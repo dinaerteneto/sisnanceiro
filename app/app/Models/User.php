@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-// use App\Scopes\TenantModels;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Scopes\TenantModels;
 
 class User extends Model
 {
-    // use TenantModels;
-
+    use TenantModels;
 
     protected $fillable = [
         'company_id', 'email', 'remember_token'

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-// use App\Scopes\TenantModels;
+use App\Scopes\TenantModels;
 
 class Person extends Model
 {
-    // use TenantModels;
+
+    use TenantModels;
 
     protected $table = 'people';
     protected $primaryKey = 'id';
