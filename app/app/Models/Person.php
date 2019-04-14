@@ -10,7 +10,7 @@ class Person extends Model
 
     use TenantModels;
 
-    protected $table = 'people';
+    protected $table = 'person';
     protected $primaryKey = 'id';
 
     protected $fillable = [

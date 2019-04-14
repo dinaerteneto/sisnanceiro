@@ -1,79 +1,88 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,500,700">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/vendors/vendors.bundle.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/app.bundle.css') }}">
+
+    <!-- favicons -->
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" type="image/x-icon">
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+<body class="   smart-style-0">
 
-                    </ul>
+    <!-- BEGIN .sa-wrapper -->
+    <div class="sa-wrapper">
+        <!-- BEGIN .sa-shortcuts -->
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+        <div class="sa-shortcuts-section">
+            <ul>
+                <li><a class="bg-pink-dark" href="profile.html"><span class="fa fa-user fa-4x"></span><span class="box-caption">Minha conta</span><em class="counter"></em></a></li>
+            </ul>
+        </div>
+        <!-- END .sa-shortcuts -->
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+        <header class="sa-page-header">
+            @include('layouts/_header')
+        </header>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
     </div>
+
+    <div class="sa-page-body">
+
+        <!-- BEGIN .sa-aside-left -->
+
+        <div class="sa-aside-left">
+            @include('layouts/_menu')
+        </div>
+
+        <!-- BEGIN .sa-content-wrapper -->
+        <div class="sa-content-wrapper">
+            <!-- BEGIN .sa-page-breadcrumb -->
+            <ol class="align-items-center sa-page-ribbon breadcrumb" aria-label="breadcrumb" role="navigation">
+                <li><span id="refresh" class="btn sa-ribbon-btn sa-theme-btn" data-action="resetWidgets"><i class="fa fa-refresh"></i></span></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Miscellaneous</a></li>
+                <li class="breadcrumb-item"><a href="blank.html">Blank Page</a></li>
+            </ol>
+
+            <!-- END .sa-page-breadcrumb -->
+            <div class="sa-content">
+                @yield('content')
+            </div>
+
+            <!-- BEGIN .sa-page-footer -->
+            <footer class="sa-page-footer">
+                @include('layouts/_footer')
+            </footer>
+            <!-- END .sa-page-footer -->
+
+        </div>
+        <!-- END .sa-content-wrapper -->
+    </div>
+
+    <script src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('assets/app/app.bundle.js') }}"></script>
+
+    <script>
+        $(function() {
+            $('#menu1').metisMenu();
+        });
+    </script>
+
 </body>
+
 </html>
