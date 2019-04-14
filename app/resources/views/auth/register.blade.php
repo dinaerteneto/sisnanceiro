@@ -99,7 +99,7 @@
                                                     <label class="input">
                                                         <i class="icon-append fa fa-user"></i>
                                                         <input id="name" placeholder="Nome da empresa" type="text" class="form-control{{ $errors->has('company_name') ? ' is-invalid' : '' }}" name="company_name" value="{{ old('company_name') }}" required autofocus>
-
+                                                        <b class="tooltip tooltip-bottom-right">O nome da empresa é necessário</b>
                                                         @if ($errors->has('company_name'))
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $errors->first('company_name') }}</strong>
@@ -110,33 +110,14 @@
                                                 <section class="mb-3">
                                                     <i class="icon-append fa fa-envelope"></i>
                                                     <input id="email" placeholder="Endereço de e-mail" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
+                                                    <b class="tooltip tooltip-bottom-right">Seu e-mail será utilizado como seu login</b>
                                                     @if ($errors->has('email'))
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $errors->first('email') }}</strong>
                                                     </span>
                                                     @endif
                                                 </section>
-                                                <section class="mb-3">
-                                                    <i class="icon-append fa fa-lock"></i>
-                                                    <input id="password" type="password" placeholder="Senha" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
-                                                    @if ($errors->has('password'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('password') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </section>
-                                                <section class="mb-3">
-                                                    <i class="icon-append fa fa-lock"></i>
-                                                    <input id="password" type="password" placeholder="Confirme sua senha" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                                    @if ($errors->has('password'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('password') }}</strong>
-                                                    </span>
-                                                    @endif
-                                                </section>
                                             </fieldset>
 
                                             <fieldset>

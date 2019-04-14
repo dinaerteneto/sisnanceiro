@@ -100,6 +100,7 @@
                                                     <label class="input mb-3">
                                                         <i class="icon-append fa fa-user"></i>
                                                         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
+                                                        <b class="tooltip tooltip-bottom-right"><i class="fa fa-user txt-color-teal"></i> Digite seu e-mail/login</b>
                                                         @if ($errors->has('email'))
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $errors->first('email') }}</strong>
@@ -112,6 +113,7 @@
                                                     <label class="input mb-1">
                                                         <i class="icon-append fa fa-lock"></i>
                                                         <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                                                        <b class="tooltip tooltip-bottom-right"><i class="fa fa-lock txt-color-teal"></i> Digite sua senha</b>
                                                         @if ($errors->has('password'))
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $errors->first('password') }}</strong>
