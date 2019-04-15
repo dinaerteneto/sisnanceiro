@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Models;
-
+namespace Sisnanceiro\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Scopes\TenantModels;
 
 class User extends Model
@@ -22,7 +20,7 @@ class User extends Model
 
     public function person()
     {
-        return $this->hasOne('App\Models\Company', 'id', 'company_id');
+        return $this->hasOne( 'Sisnanceiro\Models\Company', 'id', 'company_id');
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace Sisnanceiro\Repositories;
 
 abstract class Repository
 {
@@ -33,4 +33,6 @@ abstract class Repository
 
         return static::$model;
     }
+
+
 }

@@ -11,9 +11,18 @@
 |
 */
 
+
+
 Route::get('/', function () { return view('auth/login'); });
 Route::get('/register', function () { return view('register'); });
-
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::group(['prefix' => 'bank-categories'], function() {
+    Route::get('all', 'BankCategoryController@index');
+}); 
+
+
 Auth::routes();
+
+
+

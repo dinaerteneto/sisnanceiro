@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Sisnanceiro\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Scopes\TenantModels;

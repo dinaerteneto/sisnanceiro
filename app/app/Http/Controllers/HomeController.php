@@ -24,7 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $people = Person::get();
+        // $people = Person::get();
+        $people = [];
         return view('home', compact('people'));
     }
 
