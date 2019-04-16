@@ -2,7 +2,8 @@
 
 namespace Sisnanceiro\Transformes;
 
-class BankCategoryTransform {
+class BankCategoryTransform
+{
 
     /**
      * return tree (multidimensional array) of categories
@@ -10,7 +11,8 @@ class BankCategoryTransform {
      * @param  integer $parentId id of parent parent
      * @return array
      */
-    public function buildTree(array $elements = [], $parentId = 0) {
+    public function buildTree(array $elements = [], $parentId = 0)
+    {
         $branch = [];
         foreach ($elements as $element) {
             if ((int) $element['parent_category_id'] === $parentId) {
@@ -21,7 +23,7 @@ class BankCategoryTransform {
                 $branch[] = $element;
             }
         }
-        return $branch;        
+        return $branch;
     }
 
     /**
@@ -33,7 +35,7 @@ class BankCategoryTransform {
     public function buildHtmlDiv($elements = [])
     {
         $style = "";
-        $html = null;
+        $html  = null;
         foreach ($elements as $element) {
             if (!in_array($element['parent_category_id'], [2, 3])) {
                 $style = "padding-left: 20px";
@@ -48,6 +50,6 @@ class BankCategoryTransform {
             }
         }
         return $html;
-    }    
+    }
 
 }

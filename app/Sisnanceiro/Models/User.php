@@ -2,15 +2,15 @@
 
 namespace Sisnanceiro\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Scopes\TenantModels;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
     use TenantModels;
 
     protected $fillable = [
-        'company_id', 'email', 'remember_token'
+        'company_id', 'email', 'remember_token',
     ];
 
     public function username()
@@ -20,7 +20,7 @@ class User extends Model
 
     public function person()
     {
-        return $this->hasOne( 'Sisnanceiro\Models\Company', 'id', 'company_id');
+        return $this->hasOne('Sisnanceiro\Models\Company', 'id', 'company_id');
     }
 
 }

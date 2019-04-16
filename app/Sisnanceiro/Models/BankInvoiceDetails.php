@@ -8,27 +8,27 @@ class BankInvoiceDetails extends Model
 {
     use TenantModels;
 
-    const STATUS_ACTIVE = 1;
-    const STATUS_CANCELLED = 2;
-    const STATUS_PAID = 3;
-    const STATUS_SEND_GATEWAY = 4;
-    const STATUS_AUTHORIZED = 5;
-    const STATUS_REFUSED = 6;
+    const STATUS_ACTIVE          = 1;
+    const STATUS_CANCELLED       = 2;
+    const STATUS_PAID            = 3;
+    const STATUS_SEND_GATEWAY    = 4;
+    const STATUS_AUTHORIZED      = 5;
+    const STATUS_REFUSED         = 6;
     const STATUS_WAITING_PAYMENT = 7;
-    const STATUS_REFUNDED = 8;
-    const STATUS_PENDING_REFUND = 9;
-    const STATUS_NOT_CARD = 10;
-    const STATUS_CHARGE_BACK = 11;
+    const STATUS_REFUNDED        = 8;
+    const STATUS_PENDING_REFUND  = 9;
+    const STATUS_NOT_CARD        = 10;
+    const STATUS_CHARGE_BACK     = 11;
 
-    protected $table = 'bank_invoice_details';
+    protected $table      = 'bank_invoice_details';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'company_id', 
+        'company_id',
         'parent_id',
         'customer_id',
         'supplier_id',
-        'bank_category_id', 
+        'bank_category_id',
         'bank_account_id',
         'bank_invoice_transaction_id',
         'payment_method_id',
@@ -52,6 +52,6 @@ class BankInvoiceDetails extends Model
         'gateway_transaction',
         'grouped',
         'authorization_code',
-        'hide'
+        'hide',
     ];
 }

@@ -24,28 +24,30 @@
     </div>
 </div>
 
-<article class="col-12 sortable-grid ui-sortable">
-    <div class="jarviswidget jarviswidget-color-blue-dark jarviswidget-sortable">
-        <header role="heading" class="ui-sortable-handle">
+<article class="col-12 sortable-grid">
+    <div class="jarviswidget jarviswidget-style-2 no-padding">
+        <header role="heading" class="">
             <div class="widget-header">
                 <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
-                <h2>Normal Table</h2>
+                <h2>Categorias</h2>
             </div>
+            <span class="ml-auto" role="menu"></span>
+            <span class="jarviswidget-loader" role="menu"><i class="fa fa-refresh fa-spin"></i></span>            
+            <ul id="myTab" class="nav nav-tabs ml-auto in">
+                <li class="nav-item">
+                    <a href="#s1" data-toggle="tab" aria-expanded="false" class="nav-link">Receitas</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#s2" data-toggle="tab" aria-expanded="false" class="nav-link">Despesas</a>
+                </li>
+            </ul>
         </header>
-
-        <ul id="myTab1" class="nav nav-tabs pull-right in">
-            <li class="">
-                <a href="#s1" data-toggle="tab" aria-expanded="false">Receitas</a>
-            </li>
-            <li class="">
-                <a href="#s2" data-toggle="tab" aria-expanded="false">Despesas</a>
-            </li>
-        </ul>
 
         <div role="content">
 
-            <div id="myTabContent1" class="tab-content padding-10">
-                <div class="tab-pane fade" id="s1">
+            <div id="myTabContent" class="tab-content padding-10">
+                <div class="tab-pane" id="s1">
+                    Receitas
                     @if ($categoriesReceive)
                     <table class="table table-hover">
                         <thead>
@@ -60,8 +62,39 @@
                                 <td>
                                     <div>{{ $toReceive['text'] }}</div>
                                 </td>
-                                <td>
-
+                                <td style="text-align: right">
+                                    <a 
+                                        href="/bank-category/create?main_parent_category_id={{$toReceive['main_parent_category_id']}}&parent_category_id={{$toReceive['parent_category_id']}}"
+                                        class = "btn btn-success open-modal"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Adicionar nova subcategoria"                                       
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                    <a 
+                                        href="/bank-category/update?id={{$toReceive['id']}}"
+                                        class = "btn btn-info open-modal"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Alterar categoria"                                       
+                                    >
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a 
+                                        href="/bank-category/delete?id={{$toReceive['id']}}"
+                                        class = "btn btn-danger delete-record"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Excluir categoria",
+                                        data-title="Excluir categoria",
+                                        data-ask="Tem certeza que deseja excluir esta categoria?"
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
                                 </td>
                             </tr>
                             @if (isset($toReceive['children']))
@@ -70,7 +103,29 @@
                                 <td>
                                     <div style="padding-left: 20px">{{ $child['text'] }}</div>
                                 </td>
-                                <td>
+                                <td style="text-align: right">
+                                    <a 
+                                        href="/bank-category/update?id={{$child['id']}}"
+                                        class = "btn btn-info open-modal"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Alterar categoria"                                       
+                                    >
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a 
+                                        href="/bank-category/delete?id={{$child['id']}}"
+                                        class = "btn btn-danger delete-record"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Excluir categoria",
+                                        data-title="Excluir categoria",
+                                        data-ask="Tem certeza que deseja excluir esta categoria?"
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>                                    
                                 </td>
                             </tr>
                             @endforeach
@@ -81,7 +136,8 @@
                     @endif
                 </div>
 
-                <div class="tab-pane fade" id="s2">
+                <div class="tab-pane" id="s2">
+                    Despesas
                     @if ($categoriesPay)
                     <table class="table table-hover">
                         <thead>
@@ -96,8 +152,39 @@
                                 <td>
                                     <div>{{ $toPay['text'] }}</div>
                                 </td>
-                                <td>
-
+                                <td style="text-align: right">
+                                    <a 
+                                        href="/bank-category/create?main_parent_category_id={{$toPay['main_parent_category_id']}}&parent_category_id={{$toPay['parent_category_id']}}"
+                                        class = "btn btn-success open-modal"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Adicionar nova subcategoria"                                       
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                    <a 
+                                        href="/bank-category/update?id={{$toPay['id']}}"
+                                        class = "btn btn-info open-modal"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Alterar categoria"                                       
+                                    >
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a 
+                                        href="/bank-category/delete?id={{$toPay['id']}}"
+                                        class = "btn btn-danger delete-record"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Excluir categoria",
+                                        data-title="Excluir categoria",
+                                        data-ask="Tem certeza que deseja excluir esta categoria?"
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
                                 </td>
                             </tr>
                             @if (isset($toPay['children']))
@@ -106,7 +193,29 @@
                                 <td>
                                     <div style="padding-left: 20px">{{ $child['text'] }}</div>
                                 </td>
-                                <td>
+                                <td style="text-align: right">
+                                    <a 
+                                        href="/bank-category/update?id={{$child['id']}}"
+                                        class = "btn btn-info open-modal"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Alterar categoria"                                       
+                                    >
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a 
+                                        href="/bank-category/delete?id={{$child['id']}}"
+                                        class = "btn btn-danger delete-record"
+                                        target = "#remoteModal"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Excluir categoria",
+                                        data-title="Excluir categoria",
+                                        data-ask="Tem certeza que deseja excluir esta categoria?"
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>                                    
                                 </td>
                             </tr>
                             @endforeach

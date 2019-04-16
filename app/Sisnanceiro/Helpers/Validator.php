@@ -1,8 +1,8 @@
 <?php
 namespace Sisnanceiro\Helpers;
 
-use \Validator as V;
 use App\Exceptions\ValidationException;
+use \Validator as V;
 
 class Validator
 {
@@ -21,16 +21,16 @@ class Validator
     protected $errors;
 
     protected $errorCodes = [
-        'email' => 'invalid',
-        'min' => 'too_short',
-        'max' => 'too_long',
-        'unique' => 'not_unique',
+        'email'      => 'invalid',
+        'min'        => 'too_short',
+        'max'        => 'too_long',
+        'unique'     => 'not_unique',
         'uniquewith' => 'not_unique',
-        'notin' => 'not_allowed',
-        'exists' => 'not_found',
-        'mimes' => 'invalid',
-        'numeric' => 'invalid',
-        'invalid' => 'invalid',
+        'notin'      => 'not_allowed',
+        'exists'     => 'not_found',
+        'mimes'      => 'invalid',
+        'numeric'    => 'invalid',
+        'invalid'    => 'invalid',
     ];
 
     /**

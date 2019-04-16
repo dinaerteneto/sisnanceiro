@@ -13,17 +13,17 @@ class BankAccount extends Model
     const CONTA_CORRENTE_CONJUNTA = 'conta_corrente_conjunta';
     const CONTA_POUPANCA_CONJUNTA = 'conta_poupanca_conjunta';
 
-    protected $table = 'bank_account';
+    protected $table      = 'bank_account';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'company_id', 
-        'bank_id', 
-        'default', 
-        'default_online', 
-        'physical', 
-        'name', 
-        'bank', 
+        'company_id',
+        'bank_id',
+        'default',
+        'default_online',
+        'physical',
+        'name',
+        'bank',
         'agency',
         'account',
         'type',

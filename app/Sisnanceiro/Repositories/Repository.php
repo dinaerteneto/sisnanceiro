@@ -26,13 +26,12 @@ abstract class Repository
     public static function getModel()
     {
         if (!static::$model) {
-            $service = get_called_class();
-            $model = (new $service)->getModel();
+            $service       = get_called_class();
+            $model         = (new $service)->getModel();
             static::$model = $model;
         }
 
         return static::$model;
     }
-
 
 }
