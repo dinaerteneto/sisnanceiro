@@ -43,7 +43,7 @@ class Validator
     public function validate($data, $rules)
     {
         $validation = V::make($data, $rules);
-
+        
         if ($validation->fails()) {
             $messages = $validation->messages();
 

@@ -17,8 +17,14 @@ Route::get('/', function () { return view('auth/login'); });
 Route::get('/register', function () { return view('register'); });
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'bank-categories'], function() {
+Route::group(['prefix' => 'bank-category'], function() {
     Route::get('all', 'BankCategoryController@index');
+
+    Route::get('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
+    Route::post('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
+
+    Route::put('update/{id}', 'BankCategoryController@update');
+    Route::delete('delete/{id}', 'BankCategoryController@delete');
 }); 
 
 

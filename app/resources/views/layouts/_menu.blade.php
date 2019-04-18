@@ -6,7 +6,7 @@
     <ul class="metismenu sa-left-menu" id="menu1">
         <li class=" active">
             <!-- first-level -->
-            <a class="has-arrow" href="index.html" title="Dashboard"><span class="fa fa-lg fa-fw fa-home"></span> <span class="menu-item-parent">Dashboard</span>
+            <a class="has-arrow" href="index.html" title="Dashboard"><span class="fa fa-lg fa-fw fa-money"></span> <span class="menu-item-parent">Financeiro</span>
                 <b class="collapse-sign">
                     <em class="fa fa-plus-square-o"></em>
                     <em class="fa fa-minus-square-o"></em>
@@ -15,15 +15,27 @@
             <ul aria-expanded="false" class="sa-sub-nav collapse">
                 <!-- second-level -->
                 <li class="">
-                    <a href="index.html" title="Analytics Dashboard"> Analytics Dashboard </a>
+                    <a href="/bank-category/all" title="Analytics Dashboard"> Categorias </a>
 
                 </li><!-- second-level -->
                 <li class="">
-                    <a href="dashboard-marketing.html" title="Marketing Dashboard"> Marketing Dashboard </a>
+                    <a href="dashboard-marketing.html" title="Marketing Dashboard"> Cartões de crédito </a>
 
                 </li><!-- second-level -->
                 <li class="">
-                    <a href="dashboard-social.html" title="Social Wall"> Social Wall </a>
+                    <a href="dashboard-marketing.html" title="Marketing Dashboard"> Maquininhas </a>
+
+                </li><!-- second-level -->
+                <li class="">
+                    <a href="dashboard-marketing.html" title="Marketing Dashboard"> Contas bancárias </a>
+
+                </li><!-- second-level -->
+                <li class="">
+                    <a href="dashboard-marketing.html" title="Marketing Dashboard"> Despesas </a>
+
+                </li><!-- second-level -->
+                <li class="">
+                    <a href="dashboard-social.html" title="Social Wall"> Receitas </a>
 
                 </li>
             </ul>

@@ -25,6 +25,8 @@
 
 <body class="   smart-style-0">
 
+    <div id="remoteModal" class="modal fade" role="dialog"></div>
+
     <!-- BEGIN .sa-wrapper -->
     <div class="sa-wrapper">
         <!-- BEGIN .sa-shortcuts -->
@@ -76,6 +78,10 @@
 
     <script src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
     <script src="{{ asset('assets/app/app.bundle.js') }}"></script>
+
+    <script src="{{ asset('assets/js/custom/delete.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/form.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/main.js') }}"></script>
 
     <script>
         $(function() {

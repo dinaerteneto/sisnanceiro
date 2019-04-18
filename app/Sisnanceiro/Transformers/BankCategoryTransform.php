@@ -2,8 +2,26 @@
 
 namespace Sisnanceiro\Transformes;
 
-class BankCategoryTransform
+use League\Fractal\TransformerAbstract;
+use Sisnanceiro\Models\BankCategory;
+
+class BankCategoryTransform extends TransformerAbstract
 {
+
+    /**
+     * Transform the bank categories for controller return
+     * @param BankCategory $bankCategory
+     * @return array
+     */
+    public function transform(BankCategory $bankCategory)
+    {
+        return [
+            'id'                      => $bankCategory->id,
+            'main_parent_category_id' => $bankCategory->main_parent_category_id,
+            'parent_category_id'      => $bankCategory->parent_category_id,
+            'name'                    => $bankCategory->name,
+        ];
+    }
 
     /**
      * return tree (multidimensional array) of categories
@@ -15,8 +33,8 @@ class BankCategoryTransform
     {
         $branch = [];
         foreach ($elements as $element) {
-            if ((int) $element['parent_category_id'] === $parentId) {
-                $children = $this->buildTree($elements, (int) $element['id']);
+            if ($element['parent_category_id'] == $parentId) {
+                $children = $this->buildTree($elements, $element['id']);
                 if ($children) {
                     $element['children'] = $children;
                 }

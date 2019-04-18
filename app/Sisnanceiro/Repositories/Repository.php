@@ -34,4 +34,26 @@ abstract class Repository
         return static::$model;
     }
 
+    /**
+     * Return a model based column name
+     * @param string $column
+     * @param string $value
+     * @return Illuminate\Database\Eloquent\Model
+     */
+    public function findBy($column, $value)
+    {
+        return static::$model->where($column, $value)->first();
+    }
+
+    /**
+     * Return all records based column name 
+     * @param string $column
+     * @param string $value
+     * @return Collection
+     */
+    public function findAllBy($column, $value)
+    {
+        return static::$model->where($column, $value)->get();
+    }
+
 }

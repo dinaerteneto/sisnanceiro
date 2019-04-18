@@ -42,4 +42,14 @@ class BankCategoryService extends Service
         return $this->repository->getCategories($mainParentCategoryId);
     }
 
+    /** 
+     * return all categories based on parent_category_id
+     * @param int $parent_category_id
+     * @return Collection
+     */
+    public function findByParentCategory($parent_category_id)
+    {
+        return $this->repository->findAllBy('parent_category_id', $parent_category_id);
+    }
+
 }

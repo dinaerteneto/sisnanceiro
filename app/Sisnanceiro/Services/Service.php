@@ -27,7 +27,7 @@ abstract class Service
     public function store(array $input, $rules = false)
     {
         try {
-            $this->validator->validate($input, false !== $rules ? $rules : (isset($this->rules['store']) ? $this->rules['store'] : []));
+            $this->validator->validate($input, false !== $rules ? [$rules] : (isset($this->rules['store']) ? $this->rules['store'] : []));
             return $this->repository->create($input);
         } catch (ValidationException $e) {
             return false;
@@ -76,6 +76,24 @@ abstract class Service
             $this->validator->validate($input, isset($this->rules[$rulesId]) ? $this->rules[$rulesId] : []);
             return $this->repository->delete($input);
         } catch (ValidationException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Find based columns
+     * @param array $column
+     * @param array $value
+     * @return Collection
+     */
+    public function findBy($column, $value)
+    {
+        $item = $this->repository->findBy($column, $value);
+
+        if ($item) {
+            return $item;
+        } else {
+            $this->validator->addError('not_found', $column, 'No record found for this ' . $column . '.');
             return false;
         }
     }
