@@ -7,7 +7,8 @@ class BankCategoryRepository extends Repository {
 
     public function __construct(BankCategory $model)
     {
-        self::$model = $model;
+        $this->model = $model;
+
     }
 
     /**

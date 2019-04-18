@@ -2,8 +2,6 @@
 
 namespace Sisnanceiro\Services;
 
-use Sisnanceiro\Exceptions\ValidationException;
-
 abstract class Service
 {
 
@@ -20,6 +18,10 @@ abstract class Service
         return $this->validator->getErrors();
     }
 
+    public function getRepository()
+    {
+        return $this->repository;
+    }
     /**
      * Save a model
      * @param array $input
@@ -80,7 +82,7 @@ abstract class Service
             }
         }
 
-        $item = $this->repository->find($id);
+        $item             = $this->repository->find($id);
         $this->repository = $item;
 
         if ($item) {
@@ -99,7 +101,7 @@ abstract class Service
      */
     public function findBy($column, $value)
     {
-        $item = $this->repository->findBy($column, $value);
+        $item             = $this->repository->findBy($column, $value);
         $this->repository = $item;
 
         if ($item) {

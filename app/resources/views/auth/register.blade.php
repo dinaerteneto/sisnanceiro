@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="col-12 col-lg-5">
                                     <div class="well no-padding">
-                                        <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}" class="smart-form client-form" novalidate="novalidate">
+                                        <form method="POST" action="/cadastrar" aria-label="{{ __('Register') }}" class="smart-form client-form" novalidate="novalidate">
                                             @csrf
                                             <header>Cadastre-se</header>
 
@@ -98,7 +98,7 @@
                                                 <section class="mb-3">
                                                     <label class="input">
                                                         <i class="icon-append fa fa-user"></i>
-                                                        <input id="name" placeholder="Nome da empresa" type="text" class="form-control{{ $errors->has('company_name') ? ' is-invalid' : '' }}" name="company_name" value="{{ old('company_name') }}" required autofocus>
+                                                        <input id="Register_company_name" placeholder="Nome da empresa" type="text" class="form-control{{ $errors->has('company_name') ? ' is-invalid' : '' }}" name="Register[company_name]" value="{{ old('company_name') }}" required autofocus>
                                                         <b class="tooltip tooltip-bottom-right">O nome da empresa é necessário</b>
                                                         @if ($errors->has('company_name'))
                                                         <span class="invalid-feedback" role="alert">
@@ -109,7 +109,7 @@
                                                 </section>
                                                 <section class="mb-3">
                                                     <i class="icon-append fa fa-envelope"></i>
-                                                    <input id="email" placeholder="Endereço de e-mail" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
+                                                    <input id="Register_email" placeholder="Endereço de e-mail" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="Register[email]" value="{{ old('email') }}" required>
                                                     <b class="tooltip tooltip-bottom-right">Seu e-mail será utilizado como seu login</b>
                                                     @if ($errors->has('email'))
                                                     <span class="invalid-feedback" role="alert">
@@ -124,19 +124,19 @@
                                                 <div class="row">
                                                     <section class="col-md-6 mb-3">
                                                         <label class="input">
-                                                            <input type="text" name="firstname" placeholder="Nome">
+                                                            <input type="text" name="Register[firstname]" id="Register_firstname" placeholder="Nome">
                                                         </label>
                                                     </section>
                                                     <section class="col-md-6 mb-3">
                                                         <label class="input">
-                                                            <input type="text" name="lastname" placeholder="Sobrenome">
+                                                            <input type="text" name="Register[lastname]" id="Register_lastname" placeholder="Sobrenome">
                                                         </label>
                                                     </section>
                                                 </div>
                                                 <div class="row">
                                                     <section class="col-md-6 mb-3">
                                                         <label class="select">
-                                                            <select name="gender">
+                                                            <select name="Register[gender]">
                                                                 <option value="" selected="" disabled="">Sexo</option>
                                                                 <option value="M">Masculino</option>
                                                                 <option value="F">Feminino</option>
@@ -144,7 +144,7 @@
                                                     </section>
                                                     <section class="col-md-6 mb-3">
                                                         <label class="input"> <i class="icon-append fa fa-calendar"></i>
-                                                            <input type="text" name="request" placeholder="Data de nascimento" class="datepicker" data-dateformat="dd/mm/yy">
+                                                            <input type="text" name="Register[birthdate]" placeholder="Data de nascimento" class="datepicker" data-dateformat="dd/mm/yy">
                                                         </label>
                                                     </section>
                                                 </div>
@@ -152,7 +152,7 @@
 
                                             <footer>
                                                 <button type="submit" class="btn sa-btn-primary">
-                                                    {{ __('Register') }}
+                                                    Cadastrar
                                                 </button>
                                             </footer>
 

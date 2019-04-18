@@ -9,8 +9,12 @@ class User extends Model
 {
     use TenantModels;
 
+    const GROUP_MASTER = 1;
+    const GROUP_ADMIN  = 2;
+    const GROUP_USER   = 3;
+
     protected $fillable = [
-        'company_id', 'email', 'remember_token',
+        'id', 'company_id', 'email', 'remember_token', 'password',
     ];
 
     public function username()

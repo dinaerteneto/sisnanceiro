@@ -10,12 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
 Route::get('/', function () { return view('auth/login'); });
-Route::get('/register', function () { return view('register'); });
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/cadastrar', function () { return view('auth/register'); });
+Route::post('/cadastrar', 'HomeController@register');
 
 Route::group(['prefix' => 'bank-category'], function() {
     Route::get('all', 'BankCategoryController@index');

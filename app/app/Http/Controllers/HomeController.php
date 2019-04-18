@@ -3,30 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Person;
+use Sisnanceiro\Services\CompanyService;
 
 class HomeController extends Controller
 {
+    protected $companyService;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(CompanyService $companyService)
     {
-        $this->middleware('auth');
+        $this->companyService = $companyService;
+        // $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function register(Request $request)
     {
-        // $people = Person::get();
-        $people = [];
-        return view('home', compact('people'));
+        if ($request->isMethod('post')) {
+            $model = $this->companyService->register($request->get('Register'));
+            
+            if (method_exists($model, 'getErrors') && $model->getErrors()) {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de criar seu cadastro.', 'errors' => $model->getErrors()]);
+            } else {
+                $request->session()->flash('success', ['message' => 'Cadastro realizado com sucesso.']);
+            }
+            return redirect('/');
+        }
     }
-
 }
