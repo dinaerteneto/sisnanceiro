@@ -22,9 +22,9 @@ Route::group(['prefix' => 'bank-category'], function() {
 
     Route::get('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
     Route::post('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
-
-    Route::put('update/{id}', 'BankCategoryController@update');
-    Route::delete('delete/{id}', 'BankCategoryController@delete');
+    Route::get('update/{id}', 'BankCategoryController@update');
+    Route::post('update/{id}', 'BankCategoryController@update');
+    Route::post('delete/{id}', 'BankCategoryController@delete');
 }); 
 
 

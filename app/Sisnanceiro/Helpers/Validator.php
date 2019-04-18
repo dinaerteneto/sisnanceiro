@@ -1,7 +1,6 @@
 <?php
 namespace Sisnanceiro\Helpers;
 
-use App\Exceptions\ValidationException;
 use \Validator as V;
 
 class Validator
@@ -52,11 +51,10 @@ class Validator
                     $this->addError($rule, $field, $messages->first($field));
                 }
             }
-
-            throw new ValidationException();
         }
 
-        return true;
+        return $validation;
+
     }
 
     /**

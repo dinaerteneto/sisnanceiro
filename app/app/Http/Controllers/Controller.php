@@ -21,4 +21,16 @@ class Controller extends BaseController
     {
         return response()->json($data->toArray());
     }    
+
+    /**
+     * Respond with success status and json data
+     *
+     * @param array $data
+     * @param array $headers
+     * @return Response
+     */
+    public function apiSuccess($data = [], $headers = [])
+    {
+        return response()->json($data, 200, $headers);
+    }    
 }

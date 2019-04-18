@@ -15,7 +15,7 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="Bank_Category_name">Categoria</label>
-                <input type="text" name="BankCategory[name]" id="Bank_Category_name" class="form-control" />
+                <input type="text" name="BankCategory[name]" value="{{ $model->name }}" id="Bank_Category_name" class="form-control" />
             </div>
 
             @if(!empty($parent_category_id))

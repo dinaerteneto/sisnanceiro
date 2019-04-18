@@ -6,7 +6,6 @@
     <div>
         <h1 class="page-header"><i class="fa fa-table fa-fw "></i> Financeiro <span>&gt; Categorias</span></h1>
     </div>
-
 </div>
 
 <article class="col-12 sortable-grid">
@@ -29,6 +28,10 @@
         </header>
 
         <div role="content">
+            
+            <form id="bank-category-form-delete">
+                @csrf
+            </form>
 
             <div id="myTabContent" class="tab-content padding-10">
                 <div class="tab-pane {{ ($mainParentCategoryId == 3) ? 'active' : null }}" id="s1">

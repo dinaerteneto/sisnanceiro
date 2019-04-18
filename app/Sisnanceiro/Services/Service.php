@@ -2,6 +2,8 @@
 
 namespace Sisnanceiro\Services;
 
+use Sisnanceiro\Exceptions\ValidationException;
+
 abstract class Service
 {
 
@@ -26,42 +28,26 @@ abstract class Service
      */
     public function store(array $input, $rules = false)
     {
-        try {
-            $this->validator->validate($input, false !== $rules ? [$rules] : (isset($this->rules['store']) ? $this->rules['store'] : []));
-            return $this->repository->create($input);
-        } catch (ValidationException $e) {
-            return false;
+        $this->validator->validate($input, false !== $rules ? $this->rules[$rules] : (isset($this->rules['store']) ? $this->rules['store'] : []));
+        if ($this->validator->getErrors()) {
+            return $this->validator;
         }
+        return $this->repository->create($input);
     }
 
     /**
      * Upate a model record
-     * @param array $input
+     * @param array $data
      * @param strint $rulesId
      * @return array
      */
-    public function update(array $input, $rulesId = 'update')
+    public function update(array $data, $rules = 'update')
     {
-        try {
-            $rules = isset($this->rules[$rulesId]) ? $this->rules[$rulesId] : [];
-
-            foreach ($rules as $key => $ruleSet) {
-                foreach ($ruleSet as $key2 => $rule) {
-                    $rules[$key][$key2] = str_replace('{{id}}', $input['id'], $rule);
-                }
-            }
-
-            $this->validator->validate($input, $rules);
-            $item = $this->repository->update($input);
-
-            if ($item) {
-                return $item;
-            } else {
-                return false;
-            }
-        } catch (ValidationException $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
+        $this->validator->validate($data, false !== $rules ? $this->rules[$rules] : (isset($this->rules['update']) ? $this->rules['update'] : []));
+        if ($this->validator->getErrors()) {
+            return $this->validator;
         }
+        return $this->repository->update($data);
     }
 
     /**
@@ -70,12 +56,37 @@ abstract class Service
      * @param string $rulesId
      * @return boolean
      */
-    public function destroy(array $input, $rulesId = 'delete')
+    public function destroy($id)
     {
-        try {
-            $this->validator->validate($input, isset($this->rules[$rulesId]) ? $this->rules[$rulesId] : []);
-            return $this->repository->delete($input);
-        } catch (ValidationException $e) {
+        $model = $this->repository->find($id);
+        return $model->delete();
+    }
+
+    /**
+     * Find a model based id
+     * @param int $id
+     * @param mixed $with
+     * @return Model
+     */
+    public function find($id, $with = false)
+    {
+        if ($with) {
+            if (is_array($with)) {
+                foreach ($with as $w) {
+                    $this->repository->with($w);
+                }
+            } else {
+                $this->repository->with($with);
+            }
+        }
+
+        $item = $this->repository->find($id);
+        $this->repository = $item;
+
+        if ($item) {
+            return $item;
+        } else {
+            $this->validator->addError('not_found', 'id', 'No record found for this id.');
             return false;
         }
     }
@@ -89,6 +100,7 @@ abstract class Service
     public function findBy($column, $value)
     {
         $item = $this->repository->findBy($column, $value);
+        $this->repository = $item;
 
         if ($item) {
             return $item;

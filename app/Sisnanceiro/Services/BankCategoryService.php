@@ -11,18 +11,18 @@ class BankCategoryService extends Service
 
     protected $rules = [
         'create' => [
-            'company_id'              => 'required',
-            'main_parent_category_id' => 'required',
-            'parent_category_id'      => 'required',
-            'name'                    => 'required',
-            'status'                  => 'required',
+            // 'company_id'              => 'required|int',
+            'main_parent_category_id' => 'required|int',
+            'parent_category_id'      => 'required|int',
+            'name'                    => 'required|max:255',
+            'status'                  => 'required|int',
         ],
         'update' => [
-            'company_id'              => 'required',
-            'main_parent_category_id' => 'required',
-            'parent_category_id'      => 'required',
-            'name'                    => 'required',
-            'status'                  => 'required',
+            // 'company_id'              => 'required|int',
+            'main_parent_category_id' => 'required|int',
+            'parent_category_id'      => 'required|int',
+            'name'                    => 'required|max:255',
+            'status'                  => 'required|int',
         ],
     ];
 
