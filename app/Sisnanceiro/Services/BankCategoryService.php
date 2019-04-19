@@ -7,8 +7,6 @@ use Sisnanceiro\Repositories\BankCategoryRepository;
 
 class BankCategoryService extends Service
 {
-    protected $repository;
-
     protected $rules = [
         'create' => [
             // 'company_id'              => 'required|int',

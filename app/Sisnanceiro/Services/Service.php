@@ -2,6 +2,8 @@
 
 namespace Sisnanceiro\Services;
 
+use Illuminate\Database\Eloquent\Model;
+
 abstract class Service
 {
 
@@ -43,13 +45,13 @@ abstract class Service
      * @param strint $rulesId
      * @return array
      */
-    public function update(array $data, $rules = 'update')
+    public function update(Model $model, array $data, $rules = 'update')
     {
         $this->validator->validate($data, false !== $rules ? $this->rules[$rules] : (isset($this->rules['update']) ? $this->rules['update'] : []));
         if ($this->validator->getErrors()) {
             return $this->validator;
         }
-        return $this->repository->update($data);
+        return $model->update($data);
     }
 
     /**
@@ -82,8 +84,7 @@ abstract class Service
             }
         }
 
-        $item             = $this->repository->find($id);
-        $this->repository = $item;
+        $item = $this->repository->find($id);
 
         if ($item) {
             return $item;
@@ -101,8 +102,7 @@ abstract class Service
      */
     public function findBy($column, $value)
     {
-        $item             = $this->repository->findBy($column, $value);
-        $this->repository = $item;
+        $item = $this->repository->findBy($column, $value);
 
         if ($item) {
             return $item;

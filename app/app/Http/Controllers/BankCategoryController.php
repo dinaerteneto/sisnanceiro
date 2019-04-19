@@ -79,7 +79,7 @@ class BankCategoryController extends Controller
                 'parent_category_id'      => !empty($parent_category_id) ? $parent_category_id : $model->main_parent_category_id,
                 'status'                  => $model->status,
             ]);
-            $model = $this->bankCategoryService->update($data, 'update');
+            $model = $this->bankCategoryService->update($model, $data, 'update');
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar a categoria.', 'errors' => $model->getErrors()]);
             } else {

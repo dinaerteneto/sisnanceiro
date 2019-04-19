@@ -23,14 +23,13 @@ abstract class Repository
         $this->$model = $model;
     }
 
-    public static function getModel()
+    public function getModel()
     {
-        if (!$this->$model) {
+        if (!$this->model) {
             $service      = get_called_class();
             $model        = (new $service)->getModel();
             $this->$model = $model;
         }
-
         return $this->model;
     }
 
