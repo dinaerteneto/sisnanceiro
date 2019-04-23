@@ -90,7 +90,6 @@ BankCategory = {
     },
 
     formValidate: function() {
-        console.log('formValidate');
         $('#bank-category-form').validate({
             rules: {
                 'BankCategory[name]': 'required'

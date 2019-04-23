@@ -38,18 +38,35 @@
 
         <!-- widget div-->
         <div>
+            
+
             <div class="widget-body no-padding">
                 <!-- content goes here -->
+
+
+                        <div class="col-sm-12 pull-right align-right">
+                            <a 
+                                href="/event/create"
+                                class = "open-modal"
+                                target = "#remoteModal"
+                                rel = "tooltip"
+                                data-placement = "top"
+                                title = "Criar evento"                                       
+                            >
+                                <i class="fa fa-plus"></i> NOVO EVENTO
+                            </a>
+                        </div>
+
                 <div class="widget-body-toolbar text-right">
 
                     <div id="calendar-buttons">
-
                         <div class="btn-group">
                             <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
                             <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
+
                 <div id="calendar"></div>
                 <!-- end content -->
             </div>
@@ -60,7 +77,7 @@
 	
 </article>
 @section('scripts')
-<script src="{{ asset('assets/js/custom/Event.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/custom/Event.js') }}"></script>
 @stop
 
 @endsection

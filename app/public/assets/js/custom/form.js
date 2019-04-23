@@ -28,46 +28,56 @@ Form = {
                 return false;
             }
         });
-        $('.mask-float').maskMoney({
-            allowZero: false,
-            affixesStay: true,
-            allowNegative: true,
-            symbol: '',
-            decimal: '.',
-            thousands: '',
-            symbolPosition: 'left',
-            suffix: ''
-        });
-        $('.mask-float-precision3').maskMoney({
-            symbol: '',
-            decimal: '.',
-            thousands: '',
-            precision: 3
-        });
         $('.mask-time').mask('99:99');
-        $('.mask-currency').maskMoney({
-            symbol: 'R$',
-            decimal: ',',
-            thousands: '.'
+
+        $('.hasClockpicker').clockpicker({
+            placement: 'bottom',
+            donetext: 'Done'
         });
-        $('.money-negative').maskMoney({
-            symbol: '',
-            allowNegative: true,
-            thousands: '.',
-            decimal: ',',
-            affixesStay: false,
-            allowZero: true
-        });
+
+
         $('.mask-month-year').mask('99/9999');
         $('.mask-year').mask('9999');
 
-        $('.mask-date-picker').datepicker({
+        $('.datepicker').datepicker({
                 dateFormat: 'dd/mm/yy'
             })
             .datepicker("option",
                 "monthNames", ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'])
-            .datepicker("option", "dayNamesMin", ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'])
-            .mask('99/99/9999');
+            .datepicker("option", "dayNamesMin", ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']);
+
+
+        /* 
+                $('.mask-float').maskMoney({
+                    allowZero: false,
+                    affixesStay: true,
+                    allowNegative: true,
+                    symbol: '',
+                    decimal: '.',
+                    thousands: '',
+                    symbolPosition: 'left',
+                    suffix: ''
+                });
+                $('.mask-float-precision3').maskMoney({
+                    symbol: '',
+                    decimal: '.',
+                    thousands: '',
+                    precision: 3
+                });
+                $('.mask-currency').maskMoney({
+                    symbol: 'R$',
+                    decimal: ',',
+                    thousands: '.'
+                });
+                $('.money-negative').maskMoney({
+                    symbol: '',
+                    allowNegative: true,
+                    thousands: '.',
+                    decimal: ',',
+                    affixesStay: false,
+                    allowZero: true
+                }); */
+
     },
     unmasks: function() {
         $('input').each(function(index, element) {
@@ -76,7 +86,7 @@ Form = {
                 if (sClass.indexOf('mask') > -1) {
                     $(element).removeClass();
                     $(element).unmask();
-                    $(element).unmaskMoney();
+                    // $(element).unmaskMoney();
                     $(element).addClass(sClass);
                 }
             }

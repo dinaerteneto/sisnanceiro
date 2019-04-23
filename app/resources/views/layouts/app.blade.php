@@ -17,6 +17,7 @@
     <!-- Styles -->
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/vendors/vendors.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/app.bundle.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/custom.bundle.css') }}">
 
     <!-- favicons -->
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" type="image/x-icon">
@@ -99,16 +100,16 @@
         <!-- END .sa-content-wrapper -->
     </div>
 
-    <script src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
-    <script src="{{ asset('assets/app/app.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>
 
-    <script src="{{ asset('assets/js/custom/delete.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/form.js') }}"></script>
-    <script src="{{ asset('assets/js/custom/main.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/custom/delete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/custom/form.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/custom/main.js') }}"></script>
 
-    @yield('scripts');
+    @yield('scripts')
 
-    <script>
+    <script type="text/javascript">
         $(function() {
             $('#menu1').metisMenu();
         });
