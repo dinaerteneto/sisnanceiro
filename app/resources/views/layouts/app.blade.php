@@ -106,6 +106,8 @@
     <script src="{{ asset('assets/js/custom/form.js') }}"></script>
     <script src="{{ asset('assets/js/custom/main.js') }}"></script>
 
+    @yield('scripts');
+
     <script>
         $(function() {
             $('#menu1').metisMenu();

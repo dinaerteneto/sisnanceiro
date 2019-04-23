@@ -15,7 +15,7 @@ Route::get('/cadastrar', function () { return view('auth/register'); });
 Route::post('/cadastrar', 'HomeController@register');
 
 Route::group(['prefix' => 'bank-category'], function() {
-    Route::get('all', 'BankCategoryController@index');
+    Route::get('/', 'BankCategoryController@index');
 
     Route::get('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
     Route::post('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
@@ -24,6 +24,14 @@ Route::group(['prefix' => 'bank-category'], function() {
     Route::post('delete/{id}', 'BankCategoryController@delete');
 }); 
 
+Route::group(['prefix' => 'event'], function() {
+    Route::get('/', 'EventController@index');
+    Route::get('create', 'EventController@create');
+    Route::post('create', 'EventController@create');
+    Route::get('update/{id}', 'EventController@update');
+    Route::post('update/{id}', 'EventController@update');
+    Route::post('delete/{id}', 'EventController@delete');
+});
 
 Auth::routes();
 

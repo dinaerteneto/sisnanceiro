@@ -14,7 +14,6 @@ class BankCategoryController extends Controller
     public function __construct(BankCategoryService $bankCategoryService)
     {
         $this->bankCategoryService = $bankCategoryService;
-
     }
 
     public function index(Request $request)
