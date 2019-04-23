@@ -52,9 +52,10 @@ class UserService extends Service
         ];
         $user = $this->repository->create($data);
 
-        $this->userGroupingRepository->insert([
+        // add user to master group
+        $this->userGroupingRepository->create([
             'user_id'       => $person->id,
-            'user_group_id' => User::GROUP_USER,
+            'user_group_id' => User::GROUP_MASTER,
         ]);
 
         return $user;

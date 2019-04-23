@@ -8,7 +8,6 @@ class UserGrouping extends Model
 {
 
     protected $table      = 'user_grouping';
-    protected $primaryKey = null;
 
     protected $fillable = [
         'user_id', 'user_group_id'
