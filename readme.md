@@ -7,9 +7,16 @@ SiSnanceiro é um sistema básico, que fornece as apis necessários para um pequ
     - Após clonar o projeto
     - Altere os configurações no .env
     - Rode os comando: 
-        - docker-build .
-        - docker-composer up -d
-        - composer install
-        - php artisan generate:key
-        - php artisan migrate
-        - php artisan db:seed
+        - docker build .
+        - docker-compose up -d
+        - docker exec -it webserver composer install
+        - docker exec -it webserverphp artisan generate:key
+        - docker exec -it webserverphp artisan migrate
+        - docker exec -it webserverphp artisan db:seed
+
+## Alguns comandos do docker
+    - docker build . --force-rm --no-cache
+    - docker ps
+    - docker images
+    - docker rmi 
+    - docker rmi $(docker images -q) 

@@ -50,7 +50,7 @@ class BankCategoryController extends Controller
             } else {
                 $request->session()->flash('success', ['message' => 'Categoria incluída com sucesso.']);
             }
-            return redirect('bank-category/all');
+            return redirect('bank-category/');
         } else {
             $categories = [];
             if ($categories = $this->bankCategoryService->findByParentCategory($main_parent_category_id)) {
