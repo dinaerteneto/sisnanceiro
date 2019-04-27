@@ -1,6 +1,6 @@
 <?php
 
-namespace Sisnanceiro\Transformes;
+namespace Sisnanceiro\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Models\BankCategory;

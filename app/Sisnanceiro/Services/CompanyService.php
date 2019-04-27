@@ -49,14 +49,14 @@ class CompanyService extends Service
 
         $personData = [
             'company_id' => $companyPersonService->id,
-            'name'       => $data['firstname'],
-            'last_name'  => $data['lastname'],
+            'firstname'  => $data['firstname'],
+            'lastname'   => $data['lastname'],
             'gender'     => $data['gender'],
             'phisycal'   => 1,
         ];
-        $person = $this->personService->store($personData, 'create');
+        $person        = $this->personService->store($personData, 'create');
         $person->email = $data['email'];
-        
+
         $this->userService->create($person);
         return $repository;
     }

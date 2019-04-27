@@ -1,6 +1,6 @@
 Form = {
     init: function() {
-        // Form.masks();
+        Form.masks();
         // Form.checkAll();
     },
     masks: function() {
@@ -46,37 +46,37 @@ Form = {
                 "monthNames", ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'])
             .datepicker("option", "dayNamesMin", ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']);
 
+        $('.mask-float').maskMoney({
+            allowZero: false,
+            affixesStay: true,
+            allowNegative: true,
+            symbol: '',
+            decimal: ',',
+            thousands: '.',
+            symbolPosition: 'left',
+            suffix: ''
+        });
+        $('.mask-float-precision3').maskMoney({
+            symbol: '',
+            decimal: '.',
+            thousands: '',
+            precision: 3
+        });
+        $('.mask-currency').maskMoney({
+            symbol: 'R$',
+            decimal: ',',
+            thousands: '.'
+        });
+        $('.money-negative').maskMoney({
+            symbol: '',
+            allowNegative: true,
+            thousands: '.',
+            decimal: ',',
+            affixesStay: false,
+            allowZero: true
+        });
 
-        /* 
-                $('.mask-float').maskMoney({
-                    allowZero: false,
-                    affixesStay: true,
-                    allowNegative: true,
-                    symbol: '',
-                    decimal: '.',
-                    thousands: '',
-                    symbolPosition: 'left',
-                    suffix: ''
-                });
-                $('.mask-float-precision3').maskMoney({
-                    symbol: '',
-                    decimal: '.',
-                    thousands: '',
-                    precision: 3
-                });
-                $('.mask-currency').maskMoney({
-                    symbol: 'R$',
-                    decimal: ',',
-                    thousands: '.'
-                });
-                $('.money-negative').maskMoney({
-                    symbol: '',
-                    allowNegative: true,
-                    thousands: '.',
-                    decimal: ',',
-                    affixesStay: false,
-                    allowZero: true
-                }); */
+        $('.spinner').spinner();
 
     },
     unmasks: function() {

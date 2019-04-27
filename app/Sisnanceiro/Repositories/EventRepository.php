@@ -11,4 +11,12 @@ class EventRepository extends Repository
         $this->model = $model;
     }
 
+    public function load($start, $end) 
+    {
+        return $this->model
+                    ->where('start_date', '>=', $start)
+                    ->where('end_date', '<=', $end)
+                    ->get();
+    }
+
 }

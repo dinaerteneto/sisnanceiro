@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\Event;
 use Sisnanceiro\Services\EventService;
+use Sisnanceiro\Transformers\EventTransform;
 
 class EventController extends Controller
 {
@@ -24,7 +27,13 @@ class EventController extends Controller
     {
         $action = "/event/create";
         $title  = 'Incluir evento';
-        $model  = new Event();
+        $date   = $request->has('date') ? $request->get('date') : null;
+
+        $model = new Event();
+        if (!empty($date)) {
+            $model->start_date = $date;
+            $model->end_date   = $date;
+        }
 
         if ($request->isMethod('post')) {
             $data  = $request->get('Event');
@@ -37,7 +46,54 @@ class EventController extends Controller
             return redirect('event/');
         }
 
-        return view('event/_form', compact('model', 'action', 'title'));
+        return view('event/_form', compact('model', 'action', 'title', 'date'));
     }
+
+    public function update(Request $request, $id)
+    {
+        $model  = $this->eventService->find($id);
+        $action = "/event/update/{$id}";
+        $title  = "Evento {$model->name}";
+
+        if ($request->isMethod('post')) {
+            $data = $request->get('Event');
+            $model = $this->eventService->update($model, $data, 'update');
+            if (method_exists($model, 'getErrors') && $model->getErrors()) {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o evento.', 'errors' => $model->getErrors()]);
+            } else {
+                $request->session()->flash('success', ['message' => 'Evento alterado com sucesso.']);
+            }
+            return redirect('event/');
+        } else {
+            $carbonStartDate   = Carbon::createFromFormat('Y-m-d H:i:s', $model->start_date);
+            $carbonEndDate     = Carbon::createFromFormat('Y-m-d H:i:s', $model->end_date);
+            $model->start_date = $carbonStartDate->format('d/m/Y');
+            $model->end_date   = $carbonEndDate->format('d/m/Y');
+            $model->start_time = $carbonStartDate->format('H:i');
+            $model->end_time   = $carbonEndDate->format('H:i');
+
+            return view('event/_form', compact('model', 'action', 'title'));
+        }
+
+    }
+
+    public function load(Request $request)
+    {
+        $start = $request->get('start');
+        $end   = $request->get('end');
+
+        if ($events = $this->eventService->load($start, $end)) {
+            $eventTransform = fractal($events, new EventTransform());
+            return Response::json($eventTransform);
+        }
+        return Response::json([]);
+    }
+
+    public function delete($id)
+    {
+        if($this->eventService->destroy($id)) {
+            return $this->apiSuccess(['success' => true]);
+        }
+    }    
 
 }

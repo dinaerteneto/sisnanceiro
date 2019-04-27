@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Services\BankCategoryService;
-use Sisnanceiro\Transformes\BankCategoryTransform;
+use Sisnanceiro\Transformers\BankCategoryTransform;
 
 class BankCategoryController extends Controller
 {
@@ -73,7 +73,7 @@ class BankCategoryController extends Controller
         if ($request->isMethod('post')) {
             $data = $request->get('BankCategory');
             $data = array_merge($request->get('BankCategory'), [
-                'id' => $model->id,
+                'id'                      => $model->id,
                 'main_parent_category_id' => $model->main_parent_category_id,
                 'parent_category_id'      => !empty($parent_category_id) ? $parent_category_id : $model->main_parent_category_id,
                 'status'                  => $model->status,
@@ -96,7 +96,7 @@ class BankCategoryController extends Controller
 
     public function delete($id)
     {
-        if($this->bankCategoryService->destroy($id)) {
+        if ($this->bankCategoryService->destroy($id)) {
             return $this->apiSuccess(['success' => true]);
         }
     }

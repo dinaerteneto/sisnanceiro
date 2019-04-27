@@ -14,7 +14,7 @@ class Person extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'company_id', 'name', 'last_name', 'physical', 'gender', 'email'
+        'company_id', 'firstname', 'lastname', 'physical', 'gender', 'email'
     ];
 
     protected $hidden = ['email'];

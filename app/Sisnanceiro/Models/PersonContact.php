@@ -14,7 +14,7 @@ class PersonContact extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        // 'company_id', 'name', 'last_name', 'physical', 'gender',
+        // 'company_id', 'firstname', 'lastname', 'physical', 'gender',
     ];
 
 }

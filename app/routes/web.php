@@ -31,6 +31,7 @@ Route::group(['prefix' => 'event'], function() {
     Route::get('update/{id}', 'EventController@update');
     Route::post('update/{id}', 'EventController@update');
     Route::post('delete/{id}', 'EventController@delete');
+    Route::get('load', 'EventController@load');
 });
 
 Auth::routes();
