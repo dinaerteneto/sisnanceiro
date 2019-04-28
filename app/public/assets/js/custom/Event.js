@@ -30,7 +30,6 @@ Event = {
                         end: end.format()
                     },
                     success: function(json) {
-                        console.log(json);
                         var events = [];
                         if (!!json.data) {
                             $.map(json.data, function(r) {
@@ -59,7 +58,6 @@ Event = {
             },
             complete: function() {
                 $(target).modal('show');
-                Form.init();
             }
         });
     },

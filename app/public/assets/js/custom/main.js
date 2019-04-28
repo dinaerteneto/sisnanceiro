@@ -1,18 +1,10 @@
 Main = {
     init: function() {
         //$('#side-menu').metisMenu();
-        $(window).bind("load resize", function() {
-            topOffset = 50;
-            height = (this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height;
-            height = height - topOffset;
-            if (height < 1)
-                height = 1;
-            if (height > topOffset) {
-                $("#sidemenu").css("min-height", (height) + "px");
-            }
-        });
         // Main.configBlock();
         Main.openModal();
+        Main.closeModal();
+        $('#menu1').metisMenu();
     },
     configBlock: function() {
         //$(document).ajaxStart($.blockUI);
@@ -27,6 +19,7 @@ Main = {
             e.preventDefault();
             var href = $(this).attr('href');
             var target = $(this).attr('target');
+            $(target).empty();
             $.ajax({
                 url: href,
                 success: function(html) {
@@ -37,12 +30,13 @@ Main = {
                     Form.init();
                 }
             });
+
         });
     },
 
     closeModal: function() {
-        $('.modal').on('hidden.bs.modal', function() {
-
+        $('.modal').on('hidden.bs.modal', function(e) {
+            $(e.target).empty();
         });
     },
 

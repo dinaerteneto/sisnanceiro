@@ -55,18 +55,21 @@ Form = {
             thousands: '.',
             symbolPosition: 'left',
             suffix: ''
-        });
+        }).trigger('mask.maskMoney');
+
         $('.mask-float-precision3').maskMoney({
             symbol: '',
             decimal: '.',
             thousands: '',
             precision: 3
-        });
+        }).trigger('mask.maskMoney');
+
         $('.mask-currency').maskMoney({
             symbol: 'R$',
             decimal: ',',
             thousands: '.'
-        });
+        }).trigger('mask.maskMoney');
+
         $('.money-negative').maskMoney({
             symbol: '',
             allowNegative: true,
@@ -74,7 +77,7 @@ Form = {
             decimal: ',',
             affixesStay: false,
             allowZero: true
-        });
+        }).trigger('mask.maskMoney');
 
         $('.spinner').spinner();
 
@@ -85,7 +88,7 @@ Form = {
                 var sClass = $(element).attr('class');
                 if (sClass.indexOf('mask') > -1) {
                     $(element).removeClass();
-                    $(element).unmask();
+                    // $(element).unmask();
                     // $(element).unmaskMoney();
                     $(element).addClass(sClass);
                 }

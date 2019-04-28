@@ -1,17 +1,17 @@
-<div class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-lg" role="document" id="<?= time() ?>">
 
     <div class="modal-content">
 
+        <div class="modal-header">
+            <h4 class="modal-title">{{ $title }}</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <span aria-hidden="true">×</span>                
+            </button>
+        </div>
+            
         <form id="event-form" class="" method="post" action="{{ $action }}">
             @csrf
 
-            <div class="modal-header">
-                <h4 class="modal-title">{{ $title }}</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                    <span aria-hidden="true">×</span>                
-                </button>
-            </div>
-            
             <div class="modal-body">
 
                 <fieldset>
@@ -173,3 +173,5 @@
 
 </div>
 
+@include('layouts/_partial_scripts')
+<script type="text/javascript" src="{{ asset('assets/js/custom/Event.js') }}"></script>

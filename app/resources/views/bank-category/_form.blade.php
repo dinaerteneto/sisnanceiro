@@ -40,5 +40,5 @@
     </div>
 
 </div>
-
+@include('layouts/_partial_scripts')
 <script src="{{ asset('assets/js/custom/BankCategory.js') }}"></script>

@@ -24,7 +24,7 @@
     <link rel="icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" type="image/x-icon">
 </head>
 
-<body class="   smart-style-0">
+<body class="smart-style-0">
 
     <div id="remoteModal" class="modal fade" role="dialog"></div>
 
@@ -100,21 +100,8 @@
         <!-- END .sa-content-wrapper -->
     </div>
 
-    <script type="text/javascript" src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>
-
-    <script type="text/javascript" src="{{ asset('assets/js/libs/jquery.maskMoney.0.2.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/custom/delete.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/custom/form.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/custom/main.js') }}"></script>
-
+    @include('layouts/_scripts')
     @yield('scripts')
-
-    <script type="text/javascript">
-        $(function() {
-            $('#menu1').metisMenu();
-        });
-    </script>
 
 </body>
 
