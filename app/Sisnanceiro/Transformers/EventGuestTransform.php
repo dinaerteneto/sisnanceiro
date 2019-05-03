@@ -5,12 +5,42 @@ namespace Sisnanceiro\Transformers;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\TransformerAbstract;
-use Sisnanceiro\Models\Event;
+use Sisnanceiro\Models\EventGuest;
 
-class EventTransform extends TransformerAbstract
+class EventGuestTransform extends TransformerAbstract
 {
 
-    public function transform(Event $event)
+    public function transform(EventGuest $guest)
+    {
+        $carbonCreatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->created_at);
+        return [
+            'id'          => $guest->id,
+            'person_name' => $guest->person_name,
+            'email'       => $guest->email,
+            'status'      => strtoupper($guest->getStatus()),
+            'created_at'  => $carbonCreatedAt->format('d/m/Y'),
+            'invitedByMe' => $this->transformInvitedByMe($guest->invitedByMe()->get()),
+            'event'       => $this->transformEvent($guest->event()->get()->first()),
+        ];
+    }
+
+    private function transformInvitedByMe(Collection $guests)
+    {
+        foreach ($guests as $guest) {
+            $data[] = [
+                'id'          => $guest->id,
+                'person_name' => $guest->person_name,
+                'email'       => $guest->email,
+                'status'      => strtoupper($guest->getStatus()),
+                'created_at'  => $guest->created_at,
+            ];
+        }
+        $data['total_invited'] = count($guests);
+        return $data;
+
+    }
+
+    private function transformEvent($event)
     {
         $carbonStartDate = Carbon::createFromFormat('Y-m-d H:i:s', $event->start_date);
         $carbonEndDate   = Carbon::createFromFormat('Y-m-d H:i:s', $event->end_date);
@@ -37,24 +67,9 @@ class EventTransform extends TransformerAbstract
             'complement'             => $event->complement,
             'reference'              => $event->reference,
             'latitude'               => $event->latitude,
-            'longitude'              => $event->longitude,
-            'mainGuests'             => $this->mainGuest($event->mainGuests()->get()),
+            'longitude'              => $event->longitude
         ];
-    }
 
-    private function mainGuest(Collection $guests)
-    {
-        $data = [];
-        foreach ($guests as $guest) {
-            $data[] = [
-                'id'          => $guest->id,
-                'person_name' => $guest->person_name,
-                'email'       => $guest->email,
-                'status'      => strtoupper($guest->getStatus()),
-                'created_at'  => $guest->created_at,
-            ];
-        }
-        return $data;
     }
 
 }

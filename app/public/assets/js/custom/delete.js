@@ -16,7 +16,7 @@ Delete = {
             }, function(ButtonPressed) {
                 if (ButtonPressed === "Sim") {
 
-                    $.post(url, $('#bank-category-form-delete').serialize(), function(json) {
+                    $.post(url, $('#form-delete').serialize(), function(json) {
                         if (json.success) {
                             $.smallBox({
                                 title: "Sucesso!",

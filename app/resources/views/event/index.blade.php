@@ -43,7 +43,6 @@
             <div class="widget-body no-padding">
                 <!-- content goes here -->
 
-
                         <div class="col-sm-12 pull-right align-right">
                             <a 
                                 href="/event/create"

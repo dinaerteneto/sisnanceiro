@@ -17,6 +17,15 @@ Event = {
             header: hdr,
             editable: true,
             droppable: true,
+            eventRender: function(event, element) {
+                element.popover({
+                    animation: true,
+                    delay: 300,
+                    content: '<strong>' + event.title + '</strong><br/>' + event.description,
+                    trigger: 'hover',
+                    html: true
+                });
+            },
             windowResize: function(event, ui) {
                 $('#calendar').fullCalendar('render');
             },
@@ -36,8 +45,10 @@ Event = {
                                 events.push({
                                     id: r.id,
                                     title: r.name,
+                                    description: r.description,
                                     start: r.start_date,
-                                    end: r.end_date
+                                    end: r.end_date,
+                                    icon: 'fa-lock'
                                 });
                             });
                         }

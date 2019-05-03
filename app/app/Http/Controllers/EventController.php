@@ -56,7 +56,7 @@ class EventController extends Controller
         $title  = "Evento {$model->name}";
 
         if ($request->isMethod('post')) {
-            $data = $request->get('Event');
+            $data  = $request->get('Event');
             $model = $this->eventService->update($model, $data, 'update');
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o evento.', 'errors' => $model->getErrors()]);
@@ -65,12 +65,13 @@ class EventController extends Controller
             }
             return redirect('event/');
         } else {
-            $carbonStartDate   = Carbon::createFromFormat('Y-m-d H:i:s', $model->start_date);
-            $carbonEndDate     = Carbon::createFromFormat('Y-m-d H:i:s', $model->end_date);
-            $model->start_date = $carbonStartDate->format('d/m/Y');
-            $model->end_date   = $carbonEndDate->format('d/m/Y');
-            $model->start_time = $carbonStartDate->format('H:i');
-            $model->end_time   = $carbonEndDate->format('H:i');
+            $carbonStartDate    = Carbon::createFromFormat('Y-m-d H:i:s', $model->start_date);
+            $carbonEndDate      = Carbon::createFromFormat('Y-m-d H:i:s', $model->end_date);
+            $model->start_date  = $carbonStartDate->format('d/m/Y');
+            $model->end_date    = $carbonEndDate->format('d/m/Y');
+            $model->start_time  = $carbonStartDate->format('H:i');
+            $model->end_time    = $carbonEndDate->format('H:i');
+            $model->description = strip_tags($model->description);
 
             return view('event/_form', compact('model', 'action', 'title'));
         }
@@ -91,9 +92,33 @@ class EventController extends Controller
 
     public function delete($id)
     {
-        if($this->eventService->destroy($id)) {
+        if ($this->eventService->destroy($id)) {
             return $this->apiSuccess(['success' => true]);
         }
-    }    
+    }
+
+    public function guest(Request $request, $eventId)
+    {
+        $model          = $this->eventService->find($eventId);
+        $eventTransform = fractal($model, new EventTransform());
+        $model          = (object) $eventTransform->toArray()['data'];
+
+        return View('/event/guest', compact('model'));
+    }
+
+    public function addGuest(Request $request, $eventId)
+    {
+        $newId = 'New-' . $request->get('newId');
+        return View('event/_form_guest', compact('newId'));
+    }
+
+    public function storeGuest(Request $request, $eventId)
+    {
+        $data = $request->get('Guest');
+        if ($this->eventService->addGuest($eventId, $data)) {
+            return Response::json(['success' => true]);
+        }
+        return Response::json(['success' => false]);
+    }
 
 }

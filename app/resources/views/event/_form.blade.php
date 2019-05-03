@@ -163,8 +163,16 @@
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Enviar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                @if(!empty($model->id))
+                <div class="align-left col-sm-6"> 
+                    <a href="/event/guest/{{$model->id}}" class="btn btn-success">Convidados</a>
+                    <a href="/event/delete/{{$model->id}}" class="btn btn-danger delete-record" data-title="Excluir evento" data-ask="Tem certeza que deseja excluir este evento?">Excluir evento</a>
+                </div>
+                @endif
+                <div class="align-right col-sm-6">
+                    <button type="submit" class="btn btn-primary">Alterar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
             </div>
 
         </form>

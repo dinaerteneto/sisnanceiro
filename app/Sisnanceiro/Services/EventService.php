@@ -3,10 +3,15 @@
 namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
+use Sisnanceiro\Models\EventGuest;
 use Sisnanceiro\Repositories\EventRepository;
-use Illuminate\Database\Eloquent\Model;
+use Sisnanceiro\Services\EventGuestService;
+use Sisnanceiro\Services\PersonService;
 
 class EventService extends Service
 {
@@ -43,12 +48,26 @@ class EventService extends Service
         ],
     ];
 
-    public function __construct(Validator $validator, EventRepository $repository)
-    {
-        $this->validator  = $validator;
-        $this->repository = $repository;
+    protected $eventGuestRepository;
+    protected $personService;
+
+    public function __construct(
+        Validator $validator,
+        EventRepository $repository,
+        EventGuestService $eventGuestService,
+        PersonService $personService
+    ) {
+        $this->validator         = $validator;
+        $this->repository        = $repository;
+        $this->eventGuestService = $eventGuestService;
+        $this->personService     = $personService;
     }
 
+    /**
+     * prepare data to save in model
+     * @param array $data data to map
+     * @return array
+     */
     public function mapData(array $data)
     {
         $carbonStartDate          = Carbon::createFromFormat('d/m/Y H:i', $data['start_date'] . ' ' . $data['start_time']);
@@ -58,6 +77,26 @@ class EventService extends Service
         $data['value_per_person'] = FloatConversor::covert($data['value_per_person']);
         $data['description']      = nl2br($data['description']);
         return $data;
+    }
+
+    /**
+     * prepare data to save in model
+     * @param array $data data to map
+     * @return array
+     */
+    public function mapGuest(array $data)
+    {
+        $person   = $this->personService->findBy('email', $data['email']);
+        $personId = $person ? $person->id : null;
+
+        return [
+            'event_id'    => $data['event_id'],
+            'person_id'   => $personId,
+            'person_name' => $data['name'],
+            'email'       => $data['email'],
+            'token_email' => Hash::make(Str::random()),
+            'status'      => EventGuest::STATUS_WAITING,
+        ];
     }
 
     /**
@@ -71,6 +110,13 @@ class EventService extends Service
         return parent::store($data, $rules);
     }
 
+    /**
+     * Update event data
+     * @param Model $model model for persist data
+     * @param array $data data for persist
+     * @param boolean
+     * @return Model
+     */
     public function update(Model $model, array $data, $rules = false)
     {
         $data = $this->mapData($data);
@@ -88,4 +134,30 @@ class EventService extends Service
         return $this->repository->load($start, $end);
     }
 
+    /**
+     * Add Guests on event
+     * @param int $eventId id of the event
+     * @param array $data
+     * @return Boolean
+     */
+    public function addGuest($eventId, array $data)
+    {
+        if ($data) {
+            foreach ($data as $key => $record) {
+                $data[$key]['event_id'] = $eventId;
+                $this->eventGuestService->store($this->mapGuest($data[$key]), 'create');
+            }
+        }
+        return true;
+    }
+
+    /**
+     * return all main guest of the event
+     * @param int $eventId
+     * @return Collection
+     */
+    public function findMainGuests($eventId) 
+    {
+        return $this->eventGuestService->allMainGuest($eventId);
+    }    
 }

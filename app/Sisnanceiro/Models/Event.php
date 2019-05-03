@@ -3,7 +3,6 @@
 namespace Sisnanceiro\Models;
 
 use App\Scopes\TenantModels;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
@@ -14,6 +13,7 @@ class Event extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'id',
         'company_id',
         'name',
         'start_date',
@@ -30,12 +30,18 @@ class Event extends Model
         'complement',
         'reference',
         'latitude',
-        'longitude'
+        'longitude',
     ];
 
     protected $hidden = [
         'company_id',
     ];
 
-
+    /**
+     * Get the main Guests of the event
+     */
+    public function mainGuests()
+    {
+        return $this->hasMany('Sisnanceiro\Models\EventGuest')->whereNull('invited_by_id');
+    }
 }

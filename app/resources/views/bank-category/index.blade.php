@@ -29,7 +29,7 @@
 
         <div role="content">
             
-            <form id="bank-category-form-delete">
+            <form id="form-delete">
                 @csrf
             </form>
 

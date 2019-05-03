@@ -32,6 +32,17 @@ Route::group(['prefix' => 'event'], function() {
     Route::post('update/{id}', 'EventController@update');
     Route::post('delete/{id}', 'EventController@delete');
     Route::get('load', 'EventController@load');
+
+    Route::group(['prefix' => 'guest'], function() {
+        Route::get('/{eventId}', 'EventController@guest');
+        Route::get('/{eventId}/add', 'EventController@addGuest');
+        Route::post('/{eventId}/create', 'EventController@storeGuest');
+        Route::post('/delete/{id}', 'EventController@adelGuest');
+    });
+});
+
+Route::group(['prefix' => 'guest'], function(){
+    Route::get('/{guestId}', 'EventGuestController@index');
 });
 
 Auth::routes();
