@@ -25,6 +25,88 @@
 </head>
 
 <body class="no-header   smart-style-0  pace-done">
+
+    <div class="modal fade" id="form-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Enviar convite</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">×</span>                
+                    </button>
+                </div>
+                
+                    <form id="form-1" method="post" action="/guest/{{ $data['id'] }}/send-invite">
+                        @csrf
+
+                        <div class="modal-body">
+                            <p>O seu convidado irá receber um e-mail, informando que você o(a) esta convidado para partipar deste mesmo evento.</p>
+
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <input type="text" required name="EventGuest[person_name]" id="EventGuest_person_name" class="form-control" placeholder="Nome do convidado" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <input type="email" required name="EventGuest[email]" id="EventGuest_email" class="form-control" placeholder="E-mail do convidado" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if(!empty($event['value_per_person']) && $event['value_per_person'] > 0)
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label>Quem será o responsável pelo pagamento de R$ {{ $event['value_per_person'] }}?</label>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label class="radio">
+                                                            <input type="radio" value="me" checked="checked" name="EventGuest[reponsable_of_payment]">
+                                                            <i></i>
+                                                            Eu
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <label class="radio">
+                                                            <input type="radio" value="invite" name="EventGuest[reponsable_of_payment]">
+                                                            <i></i>
+                                                            Convidado
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                    
+                                    </div>
+                                </fieldset>
+                                @endif
+
+                            </fieldset>
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <div class="align-right col-sm-6">
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+
+                    </form>
+                
+
+            </div>
+        </div>
+    </div>
+
+
     <div class="sa-wrapper">
         <div class="sa-page-body">
             <div class="sa-content-wrapper">
@@ -35,10 +117,10 @@
                     <p>Você foi convidado para o evento <span class="label bg-darken text-white">{{ $event['name'] }}</span>, que irá ocorrer no dia {{ $event['start_date_BR'] }} ás {{ $event['start_time'] }}.</p>
                         
                     <div class="row">
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <div class="card sa-status">
                                 <div class="card-header who">
-                                    <h4>Sua Presença</h4>
+                                    <h4><i class="fa fa-check-circle-o text-success"></i> Sua Presença</h4>
                                 </div>
                                 <div class="card-body p-0">		
                                     <div class="who clearfix">
@@ -52,10 +134,11 @@
                                         -->
                                        
                                         
-                                        <div class="text-center">
-                                            <i class="fa fa-check-circle-o fa-3x text-success"></i>
-                                            <br>Presença confirmada em: 15/07/85 as 15:15h
+                                        <div class="row">
+                                            <br>Confirmada em: 15/07/85 as 15:15h
                                             <br><small><a href="">Revogar presença</a></small>
+
+                                            <br><strong>Pagto confirmado em: 15/07/85</strong>
                                         </div>
                                         
 
@@ -72,7 +155,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="card sa-status">
                                 <div class="card-header who">
                                     <h4>Informações do evento</h4>
@@ -97,7 +180,7 @@
                             <div class="card sa-status">
                                 <div class="card-header who">
                                     <h4>Pessoas que convidei</h4>
-                                    <div class="align-right"><a href="javascript:void(0)" style="margin-top: -18px; display: block">Convidar mais pessoas</a></div>
+                                    <div class="align-right"><a href="javascript:void(0)" data-toggle="modal" data-target="#form-modal" style="margin-top: -18px; display: block">Convidar mais pessoas</a></div>
                                 </div>
                                 <div class="card-body p-0">	
 
@@ -129,6 +212,28 @@
             </div>
         </div>
     </div>
+
+
+    <script type="text/javascript" src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>
+
+
+    <script type="text/javascript">
+    EventGuest = {
+        addInvite: function() {
+
+        },
+
+        submitForm: function() {
+
+        },
+
+        validation: function() {
+
+        }
+    }
+    </script>
+
 </body>
 
 </html>
