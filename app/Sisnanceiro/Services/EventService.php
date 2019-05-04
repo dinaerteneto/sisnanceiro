@@ -88,14 +88,18 @@ class EventService extends Service
     {
         $person   = $this->personService->findBy('email', $data['email']);
         $personId = $person ? $person->id : null;
+        $event    = $this->repository->find($data['event_id']);
 
         return [
-            'event_id'    => $data['event_id'],
-            'person_id'   => $personId,
-            'person_name' => $data['name'],
-            'email'       => $data['email'],
-            'token_email' => Hash::make(Str::random()),
-            'status'      => EventGuest::STATUS_WAITING,
+            'event_id'               => $data['event_id'],
+            'person_id'              => $personId,
+            'person_name'            => $data['name'],
+            'email'                  => $data['email'],
+            'token_email'            => Hash::make(Str::random()),
+            'status'                 => EventGuest::STATUS_WAITING,
+            'invited_by_id'          => isset($data['invited_by_id']) && $data['invited_by_id'] !== null ? $data['invited_by_id'] : null,
+            'responsable_of_payment' => isset($data['responsable_of_payment']) && $data['responsable_of_payment'] === 'me' ? $data['invited_by_id'] : null,
+            'value'                  => !empty($event->value_per_person) && $event->value_per_person > 0 ? $event->value_per_person : 0,
         ];
     }
 
@@ -156,8 +160,8 @@ class EventService extends Service
      * @param int $eventId
      * @return Collection
      */
-    public function findMainGuests($eventId) 
+    public function findMainGuests($eventId)
     {
         return $this->eventGuestService->allMainGuest($eventId);
-    }    
+    }
 }

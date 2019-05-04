@@ -43,6 +43,7 @@ Route::group(['prefix' => 'event'], function() {
 
 Route::group(['prefix' => 'guest'], function(){
     Route::get('/{guestId}', 'EventGuestController@index');
+    Route::post('/{guestId}/send-invite', 'EventGuestController@sendInvite');
 });
 
 Auth::routes();

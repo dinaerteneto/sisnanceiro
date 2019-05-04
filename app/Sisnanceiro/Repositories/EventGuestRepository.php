@@ -17,5 +17,4 @@ class EventGuestRepository extends Repository
             ->whereNull('invited_by_id')
             ->get();
     }
-
 }

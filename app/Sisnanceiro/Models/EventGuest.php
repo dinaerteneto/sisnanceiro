@@ -21,6 +21,8 @@ class EventGuest extends Model
         'company_id',
         'event_id',
         'person_id',
+        'responsable_of_payment',
+        'value',
         'invited_by_id',
         'person_name',
         'email',

@@ -27,12 +27,14 @@ class EventGuestTransform extends TransformerAbstract
     private function transformInvitedByMe(Collection $guests)
     {
         foreach ($guests as $guest) {
+            $carbonCreatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->created_at);
+
             $data[] = [
                 'id'          => $guest->id,
                 'person_name' => $guest->person_name,
                 'email'       => $guest->email,
                 'status'      => strtoupper($guest->getStatus()),
-                'created_at'  => $guest->created_at,
+                'created_at'  => $carbonCreatedAt->format('d/m/Y'),
             ];
         }
         $data['total_invited'] = count($guests);

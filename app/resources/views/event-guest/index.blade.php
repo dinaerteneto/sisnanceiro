@@ -33,12 +33,15 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Enviar convite</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">×</span>                
+                        <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                
+
                     <form id="form-1" method="post" action="/guest/{{ $data['id'] }}/send-invite">
                         @csrf
+
+                        <input type="hidden" name="EventGuest[event_id]" value="{{ $event['id'] }}" />
+                        <input type="hidden" name="EventGuest[invited_by_id]" value="{{ $data['id'] }}" />
 
                         <div class="modal-body">
                             <p>O seu convidado irá receber um e-mail, informando que você o(a) esta convidado para partipar deste mesmo evento.</p>
@@ -47,7 +50,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <input type="text" required name="EventGuest[person_name]" id="EventGuest_person_name" class="form-control" placeholder="Nome do convidado" />
+                                            <input type="text" name="EventGuest[name]" id="EventGuest_name" class="form-control" placeholder="Nome do convidado" />
                                         </div>
                                     </div>
                                 </div>
@@ -55,7 +58,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <input type="email" required name="EventGuest[email]" id="EventGuest_email" class="form-control" placeholder="E-mail do convidado" />
+                                            <input type="email" name="EventGuest[email]" id="EventGuest_email" class="form-control" placeholder="E-mail do convidado" />
                                         </div>
                                     </div>
                                 </div>
@@ -69,21 +72,21 @@
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <label class="radio">
-                                                            <input type="radio" value="me" checked="checked" name="EventGuest[reponsable_of_payment]">
+                                                            <input type="radio" value="me" checked="checked" name="EventGuest[responsable_of_payment]">
                                                             <i></i>
                                                             Eu
                                                         </label>
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <label class="radio">
-                                                            <input type="radio" value="invite" name="EventGuest[reponsable_of_payment]">
+                                                            <input type="radio" value="invite" name="EventGuest[responsable_of_payment]">
                                                             <i></i>
                                                             Convidado
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                 </fieldset>
                                 @endif
@@ -100,7 +103,7 @@
                         </div>
 
                     </form>
-                
+
 
             </div>
         </div>
@@ -115,14 +118,14 @@
                     <h1>Olá {{ $data['person_name'] }}</h1>
 
                     <p>Você foi convidado para o evento <span class="label bg-darken text-white">{{ $event['name'] }}</span>, que irá ocorrer no dia {{ $event['start_date_BR'] }} ás {{ $event['start_time'] }}.</p>
-                        
+
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="card sa-status">
                                 <div class="card-header who">
                                     <h4><i class="fa fa-check-circle-o text-success"></i> Sua Presença</h4>
                                 </div>
-                                <div class="card-body p-0">		
+                                <div class="card-body p-0">
                                     <div class="who clearfix">
                                         <!--
                                         <div class="text-center">
@@ -132,15 +135,15 @@
                                             </a>
                                         </div>
                                         -->
-                                       
-                                        
+
+
                                         <div class="row">
                                             <br>Confirmada em: 15/07/85 as 15:15h
                                             <br><small><a href="">Revogar presença</a></small>
 
                                             <br><strong>Pagto confirmado em: 15/07/85</strong>
                                         </div>
-                                        
+
 
                                          <!--
                                         <div class="text-center">
@@ -149,7 +152,7 @@
                                             <br><a href="">Aceitar convite</a>
                                         </div>
                                         -->
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +163,7 @@
                                 <div class="card-header who">
                                     <h4>Informações do evento</h4>
                                 </div>
-                                <div class="card-body p-0">		
+                                <div class="card-body p-0">
                                     <div class="who clearfix">
                                         <address>
                                             <strong>{{ $event['address'] }}, {{ $event['address_number'] }}</strong>
@@ -182,29 +185,30 @@
                                     <h4>Pessoas que convidei</h4>
                                     <div class="align-right"><a href="javascript:void(0)" data-toggle="modal" data-target="#form-modal" style="margin-top: -18px; display: block">Convidar mais pessoas</a></div>
                                 </div>
-                                <div class="card-body p-0">	
+                                <div class="card-body p-0">
 
                                     <div class="who clearfix">
                                         @if($invitedByMe)
-                                        <table class="table">
-                                            
+                                        <table class="table" id="table-invited-by-me">
                                             @foreach($invitedByMe as $invited)
+                                                @if(is_array($invited))
                                                 <tr>
                                                     <td>{{ $invited['person_name'] }}</td>
                                                     <td>{{ $invited['email'] }}</td>
                                                     <td>{{ $invited['created_at'] }}</td>
                                                     <td>{{ $invited['status'] }}</td>
                                                 </tr>
+                                                @endif
                                             @endforeach
-                                           
-                                        </table>                                    
+
+                                        </table>
                                         @endif
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                   
+
 					</div>
 
 
@@ -213,25 +217,111 @@
         </div>
     </div>
 
-
     <script type="text/javascript" src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>
 
-
     <script type="text/javascript">
     EventGuest = {
-        addInvite: function() {
-
+        init: function() {
+            EventGuest.formValidate();   
+            EventGuest.submitForm();
         },
 
         submitForm: function() {
+            $('#form-1').on('submit', function(e) {
+                e.preventDefault();
 
+                if(!$('#form-1').valid()) {
+                    return false;
+                }
+                
+                var data = $('#form-1').serialize();
+                var url = $('#form-1').attr('action');
+                var method = $('#form-1').attr('method');
+                $.ajax({
+                    url: url,
+                    data: data,
+                    method: method,
+                    dataType: 'json',
+                    success: function(json) {
+                        if(json.success) {
+                            $.smallBox({
+                                title: "Sucesso!",
+                                content: "<i class='fa fa-clock-o'></i> <i>Convite enviado com sucesso.</i>",
+                                color: "#659265",
+                                iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                                timeout: 2000
+                            });                        
+
+                            var html = "<tr>";
+                                html+= "<td>" + json.name + "</td>";
+                                html+= "<td>" + json.email + "</td>";
+                                html+= "<td>" + json.created_at + "</td>";
+                                html+= "<td>" + json.status + "</td>";
+                                html+= "</tr>";
+                            $('#table-invited-by-me').append(html);
+                            $('#form-modal').modal('hide');
+                            $('#form-1').each(function(){this.reset()});
+                        } else {
+                            $.smallBox({
+                                title: "Erro!",
+                                content: "<i class='fa fa-clock-o'></i> <i>Erro na tentativa de enviar o convite.</i>",
+                                color: "#C46A69",
+                                iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                                timeout: 2000
+                            });     
+                        }
+                    }
+                });
+            });                
         },
+        
 
-        validation: function() {
-
+        formValidate: function() {
+            $('#form-1').validate({
+                rules: {
+                    'EventGuest[name]': 'required',
+                    'EventGuest[email]': {
+                        'required': true,
+                        'email': true
+                    },
+                    'EventGuest[responsable_of_payment]': 'required'
+                },
+                messages: {
+                    'EventGuest[name]': 'Nome é obrigatório.',
+                    'EventGuest[email]': {
+                        'required': 'Digite o e-mail de seu convidado.',
+                        'email': 'Digite um e-mail válido.'
+                    },
+                    'EventGuest[responsable_of_paymentresponsable_of_payment]': 'Responsável pelo pagto é obrigatório'
+                },
+                highlight: function(element) {
+                    console.log(element);
+                    $(element).removeClass('is-valid').addClass('is-invalid');
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid').addClass('is-valid');
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                },
+                errorElement: 'span',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    if (element.parent('.input-group').length) {
+                        error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+                
+            });
         }
-    }
+    };
+
+    $(function() {
+        EventGuest.init();
+    });
+
     </script>
 
 </body>
