@@ -13,12 +13,17 @@ class EventGuestTransform extends TransformerAbstract
     public function transform(EventGuest $guest)
     {
         $carbonCreatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->created_at);
+        $carbonUpdatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->updated_at);
         return [
             'id'          => $guest->id,
             'person_name' => $guest->person_name,
             'email'       => $guest->email,
+            'phone'       => $guest->phone,
+            'whatsapp'    => $guest->whatsapp,
             'status'      => strtoupper($guest->getStatus()),
+            'status_int'  => (int) $guest->status,
             'created_at'  => $carbonCreatedAt->format('d/m/Y'),
+            'updated_at'  => $carbonUpdatedAt->format('d/m/Y'),
             'invitedByMe' => $this->transformInvitedByMe($guest->invitedByMe()->get()),
             'event'       => $this->transformEvent($guest->event()->get()->first()),
         ];
@@ -30,16 +35,17 @@ class EventGuestTransform extends TransformerAbstract
             $carbonCreatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->created_at);
 
             $data[] = [
-                'id'          => $guest->id,
-                'person_name' => $guest->person_name,
-                'email'       => $guest->email,
-                'status'      => strtoupper($guest->getStatus()),
-                'created_at'  => $carbonCreatedAt->format('d/m/Y'),
+                'id'                     => $guest->id,
+                'person_name'            => $guest->person_name,
+                'email'                  => $guest->email,
+                'status'                 => strtoupper($guest->getStatus()),
+                'status_int'             => (int) $guest->status,
+                'responsable_of_payment' => !empty($guest->responsable_of_payment) ? 'Eu' : 'Convidado',
+                'created_at'             => $carbonCreatedAt->format('d/m/Y'),
             ];
         }
         $data['total_invited'] = count($guests);
         return $data;
-
     }
 
     private function transformEvent($event)
@@ -69,7 +75,7 @@ class EventGuestTransform extends TransformerAbstract
             'complement'             => $event->complement,
             'reference'              => $event->reference,
             'latitude'               => $event->latitude,
-            'longitude'              => $event->longitude
+            'longitude'              => $event->longitude,
         ];
 
     }

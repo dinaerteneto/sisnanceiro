@@ -51,6 +51,7 @@ class EventTransform extends TransformerAbstract
                 'person_name' => $guest->person_name,
                 'email'       => $guest->email,
                 'status'      => strtoupper($guest->getStatus()),
+                'status_int'  => (int) $guest->status,
                 'created_at'  => $guest->created_at,
             ];
         }

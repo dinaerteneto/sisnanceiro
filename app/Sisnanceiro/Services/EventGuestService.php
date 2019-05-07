@@ -16,6 +16,13 @@ class EventGuestService extends Service
             'token_email' => 'required',
             'status'      => 'required',
         ],
+        'update' => [
+            'event_id'    => 'required|int',
+            'email'       => 'required',
+            'person_name' => 'required',
+            'token_email' => 'required',
+            'status'      => 'required',
+        ]
     ];
 
     public function __construct(Validator $validator, EventGuestRepository $repository)

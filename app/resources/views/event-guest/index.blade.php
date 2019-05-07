@@ -117,42 +117,17 @@
 
                     <h1>Olá {{ $data['person_name'] }}</h1>
 
-                    <p>Você foi convidado para o evento <span class="label bg-darken text-white">{{ $event['name'] }}</span>, que irá ocorrer no dia {{ $event['start_date_BR'] }} ás {{ $event['start_time'] }}.</p>
+                    <p>Você foi convidado para o evento <b>{{ $event['name'] }}</b>, que irá ocorrer no dia {{ $event['start_date_BR'] }} ás {{ $event['start_time'] }}.</p>
 
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="card sa-status">
                                 <div class="card-header who">
-                                    <h4><i class="fa fa-check-circle-o text-success"></i> Sua Presença</h4>
+                                    <h4>Sua Presença</h4>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div class="who clearfix">
-                                        <!--
-                                        <div class="text-center">
-                                            <a href="">
-                                                <i class="fa fa-thumbs-o-up fa-4x text-info"></i>
-                                                <br>Clique para confirmar sua presença.
-                                            </a>
-                                        </div>
-                                        -->
-
-
-                                        <div class="row">
-                                            <br>Confirmada em: 15/07/85 as 15:15h
-                                            <br><small><a href="">Revogar presença</a></small>
-
-                                            <br><strong>Pagto confirmado em: 15/07/85</strong>
-                                        </div>
-
-
-                                         <!--
-                                        <div class="text-center">
-                                            <i class="fa fa-times-circle fa-3x text-danger"></i>
-                                            <br>Sua presença foi negada em: 15/07/85 as 15:15h
-                                            <br><a href="">Aceitar convite</a>
-                                        </div>
-                                        -->
-
+                                    <div class="who clearfix" id="guest-status">
+                                        @include('event-guest/_status', compact('data'))
                                     </div>
                                 </div>
                             </div>
@@ -172,7 +147,12 @@
                                             <br>
                                             {{ $event['city'] }} - {{ $event['uf'] }}
                                             <br>
-                                            <abbr title="Phone"><i class="fa fa-phone-square"></i></abbr> 11 2951-0315
+                                            @if ($data['phone'] ) 
+                                                <abbr title="Phone"><i class="fa fa-fa-phone"></i></abbr> {{ $data['phone'] }} <br />
+                                            @endif
+                                            @if( $data['whatsapp'] )
+                                                <abbr title="Phone"><i class="fa fa-mobile-phone"></i></abbr> {{ $data['whatsapp'] }}
+                                            @endif
                                         </address>
                                     </div>
                                 </div>
@@ -183,7 +163,9 @@
                             <div class="card sa-status">
                                 <div class="card-header who">
                                     <h4>Pessoas que convidei</h4>
+                                    @if(empty($event['guest_limit_per_person']) || ($invitedByMe['total_invited'] < $event['guest_limit_per_person']) )
                                     <div class="align-right"><a href="javascript:void(0)" data-toggle="modal" data-target="#form-modal" style="margin-top: -18px; display: block">Convidar mais pessoas</a></div>
+                                    @endif
                                 </div>
                                 <div class="card-body p-0">
 
@@ -223,8 +205,24 @@
     <script type="text/javascript">
     EventGuest = {
         init: function() {
-            EventGuest.formValidate();   
             EventGuest.submitForm();
+            EventGuest.changeStatus();
+            EventGuest.formValidate();   
+        },
+
+        changeStatus: function() {
+            $('.change-status').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    dataType: 'html',
+                    success: function(html) {
+                        $('#guest-status').html(html);
+                    }
+                })
+            })
         },
 
         submitForm: function() {
@@ -254,7 +252,7 @@
                             });                        
 
                             var html = "<tr>";
-                                html+= "<td>" + json.name + "</td>";
+                                html+= "<td>" + json.person_name + "</td>";
                                 html+= "<td>" + json.email + "</td>";
                                 html+= "<td>" + json.created_at + "</td>";
                                 html+= "<td>" + json.status + "</td>";

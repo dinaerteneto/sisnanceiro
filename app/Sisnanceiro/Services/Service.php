@@ -51,7 +51,8 @@ abstract class Service
         if ($this->validator->getErrors()) {
             return $this->validator;
         }
-        return $model->update($data);
+        $model->fill($data);
+        return $model->save();
     }
 
     /**

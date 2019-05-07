@@ -17,30 +17,42 @@ class EventService extends Service
 {
     protected $rules = [
         'create' => [
-            'name'           => 'required|max:255',
-            'start_date'     => 'required',
-            'end_date'       => 'required',
-            'value'          => 'float',
-            'description'    => 'required',
-            'zipcode'        => 'required',
-            'address'        => 'required',
-            'address_number' => 'required',
-            'city'           => 'required',
+            'name'                   => 'required|max:255',
+            'start_date'             => 'required',
+            'end_date'               => 'required',
+            'people_limit'           => 'int',
+            'guest_limit_per_person' => 'int',
+            'days_for_cancel'        => 'int',
+            'value_per_person'       => 'float',
+            'phone'                  => 'string',
+            'whatsapp'               => 'string',
+            'value'                  => 'float',
+            'description'            => 'required',
+            'zipcode'                => 'required',
+            'address'                => 'required',
+            'address_number'         => 'required',
+            'city'                   => 'required',
             'complement',
             'reference',
             'latitude',
             'longitude',
         ],
         'update' => [
-            'name'           => 'required|max:255',
-            'start_date'     => 'required',
-            'end_date'       => 'required',
-            'value'          => 'float',
-            'description'    => 'required',
-            'zipcode'        => 'required',
-            'address'        => 'required',
-            'address_number' => 'required',
-            'city'           => 'required',
+            'name'                   => 'required|max:255',
+            'start_date'             => 'required',
+            'end_date'               => 'required',
+            'people_limit'           => 'int',
+            'guest_limit_per_person' => 'int',
+            'days_for_cancel'        => 'int',
+            'value_per_person'       => 'float',
+            'phone'                  => 'string',
+            'whatsapp'               => 'string',
+            'value'                  => 'float',
+            'description'            => 'required',
+            'zipcode'                => 'required',
+            'address'                => 'required',
+            'address_number'         => 'required',
+            'city'                   => 'required',
             'complement',
             'reference',
             'latitude',
@@ -142,17 +154,18 @@ class EventService extends Service
      * Add Guests on event
      * @param int $eventId id of the event
      * @param array $data
-     * @return Boolean
+     * @return array
      */
     public function addGuest($eventId, array $data)
     {
+        $return = [];
         if ($data) {
             foreach ($data as $key => $record) {
                 $data[$key]['event_id'] = $eventId;
-                $this->eventGuestService->store($this->mapGuest($data[$key]), 'create');
+                $return[]               = $this->eventGuestService->store($this->mapGuest($data[$key]), 'create');
             }
         }
-        return true;
+        return $return;
     }
 
     /**
