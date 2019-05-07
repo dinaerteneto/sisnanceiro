@@ -211,7 +211,7 @@
         },
 
         changeStatus: function() {
-            $('.change-status').on('click', function(e) {
+            $('body').on('click', '.change-status', function(e) {
                 e.preventDefault();
                 var url = $(this).attr('href');
                 $.ajax({
