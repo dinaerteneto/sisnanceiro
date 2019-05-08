@@ -76,14 +76,14 @@ Event = {
     addEvent: function() {
         var calendar = $('#calendar').fullCalendar('getCalendar');
         calendar.on('dayClick', function(date, jsEvent, view) {
-            Event.openModalEvent("event/create", { date: date.format('DD/MM/YYYY') });
+            Event.openModalEvent("/event/create", { date: date.format('DD/MM/YYYY') });
         });
     },
 
     updEvent: function() {
         var calendar = $('#calendar').fullCalendar('getCalendar');
         calendar.on('eventClick', function(event, jsEvent, view) {
-            Event.openModalEvent("event/update/" + event.id, {});
+            Event.openModalEvent("/event/update/" + event.id, {});
         });
     },
 

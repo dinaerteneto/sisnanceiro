@@ -53,6 +53,7 @@ class EventTransform extends TransformerAbstract
                 'status'      => strtoupper($guest->getStatus()),
                 'status_int'  => (int) $guest->status,
                 'created_at'  => $guest->created_at,
+                'invitedByMe' => $this->mainGuest($guest->invitedByMe()->get())
             ];
         }
         return $data;

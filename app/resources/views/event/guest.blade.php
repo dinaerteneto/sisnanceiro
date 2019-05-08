@@ -34,7 +34,7 @@
 								<br>
 								{{ $model->city }} - {{ $model->uf }}
 								<br>
-								<abbr title="Phone"><i class="fa fa-phone-square"></i></abbr> 11 2951-0315
+								<abbr title="Phone"><i class="fa fa-phone-square"></i></abbr> 
 							</address>
 						</div>
 						<div class="col-xl-6 col-md-4">
@@ -69,7 +69,7 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-xl-6 col-md-8">
+                        <div class="col-sm-12">
                            {{ $model->description }}
                            <br>                           
                         </div>
@@ -118,7 +118,7 @@
 									<ul>
                                         @if($mainGuests = $model->mainGuests)
                                             @foreach($mainGuests as $guest) 
-                                                @include('event/_guest', compact('guest'))
+                                                @include('event/_guest', compact('guest', 'model'))
                                             @endforeach
                                         @endif
 

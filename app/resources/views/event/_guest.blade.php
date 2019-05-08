@@ -4,22 +4,27 @@
         <a href="javascript:void(0);" class="username text-blue-dark">{{ $guest['person_name'] }}</a> 
         <span class="font-xs">
             {{ $guest['email'] }}  <br /> 
-            <span class="label label-info">4 CONVIDADOS</span>
-                {{$label = 'success'}}
-                @switch($guest['status'])
-                    @case('AGUARDANDO')
-                        {$label = 'success'}
-                        @break
-                    @case('CONFIRMADO')
-                        {$label = 'info'}
-                        @break
-                    @case('NEGADO')
-                        {$label = 'danger'}
-                        @break
-                @endswitch
+            <?php $label = null ?>
+            @switch( $guest['status_int'])
+                @case(1)
+                    <?php $label = 'success' ?>
+                @break
+                @case(2)
+                    <?php $label = 'warning' ?>
+                @break
+                @case(3)
+                    <?php $label = 'danger' ?>
+                @break
+            @endswitch
             <span class="label label-{{ $label }}">            
+                {{ $guest['status'] }}
+            </span>&nbsp;
+            <span class="label label-info"> 
+                {{ count($guest['invitedByMe']) }} CONVIDADOS
             </span>
         </span>
-        <time class="p-relative d-block margin-top-5"> R$ 60,00 </time> 
+        <time class="p-relative d-block margin-top-5"> 
+            R$ {{ count($guest['invitedByMe']) * $model->value_per_person }} 
+        </time> 
     </div>
 </li>

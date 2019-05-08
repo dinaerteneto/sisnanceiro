@@ -102,7 +102,6 @@ class EventController extends Controller
         $model          = $this->eventService->find($eventId);
         $eventTransform = fractal($model, new EventTransform());
         $model          = (object) $eventTransform->toArray()['data'];
-
         return View('/event/guest', compact('model'));
     }
 
