@@ -3,7 +3,6 @@ Event = {
         Event.initCalendar();
         Event.addEvent();
         Event.updEvent();
-        Event.formValidate();
     },
 
     initCalendar: function() {
@@ -84,50 +83,6 @@ Event = {
         var calendar = $('#calendar').fullCalendar('getCalendar');
         calendar.on('eventClick', function(event, jsEvent, view) {
             Event.openModalEvent("/event/update/" + event.id, {});
-        });
-    },
-
-    formValidate: function() {
-        $('#event-form').validate({
-            rules: {
-                'Event[name]': 'required',
-                'Event[start_date]': 'required',
-                'Event[start_time]': 'required',
-                'Event[end_date]': 'required',
-                'Event[end_time]': 'required',
-                'Event[zipcode]': 'required',
-                'Event[address]': 'required',
-                'Event[address_number]': 'required',
-                'Event[city]': 'required'
-            },
-            messages: {
-                'Event[name]': 'Obrigatório',
-                'Event[start_date]': 'Obrigatório',
-                'Event[start_time]': 'Obrigatório',
-                'Event[end_date]': 'Obrigatório',
-                'Event[end_time]': 'Obrigatório',
-                'Event[zipcode]': 'Obrigatório',
-                'Event[address]': 'Obrigatório',
-                'Event[address_number]': 'Obrigatório',
-                'Event[city]': 'Obrigatório'
-            },
-            highlight: function(element) {
-                $(element).removeClass('is-valid').addClass('is-invalid');
-                $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
-            },
-            unhighlight: function(element) {
-                $(element).removeClass('is-invalid').addClass('is-valid');
-                $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
-            },
-            errorElement: 'span',
-            errorClass: 'invalid-feedback',
-            errorPlacement: function(error, element) {
-                if (element.parent('.input-group').length) {
-                    error.insertAfter(element.parent());
-                } else {
-                    error.insertAfter(element);
-                }
-            }
         });
     }
 }

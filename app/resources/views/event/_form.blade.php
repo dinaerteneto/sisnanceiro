@@ -30,7 +30,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input class="form-control datepicker" id="Event_start_date" value="{{ $model->start_date }}" type="text" placeholder="Data inicial" name="Event[start_date]">
+                                            <input class="form-control datepicker" id="Event_start_date" autocomplete="off" value="{{ $model->start_date }}" type="text" placeholder="Data inicial" name="Event[start_date]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar"></i></span></span>
                                         </div>
                                     </div>
@@ -39,7 +39,7 @@
                                 <div class="col-sm-5">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input class="form-control hasClockpicker" id="Event_start_time" value="{{ $model->start_time }}" type="text" placeholder="Hora do início" data-autoclose="true" name="Event[start_time]">
+                                            <input class="form-control hasClockpicker" id="Event_start_time" autocomplete="off" value="{{ $model->start_time }}" type="text" placeholder="Hora do início" data-autoclose="true" name="Event[start_time]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
                                         </div>             
                                     </div>
@@ -52,7 +52,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input class="form-control datepicker" id="from" value="{{ $model->end_date }}" type="text" placeholder="Data do fim" name="Event[end_date]">
+                                            <input class="form-control datepicker" id="Event_end_date" autocomplete="off" value="{{ $model->end_date }}" type="text" placeholder="Data do fim" name="Event[end_date]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar"></i></span></span>
                                         </div>
                                     </div>
@@ -61,7 +61,7 @@
                                 <div class="col-sm-5">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input class="form-control hasClockpicker" id="Event_end_time" value="{{ $model->end_time }}" type="text" placeholder="Hora do término" data-autoclose="true" name="Event[end_time]">
+                                            <input class="form-control hasClockpicker" id="Event_end_time" autocomplete="off" value="{{ $model->end_time }}" type="text" placeholder="Hora do término" data-autoclose="true" name="Event[end_time]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
                                         </div>             
                                     </div>
@@ -202,6 +202,58 @@
     </div>
 
 </div>
-
 @include('layouts/_partial_scripts')
-<script type="text/javascript" src="{{ asset('assets/js/custom/Event.js') }}"></script>
+<script type="text/javascript">
+EventModal = {
+    init: function(){
+        EventModal.formValidate();
+        Form.masks();
+    },
+    formValidate: function() {
+        $('#event-form').validate({
+            rules: {
+                'Event[name]': 'required',
+                'Event[start_date]': 'required',
+                'Event[start_time]': 'required',
+                'Event[end_date]': 'required',
+                'Event[end_time]': 'required',
+                'Event[zipcode]': 'required',
+                'Event[address]': 'required',
+                'Event[address_number]': 'required',
+                'Event[city]': 'required'
+            },
+            messages: {
+                'Event[name]': 'Obrigatório',
+                'Event[start_date]': 'Obrigatório',
+                'Event[start_time]': 'Obrigatório',
+                'Event[end_date]': 'Obrigatório',
+                'Event[end_time]': 'Obrigatório',
+                'Event[zipcode]': 'Obrigatório',
+                'Event[address]': 'Obrigatório',
+                'Event[address_number]': 'Obrigatório',
+                'Event[city]': 'Obrigatório'
+            },
+            highlight: function(element) {
+                $(element).removeClass('is-valid').addClass('is-invalid');
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid').addClass('is-valid');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+            },
+            errorElement: 'span',
+            errorClass: 'invalid-feedback',
+            errorPlacement: function(error, element) {
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+    }        
+};
+$('document').ready(function() {
+    EventModal.init();
+})
+</script>
