@@ -23,8 +23,5 @@
                 {{ count($guest['invitedByMe']) }} CONVIDADOS
             </span>
         </span>
-        <time class="p-relative d-block margin-top-5"> 
-            R$ {{ count($guest['invitedByMe']) * $model->value_per_person }} 
-        </time> 
     </div>
 </li>

@@ -32,6 +32,7 @@ Route::group(['prefix' => 'event'], function() {
     Route::post('update/{id}', 'EventController@update');
     Route::post('delete/{id}', 'EventController@delete');
     Route::get('load', 'EventController@load');
+    Route::get('/{id}/guests', 'EventController@guests');
 
     Route::group(['prefix' => 'guest'], function() {
         Route::get('/{eventId}', 'EventController@guest');

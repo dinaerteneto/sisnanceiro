@@ -25,6 +25,12 @@
                     <!-- content goes here -->
 
                     <div class="row">
+                        <div class="col-md-12">
+                            <a href="/event/{{ $model->id }}/guests" target="_blank"><i class="fa fa-print"></i> Imprimir lista de convidados</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
 						<div class="col-xl-6 col-md-8">
 							<h4 class="text-medium">{{ $model->name }}</h4>
 							<address>
@@ -35,7 +41,7 @@
 								{{ $model->city }} - {{ $model->uf }}
 								<br>
 								<abbr title="Phone"><i class="fa fa-phone-square"></i></abbr> 
-							</address>
+                            </address>
 						</div>
 						<div class="col-xl-6 col-md-4">
 
@@ -50,18 +56,21 @@
                                 </div>
 
                                 <div>
-                                    30 Convidados no total <br>
-                                    15 Confirmados<br>
-                                    15 Aguardando confirnação
+                                    {{ $model->totalGuest['total'] }} Convidados no total <br>
+                                    {{ $model->totalGuest['confirmed'] }} Confirmados<br>
+                                    {{ $model->totalGuest['waiting'] }} Aguardando confirmação<br>
+                                    {{ $model->totalGuest['denied'] }} Negaram <br><br>
+                                    @if($model->value_per_person > 0) 
+                                    <b>R$ {{ $model->totalGuest['revenue'] }}</b> arrecadados até o momento
+                                    @endif
                                 </div>
 							</div>
 							<br>
 							<div class="well well-sm bg-darken text-white no-border no-border-radius">
 								<div class="fa-lg">
 									Por pessoa
-									<span class="pull-right"> R$ 15,00 </span>
+									<span class="pull-right"> R$ {{ $model->value_per_person }} </span>
 								</div>
-
 							</div>
 							<br>
 							<br>

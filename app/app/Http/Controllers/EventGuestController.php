@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
-use Sisnanceiro\Transformers\EventGuestTransform;
 
 class EventGuestController extends Controller
 {
@@ -47,9 +46,8 @@ class EventGuestController extends Controller
         $record           = $guest->toArray();
         $record['status'] = $status;
         $this->eventGuestService->update($guest, $record);
-        $transform        = fractal($guest, new EventGuestTransform());
-        $data             = $transform->toArray()['data'];
+        $transform = fractal($guest, new EventGuestTransform());
+        $data      = $transform->toArray()['data'];
         return View('event-guest/_status', compact('data'));
     }
-
 }

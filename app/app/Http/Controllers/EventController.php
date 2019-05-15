@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\Event;
 use Sisnanceiro\Services\EventService;
+use Sisnanceiro\Transformers\EventGuestsTransform;
 use Sisnanceiro\Transformers\EventTransform;
 
 class EventController extends Controller
@@ -50,7 +51,7 @@ class EventController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
+    {@
         $model  = $this->eventService->find($id);
         $action = "/event/update/{$id}";
         $title  = "Evento {$model->name}";
@@ -97,7 +98,7 @@ class EventController extends Controller
         }
     }
 
-    public function guest(Request $request, $eventId)
+    public function guest($eventId)
     {
         $model          = $this->eventService->find($eventId);
         $eventTransform = fractal($model, new EventTransform());
@@ -120,4 +121,11 @@ class EventController extends Controller
         return Response::json(['success' => false]);
     }
 
+    public function guests($id)
+    {
+        $model     = $this->eventService->find($id);
+        $transform = fractal($model, new EventGuestsTransform());
+        $data      = $transform->toArray()['data'];
+        return View('event/_guests', compact('data'));
+    }
 }

@@ -35,5 +35,4 @@ class EventGuestService extends Service
     {
         return $this->repository->allMainGuest($eventId);    
     }
-
 }
