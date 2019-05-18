@@ -46,6 +46,14 @@ class EventGuest extends Model
     /**
      * Get the main Guests of the event
      */
+    public function invitedBy()
+    {
+        return $this->hasOne('Sisnanceiro\Models\EventGuest', 'id', 'invited_by_id');
+    }
+
+    /**
+     * Get the main Guests of the event
+     */
     public function invitedByMe()
     {
         return $this->hasMany('Sisnanceiro\Models\EventGuest', 'invited_by_id');

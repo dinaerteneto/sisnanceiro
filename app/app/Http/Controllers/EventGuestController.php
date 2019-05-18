@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
+use Sisnanceiro\Transformers\EventGuestTransform;
 
 class EventGuestController extends Controller
 {

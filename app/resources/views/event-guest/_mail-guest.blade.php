@@ -1,31 +1,58 @@
-Olá {{ $eventGuest->name }}, você foi convidado por @783jdakh
-para participar do evento <b>{{ $event->name }}</b> que ocorrerá no dia {{ $event->start_date }} às xx:xx.
+<style type="text/css">
+    * {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 12px;
+        margin: 6px 0;
+        padding: 0;
+    }
+    h4 {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    h6 {
+        font-size: 14px;
+    }
+
+</style>
+
+Olá {{ $data['person_name'] }}, você foi convidado @if(!empty($data['invitedBy'])) por <b>{{ $data['invitedBy']['person_name'] }}</b>, @endif
+para participar do evento <b>{{ $data['event']['name'] }}</b> que ocorrerá no dia {{ $data['event']['start_date'] }} às {{ $data['event']['start_time'] }}h.
 
 <h4>Informações do evento</h4>
 
 <info>
-    {{ $event->description }}
+    {{ $data['event']['description'] }}
 </info>
 
 <address>
-    <h6>Endereço</h6> 
-    {{ $event->address }}, {{ $event->address_number }} <br>
-    {{ $event->district }} <br>
-    {{ $event->city }} - {{ $event->uf }} <br>
-    {{ $event->cep }}
+    <h6>Endereço</h6>
+    {{ $data['event']['address'] }}, {{ $data['event']['address_number'] }} <br>
+    {{ $data['event']['district'] }} <br>
+    {{ $data['event']['city'] }} - {{ $data['event']['uf'] }} <br>
+    {{ $data['event']['zipcode'] }}
 </address>
 
+@if(!empty($data['event']['phone']) || !empty($data['event']['whatsapp']) || !empty($data['event']['email']) )
 <contacts>
     <h6>Contato</h6>
-    Telefone: {{ $event->phone }} <br>
-    whatsapp: {{ $event->whatsapp }} <br>
-    E-mail: {{ $event->email }}
+    @if(!empty($data['event']['phone']))
+        Telefone: {{ $data['event']['phone'] }} <br>
+    @endif
+    @if(!empty($data['event']['whatsapp']))
+        whatsapp: {{ $data['event']['whatsapp'] }} <br>
+    @endif
+    @if(!empty($data['event']['email']))
+        E-mail: {{ $data['event']['email'] }}
+    @endif
 </contacts>
+@endif
 
+@if(!empty($data['event']['value_per_person']) && !empty($data['event']['responsable_of_payment']))
 <price>
     <h6>Valor do ingresso</h6>
-    {{ $event->value_per_person }} <br>
+    R$ {{ $data['event']['value_per_person'] }} por pessoa.<br>
 </price>
+@endif
 
 <confirm>
     Para confirmar sua participação <a href="#">Clique aqui</a>.

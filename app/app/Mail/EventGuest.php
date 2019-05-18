@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Sisnanceiro\Models\EventGuest as EventGuestModel;
+use Sisnanceiro\Transformers\EventGuestTransform;
 
 class EventGuest extends Mailable
 {
@@ -30,10 +31,12 @@ class EventGuest extends Mailable
      */
     public function build()
     {
-        $eventGuest = $this->eventGuest;
-        $event      = $eventGuest->event;
-        return $this->subject('Convite para o evento: ' . $event->name)
+        $guest     = $this->eventGuest;
+        $transform = fractal($guest, new EventGuestTransform());
+        $data      = $transform->toArray()['data'];
+
+        return $this->subject('Convite para o evento: ' . $data['event']['name'])
             ->from(ENV('MAIL_FROM_EMAIL'), ENV('MAIL_FROM_NAME'))
-            ->view('event-guest._mail-guest', compact('event', 'eventGuest'));
+            ->view('event-guest._mail-guest', compact('data'));
     }
 }
