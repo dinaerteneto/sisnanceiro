@@ -162,7 +162,10 @@ class EventService extends Service
         if ($data) {
             foreach ($data as $key => $record) {
                 $data[$key]['event_id'] = $eventId;
-                $return[]               = $this->eventGuestService->store($this->mapGuest($data[$key]), 'create');
+
+                $eventGuest = $this->eventGuestService->store($this->mapGuest($data[$key]), 'create');
+                $this->eventGuestService->sendInvoiceToMail($eventGuest);
+                $return[] = $eventGuest;
             }
         }
         return $return;
