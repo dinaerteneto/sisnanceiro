@@ -79,6 +79,7 @@ class EventGuestService extends Service
         if (!$guest) {
             $data = $this->mapData($data);
             if ($repository = $this->store($data, 'create')) {
+                $this->sendInvoiceToMail($repository);
                 $transform = fractal($repository, new EventGuestTransform());
                 $return    = [
                     'success' => true,
