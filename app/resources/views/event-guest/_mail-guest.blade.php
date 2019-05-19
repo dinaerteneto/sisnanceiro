@@ -55,5 +55,5 @@ para participar do evento <b>{{ $data['event']['name'] }}</b> que ocorrerá no d
 @endif
 
 <confirm>
-    Para confirmar sua participação <a href="#">Clique aqui</a>.
+    Para confirmar sua participação <a href="{{ $data['event']['company_url'] }}/guest/{{ $data['token_email'] }}">Clique aqui</a>.
 </confirm>

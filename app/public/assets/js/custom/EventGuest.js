@@ -70,7 +70,21 @@ EventGuest = {
             if (EventGuest.formValidate()) {
 
                 $.post(action, $(this).serialize(), function(json) {
-                    if (json.success) {
+
+                    var bool = true;
+                    var msg = "";
+
+                    for (var i = 0; i < json.length; i++) {
+                        if (!json[i].success) {
+                            bool = false;
+                            if (json[i].hasOwnProperty('message')) {
+                                msg = json[i].message;
+                            }
+                            break;
+                        }
+                    }
+
+                    if (bool) {
                         $.smallBox({
                             title: "Sucesso!",
                             content: "<i class='fa fa-clock-o'></i> <i>Convidado(s) incluído(s) com sucesso.</i>",
@@ -82,13 +96,21 @@ EventGuest = {
                             location.reload(true);
                         }, 2000);
                     } else {
+                        if (msg != "") {
+                            msg = json.message;
+                        } else {
+                            msg = "Erro na tentativa de enviar o convite.";
+                        }
                         $.smallBox({
                             title: "Erro!",
                             content: "<i class='fa fa-clock-o'></i> <i>Erro na tentativa de incluir convidados</i>",
                             color: "#C46A69",
                             iconSmall: "fa fa-times fa-2x fadeInRight animated",
-                            timeout: 4000
+                            timeout: 8000
                         });
+                        setTimeout(function() {
+                            location.reload(true);
+                        }, 2000);
                     }
                 });
 

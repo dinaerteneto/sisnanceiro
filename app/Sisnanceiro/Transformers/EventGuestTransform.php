@@ -5,8 +5,8 @@ namespace Sisnanceiro\Transformers;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\TransformerAbstract;
-use Sisnanceiro\Models\EventGuest;
 use Sisnanceiro\Helpers\Mask;
+use Sisnanceiro\Models\EventGuest;
 
 class EventGuestTransform extends TransformerAbstract
 {
@@ -15,14 +15,14 @@ class EventGuestTransform extends TransformerAbstract
     {
         $carbonCreatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->created_at);
         $carbonUpdatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->updated_at);
-        $invitedBy = $guest->invitedBy()->get()->first();
+        $invitedBy       = $guest->invitedBy()->get()->first();
 
         return [
             'id'          => $guest->id,
             'person_name' => $guest->person_name,
             'email'       => $guest->email,
-            'phone'       => $guest->phone,
-            'whatsapp'    => $guest->whatsapp,
+            'token_email' => $guest->token_email,
+            'value'       => $guest->value,
             'status'      => strtoupper($guest->getStatus()),
             'status_int'  => (int) $guest->status,
             'created_at'  => $carbonCreatedAt->format('d/m/Y'),
@@ -64,6 +64,7 @@ class EventGuestTransform extends TransformerAbstract
         return [
             'id'                     => $event->id,
             'name'                   => $event->name,
+            'company_url'            => $event->company()->get()->first()->url,
             'start_date'             => $carbonStartDate->format('d/m/Y'),
             'end_date'               => $carbonEndDate->format('d/m/Y'),
             'start_date_BR'          => $carbonEndDate->format('d/m/Y'),

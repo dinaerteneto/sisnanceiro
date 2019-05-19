@@ -42,6 +42,14 @@ class Event extends Model
     /**
      * Get the main Guests of the event
      */
+    public function company()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Company', 'id', 'company_id');
+    }
+
+    /**
+     * Get the main Guests of the event
+     */
     public function mainGuests()
     {
         return $this->hasMany('Sisnanceiro\Models\EventGuest')->whereNull('invited_by_id');

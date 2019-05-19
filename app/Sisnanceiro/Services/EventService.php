@@ -4,11 +4,8 @@ namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
-use Sisnanceiro\Models\EventGuest;
 use Sisnanceiro\Repositories\EventRepository;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\PersonService;
@@ -92,30 +89,6 @@ class EventService extends Service
     }
 
     /**
-     * prepare data to save in model
-     * @param array $data data to map
-     * @return array
-     */
-    public function mapGuest(array $data)
-    {
-        $person   = $this->personService->findBy('email', $data['email']);
-        $personId = $person ? $person->id : null;
-        $event    = $this->repository->find($data['event_id']);
-
-        return [
-            'event_id'               => $data['event_id'],
-            'person_id'              => $personId,
-            'person_name'            => $data['name'],
-            'email'                  => $data['email'],
-            'token_email'            => Hash::make(Str::random()),
-            'status'                 => EventGuest::STATUS_WAITING,
-            'invited_by_id'          => isset($data['invited_by_id']) && $data['invited_by_id'] !== null ? $data['invited_by_id'] : null,
-            'responsable_of_payment' => isset($data['responsable_of_payment']) && $data['responsable_of_payment'] === 'me' ? $data['invited_by_id'] : null,
-            'value'                  => !empty($event->value_per_person) && $event->value_per_person > 0 ? $event->value_per_person : 0,
-        ];
-    }
-
-    /**
      * map data to save on event table
      * @param array $data array to data for save in event table
      * @return boolean
@@ -148,27 +121,6 @@ class EventService extends Service
     public function load($start, $end)
     {
         return $this->repository->load($start, $end);
-    }
-
-    /**
-     * Add Guests on event
-     * @param int $eventId id of the event
-     * @param array $data
-     * @return array
-     */
-    public function addGuest($eventId, array $data)
-    {
-        $return = [];
-        if ($data) {
-            foreach ($data as $key => $record) {
-                $data[$key]['event_id'] = $eventId;
-
-                $eventGuest = $this->eventGuestService->store($this->mapGuest($data[$key]), 'create');
-                $this->eventGuestService->sendInvoiceToMail($eventGuest);
-                $return[] = $eventGuest;
-            }
-        }
-        return $return;
     }
 
     /**

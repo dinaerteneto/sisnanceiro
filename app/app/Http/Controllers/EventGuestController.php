@@ -19,9 +19,9 @@ class EventGuestController extends Controller
         $this->eventService      = $eventService;
     }
 
-    public function index(Request $request, $guestId)
+    public function index(Request $request, $tokenEmail)
     {
-        $guest       = $this->eventGuestService->findBy('id', $guestId);
+        $guest       = $this->eventGuestService->findBy('token_email', $tokenEmail);
         $transform   = fractal($guest, new EventGuestTransform());
         $data        = $transform->toArray()['data'];
         $invitedByMe = $data['invitedByMe'];
@@ -29,26 +29,31 @@ class EventGuestController extends Controller
         return view('event-guest/index', compact('data', 'invitedByMe', 'event'));
     }
 
-    public function sendInvite(Request $request, $guestId)
+    public function sendInvite(Request $request, $tokenEmail)
     {
         $return = ['success' => false];
-        $data[] = $request->get('EventGuest');
-        if ($guests = $this->eventService->addGuest($data[0]['event_id'], $data)) {
-            $guest     = $guests[0];
-            $transform = fractal($guest, new EventGuestTransform());
-            $return    = array_merge($transform->toArray()['data'], ['success' => true]);
-        }
+        $data = $request->get('EventGuest');
+        $return = $this->eventGuestService->addGuest($data['event_id'], $data);
         return Response::json($return);
     }
 
-    public function changeStatus($guestId, $status)
+    public function changeStatus($tokenEmail, $status)
     {
-        $guest            = $this->eventGuestService->findBy('id', $guestId);
+        $guest = $this->eventGuestService->findBy('token_email', $tokenEmail);
+        if (empty($guest->responsable_of_payment) && $guest->value > 0) {
+            return 'Status não pode ser alterado.';
+        }
         $record           = $guest->toArray();
         $record['status'] = $status;
         $this->eventGuestService->update($guest, $record);
         $transform = fractal($guest, new EventGuestTransform());
         $data      = $transform->toArray()['data'];
         return View('event-guest/_status', compact('data'));
+    }
+
+    public function invoice($tokenEmail)
+    {
+        echo $tokenEmail;
+        exit;
     }
 }

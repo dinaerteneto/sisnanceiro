@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\Event;
+use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
 use Sisnanceiro\Transformers\EventGuestsTransform;
 use Sisnanceiro\Transformers\EventTransform;
@@ -13,10 +14,12 @@ use Sisnanceiro\Transformers\EventTransform;
 class EventController extends Controller
 {
     private $eventService;
+    private $eventGuestService;
 
-    public function __construct(EventService $eventService)
+    public function __construct(EventService $eventService, EventGuestService $eventGuestService)
     {
-        $this->eventService = $eventService;
+        $this->eventService      = $eventService;
+        $this->eventGuestService = $eventGuestService;
     }
 
     public function index()
@@ -114,11 +117,17 @@ class EventController extends Controller
 
     public function storeGuest(Request $request, $eventId)
     {
-        $data = $request->get('Guest');
-        if ($this->eventService->addGuest($eventId, $data)) {
-            return Response::json(['success' => true]);
+        $postData = $request->get('Guest');
+        if ($postData) {
+            foreach ($postData as $data) {
+                $guest = $this->eventGuestService->addGuest($eventId, $data);
+                if(!$guest['success'] && isset($guest['message'])) {
+                    $request->session()->flash('error', ['message' => $guest['message'], 'errors' => []]);   
+                }
+                $return[] = $guest;
+            }
         }
-        return Response::json(['success' => false]);
+        return Response::json($return);
     }
 
     public function guests($id)

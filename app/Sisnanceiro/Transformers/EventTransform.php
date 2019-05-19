@@ -20,6 +20,7 @@ class EventTransform extends TransformerAbstract
         return [
             'id'                     => $event->id,
             'name'                   => $event->name,
+            'company_url'            => $event->company()->get()->first()->url,
             'start_date'             => $carbonStartDate->format('Y-m-d'),
             'end_date'               => $carbonEndDate->format('Y-m-d'),
             'start_date_BR'          => $carbonEndDate->format('d/m/Y'),

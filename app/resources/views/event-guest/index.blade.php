@@ -37,7 +37,7 @@
                     </button>
                 </div>
 
-                    <form id="form-1" method="post" action="/guest/{{ $data['id'] }}/send-invite">
+                    <form id="form-1" method="post" action="/guest/{{ $data['token_email'] }}/send-invite">
                         @csrf
 
                         <input type="hidden" name="EventGuest[event_id]" value="{{ $event['id'] }}" />
@@ -127,7 +127,11 @@
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="who clearfix" id="guest-status">
-                                        @include('event-guest/_status', compact('data'))
+                                        @if( $data['value'] > 0)
+                                            @include('event-guest/_status_with_payment', compact('data'))
+                                        @else
+                                            @include('event-guest/_status', compact('data'))
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -147,10 +151,10 @@
                                             <br>
                                             {{ $event['city'] }} - {{ $event['uf'] }}
                                             <br>
-                                            @if ($data['phone'] ) 
+                                            @if (!empty($data['phone']) )
                                                 <abbr title="Phone"><i class="fa fa-fa-phone"></i></abbr> {{ $data['phone'] }} <br />
                                             @endif
-                                            @if( $data['whatsapp'] )
+                                            @if( !empty($data['whatsapp']) )
                                                 <abbr title="Phone"><i class="fa fa-mobile-phone"></i></abbr> {{ $data['whatsapp'] }}
                                             @endif
                                         </address>
@@ -160,6 +164,24 @@
                         </div>
 
                         <div class="col-sm-6">
+                            <div class="card sa-status">
+                                <div class="card-header who">
+                                    <h4>Informações de pagamento</h4>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="who clearfix">
+                                        O valor do seu convite é de R$ {{ $event['value_per_person'] }}. <br><br>
+                                        <a href="/guest/{{ $data['token_email'] }}/invoice" target="_blank"><i class="fa fa-print"></i> clique aqui</a> para imprimir seu boleto.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+					</div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
                             <div class="card sa-status">
                                 <div class="card-header who">
                                     <h4>Pessoas que convidei</h4>
@@ -190,9 +212,7 @@
                                 </div>
                             </div>
                         </div>
-
-					</div>
-
+                    </div>
 
                 </div>
             </div>
@@ -207,16 +227,18 @@
         init: function() {
             EventGuest.submitForm();
             EventGuest.changeStatus();
-            EventGuest.formValidate();   
+            EventGuest.formValidate();
         },
 
         changeStatus: function() {
             $('body').on('click', '.change-status', function(e) {
                 e.preventDefault();
                 var url = $(this).attr('href');
+                var data = $('#form-2').serialize();
                 $.ajax({
                     url: url,
-                    method: 'get',
+                    data: data,
+                    method: 'post',
                     dataType: 'html',
                     success: function(html) {
                         $('#guest-status').html(html);
@@ -232,7 +254,7 @@
                 if(!$('#form-1').valid()) {
                     return false;
                 }
-                
+
                 var data = $('#form-1').serialize();
                 var url = $('#form-1').attr('action');
                 var method = $('#form-1').attr('method');
@@ -242,6 +264,7 @@
                     method: method,
                     dataType: 'json',
                     success: function(json) {
+
                         if(json.success) {
                             $.smallBox({
                                 title: "Sucesso!",
@@ -249,31 +272,33 @@
                                 color: "#659265",
                                 iconSmall: "fa fa-check fa-2x fadeInRight animated",
                                 timeout: 2000
-                            });                        
+                            });
 
                             var html = "<tr>";
-                                html+= "<td>" + json.person_name + "</td>";
-                                html+= "<td>" + json.email + "</td>";
-                                html+= "<td>" + json.created_at + "</td>";
-                                html+= "<td>" + json.status + "</td>";
+                                html+= "<td>" + json.data.person_name + "</td>";
+                                html+= "<td>" + json.data.email + "</td>";
+                                html+= "<td>" + json.data.created_at + "</td>";
+                                html+= "<td>" + json.data.status + "</td>";
                                 html+= "</tr>";
+
                             $('#table-invited-by-me').append(html);
                             $('#form-modal').modal('hide');
                             $('#form-1').each(function(){this.reset()});
                         } else {
                             $.smallBox({
                                 title: "Erro!",
-                                content: "<i class='fa fa-clock-o'></i> <i>Erro na tentativa de enviar o convite.</i>",
+                                content: "<i class='fa fa-clock-o'></i> <i>" + json.data.message + "</i>",
                                 color: "#C46A69",
                                 iconSmall: "fa fa-times fa-2x fadeInRight animated",
-                                timeout: 2000
-                            });     
+                                timeout: 8000
+                            });
+
                         }
                     }
                 });
-            });                
+            });
         },
-        
+
 
         formValidate: function() {
             $('#form-1').validate({
@@ -311,7 +336,7 @@
                         error.insertAfter(element);
                     }
                 }
-                
+
             });
         }
     };
