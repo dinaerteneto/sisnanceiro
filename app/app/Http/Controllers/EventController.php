@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\Event;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
-use Sisnanceiro\Transformers\EventGuestsTransform;
+use Sisnanceiro\Transformers\EventGuestTransform;
 use Sisnanceiro\Transformers\EventTransform;
 
 class EventController extends Controller
@@ -117,6 +117,7 @@ class EventController extends Controller
 
     public function storeGuest(Request $request, $eventId)
     {
+        $return = [];
         $postData = $request->get('Guest');
         if ($postData) {
             foreach ($postData as $data) {
@@ -130,10 +131,10 @@ class EventController extends Controller
         return Response::json($return);
     }
 
-    public function guests($id)
+    public function guests($eventId)
     {
-        $model     = $this->eventService->find($id);
-        $transform = fractal($model, new EventGuestsTransform());
+        $model     = $this->eventGuestService->confirmed($eventId);
+        $transform = fractal($model, new EventGuestTransform());
         $data      = $transform->toArray()['data'];
         return View('event/_guests', compact('data'));
     }

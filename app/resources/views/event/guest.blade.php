@@ -9,7 +9,7 @@
 </div>
 
 <div class="row">
-    <article class="col-sm-8 sortable-grid">
+    <article class="col-sm-12 sortable-grid">
         <div class="jarviswidget jarviswidget-color-blue-dark no-padding">
             <header>
                 <div class="widget-header">
@@ -92,7 +92,7 @@
         <!-- end widget -->
     </article>
 
-    <article class="col-sm-4 sortable-grid">
+    <article class="col-sm-12 sortable-grid">
         <div class="jarviswidget jarviswidget-color-blue-dark no-padding">
             <header>
                 <div class="widget-header">
@@ -119,31 +119,64 @@
 							<div class="widget-body overflow-hidden p-0">
 								
 								<!-- this is what the user will see -->
-                                <div class="chat-body custom-scroll" style="height: 599px !important;">
-                                    <div class="">
-                                        <a href="/event/guest/{{$model->id}}/add" id="guest-add" rel="tooltip" data-placement="top" title="Adiciona campos para que você possa adicionar convidados">Adicionar convidado</a>			
+                                <div class="chat-body custom-scroll">
+                                    <div class="mb-10">
+                                        <a href="/event/guest/{{$model->id}}/add" 
+                                            id="guest-add" 
+                                            rel="tooltip" 
+                                            data-placement="top" 
+                                            title="Adiciona campos para que você possa adicionar convidados"
+                                        >
+                                            <i class="fa fa-plus"></i> Adicionar convidado
+                                        </a>			
                                     </div>
-                                
-									<ul>
-                                        @if($mainGuests = $model->mainGuests)
-                                            @foreach($mainGuests as $guest) 
-                                                @include('event/_guest', compact('guest', 'model'))
-                                            @endforeach
-                                        @endif
 
-                                        <form name="form-guest" id="form-guest" action="/event/guest/{{ $model->id }}/create" method="post">
-                                            @csrf
-                                            
-                                            <div id="content-guest"></div>
-                                            
-                                            <li class="text-center mb-10 d-none" id="li-submit-guest">
-                                                <button type="submit" class="btn sa-btn-success no-margin" rel="tooltip" data-placement="top" title="Salvar os convidados adicionados">Salvar convidados</a>
-                                            </li>
-
-                                        </form>
-
-                                    </ul>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Acões
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#"><i class="fa fa-circle text-yellow"></i> Definir como Aguardando</a>
+                                            <a class="dropdown-item" href="#"><i class="fa fa-circle text-green"></i> Definir como Confirmado</a>
+                                            <a class="dropdown-item" href="#"><i class="fa fa-circle text-red"></i> Definir como Recusado</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#"><i class="fa fa-envelope"></i> Reenviar e-mail</a>
+                                        </div>
+                                    </div> 
                                     
+                                    <div class="mb-10"></div>
+                                
+                                    <form name="form-guest" id="form-guest" action="/event/guest/{{ $model->id }}/create" method="post">
+                                        @csrf
+                                        <div id="content-guest"></div>
+                                        <button type="submit" id="submit-guest" class="btn sa-btn-success no-margin d-none float-right mb-10" rel="tooltip" data-placement="top" title="Salvar os convidados adicionados">Salvar convidados</button>
+                                                                                                                
+                                        <table class="table table-bordered" id="content-guest">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <label class="checkbox vcheck">
+                                                            <input type="checkbox" name="EventGuest[all]" value="all">
+                                                            <span></span>
+                                                        </label>
+                                                    </th>
+                                                    <th>Convidado</th>
+                                                    <th>E-mail</th>
+                                                    <th>Status</th>
+                                                    <th>Convites</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @if($mainGuests = $model->mainGuests)
+                                                @foreach($mainGuests as $guest) 
+                                                    @include('event/_guest', compact('guest', 'model'))
+                                                @endforeach
+                                            @endif
+                                            </tbody>
+                                        </table>
+
+                                    </form>
+
 								</div>
 
 							</div>

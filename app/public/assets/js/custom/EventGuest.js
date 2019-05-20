@@ -12,8 +12,8 @@ EventGuest = {
             EventGuest.cont++;
             newId = EventGuest.cont;
             $.get(target, { newId: newId }, function(html) {
-                $('#content-guest').append(html);
-                $('#li-submit-guest').removeClass('d-none');
+                $('#content-guest tbody').prepend(html);
+                $('#submit-guest').removeClass('d-none');
             });
         });
     },
@@ -23,7 +23,7 @@ EventGuest = {
             var target = $(this).attr('href');
 
             if (target.indexOf('New') > -1) {
-                $(this).closest('li').remove();
+                $(this).closest('tr').remove();
             } else {
                 $.SmartMessageBox({
                     title: 'Excluir convidado',
@@ -57,8 +57,8 @@ EventGuest = {
                     }
                 });
             }
-            if ($('#content-guest .message-text').length <= 0) {
-                $('#li-submit-guest').addClass('d-none');
+            if ($('#content-guest .tr-new').length <= 0) {
+                $('#submit-guest').addClass('d-none');
             }
 
         });

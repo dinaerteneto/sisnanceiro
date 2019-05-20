@@ -107,6 +107,11 @@ class EventGuestService extends Service
         return $this->repository->allMainGuest($eventId);
     }
 
+    public function confirmed($eventId)
+    {
+        return $this->repository->where(['status' => EventGuest::STATUS_CONFIRMED])->get();
+    }
+
     public function sendInvoiceToMail(EventGuest $eventGuest)
     {
         Mail::to($eventGuest)
