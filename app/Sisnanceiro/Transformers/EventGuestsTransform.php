@@ -23,4 +23,25 @@ class EventGuestsTransform extends TransformerAbstract
         }
         return $return;
     }
+
+    /**
+     * return tree (multidimensional array) of guests
+     * @param  array   $elements array record guests
+     * @param  integer $parentId id of parent parent
+     * @return array
+     */
+    public function buildTree(array $elements = [], $parentId = 0)
+    {
+        $branch = [];
+        foreach ($elements as $element) {
+            if ($element['invited_by_id'] == $parentId) {
+                $children = $this->buildTree($elements, $element['id']);
+                if ($children) {
+                    $element['children'] = $children;
+                }
+                $branch[] = $element;
+            }
+        }
+        return $branch;
+    }
 }

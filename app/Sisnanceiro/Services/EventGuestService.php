@@ -140,4 +140,14 @@ class EventGuestService extends Service
             ->whereIn('id', $ids)
             ->update(['status' => $status]);
     }
+
+    /**
+     * return all categories based on $mainParentCategoryId
+     * @param int $mainParentCategoryId
+     * @return array
+     */
+    public function all($eventId)
+    {
+        return $this->repository->allGuests($eventId);
+    }    
 }

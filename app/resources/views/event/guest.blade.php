@@ -154,7 +154,7 @@
                                         <div id="content-guest"></div>
                                         <button type="submit" id="submit-guest" class="btn sa-btn-success no-margin d-none float-right mb-10" rel="tooltip" data-placement="top" title="Salvar os convidados adicionados">Salvar convidados</button>
                                                                                                                 
-                                        <table class="table table-bordered" id="content-guest">
+                                        <table class="table table-hover" id="content-guest">
                                             <thead>
                                                 <tr>
                                                     <th>
@@ -170,9 +170,10 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            @if($mainGuests = $model->mainGuests)
-                                                @foreach($mainGuests as $guest) 
-                                                    @include('event/_guest', compact('guest', 'model'))
+                                            @if($guests)
+                                                @foreach($guests as $guest)
+                                                    <?php $child = false ?>
+                                                    @include('event/_guest', compact('guest', 'child'))
                                                 @endforeach
                                             @endif
                                             </tbody>

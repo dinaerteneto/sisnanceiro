@@ -1,35 +1,19 @@
 <tr>
-    <td>
+    <td @if(null !== $child && !empty($child) ) ? style="padding-left: 30px" : null @endif>
         <label class="checkbox vcheck">
             <input type="checkbox" name="EventGuest[ids][]" value="{{$guest['id']}}" class="checkbox-event-guest">
             <span></span>
         </label>
     </td>
-    <td>{{ $guest['person_name'] }}</td>
-    <td>{{ $guest['email'] }}</td>
+    <td @if(null !== $child && !empty($child) ) ? style="padding-left: 30px" : null @endif>{{ $guest['person_name'] }}</td>
+    <td @if(null !== $child && !empty($child) ) ? style="padding-left: 30px" : null @endif>{{ $guest['email'] }}</td>
+    <td>{{ $guest['status'] }}</td>
     <td>
-            <?php $label = null?>
-            @switch( $guest['status_int'])
-                @case(1)
-                    <?php $label = 'warning'?>
-                @break
-                @case(2)
-                    <?php $label = 'success'?>
-                @break
-                @case(3)
-                    <?php $label = 'danger'?>
-                @break
-            @endswitch
-            <span class="label label-{{ $label }}">
-                {{ $guest['status'] }}
-            </span>&nbsp;
-            
     </td>
-    <td>
-        <span class="label label-info">
-            {{ count($guest['invitedByMe']) }} CONVIDADOS
-        </span>
-
-    </td>
-
 </tr>
+@if (isset($guest['children']))
+    @foreach ($guest['children'] as $guest)
+        <?php $child = true?>
+        @include('event/_guest', compact('guest', 'child'))
+    @endforeach
+@endif

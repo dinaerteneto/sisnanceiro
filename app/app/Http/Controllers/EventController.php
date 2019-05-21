@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\Event;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
-use Sisnanceiro\Transformers\EventGuestTransform;
+use Sisnanceiro\Transformers\EventGuestsTransform;
 use Sisnanceiro\Transformers\EventTransform;
 
 class EventController extends Controller
@@ -54,7 +54,7 @@ class EventController extends Controller
     }
 
     public function update(Request $request, $id)
-    {@
+    {
         $model  = $this->eventService->find($id);
         $action = "/event/update/{$id}";
         $title  = "Evento {$model->name}";
@@ -103,10 +103,17 @@ class EventController extends Controller
 
     public function guest($eventId)
     {
+        $guests         = [];
         $model          = $this->eventService->find($eventId);
         $eventTransform = fractal($model, new EventTransform());
         $model          = (object) $eventTransform->toArray()['data'];
-        return View('/event/guest', compact('model'));
+
+        if ($eventGuest = $this->eventGuestService->all($eventId)) {
+            $eventGuestTransform = new EventGuestsTransform();
+            $guests              = $eventGuestTransform->buildTree($eventGuest->toArray());
+        }
+        // dd($guests);
+        return View('/event/guest', compact('model', 'guests'));
     }
 
     public function addGuest(Request $request, $eventId)

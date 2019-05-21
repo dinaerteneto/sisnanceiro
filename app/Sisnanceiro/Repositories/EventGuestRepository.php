@@ -17,4 +17,22 @@ class EventGuestRepository extends Repository
             ->whereNull('invited_by_id')
             ->get();
     }
+
+    /**
+     * return all guests
+     * @param integer $eventId
+     * @return Collection
+     */
+    public function allGuests($eventId, $guestId = null)
+    {
+        $guests = EventGuest::select('*')
+            ->where('event_id', '=', $eventId);
+        if ($guestId) {
+            $guests->where('invited_by_id', '=', $guestId);
+        }
+        if($guests) {
+            return $guests->get();
+        }
+        return [];
+    }       
 }
