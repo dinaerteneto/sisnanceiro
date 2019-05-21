@@ -15,6 +15,7 @@ class CompanyService extends Service
             'id' => 'required|int',
         ],
         'update' => [
+            'id' => 'required|int',
         ],
     ];
 
@@ -40,12 +41,12 @@ class CompanyService extends Service
     public function register(array $data)
     {
         $companyData = [
-            'name'     => $data['company_name'],
-            'phisycal' => 0,
+            'firstname' => $data['company_name'],
+            'phisycal'  => (int) 0,
         ];
 
         $companyPersonService = $this->personService->store($companyData, 'create');
-        $repository           = $this->repository->insert(['id' => $companyPersonService->id]);
+        $repository = $this->repository->insert(['id' => $companyPersonService->id]);
 
         $personData = [
             'company_id' => $companyPersonService->id,
@@ -56,8 +57,8 @@ class CompanyService extends Service
         ];
         $person        = $this->personService->store($personData, 'create');
         $person->email = $data['email'];
-
         $this->userService->create($person);
+
         return $repository;
     }
 

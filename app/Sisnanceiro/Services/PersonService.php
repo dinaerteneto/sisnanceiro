@@ -9,13 +9,14 @@ class PersonService extends Service
 {
     protected $rules = [
         'create' => [
-            'name'     => 'required|max:255',
-            'cpf'      => 'unique',
+            'firstname' => 'required|max:255',
+            'lastname'  => 'max:255',
+            'cpf'       => 'unique',
         ],
         'update' => [
-            'physical' => 'required|int',
-            'name'     => 'required|int',
-            'cpf'      => 'unique',
+            'firstname' => 'required|max:255',
+            'lastname'  => 'max:255',
+            'cpf'       => 'unique',
         ],
     ];
 

@@ -22,9 +22,14 @@ class User extends Model
         return 'login';
     }
 
-    public function person()
+    public function company()
     {
         return $this->hasOne('Sisnanceiro\Models\Company', 'id', 'company_id');
+    }
+
+    public function person()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Person', 'id', 'id');
     }
 
 }

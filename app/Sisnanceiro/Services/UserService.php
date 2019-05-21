@@ -2,7 +2,9 @@
 
 namespace Sisnanceiro\Services;
 
+use App\Mail\NewUser as MailNewUser;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\Person;
@@ -43,11 +45,13 @@ class UserService extends Service
      */
     public function create(Person $person)
     {
+        $passwordGenerated = Str::random();
+
         $data = [
             'id'             => $person->id,
             'company_id'     => $person->company_id,
             'email'          => $person->email,
-            'password'       => Hash::make(Str::random()),
+            'password'       => Hash::make($passwordGenerated),
             'remember_token' => Hash::make(Str::random()),
         ];
         $user = $this->repository->create($data);
@@ -57,6 +61,10 @@ class UserService extends Service
             'user_id'       => $person->id,
             'user_group_id' => User::GROUP_MASTER,
         ]);
+
+        // send mail
+        // $user = $this->userService->findBy('id', $person->id);
+        Mail::to($user)->send(new MailNewUser($user, $passwordGenerated));
 
         return $user;
     }

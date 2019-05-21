@@ -25,7 +25,7 @@ class UserRepository extends Repository
      */
     public function create(array $data)
     {
-        $this->model->create($data);
+        $user = $this->model->create($data);
         $dataUserGroup = [
             'user_id' => $data['id'],
             'name'    => $data['email'],
@@ -36,6 +36,8 @@ class UserRepository extends Repository
             'user_group_id' => $modelUserGroup->id
         ];
         $this->modelUserGrouping->create($dataUserGrouping);
+        $user['id'] = $data['id'];
+        return $user;
     }
 
 }
