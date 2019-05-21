@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -15,7 +15,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id',
+        'name',
+        'email',
+        'password',
+        'password_generated',
     ];
 
     /**
@@ -26,4 +30,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get the company
+     */
+    public function company()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Company', 'id', 'company_id');
+    }
+
+    /**
+     * Get the person
+     */
+    public function person()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Person', 'id', 'id');
+    }
 }
