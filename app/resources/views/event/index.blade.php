@@ -15,65 +15,45 @@
                 <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
                 <h2> Eventos </h2>						
             </div>
-            <div class="widget-toolbar ml-auto">
-                <!-- add: non-hidden - to disable auto hide -->
+            <div class="widget-toolbar">
                 <div class="btn-group">
                     <button class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown">
                         Exibir
                     </button>
-                    <ul class="dropdown-menu js-status-update pull-right">
+                    <ul class="dropdown-menu js-status-update dropdown-menu-right">
                         <li>
-                            <a href="javascript:void(0);" id="mt">Mês</a>
+                            <a class="dropdown-item" href="javascript:void(0);" id="mt">Mês</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" id="ag">Agenda</a>
+                            <a class="dropdown-item" href="javascript:void(0);" id="ag">Semana</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" id="td">Hoje</a>
+                            <a class="dropdown-item" href="javascript:void(0);" id="td">Hoje</a>
                         </li>
                     </ul>
-                </div>
-            </div>
+                </div>									
+            </div>            
         </header>
 
         <!-- widget div-->
         <div>
-            
-
             <div class="widget-body no-padding">
-                <!-- content goes here -->
-
-                        <div class="col-sm-12 pull-right align-right">
-                            <a 
-                                href="/event/create"
-                                class = "open-modal"
-                                target = "#remoteModal"
-                                rel = "tooltip"
-                                data-placement = "top"
-                                title = "Criar evento"                                       
-                            >
-                                <i class="fa fa-plus"></i> NOVO EVENTO
-                            </a>
-                        </div>
-
-                <div class="widget-body-toolbar text-right">
-
+                <!-- content goes here -->                
+                <div class="widget-body-toolbar">
                     <div id="calendar-buttons">
-                        <div class="btn-group">
+                        <div class="btn-group pull-right">
                             <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
                             <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
-
+                
                 <div id="calendar"></div>
                 <!-- end content -->
             </div>
-        </div>
         <!-- end widget div -->
-    </div>
+        </div>
     <!-- end widget -->
-	
 </article>
 @section('scripts')
 <script type="text/javascript" src="{{ asset('assets/js/custom/Event.js') }}"></script>

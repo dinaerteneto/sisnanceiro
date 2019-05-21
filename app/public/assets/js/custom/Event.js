@@ -6,16 +6,29 @@ Event = {
     },
 
     initCalendar: function() {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
         var hdr = {
             left: 'title',
             center: 'month,agendaWeek,agendaDay',
             right: 'prev,today,next'
         };
 
-        $('#calendar').fullCalendar({
+        var calendar = $('#calendar').fullCalendar({
+            locale: 'pt-br',
             header: hdr,
             editable: true,
             droppable: true,
+
+            header: {
+                left: 'title', //,today
+                center: '',
+                right: '' //month, agendaDay,
+            },
+
             eventRender: function(event, element) {
                 element.popover({
                     animation: true,
@@ -55,6 +68,50 @@ Event = {
                     }
                 })
             }
+        });
+
+        /* hide default buttons */
+        //$('.fc-toolbar .fc-right, .fc-toolbar .fc-center').hide();
+
+        // calendar prev
+        $('#calendar-buttons #btn-prev').click(function() {
+            calendar.fullCalendar('prev');
+            return false;
+        });
+
+        // calendar next
+        $('#calendar-buttons #btn-next').click(function() {
+            calendar.fullCalendar('next');
+            return false;
+        });
+
+        // calendar today
+        $('#calendar-buttons #btn-today').click(function() {
+            calendar.fullCalendar('today');
+            return false;
+        });
+
+        // calendar month
+        $('#mt').click(function() {
+            calendar.fullCalendar('changeView', 'month');
+        });
+
+        // calendar agenda week
+        $('#ag').click(function() {
+            calendar.fullCalendar('changeView', 'agendaWeek');
+        });
+
+        // calendar agenda day
+        $('#td').click(function() {
+            calendar.fullCalendar('changeView', 'agendaDay');
+        });
+
+        $(".js-status-update a").click(function() {
+            var selText = $(this).text();
+            var $this = $(this);
+            $this.parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+            $this.parents('.dropdown-menu').find('li').removeClass('active');
+            $this.parent().addClass('active');
         });
     },
 
