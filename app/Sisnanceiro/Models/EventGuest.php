@@ -3,6 +3,7 @@
 namespace Sisnanceiro\Models;
 
 use App\Scopes\TenantModels;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class EventGuest extends Model
@@ -35,7 +36,6 @@ class EventGuest extends Model
         'company_id',
     ];
 
-
     /**
      * Get the event
      */
@@ -58,6 +58,21 @@ class EventGuest extends Model
     public function invitedByMe()
     {
         return $this->hasMany('Sisnanceiro\Models\EventGuest', 'invited_by_id');
+    }
+
+    /**
+     * Verify if guest can cancel your presention in event
+     * @return bool
+     */
+    public function canCancel()
+    {
+        $event = $this->event()->get()->first();
+        if (($this->value <= 0 || empty($this->value)) && ((int) $this->status === self::STATUS_CONFIRMED)) {
+            $eventDay = Carbon::createFromFormat('Y-m-d H:i:s', $event->start_date);
+            $dateForCancel = $eventDay->subDay($event->days_for_cancel);
+            return $dateForCancel->greaterThanOrEqualTo(Carbon::now());
+        }
+        return false;
     }
 
     /**

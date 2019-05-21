@@ -21,6 +21,7 @@ class Event extends Model
         'people_limit',
         'guest_limit_per_person',
         'days_for_cancel',
+        'accept_money_payment',
         'value_per_person',
         'description',
         'zipcode',

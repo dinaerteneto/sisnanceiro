@@ -48,6 +48,7 @@ Route::group(['prefix' => 'guest'], function () {
     Route::post('/{tokenEmail}/send-invite', 'EventGuestController@sendInvite');
     Route::post('/{tokenEmail}/change-status/{status}', 'EventGuestController@changeStatus');
     Route::get('/{tokenEmail}/invoice', 'EventGuestController@invoice');
+    Route::get('/{tokenEmail}/payment-with-money', 'EventGuestController@paymentWithMoney');
 });
 
 Auth::routes();

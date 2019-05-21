@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="who clearfix" id="guest-status">
-                                        @if( $data['value'] > 0)
+                                        @if( !$data['canCancel'] )
                                             @include('event-guest/_status_with_payment', compact('data'))
                                         @else
                                             @include('event-guest/_status', compact('data'))
@@ -170,8 +170,14 @@
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="who clearfix">
-                                        O valor do seu convite é de R$ {{ $event['value_per_person'] }}. <br><br>
-                                        <a href="/guest/{{ $data['token_email'] }}/invoice" target="_blank"><i class="fa fa-print"></i> clique aqui</a> para imprimir seu boleto.
+                                        O valor do seu ingresso é de R$ {{ $event['value_per_person'] }}. <br><br>
+                                        @if($data['payment_method_id'] == '3' && $data['status'] != 2)
+                                        Você informou que seu pagamento será feito com dinheiro. <br>
+                                        Caso não tenha efetuado o pagamento e queira mudar a forma de pagamento <a href="/guest/{{ $data['token_email'] }}/invoice" target="_blank">clique aqui</a>.
+                                        @else
+                                        <a href="/guest/{{ $data['token_email'] }}/invoice" target="_blank">Clique aqui</a> para ir para a tela de pagamento
+                                        <br> ou <a href="/guest/{{ $data['token_email'] }}/payment-with-money">clique aqui</a> para informar que o pagamento será feito com dinheiro.
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -185,8 +191,9 @@
                             <div class="card sa-status">
                                 <div class="card-header who">
                                     <h4>Pessoas que convidei</h4>
+                                    <input type="hidden" value="{{$event['guest_limit_per_person']}}" name="Event[guest_limit_per_person]" id="Event_guest_limit_per_person">
                                     @if(empty($event['guest_limit_per_person']) || ($invitedByMe['total_invited'] < $event['guest_limit_per_person']) )
-                                    <div class="align-right"><a href="javascript:void(0)" data-toggle="modal" data-target="#form-modal" style="margin-top: -18px; display: block">Convidar mais pessoas</a></div>
+                                    <div class="align-right"><a href="javascript:void(0)" style="margin-top: -18px; display: block" id="a-add-guest">Convidar mais pessoas</a></div>
                                     @endif
                                 </div>
                                 <div class="card-body p-0">
@@ -225,26 +232,33 @@
     <script type="text/javascript">
     EventGuest = {
         init: function() {
+            EventGuest.addGuest();
             EventGuest.submitForm();
-            EventGuest.changeStatus();
             EventGuest.formValidate();
         },
 
-        changeStatus: function() {
-            $('body').on('click', '.change-status', function(e) {
+        canGuest: function()
+        {
+            var guestLimit = parseInt($('#Event_guest_limit_per_person').val());
+            var totalGuest = parseInt($('#table-invited-by-me tbody tr').length);
+            if(guestLimit <= totalGuest) {
+                return false;
+            }
+            return true;
+        },
+
+        addGuest: function()
+        {
+            $('#a-add-guest').on('click', function(e) {
                 e.preventDefault();
-                var url = $(this).attr('href');
-                var data = $('#form-2').serialize();
-                $.ajax({
-                    url: url,
-                    data: data,
-                    method: 'post',
-                    dataType: 'html',
-                    success: function(html) {
-                        $('#guest-status').html(html);
-                    }
-                })
-            })
+                if(EventGuest.canGuest()) {
+                    $('#form-modal').modal('toggle');
+                } else {
+                    $('#a-add-guest').remove();
+                    alert('Você não pode convidar mais pessoas.');
+                }
+            });
+            
         },
 
         submitForm: function() {
@@ -294,11 +308,15 @@
                             });
 
                         }
+                    },
+                    complete: function() {
+                        if(!EventGuest.canGuest()) {
+                            $('#a-add-guest').remove();
+                        }
                     }
                 });
             });
         },
-
 
         formValidate: function() {
             $('#form-1').validate({

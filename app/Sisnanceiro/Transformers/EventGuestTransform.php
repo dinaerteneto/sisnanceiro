@@ -18,18 +18,20 @@ class EventGuestTransform extends TransformerAbstract
         $invitedBy       = $guest->invitedBy()->get()->first();
 
         return [
-            'id'          => $guest->id,
-            'person_name' => $guest->person_name,
-            'email'       => $guest->email,
-            'token_email' => $guest->token_email,
-            'value'       => $guest->value,
-            'status'      => strtoupper($guest->getStatus()),
-            'status_int'  => (int) $guest->status,
-            'created_at'  => $carbonCreatedAt->format('d/m/Y'),
-            'updated_at'  => $carbonUpdatedAt->format('d/m/Y'),
-            'invitedBy'   => !empty($invitedBy) ? $this->transformInvitedBy($guest->invitedBy()->get()->first()) : null,
-            'invitedByMe' => $this->transformInvitedByMe($guest->invitedByMe()->get()),
-            'event'       => $this->transformEvent($guest->event()->get()->first()),
+            'id'                => $guest->id,
+            'payment_method_id' => $guest->payment_method_id,
+            'person_name'       => $guest->person_name,
+            'email'             => $guest->email,
+            'token_email'       => $guest->token_email,
+            'value'             => $guest->value,
+            'status'            => strtoupper($guest->getStatus()),
+            'status_int'        => (int) $guest->status,
+            'invitedBy'         => !empty($invitedBy) ? $this->transformInvitedBy($guest->invitedBy()->get()->first()) : null,
+            'invitedByMe'       => $this->transformInvitedByMe($guest->invitedByMe()->get()),
+            'canCancel'         => $guest->canCancel(),
+            'event'             => $this->transformEvent($guest->event()->get()->first()),
+            'created_at'        => $carbonCreatedAt->format('d/m/Y'),
+            'updated_at'        => $carbonUpdatedAt->format('d/m/Y'),
         ];
     }
 
@@ -38,6 +40,7 @@ class EventGuestTransform extends TransformerAbstract
         $carbonCreatedAt = Carbon::createFromFormat('Y-m-d H:i:s', $guest->created_at);
         return [
             'id'                     => $guest->id,
+            'payment_method_id'      => $guest->payment_method_id,
             'person_name'            => $guest->person_name,
             'email'                  => $guest->email,
             'status'                 => strtoupper($guest->getStatus()),
@@ -67,7 +70,7 @@ class EventGuestTransform extends TransformerAbstract
             'company_url'            => $event->company()->get()->first()->url,
             'start_date'             => $carbonStartDate->format('d/m/Y'),
             'end_date'               => $carbonEndDate->format('d/m/Y'),
-            'start_date_BR'          => $carbonEndDate->format('d/m/Y'),
+            'start_date_BR'          => $carbonStartDate->format('d/m/Y'),
             'end_date_BR'            => $carbonEndDate->format('d/m/Y'),
             'start_time'             => $carbonStartDate->format('H:i'),
             'end_time'               => $carbonEndDate->format('H:i'),

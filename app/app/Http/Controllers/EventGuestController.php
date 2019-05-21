@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Sisnanceiro\Models\PaymentMethod;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
 use Sisnanceiro\Transformers\EventGuestTransform;
@@ -32,7 +33,7 @@ class EventGuestController extends Controller
     public function sendInvite(Request $request, $tokenEmail)
     {
         $return = ['success' => false];
-        $data = $request->get('EventGuest');
+        $data   = $request->get('EventGuest');
         $return = $this->eventGuestService->addGuest($data['event_id'], $data);
         return Response::json($return);
     }
@@ -55,5 +56,19 @@ class EventGuestController extends Controller
     {
         echo $tokenEmail;
         exit;
+    }
+
+    public function paymentWithMoney(Request $request, $tokenEmail)
+    {
+        $guest = $this->eventGuestService->findBy('token_email', $tokenEmail);
+        $record = $guest->toArray();
+        $record['payment_method_id'] = PaymentMethod::MONEY;
+        if ($this->eventGuestService->update($guest, $record)) {
+            $request->session()->flash('success', ['message' => 'Forma de pagto alterada com sucesso.']);
+        } else {
+            $request->session()->flash('error', ['message' => 'Falha na tentativa de alterar a forma de pagto.']);
+        }
+        return redirect("/guest/{$tokenEmail}");
+
     }
 }

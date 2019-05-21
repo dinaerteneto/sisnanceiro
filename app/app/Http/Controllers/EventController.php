@@ -9,6 +9,7 @@ use Sisnanceiro\Models\Event;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
 use Sisnanceiro\Transformers\EventGuestsTransform;
+use Sisnanceiro\Transformers\EventGuestTransform;
 use Sisnanceiro\Transformers\EventTransform;
 
 class EventController extends Controller
@@ -177,4 +178,5 @@ class EventController extends Controller
 
         return Response::json($return);
     }
+
 }
