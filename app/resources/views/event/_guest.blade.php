@@ -1,7 +1,7 @@
 <tr>
     <td>
         <label class="checkbox vcheck">
-            <input type="checkbox" name="EventGuest[{{$guest['id']}}]" value="1">
+            <input type="checkbox" name="EventGuest[ids][]" value="{{$guest['id']}}" class="checkbox-event-guest">
             <span></span>
         </label>
     </td>

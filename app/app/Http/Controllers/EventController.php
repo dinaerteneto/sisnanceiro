@@ -117,13 +117,13 @@ class EventController extends Controller
 
     public function storeGuest(Request $request, $eventId)
     {
-        $return = [];
+        $return   = [];
         $postData = $request->get('Guest');
         if ($postData) {
             foreach ($postData as $data) {
                 $guest = $this->eventGuestService->addGuest($eventId, $data);
-                if(!$guest['success'] && isset($guest['message'])) {
-                    $request->session()->flash('error', ['message' => $guest['message'], 'errors' => []]);   
+                if (!$guest['success'] && isset($guest['message'])) {
+                    $request->session()->flash('error', ['message' => $guest['message'], 'errors' => []]);
                 }
                 $return[] = $guest;
             }
@@ -137,5 +137,37 @@ class EventController extends Controller
         $transform = fractal($model, new EventGuestTransform());
         $data      = $transform->toArray()['data'];
         return View('event/_guests', compact('data'));
+    }
+
+    public function actions(Request $request, $eventId)
+    {
+        $return['success'] = false;
+        $postData          = $request->get('EventGuest');
+        $status            = $postData['status'];
+        $ids               = [];
+        if ($postData) {
+            foreach ($postData['ids'] as $key => $id) {
+                $ids[] = $id;
+            }
+        }
+
+        switch ($status) {
+            case '1':
+            case '2':
+            case '3':
+                if ($this->eventGuestService->updateStatus($ids, $status)) {
+                    $return['success'] = true;
+                }
+                break;
+            case 're-send-mail':
+                foreach ($ids as $id) {
+                    $eventGuest = $this->eventGuestService->find($id);
+                    $this->eventGuestService->sendInvoiceToMail($eventGuest);
+                }
+                $return['success'] = true;
+                break;
+        }
+
+        return Response::json($return);
     }
 }

@@ -1,7 +1,7 @@
 Form = {
     init: function() {
         Form.masks();
-        // Form.checkAll();
+        Form.checkAll();
     },
     masks: function() {
         Form.unmasks();

@@ -136,17 +136,20 @@
                                             Acões
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#"><i class="fa fa-circle text-yellow"></i> Definir como Aguardando</a>
-                                            <a class="dropdown-item" href="#"><i class="fa fa-circle text-green"></i> Definir como Confirmado</a>
-                                            <a class="dropdown-item" href="#"><i class="fa fa-circle text-red"></i> Definir como Recusado</a>
+                                            <a class="dropdown-item dropdown-status" href="javascript:void(0)" value="1"><i class="fa fa-circle text-yellow"></i> Definir como Aguardando</a>
+                                            <a class="dropdown-item dropdown-status" href="javascript:void(0)" value="2"><i class="fa fa-circle text-green"></i> Definir como Confirmado</a>
+                                            <a class="dropdown-item dropdown-status" href="javascript:void(0)" value="3"><i class="fa fa-circle text-red"></i> Definir como Recusado</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#"><i class="fa fa-envelope"></i> Reenviar e-mail</a>
+                                            <a class="dropdown-item dropdown-status" href="javascript:void(0)" value="re-send-mail"><i class="fa fa-envelope"></i> Reenviar e-mail</a>
                                         </div>
                                     </div> 
                                     
                                     <div class="mb-10"></div>
-                                
+
                                     <form name="form-guest" id="form-guest" action="/event/guest/{{ $model->id }}/create" method="post">
+                                        <input name="EventGuest[status]" type="hidden" value="" id="EventGuest_status">
+                                        <input name="EventGuest[event_id]" type="hidden" value="{{ $model->id }}" id="EventGuest_event_id">
+
                                         @csrf
                                         <div id="content-guest"></div>
                                         <button type="submit" id="submit-guest" class="btn sa-btn-success no-margin d-none float-right mb-10" rel="tooltip" data-placement="top" title="Salvar os convidados adicionados">Salvar convidados</button>
@@ -156,7 +159,7 @@
                                                 <tr>
                                                     <th>
                                                         <label class="checkbox vcheck">
-                                                            <input type="checkbox" name="EventGuest[all]" value="all">
+                                                            <input type="checkbox" name="EventGuest[all]" value="all" class="check-all">
                                                             <span></span>
                                                         </label>
                                                     </th>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\EventGuest;
+use Sisnanceiro\Models\PaymentMethod;
 use Sisnanceiro\Repositories\EventGuestRepository;
 use Sisnanceiro\Services\PersonService;
 use Sisnanceiro\Transformers\EventGuestTransform;
@@ -112,9 +113,31 @@ class EventGuestService extends Service
         return $this->repository->where(['status' => EventGuest::STATUS_CONFIRMED])->get();
     }
 
+    /**
+     * Send Mail to guest
+     * @param EventGuest $eventGuest
+     * @return bool
+     */
     public function sendInvoiceToMail(EventGuest $eventGuest)
     {
         Mail::to($eventGuest)
             ->send(new MailEventGuest($eventGuest));
+    }
+
+    /**
+     * mass update status guest status
+     * @param array $ids id for update
+     * @param int $status status for update
+     * @return boolean
+     */
+    public function updateStatus(array $ids, $status)
+    {
+        return $this->repository
+            // ->where(function ($q) {
+            //     $q->where('payment_method_id', '<>', PaymentMethod::MONEY)
+            //         ->orWhereNull('payment_method_id', 'is', null);
+            // })
+            ->whereIn('id', $ids)
+            ->update(['status' => $status]);
     }
 }

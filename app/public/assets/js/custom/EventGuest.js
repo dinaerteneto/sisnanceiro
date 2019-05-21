@@ -4,6 +4,7 @@ EventGuest = {
         EventGuest.addGuest();
         EventGuest.delGuest();
         EventGuest.submit();
+        EventGuest.actions();
     },
     addGuest: function() {
         $('body').on('click', '#guest-add', function(e) {
@@ -130,14 +131,66 @@ EventGuest = {
     formValidate: function() {
         return true;
         var error = false;
-        /*         $('#form-guest input').each(function(index, element) {
-                    if ($(element).val().length <= 0) {
-                        error = true;
-                        break;
-                    }
-                });
+        /*         
+            $('#form-guest input').each(function(index, element) {
+                if ($(element).val().length <= 0) {
+                    error = true;
+                    break;
+                }
+            });
          */
         return error;
+    },
+    actions: function() {
+        $('body').on('click', '.dropdown-status', function(e) {
+            e.preventDefault();
+            var bool = false;
+            $('.checkbox-event-guest').each(function(idx, elem) {
+                if ($(elem).is(':checked')) {
+                    bool = true;
+                    return;
+                }
+            });
+
+            if (!bool) {
+                $.smallBox({
+                    title: "Erro!",
+                    content: "<i class='fa fa-clock-o'></i> <i>Selecione ao menos um convidado.</i>",
+                    color: "#C46A69",
+                    iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                    timeout: 4000
+                });
+                return false;
+            }
+
+            $('#EventGuest_status').val($(this).attr('value'));
+            var eventId = $('#EventGuest_event_id').val();
+            var url = '/event/' + eventId + '/guest/actions';
+            var data = $('#form-guest').serialize();
+
+            $.post(url, data, function(json) {
+                if (json.success) {
+                    $.smallBox({
+                        title: "Sucesso!",
+                        content: "<i class='fa fa-clock-o'></i> <i>Ações executadas com sucesso.</i>",
+                        color: "#659265",
+                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                        timeout: 3000
+                    });
+                    setTimeout(function() {
+                        location.reload(true);
+                    }, 3000);
+                } else {
+                    $.smallBox({
+                        title: "Erro!",
+                        content: "<i class='fa fa-clock-o'></i> <i>Erro na tentativa de executar a ação selecionada.</i>",
+                        color: "#C46A69",
+                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                        timeout: 4000
+                    });
+                }
+            }, 'json');
+        });
     }
 }
 $('document').ready(function() {

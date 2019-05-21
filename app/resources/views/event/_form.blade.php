@@ -167,7 +167,7 @@
                     @if(!empty($model->id))
                     
                         <div class="align-left pull-left"> 
-                            <a href="/event/guest/{{$model->id}}" class="btn btn-success">Convidados</a>
+                            <a href="/event/{{$model->id}}" class="btn btn-success">Convidados</a>
                             <a href="/event/delete/{{$model->id}}" class="btn btn-danger delete-record" data-title="Excluir evento" data-ask="Tem certeza que deseja excluir este evento?">Excluir evento</a>
                         </div>
                         <div class="align-right">
