@@ -46,17 +46,17 @@ class CompanyService extends Service
         ];
 
         $companyPersonService = $this->personService->store($companyData, 'create');
-        $repository = $this->repository->insert(['id' => $companyPersonService->id]);
+        $repository           = $this->repository->insert(['id' => $companyPersonService->id]);
 
         $personData = [
             'company_id' => $companyPersonService->id,
             'firstname'  => $data['firstname'],
             'lastname'   => $data['lastname'],
             'gender'     => $data['gender'],
+            'email'      => $data['email'],
             'phisycal'   => 1,
         ];
-        $person        = $this->personService->store($personData, 'create');
-        $person->email = $data['email'];
+        $person = $this->personService->store($personData, 'create');
         $this->userService->create($person);
 
         return $repository;

@@ -17,6 +17,8 @@ class Person extends Model
         'company_id', 'firstname', 'lastname', 'physical', 'gender', 'email'
     ];
 
-    protected $hidden = ['email'];
+    protected $hidden = [
+        
+    ];
 
 }

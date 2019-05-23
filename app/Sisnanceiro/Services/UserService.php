@@ -63,7 +63,6 @@ class UserService extends Service
         ]);
 
         // send mail
-        // $user = $this->userService->findBy('id', $person->id);
         Mail::to($user)->send(new MailNewUser($user, $passwordGenerated));
 
         return $user;
