@@ -12,7 +12,7 @@ SiSnanceiro é um sistema básico, que fornece as apis necessários para um pequ
         - docker exec -it webserver apk --update add --no-cache php7-xmlwriter
         - docker exec -it webserver apk --update add --no-cache php7-fileinfo
         - docker exec -it webserver composer install
-        - docker exec -it webserver php artisan generate:key
+        - docker exec -it webserver php artisan key:generate
         - docker exec -it webserver php artisan migrate
         - docker exec -it webserver php artisan db:seed
 
