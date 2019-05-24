@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\EventGuest;
-use Sisnanceiro\Models\PaymentMethod;
 use Sisnanceiro\Repositories\EventGuestRepository;
 use Sisnanceiro\Services\PersonService;
 use Sisnanceiro\Transformers\EventGuestTransform;
@@ -75,7 +74,7 @@ class EventGuestService extends Service
         $return           = [];
         $data['event_id'] = $eventId;
         $guest            = false;
-        $guest            = $this->repository->findBy('email', $data['email']);
+        $guest            = $this->findByEmail($eventId, $data['email']);
 
         if (!$guest) {
             $data = $this->mapData($data);
@@ -133,10 +132,10 @@ class EventGuestService extends Service
     public function updateStatus(array $ids, $status)
     {
         return $this->repository
-            // ->where(function ($q) {
-            //     $q->where('payment_method_id', '<>', PaymentMethod::MONEY)
-            //         ->orWhereNull('payment_method_id', 'is', null);
-            // })
+        // ->where(function ($q) {
+        //     $q->where('payment_method_id', '<>', PaymentMethod::MONEY)
+        //         ->orWhereNull('payment_method_id', 'is', null);
+        // })
             ->whereIn('id', $ids)
             ->update(['status' => $status]);
     }
@@ -149,5 +148,14 @@ class EventGuestService extends Service
     public function all($eventId)
     {
         return $this->repository->allGuests($eventId);
-    }    
+    }
+
+    public function findByEmail($eventId, $email)
+    {
+        return $this->repository
+            ->where('event_id', '=', $eventId)
+            ->where('email', '=', $email)
+            ->get()
+            ->first();
+    }
 }
