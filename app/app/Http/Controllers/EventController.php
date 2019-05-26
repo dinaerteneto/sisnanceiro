@@ -113,7 +113,6 @@ class EventController extends Controller
             $eventGuestTransform = new EventGuestsTransform();
             $guests              = $eventGuestTransform->buildTree($eventGuest->toArray());
         }
-        // dd($guests);
         return View('/event/guest', compact('model', 'guests'));
     }
 
@@ -186,23 +185,17 @@ class EventController extends Controller
         $data      = $transform->toArray()['data'];
 
         if ($request->isMethod('post')) {
-            $postData = $request->get('EventGuest');
-            $guest    = $this->eventGuestService->findByEmail($eventId, $postData['email']);
-
-            if ($guest) {
-                if ($this->eventGuestService->updateStatus([$guest->id], $postData['status'])) {
-                    $request->session()->flash('success', ['message' => 'Registro feito com sucesso.']);
-                } else {
-                    $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar seu status.']);
-                }
-            } else {
-                if ($guest = $this->eventGuestService->addGuest($eventId, $postData)) {
-                    $request->session()->flash('success', ['message' => 'Registro feito com sucesso.']);
-                } else {
-                    $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar seu status.']);
-                }
+            $return = [
+                'success' => false,
+                'message' => 'Erro na tentativa de inserir os dados',
+            ];
+            if ($this->eventGuestService->addOrUpdate($model, $request->get('EventGuest'))) {
+                $return = [
+                    'success' => true,
+                    'message' => 'Seus dados foram incluído com sucesso.',
+                ];
             }
-            return redirect("event/{$data['id']}/{$data['name']}/{$data['start_date']}");
+            return Response::json($return);
         } else {
             return View('event/_page', compact('data'));
         }

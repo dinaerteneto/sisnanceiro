@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">    
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -118,34 +118,34 @@
                                             <address>
                                                 <br>
                                                 {{ $data['address'] }}, {{ $data['address_number'] }}
-                                                @if(!empty($data['complement'])) 
+                                                @if(!empty($data['complement']))
                                                 <br> {{ $data['complement'] }}
                                                 @endif
                                                 <br>
                                                 {{ $data['district'] }} - {{ $data['city'] }} - {{ $data['uf'] }}
                                                 <br>
                                                 {{ $data['zipcode'] }}
-                                                @if(!empty($data['reference'])) 
+                                                @if(!empty($data['reference']))
                                                 <br> {{ $data['reference'] }}
-                                                @endif                                                
-                                            </address>                                            
+                                                @endif
+                                            </address>
                                             <br>
                                             <address>
                                                 <strong>CONTATOS</strong>
-                                                @if(!empty($data['email'])) 
+                                                @if(!empty($data['email']))
                                                 <br><a href="mailto:{{$data['email']}}">{{$data['email']}}</a>
                                                 @endif
-                                                @if(!empty($data['phone'])) 
+                                                @if(!empty($data['phone']))
                                                 <br>{{$data['phone']}}
                                                 @endif
-                                                @if(!empty($data['whatsapp'])) 
+                                                @if(!empty($data['whatsapp']))
                                                 <br>{{$data['whatsapp']}}</a>
                                                 @endif
 
-                                            </address>                                            
+                                            </address>
                                         </address>
 
-                                        
+
 									</div>
 									<div class="col-md-12">
                                         <div class="text-left">
@@ -182,11 +182,11 @@
 <script type="text/javascript">
 Page = {
     init: function() {
-        Page.onSubmit();
+        Page.setStatus();
         Page.formValidate();
     },
 
-    onSubmit: function() {
+    setStatus: function() {
         $('.btn').on('click', function(e) {
             e.preventDefault();
             var status = $(this).attr('value');
@@ -195,8 +195,26 @@ Page = {
         })
     },
 
+    onSubmit: function() {
+        
+        $.post($('#page-form').attr('action'), $('#page-form').serialize(), function(json) {
+            var color = "#C46A69";
+            var title = "Erro!";
+            if(json.success) {
+                color = "#659265";
+                title = "Sucesso!";
+            }
+            alert(json.message);
+            $('#page-form').trigger('reset');
+        }, 'json');
+        
+    },
+
     formValidate: function() {
         $('#page-form').validate({
+            submitHandler: function(form) {
+                Page.onSubmit();
+            },
             rules: {
                 'EventGuest[name]': 'required',
                 'EventGuest[student_name]': 'required',
@@ -227,7 +245,7 @@ Page = {
                 }
             }
         });
-    }  
+    }
 }
 
 $('document').ready(function() {
