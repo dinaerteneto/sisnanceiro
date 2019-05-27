@@ -16,6 +16,14 @@
 
                 <fieldset>
                     <div class="row">
+                        @if(!empty($model->id))
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <b>Link do evento:</b> http://sisnanceiro.com.br/event/{{ $model->id }}/{{$model->name}}/{{ $urlStartDate }}
+                            </div>
+                        </div>
+                        @endif
+
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Nome do evento</label>

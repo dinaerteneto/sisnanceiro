@@ -56,9 +56,10 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
-        $model  = $this->eventService->find($id);
-        $action = "/event/update/{$id}";
-        $title  = "Evento {$model->name}";
+        $model        = $this->eventService->find($id);
+        $action       = "/event/update/{$id}";
+        $title        = "Evento {$model->name}";
+        $urlStartDate = null;
 
         if ($request->isMethod('post')) {
             $data  = $request->get('Event');
@@ -77,8 +78,9 @@ class EventController extends Controller
             $model->start_time  = $carbonStartDate->format('H:i');
             $model->end_time    = $carbonEndDate->format('H:i');
             $model->description = strip_tags($model->description);
+            $urlStartDate       = $carbonStartDate->format('d-m-Y');
 
-            return view('event/_form', compact('model', 'action', 'title'));
+            return view('event/_form', compact('model', 'action', 'title', 'urlStartDate'));
         }
 
     }
