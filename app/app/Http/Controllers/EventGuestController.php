@@ -69,6 +69,5 @@ class EventGuestController extends Controller
             $request->session()->flash('error', ['message' => 'Falha na tentativa de alterar a forma de pagto.']);
         }
         return redirect("/guest/{$tokenEmail}");
-
     }
 }

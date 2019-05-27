@@ -1,6 +1,11 @@
 <a href="javascript:void(0)" onclick="SAtoggleClass(this, 'body', 'sa-shortcuts-expanded')" class="sa-sidebar-shortcut-toggle">
     <img src="assets/img/avatars/sunny.png" alt="" class="online">
-    <span>{{ Auth::user()->email }} <span class="fa fa-angle-down"></span></span>
+    <span>
+        @if(Auth::user())
+        {{ Auth::user()->email }} 
+        @endif
+        <span class="fa fa-angle-down"></span>
+    </span>
 </a>
 <div class="sa-left-menu-outer">
     <ul class="metismenu sa-left-menu" id="menu1">

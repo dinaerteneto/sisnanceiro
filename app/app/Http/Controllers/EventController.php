@@ -113,7 +113,6 @@ class EventController extends Controller
             $eventGuestTransform = new EventGuestsTransform();
             $guests              = $eventGuestTransform->buildTree($eventGuest->toArray());
         }
-        // dd($guests);
         return View('/event/guest', compact('model', 'guests'));
     }
 
@@ -177,6 +176,29 @@ class EventController extends Controller
         }
 
         return Response::json($return);
+    }
+
+    public function page(Request $request, $eventId)
+    {
+        $model     = $this->eventService->find($eventId);
+        $transform = fractal($model, new EventTransform());
+        $data      = $transform->toArray()['data'];
+
+        if ($request->isMethod('post')) {
+            $return = [
+                'success' => false,
+                'message' => 'Erro na tentativa de inserir os dados',
+            ];
+            if ($this->eventGuestService->addOrUpdate($model, $request->get('EventGuest'))) {
+                $return = [
+                    'success' => true,
+                    'message' => 'Seus dados foram incluído com sucesso.',
+                ];
+            }
+            return Response::json($return);
+        } else {
+            return View('event/_page', compact('data'));
+        }
     }
 
 }

@@ -15,6 +15,9 @@ Route::get('/', function () {return view('auth/login');});
 Route::get('/cadastrar', function () {return view('auth/register');});
 Route::post('/cadastrar', 'HomeController@register');
 
+Route::get('/event/{eventId}/{eventStart}/{eventName}', 'EventController@page')->where('eventId', '[0-9]+');;
+Route::post('/event/{eventId}/page', 'EventController@page');
+
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/home', function () {return view('home');});
 
