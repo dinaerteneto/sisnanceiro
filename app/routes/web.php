@@ -56,6 +56,18 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/{tokenEmail}/invoice', 'EventGuestController@invoice');
         Route::get('/{tokenEmail}/payment-with-money', 'EventGuestController@paymentWithMoney');
     });
+
+    Route::group(['prefix' => 'store'], function() {
+        Route::group(['prefix' => 'category'], function() {
+
+        });
+        Route::group(['prefix' => 'brand'], function() {
+
+        });
+        Route::group(['prefix' => 'product'], function() {
+            
+        });
+    });
 });
 
 Auth::routes();
