@@ -2,6 +2,7 @@ Form = {
     init: function() {
         Form.masks();
         Form.checkAll();
+        Form.initSummernote();
     },
     masks: function() {
         Form.unmasks();
@@ -100,6 +101,26 @@ Form = {
             var bCheckbox = $(this).is(':checked');
             $('table tr td input:checkbox').prop('checked', bCheckbox);
         });
+    },
+    initSummernote: function() {
+
+        if ($('.summernote').length > 0) {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+
+                ]
+            });
+        }
     }
 };
 

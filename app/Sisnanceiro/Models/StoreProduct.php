@@ -2,7 +2,10 @@
 
 namespace Sisnanceiro\Models;
 
-class StoreProduct extends Models
+use Illuminate\Database\Eloquent\Model;
+use App\Scopes\TenantModels;
+
+class StoreProduct extends Model
 {
     use TenantModels;
 
