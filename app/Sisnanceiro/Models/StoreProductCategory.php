@@ -1,8 +1,11 @@
 <?php
 
 namespace Sisnanceiro\Models;
+use Illuminate\Database\Eloquent\Model;
+use App\Scopes\TenantModels;
 
-class StoreProductCategory extends Models
+
+class StoreProductCategory extends Model
 {
     use TenantModels;
 

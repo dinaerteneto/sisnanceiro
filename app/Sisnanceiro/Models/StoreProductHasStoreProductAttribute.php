@@ -1,8 +1,9 @@
 <?php
 
 namespace Sisnanceiro\Models;
+use Illuminate\Database\Eloquent\Model;
 
-class StoreProductHasStoreProductAttribute extends Models
+class StoreProductHasStoreProductAttribute extends Model
 {
     use TenantModels;
 

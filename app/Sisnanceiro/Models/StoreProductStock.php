@@ -1,8 +1,8 @@
 <?php
 
 namespace Sisnanceiro\Models;
-
-class StoreProductStock extends Models
+use Illuminate\Database\Eloquent\Model;
+class StoreProductStock extends Model
 {
     use TenantModels;
 

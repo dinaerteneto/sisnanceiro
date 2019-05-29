@@ -33,4 +33,18 @@ class Controller extends BaseController
     {
         return response()->json($data, 200, $headers);
     }    
+
+   /**
+     * Respond with error status json data
+     *
+     * @param array $data
+     * @param string $statusCode
+     * @return Response
+     */
+    public function errorJson($data, $statusCode = 400)
+    {
+        return response()->json([
+            'errors' => is_array($data) ? $data : [$data]
+        ], $statusCode);
+    }    
 }

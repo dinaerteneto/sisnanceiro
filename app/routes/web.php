@@ -58,8 +58,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     });
 
     Route::group(['prefix' => 'store'], function() {
-        Route::group(['prefix' => 'category'], function() {
-
+        Route::group(['prefix' => 'product-category'], function() {
+            Route::post('/create', 'StoreProductCategoryController@create');
         });
         Route::group(['prefix' => 'brand'], function() {
 
