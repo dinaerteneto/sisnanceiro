@@ -2,7 +2,10 @@
 
 namespace Sisnanceiro\Models;
 
-class StoreProductAttribute extends Models
+use Illuminate\Database\Eloquent\Model;
+use App\Scopes\TenantModels;
+
+class StoreProductAttribute extends Model
 {
     use TenantModels;
 
@@ -11,6 +14,6 @@ class StoreProductAttribute extends Models
 
     protected $fillable = [
         'company_id',
-        'name'
+        'name',
     ];
 }

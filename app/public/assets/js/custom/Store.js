@@ -5,7 +5,7 @@ Store = {
         Store.addAttribute();
         Store.delAttribute();
         Store.changeWithAttributes();
-        Store.submitForm();
+        Store.formValidate();
 
         $('.with-attributes').hide();
         $('.without-attributes').show();
@@ -17,7 +17,7 @@ Store = {
             $(".with-attributes").show();
             $(".without-attributes").hide();
         }
-        $('#storeprodutcts-attributes-0-value').tagbox({
+        $('#StoreProdutct-attributes-0-value').tagbox({
             onChange: function(value) {
                 Store.addSubproducts();
             }
@@ -44,7 +44,7 @@ Store = {
         });
         $('#StoreProduct-attributes-first').select2({
             formatNoMatches: function(term) {
-                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"Store.sendAttribute('" + term + "', 'storeproducts-attributes-first')\"><i class='icon-plus-circle'></i> adicionar</a></span></div>";
+                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"Store.sendAttribute('" + term + "', 'storeproducts-attributes-first')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
             },
             containerCss: {
                 'min-width': '200px'
@@ -72,8 +72,8 @@ Store = {
         $.post('/store/product-category/create', {
             'StoreProductCategory[name]': term
         }, function(json) {
-            $('#storeproducts-store_product_category_id').append("<option value=\"" + json.id + "\">" + json.name + "</option>");
-            $('#storeproducts-store_product_category_id').val(json.id).trigger("change");
+            $('#StoreProduct_store_product_category_id').append("<option value=\"" + json.id + "\">" + json.name + "</option>");
+            $('#StoreProduct_store_product_category_id').val(json.id).trigger("change");
         }).done(function() {
             Store.removeLoading();
         });
@@ -81,10 +81,10 @@ Store = {
     addBrand(term) {
         Store.loading();
         $.post('/store/product-brand/create', {
-            'StoreProductBrands[name]': term
+            'StoreProductBrand[name]': term
         }, function(json) {
-            $('#storeproducts-store_product_brand_id').append("<option value=\"" + json.id + "\">" + json.name + "</option>");
-            $('#storeproducts-store_product_brand_id').val(json.id).trigger("change");
+            $('#StoreProduct_store_product_brand_id').append("<option value=\"" + json.id + "\">" + json.name + "</option>");
+            $('#StoreProduct_store_product_brand_id').val(json.id).trigger("change");
         }).done(function() {
             Store.removeLoading();
         });
@@ -97,7 +97,7 @@ Store = {
             var trHtml = '<tr>';
             trHtml += '<td>Variação 1</td>';
             trHtml += '<td> <select name="StoreProductAttributes[' + index + ']" class="store-product-attributes">' + selectOptions + '</select> </td>';
-            trHtml += '<td width="50%"><input class="form-control"  name="StoreProductAttributeValues[' + index + '][]" form-control" placeholder="Escreva a variação e aperte enter para inserir"></td>';
+            trHtml += '<td width="50%"><input class="form-control" name="StoreProductAttributeValues[' + index + '][]" placeholder="Escreva a variação e aperte enter para inserir"></td>';
             trHtml += '<td><a class="del-attribute"><i class="fa fa-times-circle"></i></a></td>';
             trHtml += '</tr>';
             $('#table-attributes tbody').append(trHtml);
@@ -125,7 +125,7 @@ Store = {
             $('#storeprodutcts-attributes-' + index + '-id').select2({
                 formatNoMatches: function(term) {
                     var idSource = 'storeprodutcts-attributes-' + index + '-id';
-                    return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"Store.sendAttribute('" + term + "', '" + idSource + "')\"><i class='icon-plus'></i> adicionar</a></span></div>";
+                    return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"Store.sendAttribute('" + term + "', '" + idSource + "')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
                 },
                 containerCss: {
                     'min-width': '200px'
@@ -151,12 +151,25 @@ Store = {
             }
         });
     },
+    sendAttribute(term, idSource) {
+        Store.loading();
+        $.post('/store/product-attributes/create', {
+            'StoreProductAttributes[name]': term
+        }, function(json) {
+            $('#' + idSource).append("<option value=\"" + json.id + "\">" + json.name + "</option>");
+            $('#' + idSource).val(json.id).trigger("change");
+        }).done(function() {
+            Store.removeLoading();
+        });
+    },
     addSubproducts() {
         Store.loading();
         $.post('/store/product/add-subproduct', $('#w0').serialize(), function(json) {
 
             var html = '';
             json.forEach(element => {
+                console.log(element);
+
                 var checked = "";
                 if (element.form.checked || (!element.form.hasOwnProperty('checked') && $('#w0').attr('action').indexOf('update') < 0)) {
                     checked = 'checked';
@@ -169,15 +182,15 @@ Store = {
                 });
                 html += '</td>';
                 html += '<td>' + element.values.join(' , ') + '</td>';
-                html += '<td><input type="text" name="subproduct[' + element.key + '][price]" class="form-control money" value="' + element.form.price + '"></td>';
-                html += '<td><input type="text" name="subproduct[' + element.key + '][weight]" class="form-control float-precision-3" value="' + element.form.weight + '"></td>';
+                html += '<td><input type="text" name="subproduct[' + element.key + '][price]" class="form-control mask-currency" value="' + element.form.price + '"></td>';
+                html += '<td><input type="text" name="subproduct[' + element.key + '][weight]" class="form-control mask-float-precision3" value="' + element.form.weight + '"></td>';
                 html += '<td>';
                 html += '<input type="text" name="subproduct[' + element.key + '][sku]" class="form-control subproduct-sku" value="' + element.form.sku + '">';
                 html += '<input type="hidden" name="subproduct[' + element.key + '][id]" value="' + element.form.id + '" class="subproduct-id">';
                 html += '</td>';
                 html += '<td>';
                 if (element.form.id == '') {
-                    html += '<input type="text" name="subproduct[' + element.key + '][total_in_stock]" class="form-control number" value="' + element.form.total_in_stock + '">';
+                    html += '<input type="text" name="subproduct[' + element.key + '][total_in_stock]" class="form-control mask-number" value="' + element.form.total_in_stock + '">';
                 } else {
                     html += '<input type="text" value="' + element.form.total_in_stock + '" class="form-control"  disabled>';
                     html += '<input type="hidden" name="subproduct[' + element.key + '][total_in_stock]" value="' + element.form.total_in_stock + '">';
@@ -186,12 +199,25 @@ Store = {
                 html += '</tr>';
             })
             $('table#table-subproducts tbody').html(html);
-            $('.float-precision-3').mask("0,000", {
-                reverse: true
+
+            $('.mask-number').keypress(function(e) {
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    return false;
+                }
             });
-            $('.money').mask("#.##0,00", {
-                reverse: true
-            });
+            $('.mask-float-precision3').maskMoney({
+                symbol: '',
+                decimal: '.',
+                thousands: '',
+                precision: 3
+            }).trigger('mask.maskMoney');
+
+            $('.mask-currency').maskMoney({
+                symbol: 'R$',
+                decimal: ',',
+                thousands: '.'
+            }).trigger('mask.maskMoney');
+
         }).done(function() {
             Store.removeLoading();
         });
@@ -306,7 +332,7 @@ Store = {
             },
             rules: {
                 'StoreProduct[name]': 'required',
-                'StoreProduct[store_product_category_id]': 'required',
+                '#StoreProduct_store_product_category_id': 'required',
                 'StoreProduct[store_product_brand_id]': 'required',
             },
             messages: {

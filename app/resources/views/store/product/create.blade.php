@@ -51,6 +51,9 @@
                                                             <label>Categoria</label>
                                                             <select class="select2" name="StoreProduct[store_product_category_id]" id="StoreProduct_store_product_category_id">
                                                                 <option value="">Selecione</option>
+                                                                @foreach($categories as $category)
+                                                                    <option value="{{ $category['id'] }}" {{ $category['id'] == $model->store_product_category_id ? 'selected' : null }}>{{ $category['name'] }}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
@@ -59,6 +62,9 @@
                                                             <label>Marca</label>
                                                             <select class="select2" name="StoreProduct[store_product_brand_id]" id="StoreProduct_store_product_brand_id">
                                                                 <option value="">Selecione</option>
+                                                                @foreach($brands as $brand)
+                                                                    <option value="{{ $brand['id'] }}" {{ $brand['id'] == $model->store_product_brand_id ? 'selected' : null }}>{{ $brand['name'] }}</option>
+                                                                @endforeach                                                                
                                                             </select>
                                                         </div>
                                                     </div>
@@ -170,10 +176,14 @@
                                                                     </td>
                                                                     <td>
                                                                         <select name="StoreProductAttributes[0]" class="select2 select2-container store-product-attributes" id="StoreProduct-attributes-first" style="width: auto !important;">
+                                                                            <option value="">Selecione</option>
+                                                                            @foreach($attributes as $attribute)
+                                                                                <option value="{{ $attribute['id'] }}">{{ $attribute['name'] }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </td>
                                                                     <td width="50%">
-                                                                        <input class="form-control" id="storeprodutcts-attributes-0-value" name="StoreProductAttributeValues[0][]" value="" >
+                                                                        <input class="form-control" id="StoreProdutct-attributes-0-value" name="StoreProductAttributeValues[0][]" value="" >
                                                                     </td>
                                                                     <td>
                                                                                                                                                 

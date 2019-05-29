@@ -24,6 +24,12 @@ abstract class Service
     {
         return $this->repository;
     }
+
+    public function all()
+    {
+        return $this->repository->all();
+     }
+
     /**
      * Save a model
      * @param array $input
