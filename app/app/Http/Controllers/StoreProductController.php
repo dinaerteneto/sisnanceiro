@@ -9,6 +9,7 @@ use Sisnanceiro\Models\StoreProduct;
 use Sisnanceiro\Services\StoreProductAttributeService;
 use Sisnanceiro\Services\StoreProductBrandService;
 use Sisnanceiro\Services\StoreProductCategoryService;
+use Sisnanceiro\Services\StoreProductService;
 use Sisnanceiro\Transformers\StoreProductAttributeTransform;
 use Sisnanceiro\Transformers\StoreProductBrandTransform;
 use Sisnanceiro\Transformers\StoreProductCategoryTransform;
@@ -16,15 +17,18 @@ use Sisnanceiro\Transformers\StoreProductCategoryTransform;
 class StoreProductController extends Controller
 {
 
+    private $storeProductService;
     private $storeProductCategoryService;
     private $storeProductBrandService;
     private $storeProductAttributeService;
 
     public function __construct(
+        StoreProductService $storeProductService,
         StoreProductCategoryService $storeProductCategoryService,
         StoreProductBrandService $storeProductBrandService,
         StoreProductAttributeService $storeProductAttributeService
     ) {
+        $this->storeProductService          = $storeProductService;
         $this->storeProductCategoryService  = $storeProductCategoryService;
         $this->storeProductBrandService     = $storeProductBrandService;
         $this->storeProductAttributeService = $storeProductAttributeService;
@@ -34,7 +38,13 @@ class StoreProductController extends Controller
     {
         $model = new StoreProduct;
         if ($request->isMethod('post')) {
-            // salva
+            $data = $request->all();
+            if ($model = $this->storeProductService->store($data, 'create')) {
+                $request->session()->flash('success', ['message' => 'Produto incluído com sucesso.']);
+            } else {
+                $request->session()->flash('error', ['message' => 'Falha na tentativa de incluir o produto.']);
+            }
+            return redirect("/store/product/update/{$model->id}");
         } else {
             $categories          = $this->storeProductCategoryService->all();
             $transformCategories = fractal($categories, new StoreProductCategoryTransform());
@@ -49,6 +59,32 @@ class StoreProductController extends Controller
             $attributes         = $transformAttribute->toArray()['data'];
 
             return view('store/product/create', compact('model', 'categories', 'brands', 'attributes'));
+        }
+    }
+
+    public function index()
+    {
+        return view('store/product/index');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $model = $this->storeProductService->find($id);
+        if ($request->isMethod('post')) {
+
+        } else {
+            $categories          = $this->storeProductCategoryService->all();
+            $transformCategories = fractal($categories, new StoreProductCategoryTransform());
+            $categories          = $transformCategories->toArray()['data'];
+
+            $brands          = $this->storeProductBrandService->all();
+            $transformBrands = fractal($brands, new StoreProductBrandTransform());
+            $brands          = $transformBrands->toArray()['data'];
+
+            $attributes         = $this->storeProductAttributeService->all();
+            $transformAttribute = fractal($attributes, new StoreProductAttributeTransform());
+            $attributes         = $transformAttribute->toArray()['data'];
+            return view('store/product/update', compact('model', 'categories', 'brands', 'attributes'));
         }
     }
 

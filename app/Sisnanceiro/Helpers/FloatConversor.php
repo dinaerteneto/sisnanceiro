@@ -10,7 +10,7 @@ class FloatConversor
      * @return float
      * @throws Exception if return is not float
      */
-    public static function covert($str)
+    public static function convert($str)
     {
         $newStr = str_replace('.', '', $str);
         $newStr = (float) str_replace(',', '.', $newStr);

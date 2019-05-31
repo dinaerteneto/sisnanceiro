@@ -83,7 +83,7 @@ class EventService extends Service
         $carbonEndDate            = Carbon::createFromFormat('d/m/Y H:i', $data['end_date'] . ' ' . $data['end_time']);
         $data['start_date']       = $carbonStartDate->format('Y-m-d H:i:s');
         $data['end_date']         = $carbonEndDate->format('Y-m-d H:i:s');
-        $data['value_per_person'] = FloatConversor::covert($data['value_per_person']);
+        $data['value_per_person'] = FloatConversor::convert($data['value_per_person']);
         $data['description']      = nl2br($data['description']);
         return $data;
     }

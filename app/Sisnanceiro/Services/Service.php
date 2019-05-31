@@ -28,7 +28,7 @@ abstract class Service
     public function all()
     {
         return $this->repository->all();
-     }
+    }
 
     /**
      * Save a model
@@ -117,6 +117,21 @@ abstract class Service
             $this->validator->addError('not_found', $column, 'No record found for this ' . $column . '.');
             return false;
         }
+    }
+
+    /**
+     * Delete based column
+     * @param string $column
+     * @param string $value
+     * @return boolean
+     */
+    public function deleteBy($column, $value)
+    {
+        $model = $this->findBy($column, $value);
+        if($model) {
+            return $model->delete();
+        }
+        return false;
     }
 
 }

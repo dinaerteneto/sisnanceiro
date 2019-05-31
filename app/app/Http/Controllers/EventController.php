@@ -111,7 +111,7 @@ class EventController extends Controller
         $eventTransform = fractal($model, new EventTransform());
         $model          = (object) $eventTransform->toArray()['data'];
 
-        if ($eventGuest = $this->eventGuestService->all($eventId)) {
+        if ($eventGuest = $this->eventGuestService->getAll($eventId)) {
             $eventGuestTransform = new EventGuestsTransform();
             $guests              = $eventGuestTransform->buildTree($eventGuest->toArray());
         }

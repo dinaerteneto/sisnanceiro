@@ -4,7 +4,7 @@
 
 <div class="d-flex w-100 home-header">
     <div>
-        <h1 class="page-header"><i class="fa fa-fw fa-tags "></i> Produtos <span>&gt; Novo</span></h1>
+        <h1 class="page-header"><i class="fa fa-fw fa-tags "></i> Produtos <span>&gt; {{ $model->name }}</span></h1>
     </div>
 </div>
 
@@ -74,7 +74,7 @@
                                                     <div class="col-sm-12">
                                                         <div class="form-group">
                                                             <label>Descrição</label>
-                                                            <textarea class="summernote" name="StoreProduct[description]"></textarea>
+                                                            <textarea class="summernote" name="StoreProduct[description]">{{ $model->description }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -82,7 +82,7 @@
                                                 <div class="row mb-10">
                                                     <div class="col-sm-6">
                                                         <span class="onoffswitch">
-                                                            <input type="checkbox" name="StoreProduct[status]" class="onoffswitch-checkbox" id="StoreProduct_status" value="1">
+                                                            <input type="checkbox" name="StoreProduct[status]" class="onoffswitch-checkbox" id="StoreProduct_status" value="1" @if(!empty($model->status)) checked @endif >
                                                             <label class="onoffswitch-label" for="StoreProduct_status">
                                                                 <span class="onoffswitch-inner" data-swchon-text="SIM" data-swchoff-text="NÃO"></span>
                                                                 <span class="onoffswitch-switch"></span>
@@ -92,7 +92,7 @@
                                                     </div>                                                    
                                                     <div class="col-sm-6">
                                                         <span class="onoffswitch">
-                                                            <input type="checkbox" name="StoreProduct[sale_with_negative_stock]" class="onoffswitch-checkbox" id="StoreProduct_sale_with_negative_stock" value="1">
+                                                            <input type="checkbox" name="StoreProduct[sale_with_negative_stock]" class="onoffswitch-checkbox" id="StoreProduct_sale_with_negative_stock" value="1" @if(!empty($model->sale_with_negative_stock)) checked @endif>
                                                             <label class="onoffswitch-label" for="StoreProduct_sale_with_negative_stock">
                                                                 <span class="onoffswitch-inner" data-swchon-text="SIM" data-swchoff-text="NÃO"></span>
                                                                 <span class="onoffswitch-switch"></span>
@@ -121,7 +121,7 @@
                                                 <div class="row mb-10">
                                                     <div class="col-sm-12">
                                                         <span class="onoffswitch">
-                                                            <input type="checkbox" name="StoreProduct[with_attributes]" class="onoffswitch-checkbox" id="StoreProduct_with_attributes" value="1">
+                                                            <input type="checkbox" name="StoreProduct[with_attributes]" class="onoffswitch-checkbox" id="StoreProduct_with_attributes" value="1" @if(!empty($model->with_attributes)) checked @endif>
                                                             <label class="onoffswitch-label" for="StoreProduct_with_attributes">
                                                                 <span class="onoffswitch-inner" data-swchon-text="SIM" data-swchoff-text="NÃO"></span>
                                                                 <span class="onoffswitch-switch"></span>

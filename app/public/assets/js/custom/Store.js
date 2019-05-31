@@ -9,9 +9,9 @@ Store = {
 
         $('.with-attributes').hide();
         $('.without-attributes').show();
-        var checked = $('#storeproducts-with_attributes').is(':checked');
+        var checked = $('#StoreProduct-with_attributes').is(':checked');
         if ($('#w0').attr('action').indexOf('update') > 0) {
-            checked = $("#storeproducts-with_attributes").val() == '1' ? true : false;
+            checked = $("#StoreProduct-with_attributes").val() == '1' ? true : false;
         }
         if (checked) {
             $(".with-attributes").show();
@@ -239,7 +239,7 @@ Store = {
         var error = '';
 
         // validate subproducts
-        if ($("#storeproducts-with_attributes").is(":checked") || $('#table-subproducts tbody td').length > 0) {
+        if ($("#StoreProduct-with_attributes").is(":checked") || $('#table-subproducts tbody td').length > 0) {
             if ($("table#table-subproducts tbody tr").length <= 0) {
                 error = "- Adicione ao menos uma variação. <br />";
             }
