@@ -88,7 +88,7 @@ class StoreProductService extends Service
         $mapData         = $this->mapDataStoreSubproduct($mainProduct, $dataSubproduct);
         $modelSubproduct = parent::store($mapData, 'create');
 
-        $this->storeProductsHasStoreProductAttributesServices->deleteBy('store_product_id', $modelSubproduct->id);
+        // $this->storeProductsHasStoreProductAttributesServices->deleteBy('store_product_id', $modelSubproduct->id);
         if (isset($dataSubproduct['product_attribute'])) {
             foreach ($dataSubproduct['product_attribute'] as $i => $value) {
                 $dataAttribute = [

@@ -4,7 +4,7 @@
 
 <div class="d-flex w-100 home-header">
     <div>
-        <h1 class="page-header"><i class="fa fa-fw fa-tags "></i> Produtos <span>&gt; {{ $model->name }}</span></h1>
+        <h1 class="page-header"><i class="fa fa-fw fa-tags "></i> Produtos <span>&gt; {{ $model['name'] }}</span></h1>
     </div>
 </div>
 
@@ -30,8 +30,10 @@
                                     <div class="widget-body">
 
                                         <!-- this is what the user will see -->
-                                        <form id="w0" method="post" action="">
+                                        <form id="w0" method="post" action="/store/product/update/{{ $model['id'] }}">
                                             @csrf
+
+                                            <input type="hidden" id="StoreProduct-with_attributes" value="{{ count($model['subproducts']) ? 1 : 0 }}">
 
                                             <fieldset>
                                                 <legend><i class="fa fa-file-text-o"></i> Dados básicos</legend>
@@ -40,7 +42,7 @@
                                                     <div class="col-sm-12">
                                                         <div class="form-group">
                                                             <label>Nome</label>
-                                                            <input type="text" name="StoreProduct[name]" value="{{ $model->name }}" id="StoreProduct_name" class="form-control" placeholder="Nome do produto" />
+                                                            <input type="text" name="StoreProduct[name]" value="{{ $model['name'] }}" id="StoreProduct_name" class="form-control" placeholder="Nome do produto" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -52,7 +54,7 @@
                                                             <select class="select2" name="StoreProduct[store_product_category_id]" id="StoreProduct_store_product_category_id">
                                                                 <option>Selecione</option>
                                                                 @foreach($categories as $category)
-                                                                    <option value="{{ $category['id'] }}" {{ $category['id'] == $model->store_product_category_id ? 'selected' : null }}>{{ $category['name'] }}</option>
+                                                                    <option value="{{ $category['id'] }}" {{ $category['id'] == $model['category']['id'] ? 'selected' : null }}>{{ $category['name'] }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -63,7 +65,7 @@
                                                             <select class="select2" name="StoreProduct[store_product_brand_id]" id="StoreProduct_store_product_brand_id">
                                                                 <option>Selecione</option>
                                                                 @foreach($brands as $brand)
-                                                                    <option value="{{ $brand['id'] }}" {{ $brand['id'] == $model->store_product_brand_id ? 'selected' : null }}>{{ $brand['name'] }}</option>
+                                                                    <option value="{{ $brand['id'] }}" {{ $brand['id'] == $model['brand']['id'] ? 'selected' : null }}>{{ $brand['name'] }}</option>
                                                                 @endforeach                                                                
                                                             </select>
                                                         </div>
@@ -74,7 +76,7 @@
                                                     <div class="col-sm-12">
                                                         <div class="form-group">
                                                             <label>Descrição</label>
-                                                            <textarea class="summernote" name="StoreProduct[description]">{{ $model->description }}</textarea>
+                                                            <textarea class="summernote" name="StoreProduct[description]">{{ $model['description'] }}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -82,7 +84,7 @@
                                                 <div class="row mb-10">
                                                     <div class="col-sm-6">
                                                         <span class="onoffswitch">
-                                                            <input type="checkbox" name="StoreProduct[status]" class="onoffswitch-checkbox" id="StoreProduct_status" value="1" @if(!empty($model->status)) checked @endif >
+                                                            <input type="checkbox" name="StoreProduct[status]" class="onoffswitch-checkbox" id="StoreProduct_status" value="1" @if(!empty($model['status'])) checked @endif >
                                                             <label class="onoffswitch-label" for="StoreProduct_status">
                                                                 <span class="onoffswitch-inner" data-swchon-text="SIM" data-swchoff-text="NÃO"></span>
                                                                 <span class="onoffswitch-switch"></span>
@@ -92,7 +94,7 @@
                                                     </div>                                                    
                                                     <div class="col-sm-6">
                                                         <span class="onoffswitch">
-                                                            <input type="checkbox" name="StoreProduct[sale_with_negative_stock]" class="onoffswitch-checkbox" id="StoreProduct_sale_with_negative_stock" value="1" @if(!empty($model->sale_with_negative_stock)) checked @endif>
+                                                            <input type="checkbox" name="StoreProduct[sale_with_negative_stock]" class="onoffswitch-checkbox" id="StoreProduct_sale_with_negative_stock" value="1" @if(!empty($model['sale_with_negative_stock'])) checked @endif>
                                                             <label class="onoffswitch-label" for="StoreProduct_sale_with_negative_stock">
                                                                 <span class="onoffswitch-inner" data-swchon-text="SIM" data-swchoff-text="NÃO"></span>
                                                                 <span class="onoffswitch-switch"></span>
@@ -100,35 +102,6 @@
                                                         </span>
                                                         Venda com estoque negativo
                                                     </div>                                                    
-                                                </div>
-
-                                            </fieldset>
-
-                                            <fieldset>
-                                                <legend><i class="fa fa-image"></i> Fotos do produto</legend>
-                                                <div class="row">
-                                                    <div class="col-sm-12 mb-10">
-                                                        <div id="upload-images" class=" dz-clickable" style="min-height: 100px !important">
-                                                            <div class="dz-default dz-message">
-                                                                <span>
-                                                                    <h4>Clique ou arraste as imagens aqui para fazer upload</h4>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-10">
-                                                    <div class="col-sm-12">
-                                                        <span class="onoffswitch">
-                                                            <input type="checkbox" name="StoreProduct[with_attributes]" class="onoffswitch-checkbox" id="StoreProduct_with_attributes" value="1" @if(!empty($model->with_attributes)) checked @endif>
-                                                            <label class="onoffswitch-label" for="StoreProduct_with_attributes">
-                                                                <span class="onoffswitch-inner" data-swchon-text="SIM" data-swchoff-text="NÃO"></span>
-                                                                <span class="onoffswitch-switch"></span>
-                                                            </label>
-                                                        </span>
-                                                        Produto com variações
-                                                    </div>
                                                 </div>
 
                                             </fieldset>
@@ -154,8 +127,8 @@
                                                     </div>
                                                 </div>                                                    
                                             </fieldset>
-
-                                            <fieldset class="with-attributes" style="display: none">
+            
+                                            <fieldset class="with-attributes">
                                                 <legend><i class="fa fa-list-alt"></i> Variações</legend>
 
                                                 <div class="row mb-10">
@@ -170,30 +143,34 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+                                                                @if(count($attrVariables) > 0)
+                                                                @foreach($attrVariables as $key => $attr)
                                                                 <tr>
-                                                                    <td>Variação 1
-                                                                        <input type="hidden" name="id[]" value="0" class="id-attribute">
-                                                                    </td>
+                                                                    <td>Variação 1</td>
                                                                     <td>
-                                                                        <select name="StoreProductAttributes[0]" class="select2 select2-container store-product-attributes" id="StoreProduct-attributes-first" style="width: auto !important;">
+                                                                        <select name="StoreProductAttributes[{{ $key }}]" class="select2 select2-container store-product-attributes" id="StoreProduct-attributes-first" style="width: auto !important;">
                                                                             <option>Selecione</option>
                                                                             @foreach($attributes as $attribute)
-                                                                                <option value="{{ $attribute['id'] }}">{{ $attribute['name'] }}</option>
+                                                                                <option value="{{ $attribute['id'] }}" @if($attr['id']  ===  $attribute['id'] ) selected @endif>
+                                                                                    {{ $attribute['name'] }}
+                                                                                </option>
                                                                             @endforeach
                                                                         </select>
                                                                     </td>
                                                                     <td width="50%">
-                                                                        <input class="form-control" id="StoreProdutct-attributes-0-value" name="StoreProductAttributeValues[0][]" value="" >
+                                                                        <input class="form-control" name="StoreProductAttributeValues[{{ $attr['store_product_attribute_id'] }}][]" value="<?= implode(',', $attr['values']) ?>" >
                                                                     </td>
                                                                     <td>
-                                                                                                                                                
+                                                                        <a class="del-attribute"><i class="fa fa-times-circle"></i></a>                                                  
                                                                     </td>
                                                                 </tr>
+                                                                @endforeach
+                                                                @endif
                                                             </tbody>
+                                                            
                                                         </table>
                                                         <button class="btn btn-sm btn-primary" id="add-attribute">Adicionar variação</button>
                                                     </div>
-
                                                     
                                                     <div class="col-sm-12">
                                                         <table class="table" id="table-subproducts">
@@ -208,10 +185,34 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+                                                                @foreach($model['subproducts'] as $key => $subproduct)
+                                                                @if($key !== 'variables')
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="checkbox" name="subproduct-checked[{{ $subproduct['id_attribute'] }}][checkbox]" value="{{ $subproduct['id_attribute'] }}" class="subproduct-checked" checked>
+                                                                        @foreach($subproduct['attributes'] as $attribute)
+                                                                            <input type="hidden" name="subproduct[{{ $subproduct['id_attribute'] }}][product_attribute][]" value="{{ $attribute['value'] }}">
+                                                                        @endforeach
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= str_replace('-', ' , ', $subproduct['id_attribute']) ?>
+                                                                    </td>
+                                                                    <td><input type="text" name="subproduct[{{ $subproduct['id_attribute'] }}][price]" class="form-control mask-currency" value="{{ $subproduct['price'] }}"></td>
+                                                                    <td><input type="text" name="subproduct[{{ $subproduct['id_attribute'] }}][weight]" class="form-control float-precision-3" value="{{ $subproduct['weight'] }}"></td>
+                                                                    <td>
+                                                                        <input type="text" name="subproduct[{{ $subproduct['id_attribute'] }}][sku]" class="form-control subproduct-sku" value="{{ $subproduct['sku'] }}">
+                                                                        <input type="hidden" name="subproduct[{{ $subproduct['id_attribute'] }}][id]" value="{{ $subproduct['id'] }}" class="subproduct-id" >
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" value="{{ $subproduct['total_in_stock'] }}" class="form-control" disabled>
+                                                                        <input type="hidden" name="subproduct[{{ $subproduct['id_attribute'] }}][total_in_stock]" value="{{ $subproduct['id_attribute'] }}">
+                                                                    </td>                                                                    
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    
 
                                                 </div>
 
@@ -226,17 +227,13 @@
                                         </form>
                                     </div>
                                     <!-- end widget content -->
-
                                 </div>
                                 <!-- end widget div -->
                             </div>
                         <!-- end widget -->
                     </article>
-
                 </div>
-
                 <!-- end row -->
-
             </section>
         </div>
 @endsection
@@ -246,4 +243,7 @@
 <script type="text/javascript" src="{{ asset('assets/js/custom/Store.js') }}"></script>
 <link href="{{ asset('assets/js/libs/jquery-easy-ui-1.5.1/themes/bootstrap/tagbox.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/js/libs/jquery-easy-ui-1.5.1/themes/icon.css') }}" rel="stylesheet">
+<script type="text/javascript">
+// Store.addSubproducts();
+</script>
 @stop

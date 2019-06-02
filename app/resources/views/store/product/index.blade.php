@@ -15,12 +15,15 @@
 
                     <div class="jarviswidget jarviswidget-color-blue-dark" id="wid-id-0" role="widget">
 
-                        <header role="heading" class="ui-sortable-handle">
-                            <div class="widget-header">
-                                <span class="widget-icon"> <i class="fa fa-tags"></i> </span>
+                        <header>
+                            <div class="widget-header">	
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                                 <h2>Produtos</h2>
                             </div>
 
+                            <div class="widget-toolbar">
+                                <!-- add: non-hidden - to disable auto hide -->
+                            </div>
                         </header>
 
                         <!-- widget div-->
@@ -28,6 +31,43 @@
 
                             <!-- widget content -->
                             <div class="widget-body">
+
+					
+                                <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+                                    <thead>			                
+                                        <tr>
+                                            <th data-hide="">Cód</th>
+                                            <th data-class="">Nome</th>
+                                            <th data-hide="">Categoria</th>
+                                            <th data-hide="">Marca</th>
+                                            <th data-hide="">Valor</th>
+                                            <th data-hide="">Estoque</th>
+                                            <th data-hide=""></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0001</td>
+                                            <td>Camiseta</td>
+                                            <td>Roupa</td>
+                                            <td>Brandli</td>
+                                            <td>R$ 50,00</td>
+                                            <td>5</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>0001</td>
+                                            <td>Camiseta</td>
+                                            <td>Roupa</td>
+                                            <td>Brandli</td>
+                                            <td>R$ 50,00</td>
+                                            <td>5</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
                             </div>
                         </div>
                     </div>

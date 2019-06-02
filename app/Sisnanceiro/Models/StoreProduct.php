@@ -2,8 +2,8 @@
 
 namespace Sisnanceiro\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Scopes\TenantModels;
+use Illuminate\Database\Eloquent\Model;
 
 class StoreProduct extends Model
 {
@@ -25,6 +25,31 @@ class StoreProduct extends Model
         'description',
         'total_in_stock',
         'sale_with_negative_stock',
-        'status'
+        'status',
     ];
+
+    public function haveChild()
+    {
+        return $this->subproducts()->get()->first() ? true : false;
+    }
+
+    public function brand()
+    {
+        return $this->hasOne('Sisnanceiro\Models\StoreProductBrand', 'id', 'store_product_brand_id');
+    }
+
+    public function category()
+    {
+        return $this->hasOne('Sisnanceiro\Models\StoreProductCategory', 'id', 'store_product_category_id');
+    }
+
+    public function subproducts()
+    {
+        return $this->hasMany('Sisnanceiro\Models\StoreProduct', 'store_product_id', 'id');
+    }
+
+    public function attributes()
+    {
+        return $this->hasMany('Sisnanceiro\Models\StoreProductHasStoreProductAttribute', 'store_product_id', 'id');
+    }
 }

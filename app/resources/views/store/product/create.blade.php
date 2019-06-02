@@ -105,18 +105,6 @@
                                             </fieldset>
 
                                             <fieldset>
-                                                <legend><i class="fa fa-image"></i> Fotos do produto</legend>
-                                                <div class="row">
-                                                    <div class="col-sm-12 mb-10">
-                                                        <div id="upload-images" class=" dz-clickable" style="min-height: 100px !important">
-                                                            <div class="dz-default dz-message">
-                                                                <span>
-                                                                    <h4>Clique ou arraste as imagens aqui para fazer upload</h4>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <div class="row mb-10">
                                                     <div class="col-sm-12">

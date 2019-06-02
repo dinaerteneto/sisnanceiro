@@ -16,4 +16,9 @@ class StoreProductHasStoreProductAttribute extends Model
         'store_product_attribute_id',
         'value',
     ];
+
+    public function productAttributes()
+    {
+        return $this->hasMany('Sisnanceiro\Models\StoreProductAttribute', 'id', 'store_product_attribute_id');
+    }
 }

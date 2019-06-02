@@ -13,6 +13,7 @@ use Sisnanceiro\Services\StoreProductService;
 use Sisnanceiro\Transformers\StoreProductAttributeTransform;
 use Sisnanceiro\Transformers\StoreProductBrandTransform;
 use Sisnanceiro\Transformers\StoreProductCategoryTransform;
+use Sisnanceiro\Transformers\StoreProductTransform;
 
 class StoreProductController extends Controller
 {
@@ -84,7 +85,17 @@ class StoreProductController extends Controller
             $attributes         = $this->storeProductAttributeService->all();
             $transformAttribute = fractal($attributes, new StoreProductAttributeTransform());
             $attributes         = $transformAttribute->toArray()['data'];
-            return view('store/product/update', compact('model', 'categories', 'brands', 'attributes'));
+
+            $transformProduct = fractal($model, new StoreProductTransform());
+            $model            = $transformProduct->toArray()['data'];
+ 
+            $attrVariables = [];
+            if(count($model['subproducts']) > 0)  {
+                $attrVariables = $model['subproducts']['variables'];
+            }
+
+            // dd($model);
+            return view('store/product/update', compact('model', 'categories', 'brands', 'attributes', 'attrVariables'));
         }
     }
 
