@@ -72,7 +72,13 @@ class StoreProductController extends Controller
     {
         $model = $this->storeProductService->find($id);
         if ($request->isMethod('post')) {
-
+            $data = $request->all();
+            if ($model = $this->storeProductService->store($data, 'update')) {
+                $request->session()->flash('success', ['message' => 'Produto alterado com sucesso.']);
+            } else {
+                $request->session()->flash('error', ['message' => 'Falha na tentativa de alterar o produto.']);
+            }
+            return redirect("/store/product/update/{$model->id}");
         } else {
             $categories          = $this->storeProductCategoryService->all();
             $transformCategories = fractal($categories, new StoreProductCategoryTransform());
@@ -88,13 +94,11 @@ class StoreProductController extends Controller
 
             $transformProduct = fractal($model, new StoreProductTransform());
             $model            = $transformProduct->toArray()['data'];
- 
+
             $attrVariables = [];
-            if(count($model['subproducts']) > 0)  {
+            if (count($model['subproducts']) > 0) {
                 $attrVariables = $model['subproducts']['variables'];
             }
-
-            // dd($model);
             return view('store/product/update', compact('model', 'categories', 'brands', 'attributes', 'attrVariables'));
         }
     }

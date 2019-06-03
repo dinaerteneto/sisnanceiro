@@ -45,6 +45,7 @@ class StoreProductService extends Service
     private function mapDataStoreProduct(array $data)
     {
         return [
+            'id'                        => isset($data['id']) ? (int) $data['id'] : null,
             'name'                      => $data['name'],
             'store_product_category_id' => $data['store_product_category_id'],
             'store_product_brand_id'    => $data['store_product_brand_id'],
@@ -52,7 +53,7 @@ class StoreProductService extends Service
             'sale_with_negative_stock'  => isset($data['sale_with_negative_stock']) ? $data['sale_with_negative_stock'] : 0,
             'price'                     => FloatConversor::convert($data['price']),
             'sku'                       => $data['sku'],
-            'weight'                    => FloatConversor::convert($data['weight']),
+            'weight'                    => (float) $data['weight'],
             'total_in_stock'            => !empty($data['total_in_stock']) ? $data['total_in_stock'] : 0,
             'description'               => $data['description'],
         ];
@@ -69,9 +70,9 @@ class StoreProductService extends Service
         $dataMap     = $this->mapDataStoreProduct($mainProduct->getAttributes());
         $dataReplace = [
             'store_product_id' => $mainProduct->id,
-            'id'               => isset($data['id']) ? $data['id'] : null,
+            'id'               => isset($data['id']) ? (int) $data['id'] : null,
             'sku'              => $data['sku'],
-            'weight'           => FloatConversor::convert($data['weight']),
+            'weight'           => (float) $data['weight'],
             'total_in_stock'   => !empty($data['total_in_stock']) ? $data['total_in_stock'] : 0,
             'price'            => FloatConversor::convert($data['price']),
         ];
@@ -80,15 +81,20 @@ class StoreProductService extends Service
 
     /**
      * persist subproduct with yours attributes
+     * @param StoreProduct $mainProduct
      * @param array $dataSubproduct
+     * @param array $attributes
      * @return StoreProduct
      */
     private function storeSubproduct(StoreProduct $mainProduct, array $dataSubproduct, array $attributes)
     {
-        $mapData         = $this->mapDataStoreSubproduct($mainProduct, $dataSubproduct);
+        $mapData = $this->mapDataStoreSubproduct($mainProduct, $dataSubproduct);
+        if (!empty($mapData['id'])) {
+            $this->storeProductsHasStoreProductAttributesServices->deleteBy('store_product_id', $mapData['id']);
+        }
         $modelSubproduct = parent::store($mapData, 'create');
 
-        // $this->storeProductsHasStoreProductAttributesServices->deleteBy('store_product_id', $modelSubproduct->id);
+        // store attributes
         if (isset($dataSubproduct['product_attribute'])) {
             foreach ($dataSubproduct['product_attribute'] as $i => $value) {
                 $dataAttribute = [
@@ -99,7 +105,6 @@ class StoreProductService extends Service
                 $this->storeProductsHasStoreProductAttributesServices->store($dataAttribute, 'create');
             }
         }
-
         return $modelSubproduct;
     }
 
@@ -112,12 +117,24 @@ class StoreProductService extends Service
      */
     public function store(array $data, $rules = false)
     {
+        $idsChecked = [];
         $productData = $this->mapDataStoreProduct($data['StoreProduct']);
         $mainProduct = parent::store($productData, $rules);
         if (null !== $data['subproduct-checked']) {
             foreach ($data['subproduct-checked'] as $key => $subproduct) {
+                $idsChecked[] = $subproduct['checkbox'];
                 $this->storeSubproduct($mainProduct, $data['subproduct'][$key], $data['StoreProductAttributes']);
             }
+        }
+        // remove product unchecked
+        $unCheckeds = $this->repository
+            ->select('id')
+            ->where('store_product_id', '=', $mainProduct->id)
+            ->whereNotIn('id', $idsChecked)
+            ->get()
+            ->toArray();
+        if ($unCheckeds) {
+            $this->repository->destroy($unCheckeds);
         }
         return $mainProduct;
     }

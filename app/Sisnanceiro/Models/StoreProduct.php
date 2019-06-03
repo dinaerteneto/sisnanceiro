@@ -4,10 +4,12 @@ namespace Sisnanceiro\Models;
 
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StoreProduct extends Model
 {
     use TenantModels;
+    use SoftDeletes;
 
     protected $table      = 'store_product';
     protected $primaryKey = 'id';

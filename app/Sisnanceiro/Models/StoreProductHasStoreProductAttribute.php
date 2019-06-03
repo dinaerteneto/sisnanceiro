@@ -17,6 +17,14 @@ class StoreProductHasStoreProductAttribute extends Model
         'value',
     ];
 
+    protected function setKeysForSaveQuery(\Illuminate\Database\Eloquent\Builder $query)
+    {
+        $query
+            ->where('store_product_id', '=', $this->getAttribute('store_product_id'))
+            ->where('store_product_attribute_id', '=', $this->getAttribute('store_product_attribute_id'));
+        return $query;
+    }
+
     public function productAttributes()
     {
         return $this->hasMany('Sisnanceiro\Models\StoreProductAttribute', 'id', 'store_product_attribute_id');

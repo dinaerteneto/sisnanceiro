@@ -42,7 +42,13 @@ abstract class Service
         if ($this->validator->getErrors()) {
             return $this->validator;
         }
+        if (isset($input['id']) && !empty($input['id'])) {
+            $model = $this->repository->find($input['id']);
+            $model->update($input);
+            return $model;
+        }
         return $this->repository->create($input);
+
     }
 
     /**
@@ -127,11 +133,9 @@ abstract class Service
      */
     public function deleteBy($column, $value)
     {
-        $model = $this->findBy($column, $value);
-        if($model) {
-            return $model->delete();
-        }
-        return false;
+        return $this->repository
+            ->where($column, '=', $value)
+            ->delete();        
     }
 
 }

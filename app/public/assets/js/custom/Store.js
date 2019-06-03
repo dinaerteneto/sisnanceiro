@@ -169,14 +169,13 @@ Store = {
             var html = '';
             json.forEach(element => {
                 console.log(element);
-
                 var checked = "";
                 if (element.form.checked || (!element.form.hasOwnProperty('checked') && $('#w0').attr('action').indexOf('update') < 0)) {
                     checked = 'checked';
                 }
                 html += '<tr>';
                 html += '<td>';
-                html += '<input type="checkbox" name="subproduct-checked[' + element.key + '][checkbox]" value="' + element.key + '" class="subproduct-checked" ' + checked + '>';
+                html += '<input type="checkbox" name="subproduct-checked[' + element.key + '][checkbox]" value="' + element.form.id + '" class="subproduct-checked" ' + checked + '>';
                 element.values.forEach(value => {
                     html += '<input type="hidden" name="subproduct[' + element.key + '][product_attribute][]" value="' + value + '">';
                 });

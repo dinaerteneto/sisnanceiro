@@ -32,7 +32,7 @@
                                         <!-- this is what the user will see -->
                                         <form id="w0" method="post" action="/store/product/update/{{ $model['id'] }}">
                                             @csrf
-
+                                            <input type="hidden" name="StoreProduct[id]" value="{{ $model['id'] }}">
                                             <input type="hidden" id="StoreProduct-with_attributes" value="{{ count($model['subproducts']) ? 1 : 0 }}">
 
                                             <fieldset>
@@ -111,7 +111,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-3 field-StoreProduct_price">
                                                         <label class="control-label" for="StoreProduct_price">Preço</label>
-                                                        <input type="text" id="StoreProduct_price" class="form-control mask-currency" name="StoreProduct[price]" autocomplete="off">
+                                                        <input type="text" id="StoreProduct_price" class="form-control mask-currency" name="StoreProduct[price]" autocomplete="off" value="{{ $model['price'] }}">
                                                     </div>
                                                     <div class="col-sm-3 field-StoreProduct_sku">
                                                         <label class="control-label" for="StoreProduct_sku">SKU <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></label>
@@ -119,11 +119,11 @@
                                                     </div>
                                                     <div class="col-sm-3 field-StoreProduct_weight">
                                                         <label class="control-label" for="StoreProduct_weight">Peso</label>
-                                                        <input type="text" id="StoreProduct_weight" class="form-control mask-float" name="StoreProduct[weight]" maxlength="45">
+                                                        <input type="text" id="StoreProduct_weight" class="form-control mask-float" name="StoreProduct[weight]" maxlength="45" value="{{ $model['weight'] }}">
                                                     </div>
                                                     <div class="col-sm-3 field-StoreProduct_total_in_stock">
                                                         <label class="control-label" for="StoreProduct_total_in_stock">Total no estoque</label>
-                                                        <input type="text" id="StoreProduct_total_in_stock" class="form-control mask-number" name="StoreProduct[total_in_stock]">
+                                                        <input type="text" id="StoreProduct_total_in_stock" class="form-control mask-number" name="StoreProduct[total_in_stock]" value="{{ $model['total_in_stock'] }}">
                                                     </div>
                                                 </div>                                                    
                                             </fieldset>
@@ -144,27 +144,29 @@
                                                             </thead>
                                                             <tbody>
                                                                 @if(count($attrVariables) > 0)
-                                                                @foreach($attrVariables as $key => $attr)
-                                                                <tr>
-                                                                    <td>Variação 1</td>
-                                                                    <td>
-                                                                        <select name="StoreProductAttributes[{{ $key }}]" class="select2 select2-container store-product-attributes" id="StoreProduct-attributes-first" style="width: auto !important;">
-                                                                            <option>Selecione</option>
-                                                                            @foreach($attributes as $attribute)
-                                                                                <option value="{{ $attribute['id'] }}" @if($attr['id']  ===  $attribute['id'] ) selected @endif>
-                                                                                    {{ $attribute['name'] }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </td>
-                                                                    <td width="50%">
-                                                                        <input class="form-control" name="StoreProductAttributeValues[{{ $attr['store_product_attribute_id'] }}][]" value="<?= implode(',', $attr['values']) ?>" >
-                                                                    </td>
-                                                                    <td>
-                                                                        <a class="del-attribute"><i class="fa fa-times-circle"></i></a>                                                  
-                                                                    </td>
-                                                                </tr>
-                                                                @endforeach
+                                                                    @foreach($attrVariables as $key => $attr)
+                                                                    <tr>
+                                                                        <td>Variação 1</td>
+                                                                        <td>
+                                                                            <select name="StoreProductAttributes[{{ $key }}]" class="select2 select2-container store-product-attributes" id="StoreProduct-attributes-first" style="width: auto !important;">
+                                                                                <option>Selecione</option>
+                                                                                @foreach($attributes as $attribute)
+                                                                                    <option value="{{ $attribute['id'] }}" @if( isset($attr['id']) && $attr['id']  ===  $attribute['id'] ) selected @endif>
+                                                                                        {{ $attribute['name'] }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </td>
+                                                                        <td width="50%">
+                                                                            @if( isset($attr['store_product_attribute_id']) )
+                                                                            <input class="form-control" name="StoreProductAttributeValues[{{ $attr['store_product_attribute_id'] }}][]" value="<?= implode(',', $attr['values']) ?>" >
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            <a class="del-attribute"><i class="fa fa-times-circle"></i></a>                                                  
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
                                                                 @endif
                                                             </tbody>
                                                             
@@ -186,10 +188,10 @@
                                                             </thead>
                                                             <tbody>
                                                                 @foreach($model['subproducts'] as $key => $subproduct)
-                                                                @if($key !== 'variables')
+                                                                @if($key !== 'variables' && count($subproduct['attributes']) > 0) 
                                                                 <tr>
                                                                     <td>
-                                                                        <input type="checkbox" name="subproduct-checked[{{ $subproduct['id_attribute'] }}][checkbox]" value="{{ $subproduct['id_attribute'] }}" class="subproduct-checked" checked>
+                                                                        <input type="checkbox" name="subproduct-checked[{{ $subproduct['id_attribute'] }}][checkbox]" value="{{ $subproduct['id'] }}" class="subproduct-checked" checked>
                                                                         @foreach($subproduct['attributes'] as $attribute)
                                                                             <input type="hidden" name="subproduct[{{ $subproduct['id_attribute'] }}][product_attribute][]" value="{{ $attribute['value'] }}">
                                                                         @endforeach
@@ -204,8 +206,8 @@
                                                                         <input type="hidden" name="subproduct[{{ $subproduct['id_attribute'] }}][id]" value="{{ $subproduct['id'] }}" class="subproduct-id" >
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" value="{{ $subproduct['total_in_stock'] }}" class="form-control" disabled>
-                                                                        <input type="hidden" name="subproduct[{{ $subproduct['id_attribute'] }}][total_in_stock]" value="{{ $subproduct['id_attribute'] }}">
+                                                                        <input type="text" value="{{ $subproduct['total_in_stock'] }}" class="form-control" disabled >
+                                                                        <input type="hidden" name="subproduct[{{ $subproduct['id_attribute'] }}][total_in_stock]" value="{{ $subproduct['total_in_stock'] }}">
                                                                     </td>                                                                    
                                                                 </tr>
                                                                 @endif
@@ -244,6 +246,8 @@
 <link href="{{ asset('assets/js/libs/jquery-easy-ui-1.5.1/themes/bootstrap/tagbox.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/js/libs/jquery-easy-ui-1.5.1/themes/icon.css') }}" rel="stylesheet">
 <script type="text/javascript">
-// Store.addSubproducts();
+$(document).ready(function(){
+    Store.addSubproducts();
+});
 </script>
 @stop
