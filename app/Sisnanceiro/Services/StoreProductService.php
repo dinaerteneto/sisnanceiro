@@ -139,4 +139,9 @@ class StoreProductService extends Service
         return $mainProduct;
     }
 
+    public function getAll($search = null)
+    {
+        return $this->repository->getAll();
+    }
+
 }

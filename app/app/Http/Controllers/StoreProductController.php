@@ -63,8 +63,16 @@ class StoreProductController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->isMethod('post')) {
+            $search  = $request->get('search');
+            $records = $this->storeProductService->getAll();
+            $dt      = datatables()->of($records);
+            return $dt->filterColumn('name', function ($query, $keyword) {
+                $query->whereRaw("name LIKE ?", ["%{$keyword}%"]);
+            })->make(true);
+        }
         return view('store/product/index');
     }
 

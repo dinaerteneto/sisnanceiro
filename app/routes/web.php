@@ -66,6 +66,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         });
         Route::group(['prefix' => 'product'], function () {
             Route::get('/', 'StoreProductController@index');
+            Route::post('/', 'StoreProductController@index');
             Route::get('/create', 'StoreProductController@create');
             Route::post('/create', 'StoreProductController@create');
             Route::get('/update/{id}', 'StoreProductController@update');
