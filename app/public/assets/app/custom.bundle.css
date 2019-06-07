@@ -1,4 +1,52 @@
+.sa-content-wrapper {
+    background-color: #EFEFEF;
+}
+
 .ui-widget.ui-widget-content {
     position: relative;
     z-index: 9999 !important;
+<<<<<<< Updated upstream
+=======
+}
+
+.textbox {
+    position: relative;
+    border: 1px solid #dfdfdf;
+    background-color: #fff;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.textbox .textbox-text {
+    border: 0;
+    margin: 0;
+    padding: 4px;
+    white-space: normal;
+    vertical-align: top;
+    outline-style: none;
+    resize: none;
+}
+
+.select2-container {
+    display: block;
+}
+
+.line-container {
+    border-bottom: 1px solid #ced4da;
+    margin-left: 0;
+    margin-right: 55px;
+    margin-bottom: -10px;
+    margin-top: 5px;
+}
+
+.delete-container {
+    position: relative;
+    right: 15px;
+    text-align: right;
+>>>>>>> Stashed changes
 }

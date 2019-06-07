@@ -56,6 +56,47 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/{tokenEmail}/invoice', 'EventGuestController@invoice');
         Route::get('/{tokenEmail}/payment-with-money', 'EventGuestController@paymentWithMoney');
     });
+<<<<<<< Updated upstream
+=======
+
+    Route::group(['prefix' => 'store'], function () {
+        Route::group(['prefix' => 'product-category'], function () {
+            Route::post('/create', 'StoreProductCategoryController@create');
+        });
+        Route::group(['prefix' => 'product-brand'], function () {
+            Route::post('/create', 'StoreProductBrandController@create');
+        });
+        Route::group(['prefix' => 'product'], function () {
+            Route::get('/', 'StoreProductController@index');
+            Route::post('/', 'StoreProductController@index');
+            Route::get('/create', 'StoreProductController@create');
+            Route::post('/create', 'StoreProductController@create');
+            Route::get('/update/{id}', 'StoreProductController@update');
+            Route::post('/update/{id}', 'StoreProductController@update');
+            Route::post('/add-subproduct', 'StoreProductController@addSubproduct');
+        });
+        Route::group(['prefix' => 'product-attributes'], function () {
+            Route::post('/create', 'StoreProductAttributeController@create');
+        });
+    });
+
+    Route::group(['prefix' => 'customer'], function () {
+        Route::get('/', 'CustomerController@index');
+        Route::post('/', 'CustomerController@index');
+        Route::get('/create', 'CustomerController@create');
+        Route::post('/create', 'CustomerController@create');
+        Route::get('/update/{id}', 'CustomerController@update');
+        Route::post('/update/{id}', 'CustomerController@update');
+        Route::post('/delete/{id}', 'CustomerController@delete');
+    });
+
+    Route::group(['prefix' => 'person'], function () {
+        Route::get('/add-contact', 'PersonController@addContact');
+        Route::get('/add-address', 'PersonController@addAddress');
+        Route::post('/del-contact/{id}', 'PersonController@delContact');
+        Route::post('/del-address/{id}', 'PersonController@delAddress');
+    });
+>>>>>>> Stashed changes
 });
 
 Auth::routes();
