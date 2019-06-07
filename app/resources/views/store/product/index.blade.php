@@ -103,7 +103,15 @@ $('document').ready(function() {
         },
         columns: [
             { data: 'sku' },
-            { data: 'name', name: 'name' },
+            { 
+                name: 'name',
+                mRender: function(data, type, row) {
+                    if(row.attributes == null) {
+                       return row.name;
+                    }
+                    return row.name + " - " + row.attributes;
+                } 
+            },
             { data: 'category_name'},
             { data: 'brand_name' },
             { data: 'price' },
