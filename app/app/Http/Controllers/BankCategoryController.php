@@ -20,12 +20,12 @@ class BankCategoryController extends Controller
     {
         $mainParentCategoryId = $request->has('mainParentCategoryId') ? $request->mainParentCategoryId : BankCategory::CATEGORY_TO_RECEIVE;
         $categoriesReceive    = [];
-        if ($categoriesReceive = $this->bankCategoryService->all(BankCategory::CATEGORY_TO_RECEIVE)) {
+        if ($categoriesReceive = $this->bankCategoryService->getAll(BankCategory::CATEGORY_TO_RECEIVE)) {
             $categoryReceiveTransform = new BankCategoryTransform();
             $categoriesReceive        = $categoryReceiveTransform->buildTree($categoriesReceive->toArray(), BankCategory::CATEGORY_TO_RECEIVE);
         }
         $categoriesPay = [];
-        if ($categoriesPay = $this->bankCategoryService->all(BankCategory::CATEGORY_TO_PAY)) {
+        if ($categoriesPay = $this->bankCategoryService->getAll(BankCategory::CATEGORY_TO_PAY)) {
             $categoryPayTransform = new BankCategoryTransform();
             $categoriesPay        = $categoryPayTransform->buildTree($categoriesPay->toArray(), BankCategory::CATEGORY_TO_PAY);
         }

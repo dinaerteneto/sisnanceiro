@@ -15,7 +15,7 @@ Route::get('/', function () {return view('auth/login');});
 Route::get('/cadastrar', function () {return view('auth/register');});
 Route::post('/cadastrar', 'HomeController@register');
 
-Route::get('/event/{eventId}/{eventStart}/{eventName}', 'EventController@page')->where('eventId', '[0-9]+');;
+Route::get('/event/{eventId}/{eventStart}/{eventName}', 'EventController@page')->where('eventId', '[0-9]+');
 Route::post('/event/{eventId}/page', 'EventController@page');
 
 Route::group(['middleware' => ['web', 'auth']], function () {
@@ -55,6 +55,27 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/{tokenEmail}/change-status/{status}', 'EventGuestController@changeStatus');
         Route::get('/{tokenEmail}/invoice', 'EventGuestController@invoice');
         Route::get('/{tokenEmail}/payment-with-money', 'EventGuestController@paymentWithMoney');
+    });
+
+    Route::group(['prefix' => 'store'], function () {
+        Route::group(['prefix' => 'product-category'], function () {
+            Route::post('/create', 'StoreProductCategoryController@create');
+        });
+        Route::group(['prefix' => 'product-brand'], function () {
+            Route::post('/create', 'StoreProductBrandController@create');
+        });
+        Route::group(['prefix' => 'product'], function () {
+            Route::get('/', 'StoreProductController@index');
+            Route::post('/', 'StoreProductController@index');
+            Route::get('/create', 'StoreProductController@create');
+            Route::post('/create', 'StoreProductController@create');
+            Route::get('/update/{id}', 'StoreProductController@update');
+            Route::post('/update/{id}', 'StoreProductController@update');
+            Route::post('/add-subproduct', 'StoreProductController@addSubproduct');
+        });
+        Route::group(['prefix' => 'product-attributes'], function () {
+            Route::post('/create', 'StoreProductAttributeController@create');
+        });
     });
 });
 

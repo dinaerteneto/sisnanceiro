@@ -149,7 +149,7 @@ class EventGuestService extends Service
      * @param int $mainParentCategoryId
      * @return array
      */
-    public function all($eventId)
+    public function getAll($eventId)
     {
         return $this->repository->allGuests($eventId);
     }

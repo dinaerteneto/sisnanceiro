@@ -54,6 +54,31 @@
                 <span class="menu-item-parent">Eventos</span>
             </a>          
         </li>
+        <li class="">
+            <a class="" href="javascript:void(0)" title="Loja">
+                <span class="fa fa-lg fa-fw fa-tags"></span> 
+                <span class="menu-item-parent">Loja</span>
+                <b class="collapse-sign">
+                    <em class="fa fa-plus-square-o"></em>
+                    <em class="fa fa-minus-square-o"></em>
+                </b>
+            </a>
+            <ul aria-expanded="false" class="sa-sub-nav collapse">
+                <!-- second-level -->
+                <li class="">
+                    <a href="/store/product" title="Produtos"> Produtos </a>
+                </li>                
+                <li class="">
+                    <a href="/store/category" title="Categorias de produto"> Categorias </a>
+                </li>                
+                <li class="">
+                    <a href="/store/brand" title="Marcas"> Marcas </a>
+                </li>        
+                <li class="">
+                    <a href="/sale" title="Marcas"> Vendas </a>
+                </li>        
+            </ul>        
+        </li>
     </ul>
 </div>
 <a href="javascript:void(0)" class="minifyme" onclick="SAtoggleClass(this, 'body', 'minified')">

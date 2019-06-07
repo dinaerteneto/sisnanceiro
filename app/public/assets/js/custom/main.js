@@ -1,7 +1,7 @@
 Main = {
     init: function() {
         //$('#side-menu').metisMenu();
-        // Main.configBlock();
+        Main.configBlock();
         Main.openModal();
         Main.closeModal();
         $('#menu1').metisMenu();
