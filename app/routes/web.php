@@ -56,8 +56,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/{tokenEmail}/invoice', 'EventGuestController@invoice');
         Route::get('/{tokenEmail}/payment-with-money', 'EventGuestController@paymentWithMoney');
     });
-<<<<<<< Updated upstream
-=======
 
     Route::group(['prefix' => 'store'], function () {
         Route::group(['prefix' => 'product-category'], function () {
@@ -96,7 +94,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/del-contact/{id}', 'PersonController@delContact');
         Route::post('/del-address/{id}', 'PersonController@delAddress');
     });
->>>>>>> Stashed changes
+
 });
 
 Auth::routes();

@@ -9,7 +9,6 @@ class PersonContactRepository extends Repository
     public function __construct(PersonContact $model)
     {
         $this->model = $model;
-
     }
 
 }

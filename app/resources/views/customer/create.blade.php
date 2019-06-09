@@ -15,7 +15,9 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                     <div class="jarviswidget well jarviswidget-color-darken">
                         <div class="widget-body">
-                            <form>
+                            <form id="form1" method="post" action="/customer/create">
+                                @csrf
+
                                 <fieldset>
                                     <legend><i class="fa fa-list-alt"></i> Dados gerais</legend>
                                     <div class="row">
@@ -49,7 +51,7 @@
                                        <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label>Sexo</label>
-                                                <input type="text" id="Customer_birthdate" name="Customer[birthdate]" class="form-control" placeholder="Sexo">
+                                                <input type="text" id="Customer_gender" name="Customer[gender]" class="form-control" placeholder="Sexo">
                                             </div>
                                         </div>                                                                      
                                         <div class="col-sm-4">
@@ -94,6 +96,8 @@
                                         </div>                                        
                                     </div>                                    
                                 </fieldset>
+
+                                <input type="submit" value="Salvar" class="btn bg-blue-dark text-white">
                             </form>
                         </div>
                     </div>

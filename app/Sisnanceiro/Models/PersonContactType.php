@@ -5,24 +5,17 @@ namespace Sisnanceiro\Models;
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
 
-class Person extends Model
+class PersonContactType extends Model
 {
 
     use TenantModels;
 
-    protected $table      = 'person';
+    protected $table      = 'person_contact_type';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'company_id',
-        'physical',
-        'firstname',
-        'lastname',
-        'cpf',
-        'rg',
-        'gender',
-        'email',
-        'birthdate',
+        'company_id', 
+        'type'
     ];
 
     protected $hidden = [
