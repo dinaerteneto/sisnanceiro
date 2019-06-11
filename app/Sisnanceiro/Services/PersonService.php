@@ -3,10 +3,10 @@
 namespace Sisnanceiro\Services;
 
 use Sisnanceiro\Helpers\Validator;
+use Sisnanceiro\Models\Person;
 use Sisnanceiro\Repositories\PersonAddressRepository;
 use Sisnanceiro\Repositories\PersonContactRepository;
 use Sisnanceiro\Repositories\PersonRepository;
-use Sisnanceiro\Models\Person;
 
 class PersonService extends Service
 {
@@ -63,6 +63,16 @@ class PersonService extends Service
     {
         $data['person_id'] = $person->id;
         return $this->personContactRepository->create($data);
+    }
+
+    public function getTypeContacts()
+    {
+        return $this->personContactRepository->getAllType();
+    }
+
+    public function getTypeAddresses()
+    {
+        return $this->personAddressRepository->getAllType();
     }
 
 }

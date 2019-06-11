@@ -106,24 +106,17 @@ $('document').ready(function() {
             type: 'POST'
         },
         columns: [
-            { data: 'sku' },
-            { 
-                name: 'name',
-                mRender: function(data, type, row) {
-                    if(row.attributes == null) {
-                       return row.name;
-                    }
-                    return row.name + " - " + row.attributes;
-                } 
-            },
-            { data: 'category_name'},
-            { data: 'brand_name' },
-            { data: 'price' },
-            { data: 'total_in_stock' },
+            { data: 'id', 'searchable': false },
+            { data: 'firstname'},
+            { data: 'physical','searchable': false},
+            { data: 'phone', 'searchable': false },
+            { data: 'cellphone', 'searchable': false },
+            { data: 'email', 'searchable': false },
             { 
                 mRender: function(data, type, row) {
-                    var id = row.store_product_id !== null ? row.store_product_id : row.id;
-                    return '<a href="/store/product/update/'+id+'"><i class="fa fa-pencil"></i></a> <a href="/store/product/delete/'+row.id+'"><i class="fa fa-trash"></i></a>';
+                    var html = '<a href="/customer/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
+                        html+= '<a href="/customer/delete/'+row.id+'" class="delete-record" data-title="Excluir este cliente?" data-ask="Tem certeza que deseja excluir o cliente: '+ row.firstname +'?"><i class="fa fa-trash"></i></a>';
+                    return html;
                 }
             }
         ]

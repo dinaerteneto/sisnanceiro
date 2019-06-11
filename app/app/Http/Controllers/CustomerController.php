@@ -14,7 +14,7 @@ class CustomerController extends Controller
     public function __construct(CustomerService $customerService, PersonService $personService)
     {
         $this->customerService = $customerService;
-        $this->personService = $personService;
+        $this->personService   = $personService;
     }
 
     public function index(Request $request)
@@ -59,9 +59,24 @@ class CustomerController extends Controller
             $modelContact     = new \stdClass();
             $modelAddress->id = 'N0';
             $modelContact->id = 'N0';
-            return view('customer/create', compact('modelAddress', 'modelContact'));
+            $typeContacts     = $this->personService->getTypeContacts();
+            $typeAddresses    = $this->personService->getTypeAddresses();
+            return view('customer/create', compact('modelAddress', 'modelContact', 'typeContacts', 'typeAddresses'));
         }
+    }
 
+    public function update(Request $request, $id)
+    {
+        $model = $this->personService->find($id);
+        if ($request->isMethod('post')) {
+
+        } else {
+            $typeContacts  = $this->personService->getTypeContacts();
+            $typeAddresses = $this->personService->getTypeAddresses();
+            $addresses     = $model->addresses()->get();
+            $contacts      = $model->contacts()->get();
+            return view('customer/update', compact('model', 'addresses', 'contacts', 'typeContacts', 'typeAddresses'));
+        }
     }
 
 }

@@ -14,7 +14,7 @@ class StoreProductRepository extends Repository
     /**
      * get all products
      * @param String $search
-     * @return Illuminate\Pagination\LengthAwarePaginator
+     * @return IIlluminate\Database\Query\Builder
      */
     public function getAll($search = null)
     {

@@ -5,7 +5,7 @@ namespace Sisnanceiro\Models;
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
 
-class PersonAddresstType extends Model
+class PersonAddressType extends Model
 {
 
     use TenantModels;

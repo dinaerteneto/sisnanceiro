@@ -8,7 +8,6 @@ use Sisnanceiro\Repositories\CustomerRepository;
 use Sisnanceiro\Repositories\PersonAddressRepository;
 use Sisnanceiro\Repositories\PersonContactRepository;
 use Sisnanceiro\Repositories\PersonRepository;
-use Illuminate\Support\Facades\Auth;
 
 class CustomerService extends PersonService
 {
@@ -68,42 +67,9 @@ class CustomerService extends PersonService
         return $model;
     }
 
-    public function getAll()
+    public function getAll($search = null)
     {
-        $companyId = Auth::user()->company_id;
-        $sql = "
-            select p.id
-                 , p.physical
-                 , p.firstname
-                 , p.lastname
-                 , email.value as email
-                 , cellphone.value as cellphone
-                 , phone.value as phone
-             from person p
-             join customer c
-               on p.id = c.id
-             left join person_contact email on email.id = (
-                select min(id)
-                  from person_contact 
-                 where person_id = p.id
-                   and person_contact_type_id = 1
-                 limit 1
-            )
-            left join person_contact cellphone on cellphone.id = (
-               select min(id)
-                 from person_contact
-                where person_id = p.id
-                  and person_contact_type_id = 2
-            )
-            left join person_contact phone on phone.id = (
-               select min(id)
-                from person_contact
-               where person_id = p.id
-                 and person_contact_type_id = 3
-            )
-          where p.company_id = {$companyId}
-        ";
-        return \DB::select($sql);
+        return $this->customerRepository->getAll($search);
     }
 
 }

@@ -29,4 +29,12 @@ class Person extends Model
 
     ];
 
+    public function addresses() {
+        return $this->hasMany('Sisnanceiro\Models\PersonAddress', 'person_id');
+    }
+
+    public function contacts() {
+        return $this->hasMany('Sisnanceiro\Models\PersonContact', 'person_id');
+    }
+
 }
