@@ -1,3 +1,7 @@
+.sa-content-wrapper {
+    background-color: #EFEFEF;
+}
+
 .ui-widget.ui-widget-content {
     position: relative;
     z-index: 9999 !important;
@@ -28,4 +32,18 @@
 
 .select2-container {
     display: block;
+}
+
+.line-container {
+    border-bottom: 1px solid #ced4da;
+    margin-left: 0;
+    margin-right: 55px;
+    margin-bottom: -10px;
+    margin-top: 5px;
+}
+
+.delete-container {
+    position: relative;
+    right: 15px;
+    text-align: right;
 }

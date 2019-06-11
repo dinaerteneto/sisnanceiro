@@ -9,6 +9,29 @@
 </a>
 <div class="sa-left-menu-outer">
     <ul class="metismenu sa-left-menu" id="menu1">
+        <li class="">
+            <a class="" href="/event" title="Eventos">
+                <span class="fa fa-lg fa-fw fa-calendar"></span> 
+                <span class="menu-item-parent">Eventos</span>
+            </a>          
+        </li>
+        <li class="">
+            <a class="" href="javascript:void(0)" title="Cadastros">
+                <span class="fa fa-lg fa-fw fa-list"></span> 
+                <span class="menu-item-parent">Cadastros</span>
+                <b class="collapse-sign">
+                    <em class="fa fa-plus-square-o"></em>
+                    <em class="fa fa-minus-square-o"></em>
+                </b>                
+            </a>
+            <ul aria-expanded="false" class="sa-sub-nav collapse">
+                <li class="">
+                    <a href="/customer" title="Clientes"><i class="fa fa-group"></i> Clientes </a>
+                    <a href="/customer" title="Clientes"><i class="fa fa-user"></i> Usuários </a>
+                    <a href="/supplier" title="Clientes"><i class="fa fa-truck"></i> Fornecedores </a>
+                </li>                 
+            </ul>          
+        </li>
         <li class=" active">
             <!-- first-level -->
             <a class="has-arrow" href="#" title="Dashboard"><span class="fa fa-lg fa-fw fa-money"></span> <span class="menu-item-parent">Financeiro</span>
@@ -47,12 +70,40 @@
                 -->
             </ul>
 
+<<<<<<< Updated upstream
         </li>
         <li class="">
             <a class="" href="/event" title="Eventos">
                 <span class="fa fa-lg fa-fw fa-calendar"></span> 
                 <span class="menu-item-parent">Eventos</span>
             </a>          
+=======
+        </li>        
+        <li class="">
+            <a class="" href="javascript:void(0)" title="Loja">
+                <span class="fa fa-lg fa-fw fa-tags"></span> 
+                <span class="menu-item-parent">Loja</span>
+                <b class="collapse-sign">
+                    <em class="fa fa-plus-square-o"></em>
+                    <em class="fa fa-minus-square-o"></em>
+                </b>
+            </a>
+            <ul aria-expanded="false" class="sa-sub-nav collapse">
+                <!-- second-level -->
+                <li class="">
+                    <a href="/store/product" title="Produtos"> Produtos </a>
+                </li>                
+                <li class="">
+                    <a href="/store/category" title="Categorias de produto"> Categorias </a>
+                </li>                
+                <li class="">
+                    <a href="/store/brand" title="Marcas"> Marcas </a>
+                </li>        
+                <li class="">
+                    <a href="/sale" title="Marcas"> Vendas </a>
+                </li>        
+            </ul>        
+>>>>>>> Stashed changes
         </li>
         <li class="">
             <a class="" href="javascript:void(0)" title="Loja">

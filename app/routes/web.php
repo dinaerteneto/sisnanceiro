@@ -77,6 +77,23 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('/create', 'StoreProductAttributeController@create');
         });
     });
+
+    Route::group(['prefix' => 'customer'], function () {
+        Route::get('/', 'CustomerController@index');
+        Route::post('/', 'CustomerController@index');
+        Route::get('/create', 'CustomerController@create');
+        Route::post('/create', 'CustomerController@create');
+        Route::get('/update/{id}', 'CustomerController@update');
+        Route::post('/update/{id}', 'CustomerController@update');
+        Route::post('/delete/{id}', 'CustomerController@delete');
+    });
+
+    Route::group(['prefix' => 'person'], function () {
+        Route::get('/add-contact', 'PersonController@addContact');
+        Route::get('/add-address', 'PersonController@addAddress');
+        Route::post('/del-contact/{id}', 'PersonController@delContact');
+        Route::post('/del-address/{id}', 'PersonController@delAddress');
+    });
 });
 
 Auth::routes();
