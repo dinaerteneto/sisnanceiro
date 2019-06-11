@@ -17,8 +17,15 @@ class CustomerController extends Controller
         $this->personService = $personService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->isMethod('post')) {
+            $records = $this->customerService->getAll();
+            $dt      = datatables()->of($records);
+            return $dt->filterColumn('firstname', function ($query, $keyword) {
+                $query->whereRaw("firstname LIKE ?", ["%{$keyword}%"]);
+            })->make(true);
+        }
         return view('customer/index');
     }
 
