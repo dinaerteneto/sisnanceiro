@@ -93,7 +93,6 @@ class CustomerService extends PersonService
             $this->personAddressRepository->destroy($unsetAddresses);
         }
         // remove contacts removed on frontend
-        print_r($contactIds);
         $unsetContacts = $this->personContactRepository
             ->select('id')
             ->where('person_id', '=', $model->id)

@@ -23,7 +23,9 @@ class CustomerRepository extends Repository
         $query     = \DB::query()
             ->selectRaw("
                   person.id
-                , person.physical
+                , case person.physical 
+                  WHEN 1 THEN 'Física' ELSE 'Jurídica' 
+                   END physical
                 , person.firstname
                 , person.lastname
                 , (
@@ -31,6 +33,7 @@ class CustomerRepository extends Repository
                       from person_contact
                      where person_contact.person_id = person.id
                        and person_contact.person_contact_type_id = 1
+                       and person_contact.deleted_at is null
                      limit 1
                 ) as email
                 , (
@@ -38,6 +41,7 @@ class CustomerRepository extends Repository
                       from person_contact
                      where person_contact.person_id = person.id
                        and person_contact.person_contact_type_id = 2
+                       and person_contact.deleted_at is null
                      limit 1
                 ) as cellphone
                 , (
@@ -45,6 +49,7 @@ class CustomerRepository extends Repository
                       from person_contact
                      where person_contact.person_id = person.id
                        and person_contact.person_contact_type_id = 3
+                       and person_contact.deleted_at is null
                      limit 1
                 ) as phone
             ")
