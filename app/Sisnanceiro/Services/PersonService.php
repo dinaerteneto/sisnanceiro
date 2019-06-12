@@ -51,6 +51,11 @@ class PersonService extends Service
     public function storeAddress(Person $person, array $data)
     {
         $data['person_id'] = $person->id;
+        if (isset($data['id']) && (!empty($data['id']) && is_numeric($data['id']))) {
+            $model = $this->personAddressRepository->find($data['id']);
+            $model->update($data);
+            return $model;
+        }
         return $this->personAddressRepository->create($data);
     }
 
@@ -62,6 +67,11 @@ class PersonService extends Service
     public function storeContact(Person $person, array $data)
     {
         $data['person_id'] = $person->id;
+        if (isset($data['id']) && (!empty($data['id']) && is_numeric($data['id']))) {
+            $model = $this->personContactRepository->find($data['id']);
+            $model->update($data);
+            return $model;
+        }
         return $this->personContactRepository->create($data);
     }
 

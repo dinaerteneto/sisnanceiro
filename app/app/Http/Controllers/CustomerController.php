@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\PersonService;
@@ -31,28 +32,14 @@ class CustomerController extends Controller
 
     public function create(Request $request)
     {
-
         if ($request->isMethod('post')) {
-            $customerPost  = $request->get('Customer');
+            $customerPost  = $request->all();
             $customerModel = $this->customerService->store($customerPost, 'create');
-
-            if (null !== $request->get('PersonAddress')) {
-                foreach ($request->get('PersonAddress') as $keyCustomerAddress => $postCustomerAddress) {
-                    $this->personService->storeAddress($customerModel, $postCustomerAddress);
-                }
-            }
-            if (null !== $request->get('PersonContact')) {
-                foreach ($request->get('PersonContact') as $keyCustomerContact => $postCustomerContact) {
-                    $this->personService->storeContact($customerModel, $postCustomerContact);
-                }
-            }
-
             if (method_exists($customerModel, 'getErrors') && $customerModel->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de incluir o cliente.', 'errors' => $customerModel->getErrors()]);
             } else {
                 $request->session()->flash('success', ['message' => 'Cliente incluído com sucesso.']);
             }
-
             return redirect('customer/');
         } else {
             $modelAddress     = new \stdClass();
@@ -69,8 +56,19 @@ class CustomerController extends Controller
     {
         $model = $this->personService->find($id);
         if ($request->isMethod('post')) {
-
+            $customerPost  = $request->all();
+            $customerModel = $this->customerService->store($customerPost, 'update');
+            if (method_exists($customerModel, 'getErrors') && $customerModel->getErrors()) {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o cliente.', 'errors' => $customerModel->getErrors()]);
+            } else {
+                $request->session()->flash('success', ['message' => 'Cliente alterado com sucesso.']);
+            }
+            return redirect('customer/');
         } else {
+            if (!empty($model->birthdate)) {
+                $carbonBirthdate  = Carbon::createFromFormat('Y-m-d', $model->birthdate);
+                $model->birthdate = $carbonBirthdate->format('d/m/Y');
+            }
             $typeContacts  = $this->personService->getTypeContacts();
             $typeAddresses = $this->personService->getTypeAddresses();
             $addresses     = $model->addresses()->get();

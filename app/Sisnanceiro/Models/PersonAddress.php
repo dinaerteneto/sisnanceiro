@@ -4,11 +4,13 @@ namespace Sisnanceiro\Models;
 
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PersonAddress extends Model
 {
 
     use TenantModels;
+    use SoftDeletes;
 
     protected $table      = 'person_address';
     protected $primaryKey = 'id';

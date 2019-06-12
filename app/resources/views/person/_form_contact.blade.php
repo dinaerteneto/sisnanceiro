@@ -19,19 +19,19 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <label>Nome</label>
-                <input value="{{ $modelContact->name }}" type="text" id="PersonContact_{{ $modelContact->id }}_name" name="PersonContact[{{ $modelContact->id }}][name]" class="form-control" placeholder="">
+                <input value="{{ isset($modelContact->name) ? $modelContact->name : null }}" type="text" id="PersonContact_{{ $modelContact->id }}_name" name="PersonContact[{{ $modelContact->id }}][name]" class="form-control" placeholder="">
             </div>
         </div>                                    
         <div class="col-sm-3">
             <div class="form-group">
                 <label>Contato</label>
-                <input value="{{ $modelContact->value }}" type="text" id="PersonContact_{{ $modelContact->id }}_value" name="PersonContact[{{ $modelContact->id }}][value]" class="form-control" placeholder="">
+                <input value="{{ isset($modelContact->value) ? $modelContact->value : null }}" type="text" id="PersonContact_{{ $modelContact->id }}_value" name="PersonContact[{{ $modelContact->id }}][value]" class="form-control person-contact-value" data-id="{{ $modelContact->id }}" placeholder="">
             </div>
         </div>                                    
         <div class="col-sm-3">
             <div class="form-group">
                 <label>Observação</label>
-                <input value="{{ $modelContact->description }}" type="text" id="PersonContact_{{ $modelContact->id }}_description" name="PersonContact[{{ $modelContact->id }}][description]" class="form-control" placeholder="">
+                <input value="{{ isset($modelContact->description) ? $modelContact->description : null }}" type="text" id="PersonContact_{{ $modelContact->id }}_description" name="PersonContact[{{ $modelContact->id }}][description]" class="form-control" placeholder="">
             </div>
         </div>      
     </div>
