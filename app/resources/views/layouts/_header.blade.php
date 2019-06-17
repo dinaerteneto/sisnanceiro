@@ -39,7 +39,6 @@
 
                             <button class="btn btn-default sa-btn-icon sa-sidebar-hidden-toggle" onclick="SAtoggleClass(this, 'body', 'sa-hidden-menu')" type="button"><span class="fa fa-reorder"></span></button>
 
-
                         </div>
                     </div>
                 </div>

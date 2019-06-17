@@ -42,7 +42,6 @@ Person = {
             var zipcode = $(this).val();
             var id = $(this).attr('data-id');
             $.getJSON('https://viacep.com.br/ws/' + zipcode + '/json/?callback=?', function(json) {
-                console.log(json);
                 var zipcode = json.cep;
                 var address = json.logradouro;
                 var district = json.bairro;
@@ -92,10 +91,10 @@ Person = {
             var id = $(this).attr('data-id');
             var typeId = parseInt($('#PersonContact_' + id + '_person_contact_type_id').val());
             if (typeId >= 3 && typeId <= 5) {
-                $(this).mask('"(99) 9999-9999"')
+                $(this).mask('(99) 9999-9999')
             }
             if (typeId == 2) {
-                $(this).mask("(99) 99999-999?9");
+                $(this).mask('(99) 99999-999?9');
             }
         });
     },

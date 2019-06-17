@@ -94,6 +94,12 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/del-contact/{id}', 'PersonController@delContact');
         Route::post('/del-address/{id}', 'PersonController@delAddress');
     });
+
+    Route::group(['prefix' => 'sale'], function() {
+        Route::get('/index', 'SaleController@index');
+        Route::get('/create', 'SaleController@create');
+        Route::get('/search-item', 'SaleController@searchItem');
+    });
 });
 
 Auth::routes();

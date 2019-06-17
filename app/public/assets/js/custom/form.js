@@ -60,8 +60,8 @@ Form = {
 
         $('.mask-float-precision3').maskMoney({
             symbol: '',
-            decimal: '.',
-            thousands: '',
+            decimal: ',',
+            thousands: '.',
             precision: 3
         }).trigger('mask.maskMoney');
 
