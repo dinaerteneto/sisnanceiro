@@ -4,9 +4,14 @@ Sale = {
         Sale.addProduct();
         Sale.delProduct();
 
-        $('#Product_quant, #Product_unit_value, #Product_discount').on('blur', function() {
+        $('#Product_quant, #Product_unit_value, #Product_discount, #Product_discount_type').on('blur', function() {
             Sale.calculateTotalValue();
         });
+
+        $('#Product_discount_type').on('change', function() {
+            Sale.calculateTotalValue();
+        });
+
     },
 
     templateProduct: function(data) {
@@ -80,24 +85,26 @@ Sale = {
         var quant = $('#Product_quant').val();
         quant = quant.replace(".", "");
         quant = quant.replace(",", ".");
-        quant = parseFloat(quant);
         quant = isNaN(quant) ? 0 : quant;
+        quant = parseFloat(quant);
 
         var discountValue = $('#Product_discount').val();
         var discountType = $('#Product_discount_type').val();
         discountValue = discountValue.replace(".", "");
         discountValue = discountValue.replace(",", ".");
-        discountValue = parseFloat(discountValue);
         discountValue = isNaN(discountValue) ? 0 : discountValue;
+        discountValue = parseFloat(discountValue);
 
         var price = $('#Product_unit_value').val();
         price = price.replace(".", "");
         price = price.replace(",", ".");
+        price = isNaN(price) ? 0 : price;
         price = parseFloat(price);
 
         var subtotal = price * quant;
+
         if (discountType == '%') {
-            discountValue = (subtotal / 100 * discountValue);
+            discountValue = discountValue / 100;
         } else {
             discountValue *= 1;
         }
@@ -110,8 +117,17 @@ Sale = {
     addProduct: function() {
         $('#form-add-product').on('submit', function(e) {
             e.preventDefault();
+            var id = parseInt($('#Product_id').val());
 
-            var id = $('#Product_id').val();
+            if (isNaN(id)) {
+                swal("Oops...", "Você deve localizar um produto.", "error");
+                return false;
+            }
+            if ($('#table-items #' + id).length > 0) {
+                swal("Oops...", "Este produto já esta no carrinho.", "error");
+                return false;
+            }
+
             var quant = $('#Product_quant').val();
             var discountValue = $('#Product_discount').val();
             var discountType = $('#Product_discount_type').val();
@@ -124,7 +140,11 @@ Sale = {
             var html = "<tr id='" + id + "'>";
             html += "<td>" + quant + "</td>";
             html += "<td>" + productName + "</td>";
-            html += "<td>" + discountValue + "</td>";
+            if (discountType == '%') {
+                html += "<td>" + discountValue + "%</td>";
+            } else {
+                html += "<td>" + discountValue + "</td>";
+            }
             html += "<td>" + total + "</td>";
             html += "<td>";
             html += "<a href='javascript: void(0)' class='text-danger del-item' data-id='" + id + "' ><i class='fa fa-times-circle'></i></a>";
@@ -140,8 +160,11 @@ Sale = {
             $('#table-items tbody').append(html);
 
             $('#form-add-product')[0].reset();
-            $("#Sale_search").focus();
+            $('#Product_id').val('');
             Sale.calcTotalPedido();
+
+            $("#Sale_search").select2('val', '');
+            $("#Sale_search").select2('focus');
         });
     },
 

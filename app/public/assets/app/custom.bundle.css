@@ -1,3 +1,4 @@
+@import '../../assets/js/libs/sweetalert/sweetalert.css';
 .sa-content-wrapper {
     background-color: #EFEFEF;
 }
