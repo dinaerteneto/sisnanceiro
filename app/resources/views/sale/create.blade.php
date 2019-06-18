@@ -66,6 +66,51 @@
 </head>
 
 <body class="">
+
+    <div class="modal fade" id="modal-customer" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <form id="form-customer" method="post" action="">
+                <input type="hidden" id="Customer_name">
+                <input type="hidden" id="Customer_id">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Selecione</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Tipo</label>
+                                    <select class="form-control" name="Customer[type]" id="Customer_type">
+                                        <option value="1">Varejo</option>
+                                        <option value="2">Atacado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Cliente</label>
+                                    <input type="text" name="Customer[search]" id="Customer_search" class="form-control" placeholder="Nome/Razão social do cliente" />
+                                </div>
+                            </div>
+                        </fieldset>                            
+                    </div>
+                    <div class="modal-footer">
+                        <div class="align-right col-sm-6">
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>          
+                </div>
+            </form>
+        </div>
+    </div>
+
     <header class="sa-page-header">
         @include('layouts/_header')
     </header>
@@ -136,13 +181,16 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <form id="table-products" method="post" action="/sale/create">
+                    <form id="form-sale" method="post" action="/sale/create">
+                        @csrf
+                        <input type="hidden" name="Sale[type]" id="Sale_type">
+                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id">
+
                         <div class="text-center well bg-darken well-sm text-white" style="padding: 14px">
-                            CLIENTE: AO CONSUMIDOR 
-                            <a href="/sale/customer-change" id="btn-customer" rel="tooltip" data-placement="top" data-original-title="Alterar cliente">
+                            CLIENTE: <span id="Sale_customer_name">AO CONSUMIDOR</span>
+                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-customer" id="btn-customer" rel="tooltip" data-placement="top" data-original-title="Alterar cliente">
                                 <i class="fa fa-pencil-square-o"></i>
                             </a>
-                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id">
                         </div>
 
                         <div class="table-responsive" style="height: 301px; margin-top: -5px; overflow: auto; ">
@@ -150,6 +198,7 @@
                                 <table class="table table-hover" id="table-items">
                                     <thead>
                                         <tr>
+                                            <th>Cód</th>
                                             <th>Qtd.</th>
                                             <th>Produto</th>
                                             <th>Desc.</th>
@@ -169,7 +218,7 @@
                             </div>                        
                         </div>
                         <div class="pull-right">
-                            <a href="#" class="btn btn-primary input-lg">FINALIZAR VENDA</a>                        
+                            <input type="submit" class="btn btn-primary input-lg" value="FINALIZAR VENDA">
                         </div>
                     </form>
                 </div>
@@ -183,10 +232,15 @@
         </div>
     </section>
 
-    @include('layouts/_scripts')
-    @section('scripts')
-    <script type="text/javascript" src="{{ asset('assets/js/custom/Sale.js') }}"></script>
     
+    @section('scripts')
+    <script type="text/javascript" src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('assets/js/libs/jquery.maskMoney.0.2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/libs/sweetalert/sweetalert.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('assets/js/custom/form.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/custom/Sale.js') }}"></script>    
 
 </body>
     

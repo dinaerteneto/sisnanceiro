@@ -98,7 +98,9 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::group(['prefix' => 'sale'], function() {
         Route::get('/index', 'SaleController@index');
         Route::get('/create', 'SaleController@create');
+        Route::post('/create', 'SaleController@create');
         Route::get('/search-item', 'SaleController@searchItem');
+        Route::get('/search-customer', 'SaleController@searchCustomer');
     });
 });
 

@@ -1,8 +1,11 @@
 Sale = {
     init: function() {
+        Sale.searchCustomer();
         Sale.searchItem();
         Sale.addProduct();
         Sale.delProduct();
+        Sale.submitFormSale();
+        Sale.submitFormCustomer();
 
         $('#Product_quant, #Product_unit_value, #Product_discount, #Product_discount_type').on('blur', function() {
             Sale.calculateTotalValue();
@@ -14,12 +17,55 @@ Sale = {
 
     },
 
-    templateProduct: function(data) {
-        return data.html;
-    },
-
-    temaplateProductSelection: function(data) {
-        return data.selection;
+    searchCustomer: function() {
+        $("#Customer_search").select2({
+            formatNoMatches: function(term) {
+                return 'Nenhum cliente encontrado.';
+            },
+            formatSearching: function() {
+                return 'Procurando...';
+            },
+            formatInputTooShort: function(term, minLength) {
+                var caracteresRemaining = parseInt(minLength - term.length);
+                var message = "Digite mais " + caracteresRemaining + " caracteres para iniciar a pesquisa.";
+                if (caracteresRemaining <= 1) {
+                    message = "Digite mais 1 caractere para iniciar a pequisa.";
+                }
+                return message;
+            },
+            placeholder: "Pesquise pelo nome ou razão social do cliente...",
+            minimumInputLength: 3,
+            ajax: {
+                url: "/sale/search-customer",
+                dataType: "json",
+                quietMillis: 250,
+                data: function(term, page) {
+                    return {
+                        term: term,
+                        page: page
+                    };
+                },
+                results: function(data, page) {
+                    var more = (page * 10) < data.total_count;
+                    return {
+                        results: data.items,
+                        more: more
+                    };
+                }
+            },
+            formatResult: function(data) {
+                return data.selection;
+            },
+            formatSelection: function(data) {
+                return data.selection;
+            },
+            escapeMarkup: function(m) {
+                return m;
+            }
+        }).on('change', function(e) {
+            $('#Customer_id').val(e.added.data.id);
+            $('#Customer_name').val(e.added.data.firstname + ' ' + e.added.data.lastname);
+        });
     },
 
     searchItem: function() {
@@ -85,26 +131,26 @@ Sale = {
         var quant = $('#Product_quant').val();
         quant = quant.replace(".", "");
         quant = quant.replace(",", ".");
-        quant = isNaN(quant) ? 0 : quant;
+        quant = isNaN(quant) || quant == '' ? 0 : quant;
         quant = parseFloat(quant);
 
         var discountValue = $('#Product_discount').val();
         var discountType = $('#Product_discount_type').val();
         discountValue = discountValue.replace(".", "");
         discountValue = discountValue.replace(",", ".");
-        discountValue = isNaN(discountValue) ? 0 : discountValue;
+        discountValue = isNaN(discountValue) || discountValue == '' ? 0 : discountValue;
         discountValue = parseFloat(discountValue);
 
         var price = $('#Product_unit_value').val();
         price = price.replace(".", "");
         price = price.replace(",", ".");
-        price = isNaN(price) ? 0 : price;
+        price = isNaN(price) || price == '' ? 0 : price;
         price = parseFloat(price);
 
         var subtotal = price * quant;
 
         if (discountType == '%') {
-            discountValue = discountValue / 100;
+            discountValue = (subtotal / 100) * discountValue;
         } else {
             discountValue *= 1;
         }
@@ -128,6 +174,12 @@ Sale = {
                 return false;
             }
 
+            if (!Sale.formProductValidate()) {
+                swal("Oops...", "Todos os campos devem ser preenchidos.", "error");
+                return false;
+            }
+
+            var code = $('#Product_code').val();
             var quant = $('#Product_quant').val();
             var discountValue = $('#Product_discount').val();
             var discountType = $('#Product_discount_type').val();
@@ -138,6 +190,7 @@ Sale = {
             totalValue = totalValue.replace(",", ".");
 
             var html = "<tr id='" + id + "'>";
+            html += "<td>" + code + "</td>";
             html += "<td>" + quant + "</td>";
             html += "<td>" + productName + "</td>";
             if (discountType == '%') {
@@ -186,7 +239,46 @@ Sale = {
         labelTotal = sum.toString().replace(",", "");
         labelTotal = labelTotal.replace(".", ",");
         $('#total-value').text(labelTotal);
+    },
+
+    submitFormSale: function() {
+        $('#form-sale').on('submit', function(e) {
+            if (!Sale.formSaleValidate()) {
+                swal("Oops...", "Você deve incluir produto(s) no carrinho.", "error");
+                return false;
+            }
+            return true;
+        });
+    },
+
+    submitFormCustomer: function() {
+        $('#form-customer').on('submit', function(e) {
+            e.preventDefault();
+            $('#Sale_customer_id').val($('#Customer_id').val());
+            $('#Sale_customer_name').html($('#Customer_name').val());
+            $('#Sale_type').val($('#Customer_type').val());
+            $('#modal-customer').modal('hide');
+        });
+    },
+
+    formProductValidate: function() {
+        var id = $('#Product_id').val().length;
+        var quant = $('#Product_quant').val().length;
+        var unitValue = $('#Product_unit_value').val().length;
+        var totalValue = $('#Product_total_value').val().length;
+        if (id <= 0 || quant <= 0 || unitValue <= 0 || totalValue <= 0) {
+            return false;
+        }
+        return true;
+    },
+
+    formSaleValidate: function() {
+        if ($('#table-items tbody tr').length <= 0) {
+            return false;
+        }
+        return true;
     }
+
 }
 
 $('document').ready(function() {
