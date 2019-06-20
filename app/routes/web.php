@@ -101,6 +101,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/create', 'SaleController@create');
         Route::get('/search-item', 'SaleController@searchItem');
         Route::get('/search-customer', 'SaleController@searchCustomer');
+        Route::get('/print/{id}', 'SaleController@print');
     });
 });
 

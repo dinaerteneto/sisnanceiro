@@ -1,5 +1,4 @@
 <?php
-
 namespace Sisnanceiro\Transformers;
 
 use League\Fractal\TransformerAbstract;

@@ -44,11 +44,11 @@
         left: 0;        
     } 
 
-    #btn-customer {
+    #btn-customer, #btn-customer-clear {
         color: #fff;
-        display: block;
-        float: right;
-        text-align: right;
+        /* display: block; */
+        /* float: right; */
+        /* text-align: right; */
     }
 
     .select2-container .select2-choice {
@@ -185,12 +185,23 @@
                         @csrf
                         <input type="hidden" name="Sale[type]" id="Sale_type">
                         <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id">
+                        <input type="hidden" name="Sale[net_value]" id="Sale_net_value">
 
                         <div class="text-center well bg-darken well-sm text-white" style="padding: 14px">
-                            CLIENTE: <span id="Sale_customer_name">AO CONSUMIDOR</span>
-                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-customer" id="btn-customer" rel="tooltip" data-placement="top" data-original-title="Alterar cliente">
-                                <i class="fa fa-pencil-square-o"></i>
-                            </a>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    Cliente: <span id="Sale_customer_name">AO CONSUMIDOR</span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-customer" id="btn-customer" rel="tooltip" data-placement="top" data-original-title="Alterar cliente">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                    </a>
+
+                                    <a href="javascript:void(0)" class="d-none" id="btn-customer-clear" rel="tooltip" data-placement="top" data-original-title="Limpar cliente">
+                                        <i class="fa fa-times-circle-o"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="table-responsive" style="height: 301px; margin-top: -5px; overflow: auto; ">

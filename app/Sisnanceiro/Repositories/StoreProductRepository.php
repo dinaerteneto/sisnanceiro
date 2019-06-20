@@ -37,16 +37,16 @@ class StoreProductRepository extends Repository
             ->join('store_product_brand', 'store_product.store_product_brand_id', '=', 'store_product_brand.id')
             ->join('store_product_category', 'store_product.store_product_category_id', '=', 'store_product_category.id')
             ->leftJoin('store_product_has_store_product_attribute', 'store_product_has_store_product_attribute.store_product_id', '=', 'store_product.id')
-            ->whereNull('store_product.deleted_at')
-            ->whereRaw("store_product.company_id = $companyId")
-            ->toSql();
+            ->whereRaw("store_product.company_id = $companyId");
+            if (!empty($search)) {
+                $queryBase->whereRaw("store_product.name LIKE '%{$search}%'");
+            }
+            $queryBase->whereNull('store_product.deleted_at');
+            $queryBase = $queryBase->toSql();
 
         $query = \DB::table(\DB::raw('(' . $queryBase . ')  AS BASE'))
             ->select(\DB::raw("*, GROUP_CONCAT( value ORDER BY store_product_attribute_id SEPARATOR ' , ') AS attributes"))
             ->groupBy('id');
-        if(!empty($search)) {
-            $query->where(\DB::raw("name LIKE '%{$search}%'"));
-        }
         return $query;
     }
 

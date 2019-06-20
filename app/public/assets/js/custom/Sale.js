@@ -6,15 +6,13 @@ Sale = {
         Sale.delProduct();
         Sale.submitFormSale();
         Sale.submitFormCustomer();
-
+        Sale.clearCustomer();
         $('#Product_quant, #Product_unit_value, #Product_discount, #Product_discount_type').on('blur', function() {
             Sale.calculateTotalValue();
         });
-
         $('#Product_discount_type').on('change', function() {
             Sale.calculateTotalValue();
         });
-
     },
 
     searchCustomer: function() {
@@ -236,6 +234,7 @@ Sale = {
         $(".total-value-by-item").each(function() {
             sum += parseFloat(this.value);
         });
+        $('#Sale_net_value').val(sum);
         labelTotal = sum.toString().replace(",", "");
         labelTotal = labelTotal.replace(".", ",");
         $('#total-value').text(labelTotal);
@@ -258,6 +257,16 @@ Sale = {
             $('#Sale_customer_name').html($('#Customer_name').val());
             $('#Sale_type').val($('#Customer_type').val());
             $('#modal-customer').modal('hide');
+            $('#btn-customer-clear').removeClass('d-none');
+        });
+    },
+
+    clearCustomer: function() {
+        $('#btn-customer-clear').on('click', function(e) {
+            e.preventDefault();
+            $('#Sale_customer_id').val('');
+            $('#Sale_customer_name').html('AO CONSUMIDOR');
+            $(this).addClass('d-none');
         });
     },
 

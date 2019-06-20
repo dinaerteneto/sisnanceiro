@@ -12,10 +12,13 @@ class FloatConversor
      */
     public static function convert($str)
     {
-        $newStr = str_replace('.', '', $str);
-        $newStr = (float) str_replace(',', '.', $newStr);
-        if (!is_float($newStr)) {
-            throw new \Exception("Erro na tentativa de converter em número");
+        $newStr = $str;
+        if (!is_numeric($str)) {
+            $newStr = str_replace('.', '', $str);
+            $newStr = (float) str_replace(',', '.', $newStr);
+            if (!is_float($newStr)) {
+                throw new \Exception("Erro na tentativa de converter em número");
+            }
         }
         return $newStr;
     }

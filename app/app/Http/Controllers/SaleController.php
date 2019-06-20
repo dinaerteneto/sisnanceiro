@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\SaleService;
 use Sisnanceiro\Services\StoreProductService;
-use Sisnanceiro\Transformers\SaleStoreProductTransform;
 use Sisnanceiro\Transformers\SaleCustomerTransform;
+use Sisnanceiro\Transformers\SaleStoreProductTransform;
+use Sisnanceiro\Transformers\SaleTransform;
 
 class SaleController extends Controller
 {
@@ -28,16 +29,29 @@ class SaleController extends Controller
     public function create(Request $request)
     {
         if ($request->isMethod('post')) {
-            echo '<pre>';
-            print_r($_POST);
-            exit;
+            $postData = $request->all();
+            $model    = $this->saleService->create($postData);
+            if (method_exists($model, 'getErrors') && $model->getErrors()) {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a venda.', 'errors' => $model->getErrors()]);
+                return redirect("sale/index");
+            } else {
+                return redirect("sale/print/{$model->id}");
+            }
         }
         return view('sale/create');
     }
 
+    public function print($id)
+    {
+        $model = $this->saleService->find($id);
+        $model = fractal($model, new SaleTransform());
+        $sale = $model->toArray()['data'];
+        return view('sale/print', compact('sale'));
+    }
+
     public function searchItem(Request $request)
     {
-        $search  = $request->get('search');
+        $search  = $request->get('term');
         $records = $this->storeProductService->getAll($search)->get();
         if ($records) {
             $recordTransform = fractal($records, new SaleStoreProductTransform());
@@ -49,7 +63,7 @@ class SaleController extends Controller
 
     public function searchCustomer(Request $request)
     {
-        $search  = $request->get('search');
+        $search  = $request->get('term');
         $records = $this->customerService->getAll($search)->get();
         if ($records) {
             $recordTransform = fractal($records, new SaleCustomerTransform());
