@@ -11,7 +11,9 @@
 |
  */
 
-Route::get('/', function () {return view('auth/login');});
+Auth::routes();
+
+Route::name('home')->get('/', function () {return view('auth/login');});
 Route::get('/cadastrar', function () {return view('auth/register');});
 Route::post('/cadastrar', 'HomeController@register');
 
@@ -79,11 +81,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     });
 
     Route::group(['prefix' => 'customer'], function () {
-        Route::get('/', 'CustomerController@index');
+        Route::name('Cliente')->get('/', 'CustomerController@index');
         Route::post('/', 'CustomerController@index');
-        Route::get('/create', 'CustomerController@create');
+        Route::name('Incluir')->get('/create', 'CustomerController@create');
         Route::post('/create', 'CustomerController@create');
-        Route::get('/update/{id}', 'CustomerController@update');
+        Route::name('Alterar')->get('/update/{id}', 'CustomerController@update');
         Route::post('/update/{id}', 'CustomerController@update');
         Route::post('/delete/{id}', 'CustomerController@delete');
     });
@@ -96,7 +98,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     });
 
     Route::group(['prefix' => 'sale'], function() {
-        Route::get('/index', 'SaleController@index');
+        Route::get('/', 'SaleController@index');
+        Route::post('/', 'SaleController@index');
         Route::get('/create', 'SaleController@create');
         Route::post('/create', 'SaleController@create');
         Route::get('/search-item', 'SaleController@searchItem');
@@ -104,5 +107,3 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/print/{id}', 'SaleController@print');
     });
 });
-
-Auth::routes();

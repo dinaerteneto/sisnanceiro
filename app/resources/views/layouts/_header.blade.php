@@ -9,16 +9,10 @@
         <div class="d-table-cell h-100 w-100 align-middle">
             <div class="sa-header-menu">
                 <div class="d-flex align-items-center w-100">
-
                     <div class="ml-auto sa-header-right-area">
                         <div class="form-inline">
 
-                            <button class="btn btn-light sa-btn-icon sa-btn-micro d-none d-lg-block" type="button"><span class="fa fa-microphone"></span></button>
                             <button class="btn btn-light sa-btn-icon sa-toggle-full-screen d-none d-lg-block" type="button" onclick="toggleFullScreen()"><span class="fa fa-arrows-alt"></span></button>
-                            <form class="sa-header-search-form">
-                                <input type="text" class="form-control" placeholder="Find reports and more">
-                                <button type="submit" class="sa-form-btn"><span class="fa fa-search"></span></button>
-                            </form>
                             <button class="btn btn-default sa-logout-header-toggle sa-btn-icon" type="button" href="{{ route('logout') }}"><span class="fa fa-sign-out"></span></button>
                             <span class="dropdown sa-user-dropdown">
                                 <a href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sa-user-dropdown-toggle">

@@ -1,4 +1,38 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 Main = {
+    dataTableOptions: {
+        processing: true,
+        autoWidth: true,
+        responsive: true,
+        "sDom": "<'dt-toolbar d-flex'<f><'ml-auto hidden-xs show-control'l>r>" +
+            "t" +
+            "<'dt-toolbar-footer d-flex'<'hidden-xs'i><'ml-auto'p>>",
+        "classes": {
+            "sWrapper": "dataTables_wrapper dt-bootstrap4"
+        },
+        "oLanguage": {
+            "sSearch": '<span class="input-group-addon"><i class="fa fa-search"></i></span>',
+            'sProcessing': '..::Carregando::..',
+            'sLengthMenu': '_MENU_',
+            'sZeroRecords': 'Nenhum registro encontrado.',
+            'sInfo': 'Exibindo de _START_ até _END_ no total de _TOTAL_ Registros',
+            'sInfoEmpty': 'Nenhum registro encontrado',
+            'sInfoFiltered': '(filtrado de _MAX_  registros)',
+            'sInfoPostFix': '',
+            'sUrl': '',
+            'oPaginate': {
+                'sFirst': 'Primeiro',
+                'sPrevious': 'Anterior',
+                'sNext': 'Próximo',
+                'sLast': 'Último'
+            }
+        }
+    },
     init: function() {
         //$('#side-menu').metisMenu();
         Main.configBlock();

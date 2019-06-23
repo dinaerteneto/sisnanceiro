@@ -54,17 +54,31 @@
                                 <div class="col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
                                     <h1 class="text-red login-header-big">{{ config('app.name', 'Laravel') }}</h1>
                                     <div class="clearfix">
-                                        <div class="hero">
+                                        <div class="">
                                             <div class="pull-left login-desc-box-l">
                                                 <h4 class="paragraph-header">
                                                     Tudo bem ser esperto. Experimente a simplicidade do {{ config('app.name', 'Laravel') }}, onde quer que você vá!
                                                 </h4>
-                                                <!--
-                                                <div class="login-app-icons">
-                                                    <a href="javascript:void(0);" class="btn sa-btn-danger btn-sm">Frontend Template</a>
-                                                    <a href="javascript:void(0);" class="btn sa-btn-danger btn-sm">Find out more</a>
-                                                </div>
-                                                -->
+                                                
+                                               <br>
+                                                @if ($message = Session::has('flash_message'))
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    {!! Session::get('success')['message'] !!}.
+                                                </div>                
+                                                @endif
+
+                                                @if (Session::has('error'))
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <i class="fa-fw fa fa-times"></i>
+                                                    <strong>Erro!</strong> {{ Session::get('error')['message'] }} 
+                                                    @foreach(Session::get('error')['errors'] as $errors)
+                                                        <br>{{$errors['message']}} 
+                                                    @endforeach
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>             
+                                                @endif        
                                             </div>
 
                                             <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
@@ -72,32 +86,16 @@
                                         </div>
                                     </div>
 
-
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                            <h5 class="about-heading">Sobre o {{ config('app.name', 'Laravel') }} - Você está atualizado?</h5>
-                                            <p>
-                                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.
-                                            </p>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                            <h5 class="about-heading">Not just your average template!</h5>
-                                            <p>
-                                                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi voluptatem accusantium!
-                                            </p>
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <div class="col-sm-12 col-lg-4">
-                                    <div class="well no-padding">
+                                    <div class="well">
                                         <form method="POST" action="{{ route('password.request') }}" aria-label="{{ __('Reset Password') }}">
                                             @csrf
 
                                             <input type="hidden" name="token" value="{{ $token }}">
 
                                             <div class="form-group row">
-                                                <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                                                <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail</label>
 
                                                 <div class="col-md-6">
                                                     <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ $email ?? old('email') }}" required autofocus>
@@ -111,7 +109,7 @@
                                             </div>
 
                                             <div class="form-group row">
-                                                <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                                                <label for="password" class="col-md-4 col-form-label text-md-right">Nova senha</label>
 
                                                 <div class="col-md-6">
                                                     <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
@@ -125,7 +123,7 @@
                                             </div>
 
                                             <div class="form-group row">
-                                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+                                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">Confirmar nova senha</label>
 
                                                 <div class="col-md-6">
                                                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
@@ -135,7 +133,7 @@
                                             <div class="form-group row mb-0">
                                                 <div class="col-md-6 offset-md-4">
                                                     <button type="submit" class="btn btn-primary">
-                                                        {{ __('Reset Password') }}
+                                                        Alterar senha
                                                     </button>
                                                 </div>
                                             </div>
@@ -151,4 +149,3 @@
     </div>
 </body>
                                     
-@endsection

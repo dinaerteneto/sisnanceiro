@@ -11,7 +11,9 @@ class Sale extends Model
     use TenantModels;
     use SoftDeletes;
 
-    const STATUS_ACTIVE = 1;
+    const STATUS_ACTIVE      = 1;
+    const STATUS_CANCELED    = 2;
+    const STATUS_IN_PROGRESS = 3;
 
     protected $table      = 'sale';
     protected $primaryKey = 'id';
@@ -31,7 +33,7 @@ class Sale extends Model
         'fine_cancel_value',
         'sale_date',
         'cancel_date',
-        'created_at'
+        'created_at',
     ];
 
     public function company()
@@ -44,9 +46,34 @@ class Sale extends Model
         return $this->hasOne('Sisnanceiro\Models\User', 'id', 'user_id_created');
     }
 
+    public function customer()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Customer', 'id', 'customer_id');
+    }
+
     public function items()
     {
         return $this->hasMany('Sisnanceiro\Models\SaleItem');
+    }
+
+    public static function getStatus($status)
+    {
+        $ret = null;
+        switch ($status) {
+            case 1:
+                $ret = 'Finalizada';
+                break;
+
+            case 2:
+                $ret = 'Cancelada';
+                break;
+
+            case 3:
+                $ret = 'Em andamento';
+                break;
+
+        }
+        return $ret;
     }
 
 }

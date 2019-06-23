@@ -45,6 +45,8 @@
 
                 <div class="sa-content">
 
+
+                
                     <div class="main" role="main">
 
                         <!-- MAIN CONTENT -->
@@ -54,37 +56,36 @@
                                 <div class="col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
                                     <h1 class="text-red login-header-big">{{ config('app.name', 'Laravel') }}</h1>
                                     <div class="clearfix">
-                                        <div class="hero">
+                                        <div class="">
                                             <div class="pull-left login-desc-box-l">
                                                 <h4 class="paragraph-header">
                                                     Tudo bem ser esperto. Experimente a simplicidade do {{ config('app.name', 'Laravel') }}, onde quer que você vá!
                                                 </h4>
-                                                <!--
-                                                <div class="login-app-icons">
-                                                    <a href="javascript:void(0);" class="btn sa-btn-danger btn-sm">Frontend Template</a>
-                                                    <a href="javascript:void(0);" class="btn sa-btn-danger btn-sm">Find out more</a>
-                                                </div>
-                                                -->
+                                                <br>
+
+                                                @if ($message = Session::has('success'))
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    {!! Session::get('success')['message'] !!}.
+                                                </div>                
+                                                @endif
+
+                                                @if (Session::has('error'))
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <i class="fa-fw fa fa-times"></i>
+                                                    <strong>Erro!</strong> {{ Session::get('error')['message'] }} 
+                                                    @foreach(Session::get('error')['errors'] as $errors)
+                                                        <br>{{$errors['message']}} 
+                                                    @endforeach
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>             
+                                                @endif   
+
                                             </div>
 
                                             <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
 
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                            <h5 class="about-heading">Sobre o {{ config('app.name', 'Laravel') }} - Você está atualizado?</h5>
-                                            <p>
-                                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.
-                                            </p>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                            <h5 class="about-heading">Not just your average template!</h5>
-                                            <p>
-                                                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi voluptatem accusantium!
-                                            </p>
                                         </div>
                                     </div>
 
@@ -104,7 +105,7 @@
                                                     <label class="label">Digite seu e-mail</label>
                                                     <label class="input"> <i class="icon-append fa fa-envelope"></i>
                                                         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-                                                        <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i> Please enter email address for password reset</b></label>
+                                                        <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i> Digite seu e-mail para criar uma nova senha.</b></label>
                                                         @if ($errors->has('email'))
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $errors->first('email') }}</strong>
@@ -116,7 +117,7 @@
                                             </fieldset>
                                             <footer>
                                                 <button type="submit" class="btn btn-primary">
-                                                    <i class="fa fa-refresh"></i> Reenviar a senha
+                                                    <i class="fa fa-refresh"></i> Enviar senha por e-mail
                                                 </button>
                                             </footer>
                                         </form>

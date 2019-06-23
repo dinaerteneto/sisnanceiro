@@ -4,7 +4,7 @@
 
 <div class="d-flex w-100 home-header">
     <div>
-        <h1 class="page-header"><i class="fa fa-group"></i> Clientes </h1>
+        <h1 class="page-header"><i class="fa fa-shopping-cart"></i> Vendas </h1>
     </div>
 </div>
 
@@ -12,7 +12,7 @@
     <div class="d-flex w-100">
         <section id="widget-grid" class="w-100">
             <div class="mb-10">
-                <a href="/customer/create" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> Incluir cliente </a>
+                <a href="/sale/create" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> Incluir venda </a>
             </div>
 
             <div class="row">
@@ -25,14 +25,16 @@
                                     <thead>
                                         <tr>
                                             <th>Cód</th>
-                                            <th>Nome</th>
-                                            <th>Tipo</th>
-                                            <th>Telefone</th>
-                                            <th>Celular</th>
-                                            <th>E-Mail</th>
+                                            <th>Status</th>
+                                            <th>Data</th>
+                                            <th>Cliente</th>
+                                            <th>Operador</th>
+                                            <th>Valor</th>
                                             <th width="5%">Ações</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                    </tbody>
                                 </table>
                             </div>
 
@@ -50,27 +52,27 @@
 <script type="text/javascript">
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.ajax = {
-            url: "customer/",
+            url: "sale/",
             type: 'POST'
     };
     Main.dataTableOptions.columns = [
-        { data: 'id', 'searchable': false },
-        { data: 'firstname'},
-        { data: 'physical','searchable': false},
-        { data: 'phone', 'searchable': false },
-        { data: 'cellphone', 'searchable': false },
-        { data: 'email', 'searchable': false },
-        {
-            bSortable: false, 
+        { data: 'sale_code', 'searchable': false },
+        { data: 'status', 'searchable': false},
+        { data: 'sale_date','searchable': false},
+        { data: 'customer.name', 'searchable': true },
+        { data: 'userCreated.name', 'searchable': true },
+        { data: 'net_value', 'searchable': false },
+        { 
+            bSortable: false,
             mRender: function(data, type, row) {
-                var html = '<a href="/customer/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
-                    html+= '<a href="/customer/delete/'+row.id+'" class="delete-record" data-title="Excluir este cliente?" data-ask="Tem certeza que deseja excluir o cliente: '+ row.firstname +'?"><i class="fa fa-trash"></i></a>';
+                var html = '<a href="/sale/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
+                    html+= '<a href="/sale/delete/'+row.id+'" class="delete-record" data-title="Cancelar esta venda?" data-ask="Tem certeza que deseja cancelar a venda: '+ row.sale_code +'?"><i class="fa fa-trash"></i></a>';
                 return html;
             }
         }
-    ];
+    ];    
 
     var dataTables = $('#dt_basic').DataTable(Main.dataTableOptions);
-   
+
 </script>
 @endsection

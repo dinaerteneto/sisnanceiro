@@ -13,4 +13,9 @@ class Customer extends Model
         'id',
     ];
 
+    public function person()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Person', 'id', 'id');
+    }    
+
 }

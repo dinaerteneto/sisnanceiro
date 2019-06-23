@@ -23,6 +23,13 @@ class SaleController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->isMethod('post')) {
+            $records = $this->saleService->all();
+            $dt      = datatables()->of($records)
+                ->setTransformer('Sisnanceiro\Transformers\SaleTransform');
+            return $dt->make(true);
+
+        }
         return view('/sale/index');
     }
 
@@ -41,11 +48,10 @@ class SaleController extends Controller
         return view('sale/create');
     }
 
-    public function print($id)
-    {
+    function print($id) {
         $model = $this->saleService->find($id);
         $model = fractal($model, new SaleTransform());
-        $sale = $model->toArray()['data'];
+        $sale  = $model->toArray()['data'];
         return view('sale/print', compact('sale'));
     }
 

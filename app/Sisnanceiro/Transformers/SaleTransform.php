@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Helpers\Mask;
+use Sisnanceiro\Models\Customer;
 use Sisnanceiro\Models\Sale;
 use Sisnanceiro\Models\StoreProduct;
 use Sisnanceiro\Models\User;
@@ -21,8 +22,10 @@ class SaleTransform extends TransformerAbstract
             'net_value'   => Mask::currency($sale->net_value),
             'sale_date'   => $saleCarbonDate->format('d/m/Y'),
             'sale_hour'   => $saleCarbonDate->format('H:i'),
+            'status'      => Sale::getStatus($sale->status),
             'companyName' => strtoupper($sale->company->person->firstname),
             'userCreated' => $this->transformUser($sale->userCreated),
+            'customer'    => $this->transformCustomer($sale->customer),
             'items'       => $this->transformItems($sale->items),
         ];
     }
@@ -33,6 +36,15 @@ class SaleTransform extends TransformerAbstract
         return [
             'name' => "{$person->firstname} {$person->lastname}",
         ];
+    }
+
+    private function transformCustomer(Customer $customer = null)
+    {
+        if ($customer) {
+            $person = $customer->person;
+            return ['name' => "{$person->firstname} {$person->lastname}"];
+        }
+        return ['name' => 'Ao Consumidor'];
     }
 
     private function transformItems(Collection $items)

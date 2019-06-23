@@ -98,7 +98,6 @@ class SaleService extends Service
     public function create(array $data)
     {
         $saleData  = $this->mapData($data['Sale']);
-        dd($saleData);
         $saleModel = $this->store($saleData);
         if (isset($data['SaleItem'])) {
             foreach ($data['SaleItem'] as $item) {
