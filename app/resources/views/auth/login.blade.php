@@ -111,7 +111,7 @@
                                             <header>Login</header>
                                             <fieldset>
                                                 <section>
-                                                    <label for="email" class="">{{ __('E-Mail Address') }}</label>
+                                                    <label for="email" class="">E-Mail / Login</label>
                                                     <label class="input mb-3">
                                                         <i class="icon-append fa fa-user"></i>
                                                         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
@@ -124,7 +124,7 @@
                                                     </label>
                                                 </section>
                                                 <section>
-                                                    <label for="password" class="">{{ __('Password') }}</label>
+                                                    <label for="password" class="">Senha</label>
                                                     <label class="input mb-1">
                                                         <i class="icon-append fa fa-lock"></i>
                                                         <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>

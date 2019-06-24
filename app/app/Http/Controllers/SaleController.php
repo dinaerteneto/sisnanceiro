@@ -42,13 +42,18 @@ class SaleController extends Controller
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a venda.', 'errors' => $model->getErrors()]);
                 return redirect("sale/index");
             } else {
-                return redirect("sale/print/{$model->id}");
+                return redirect("sale/ask/{$model->id}");
             }
         }
         return view('sale/create');
     }
 
-    function print($id) {
+    public function ask($id)
+    {
+        return View('sale/ask', ['id' => $id]);
+    }
+
+    public function print($id) {
         $model = $this->saleService->find($id);
         $model = fractal($model, new SaleTransform());
         $sale  = $model->toArray()['data'];

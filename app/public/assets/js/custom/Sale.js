@@ -7,6 +7,7 @@ Sale = {
         Sale.submitFormSale();
         Sale.submitFormCustomer();
         Sale.clearCustomer();
+        Sale.shortcuts();
         $('#Product_quant, #Product_unit_value, #Product_discount, #Product_discount_type').on('blur', function() {
             Sale.calculateTotalValue();
         });
@@ -215,7 +216,7 @@ Sale = {
             Sale.calcTotalPedido();
 
             $("#Sale_search").select2('val', '');
-            $("#Sale_search").select2('focus');
+            $("#Sale_search").select2('open');
         });
     },
 
@@ -286,6 +287,21 @@ Sale = {
             return false;
         }
         return true;
+    },
+
+    shortcuts: function() {
+        $("body").keydown(function(event) {
+            if (event.which == 113) { //F2
+                $("#Sale_search").select2('open');
+                $("#Sale_search").trigger('click');
+            }
+            if (event.which == 114) { //F3
+                $('#form-add-product').trigger('submit');
+            }
+            if (event.which == 115) { //F4
+                $('#form-sale').trigger('submit');
+            }
+        });
     }
 
 }

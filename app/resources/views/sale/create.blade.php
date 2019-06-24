@@ -84,16 +84,6 @@
                         <fieldset>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label>Tipo</label>
-                                    <select class="form-control" name="Customer[type]" id="Customer_type">
-                                        <option value="1">Varejo</option>
-                                        <option value="2">Atacado</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div class="form-group">
                                     <label>Cliente</label>
                                     <input type="text" name="Customer[search]" id="Customer_search" class="form-control" placeholder="Nome/Razão social do cliente" />
                                 </div>
@@ -236,7 +226,7 @@
 
                 <div class="row">
                     <div class="hidden-xs teclas">
-                        <b>F2</b> = Nova Busca <b>|</b> <b>F3</b> = Mudar Quantidade <b>|</b> <b>F4</b> = Adicionar Produto <b>|</b> <b>F6</b> = Finalizar Venda <b>
+                        <b>F2</b> = Nova Busca <b>|</b> <b>F3</b> = Adicionar Produto <b>|</b> <b>F4</b> = Finalizar Venda <b>
                     </div>                
                 </div>
             </div>
