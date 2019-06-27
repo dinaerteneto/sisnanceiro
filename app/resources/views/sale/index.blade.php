@@ -52,7 +52,7 @@
 <script type="text/javascript">
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.ajax = {
-            url: "sale/",
+            url: "/sale",
             type: 'POST'
     };
     Main.dataTableOptions.columns = [

@@ -65,7 +65,7 @@ class SaleTransform extends TransformerAbstract
                 'discount_value'   => $discountValue,
                 'total_value'      => Mask::currency($item->total_value),
                 'company_name'     => $companyName,
-                'product'          => $this->transformProduct($item->product),
+                // 'product'          => $this->transformProduct($item->product),
             ];
         }
         return $return;

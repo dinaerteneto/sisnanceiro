@@ -25,10 +25,6 @@ class Person extends Model
         'birthdate',
     ];
 
-    protected $hidden = [
-
-    ];
-
     public function addresses() {
         return $this->hasMany('Sisnanceiro\Models\PersonAddress', 'person_id');
     }

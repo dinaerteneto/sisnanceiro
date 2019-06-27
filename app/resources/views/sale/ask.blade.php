@@ -63,9 +63,9 @@
         <div class="container">
             <div class="center">
                 <i class="fa fa-shopping-cart fa-5x text-success"></i>
-                <h1 class="text-success">VENDA FINALIZADA COM SUCESSO</h1>
+                <h1 class="text-success">VENDA <b>{{ $sale['sale_code'] }}</b> FINALIZADA COM SUCESSO</h1>
                 <a id="sale-create" href="/sale/create" class="btn btn-success btn-lg">CRIAR NOVA VENDA</a>
-                <a id="sale-print" href="/sale/print/{{ $id }}" target="_blank" class="btn btn-info btn-lg">IMPRIMIR CUPOM</a>
+                <a id="sale-print" href="/sale/print/{{ $sale['id'] }}" target="_blank" class="btn btn-info btn-lg">IMPRIMIR CUPOM</a>
             </div>
         </div>
 

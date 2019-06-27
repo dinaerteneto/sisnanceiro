@@ -34,8 +34,8 @@ class StoreProductRepository extends Repository
                  , `store_product_has_store_product_attribute`.`value`
             ")
             ->from('store_product')
-            ->join('store_product_brand', 'store_product.store_product_brand_id', '=', 'store_product_brand.id')
-            ->join('store_product_category', 'store_product.store_product_category_id', '=', 'store_product_category.id')
+            ->leftJoin('store_product_brand', 'store_product.store_product_brand_id', '=', 'store_product_brand.id')
+            ->leftJoin('store_product_category', 'store_product.store_product_category_id', '=', 'store_product_category.id')
             ->leftJoin('store_product_has_store_product_attribute', 'store_product_has_store_product_attribute.store_product_id', '=', 'store_product.id')
             ->whereRaw("store_product.company_id = $companyId");
             if (!empty($search)) {

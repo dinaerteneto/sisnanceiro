@@ -20,6 +20,10 @@ Route::post('/cadastrar', 'HomeController@register');
 Route::get('/event/{eventId}/{eventStart}/{eventName}', 'EventController@page')->where('eventId', '[0-9]+');
 Route::post('/event/{eventId}/page', 'EventController@page');
 
+Route::group(['prefix' => 'sync'], function () {
+    Route::get('/customer', 'SynchronizerController@customerSync');
+});
+
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/home', function () {return view('home');});
 

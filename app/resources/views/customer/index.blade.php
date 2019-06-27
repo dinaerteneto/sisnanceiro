@@ -50,7 +50,7 @@
 <script type="text/javascript">
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.ajax = {
-            url: "customer/",
+            url: "/customer",
             type: 'POST'
     };
     Main.dataTableOptions.columns = [

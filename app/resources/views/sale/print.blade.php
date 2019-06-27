@@ -68,7 +68,7 @@
         
         <div>
             <div>==================================================</div>
-            <div class="text-center">PEDIDO Nº 1</div>
+            <div class="text-center">PEDIDO Nº {{ $sale['sale_code'] }}</div>
             <div>==================================================</div>
 
             <table cellpadding="0" cellspacing="0" width="100%">

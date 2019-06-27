@@ -18,6 +18,7 @@
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/vendors/vendors.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/app.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/custom.bundle.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/form.css') }}">    
 
     <!-- favicons -->
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" type="image/x-icon">

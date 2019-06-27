@@ -10,6 +10,11 @@
 
 <div class="d-flex w-100">
     <section id="widget-grid" class="w-100">
+
+            <div class="mb-10">
+                <a href="/store/product/create" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> Incluir </a>
+            </div>
+
         <div class="row">
             <article class="col-12 sortable-grid ui-sortable">
 

@@ -236,6 +236,7 @@ Sale = {
             sum += parseFloat(this.value);
         });
         $('#Sale_net_value').val(sum);
+        sum = sum.toFixed(2);
         labelTotal = sum.toString().replace(",", "");
         labelTotal = labelTotal.replace(".", ",");
         $('#total-value').text(labelTotal);

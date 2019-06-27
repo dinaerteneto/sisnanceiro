@@ -32,8 +32,4 @@ class PersonAddress extends Model
         'longitude',
     ];
 
-    protected $hidden = [
-
-    ];
-
 }
