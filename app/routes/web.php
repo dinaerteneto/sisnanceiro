@@ -77,6 +77,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('/create', 'StoreProductController@create');
             Route::get('/update/{id}', 'StoreProductController@update');
             Route::post('/update/{id}', 'StoreProductController@update');
+            Route::post('/delete/{id}', 'StoreProductController@delete');
             Route::post('/add-subproduct', 'StoreProductController@addSubproduct');
         });
         Route::group(['prefix' => 'product-attributes'], function () {
@@ -110,5 +111,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/search-customer', 'SaleController@searchCustomer');
         Route::get('/ask/{id}', 'SaleController@ask');
         Route::get('/print/{id}', 'SaleController@print');
+        Route::get('/update/{id}', 'SaleController@update');
+        Route::post('/delete/{id}', 'SaleController@delete');
     });
 });

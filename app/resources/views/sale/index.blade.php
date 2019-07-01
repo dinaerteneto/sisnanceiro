@@ -56,17 +56,17 @@
             type: 'POST'
     };
     Main.dataTableOptions.columns = [
-        { data: 'sale_code', 'searchable': false },
-        { data: 'status', 'searchable': false},
-        { data: 'sale_date','searchable': false},
-        { data: 'customer.name', 'searchable': true },
-        { data: 'userCreated.name', 'searchable': true },
-        { data: 'net_value', 'searchable': false },
+        { data: 'company_sale_code', name: 'sale.company_sale_code', searchable: true },
+        { data: 'status', name: 'sale.status', searchable: true},
+        { data: 'sale_date', name: 'sale.sale_date', searchable: false},
+        { data: 'customer_firstname', name: 'customer.firstname', searchable: true },
+        { data: 'user_created_firstname', name: 'user_created.firstname', searchable: true },
+        { data: 'net_value', name: 'net_value',  searchable: false },
         { 
             bSortable: false,
             mRender: function(data, type, row) {
                 var html = '<a href="/sale/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
-                    html+= '<a href="/sale/delete/'+row.id+'" class="delete-record" data-title="Cancelar esta venda?" data-ask="Tem certeza que deseja cancelar a venda: '+ row.sale_code +'?"><i class="fa fa-trash"></i></a>';
+                    html+= '<a href="/sale/delete/'+row.id+'" class="delete-record" data-title="Cancelar esta venda?" data-ask="Tem certeza que deseja cancelar a venda: '+ row.company_sale_code +'?"><i class="fa fa-trash"></i></a>';
                 return html;
             }
         }

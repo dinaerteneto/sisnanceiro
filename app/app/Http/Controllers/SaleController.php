@@ -24,11 +24,11 @@ class SaleController extends Controller
     public function index(Request $request)
     {
         if ($request->isMethod('post')) {
-            $records = $this->saleService->all();
-            $dt      = datatables()->of($records)
-                ->setTransformer('Sisnanceiro\Transformers\SaleTransform');
-            return $dt->make(true);
-
+            $records = $this->saleService->getAll();
+            $dt      = datatables()->of($records);
+            return $dt->filterColumn('firstname', function ($query, $keyword) {
+                $query->whereRaw("firstname LIKE ?", ["%{$keyword}%"]);
+            })->make(true);
         }
         return view('/sale/index');
     }
@@ -46,6 +46,13 @@ class SaleController extends Controller
             }
         }
         return view('sale/create');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $model = $this->saleService->find($id);
+
+        return view('sale/update');
     }
 
     public function ask($id)
@@ -84,6 +91,13 @@ class SaleController extends Controller
 
             $return = ['items' => $recordTransform->toArray()['data'], 'total_count' => count($records)];
             return Response::json($return);
+        }
+    }
+
+    public function delete($id)
+    {
+        if ($this->saleService->destroy($id)) {
+            return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
         }
     }
 

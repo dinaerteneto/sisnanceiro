@@ -108,4 +108,9 @@ class SaleService extends Service
         return $saleModel;
     }
 
+    public function getAll($search = null)
+    {
+        return $this->repository->getAll($search);
+    }
+
 }

@@ -77,4 +77,11 @@ class CustomerController extends Controller
         }
     }
 
+    public function delete($id)
+    {
+        if ($this->personService->destroy($id)) {
+            return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
+        }
+    }       
+
 }

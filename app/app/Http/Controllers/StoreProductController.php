@@ -159,4 +159,10 @@ class StoreProductController extends Controller
         return Response::json($subproducts);
     }
 
+    public function delete($id)
+    {
+        if ($this->storeProductService->destroy($id)) {
+            return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
+        }
+    }    
 }

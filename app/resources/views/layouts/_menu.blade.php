@@ -2,7 +2,7 @@
     <img src="assets/img/avatars/sunny.png" alt="" class="online">
     <span>
         @if(Auth::user())
-        {{ Auth::user()->email }} 
+        {{ Auth::user()->person->firstname }} 
         @endif
         <span class="fa fa-angle-down"></span>
     </span>

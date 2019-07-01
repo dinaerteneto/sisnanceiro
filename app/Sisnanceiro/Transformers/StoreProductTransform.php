@@ -35,20 +35,26 @@ class StoreProductTransform extends TransformerAbstract
         ];
     }
 
-    private function transformCategory(StoreProductCategory $storeProductCategory)
+    private function transformCategory(StoreProductCategory $storeProductCategory = null)
     {
-        return [
-            'id'   => $storeProductCategory->id,
-            'name' => $storeProductCategory->name,
-        ];
+        if ($storeProductCategory) {
+            return [
+                'id'   => $storeProductCategory->id,
+                'name' => $storeProductCategory->name,
+            ];
+        }
+        return [];
     }
 
-    private function transformBrand(StoreProductBrand $storeProductBrand)
+    private function transformBrand(StoreProductBrand $storeProductBrand = null)
     {
-        return [
-            'id'   => $storeProductBrand->id,
-            'name' => $storeProductBrand->name,
-        ];
+        if ($storeProductBrand) {
+            return [
+                'id'   => $storeProductBrand->id,
+                'name' => $storeProductBrand->name,
+            ];
+        }
+        return [];
     }
 
     private function transformSubproducts(Collection $products)
@@ -68,30 +74,31 @@ class StoreProductTransform extends TransformerAbstract
                 'attributes'               => $this->transformAttributes($product->attributes()->get()),
             ];
         }
-        $subproducts['variables'] = $subproducts[0]['attributes'];
-        foreach ($subproducts['variables'] as $key => $variable) {
-            $recordValues = \DB::table('store_product_has_store_product_attribute')
-                ->select('store_product_attribute_id', 'value')
-                ->whereIn('store_product_id', \DB::table('store_product')
-                    ->select('id')
-                    ->where('store_product_id', $product->store_product_id))
+        if ($subproducts) {
+            $subproducts['variables'] = $subproducts[0]['attributes'];
+            foreach ($subproducts['variables'] as $key => $variable) {
+                $recordValues = \DB::table('store_product_has_store_product_attribute')
+                    ->select('store_product_attribute_id', 'value')
+                    ->whereIn('store_product_id', \DB::table('store_product')
+                            ->select('id')
+                            ->where('store_product_id', $product->store_product_id))
                     ->where('store_product_attribute_id', $variable['store_product_attribute_id'])
-                ->groupBy('store_product_attribute_id', 'value')
-                ->get();
-            foreach ($recordValues as $recordValue) {
-                $subproducts['variables'][$key]['values'][] = $recordValue->value;
-            }
-        }
-
-        foreach ($subproducts as $key => $subproduct) {
-            if (isset($subproduct['attributes']) && count($subproduct['attributes']) > 0) {
-                foreach ($subproduct['attributes'] as $attr) {
-                    $subproducts[$key]['id_attribute'][] = $attr['value'];
+                    ->groupBy('store_product_attribute_id', 'value')
+                    ->get();
+                foreach ($recordValues as $recordValue) {
+                    $subproducts['variables'][$key]['values'][] = $recordValue->value;
                 }
-                $subproducts[$key]['id_attribute'] = implode('-', $subproducts[$key]['id_attribute']);
+            }
+
+            foreach ($subproducts as $key => $subproduct) {
+                if (isset($subproduct['attributes']) && count($subproduct['attributes']) > 0) {
+                    foreach ($subproduct['attributes'] as $attr) {
+                        $subproducts[$key]['id_attribute'][] = $attr['value'];
+                    }
+                    $subproducts[$key]['id_attribute'] = implode('-', $subproducts[$key]['id_attribute']);
+                }
             }
         }
-
         return $subproducts;
     }
 

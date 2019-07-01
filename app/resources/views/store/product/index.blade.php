@@ -82,8 +82,9 @@
         {
             bSortable: false,
             mRender: function(data, type, row) {
-                var id = row.store_product_id !== null ? row.store_product_id : row.id;
-                return '<a href="/store/product/update/'+id+'"><i class="fa fa-pencil"></i></a> <a href="/store/product/delete/'+row.id+'"><i class="fa fa-trash"></i></a>';
+                var html = '<a href="/store/product/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
+                    html+= '<a href="/store/product/delete/'+row.id+'" class="delete-record" data-title="Excluir este produto?" data-ask="Tem certeza que deseja excluir o produto: '+ row.name +'?"><i class="fa fa-trash"></i></a>';
+                return html;
             }
         }
     ];
