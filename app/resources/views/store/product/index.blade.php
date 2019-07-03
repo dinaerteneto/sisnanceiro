@@ -90,5 +90,6 @@
     ];
 
     var dataTables = $('#dt_basic').DataTable(Main.dataTableOptions);
+    
 </script>
 @endsection

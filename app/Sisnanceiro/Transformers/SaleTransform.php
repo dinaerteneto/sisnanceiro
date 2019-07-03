@@ -7,7 +7,6 @@ use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Helpers\Mask;
 use Sisnanceiro\Models\Customer;
 use Sisnanceiro\Models\Sale;
-use Sisnanceiro\Models\StoreProduct;
 use Sisnanceiro\Models\User;
 
 class SaleTransform extends TransformerAbstract
@@ -17,16 +16,18 @@ class SaleTransform extends TransformerAbstract
     {
         $saleCarbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $sale->created_at);
         return [
-            'id'          => $sale->id,
-            'sale_code'   => $sale->company_sale_code,
-            'net_value'   => Mask::currency($sale->net_value),
-            'sale_date'   => $saleCarbonDate->format('d/m/Y'),
-            'sale_hour'   => $saleCarbonDate->format('H:i'),
-            'status'      => Sale::getStatus($sale->status),
-            'companyName' => strtoupper($sale->company->person->firstname),
-            'userCreated' => $this->transformUser($sale->userCreated),
-            'customer'    => $this->transformCustomer($sale->customer),
-            'items'       => $this->transformItems($sale->items),
+            'id'             => $sale->id,
+            'sale_code'      => $sale->company_sale_code,
+            'gross_value'    => Mask::currency($sale->gross_value),
+            'discount_value' => Mask::currency($sale->discount_value),
+            'net_value'      => Mask::currency($sale->net_value),
+            'sale_date'      => $saleCarbonDate->format('d/m/Y'),
+            'sale_hour'      => $saleCarbonDate->format('H:i'),
+            'status'         => Sale::getStatus($sale->status),
+            'companyName'    => strtoupper($sale->company->person->firstname),
+            'userCreated'    => $this->transformUser($sale->userCreated),
+            'customer'       => $this->transformCustomer($sale->customer),
+            'items'          => $this->transformItems($sale->items),
         ];
     }
 
@@ -65,17 +66,21 @@ class SaleTransform extends TransformerAbstract
                 'discount_value'   => $discountValue,
                 'total_value'      => Mask::currency($item->total_value),
                 'company_name'     => $companyName,
-                // 'product'          => $this->transformProduct($item->product),
+                'product'          => $this->transformProduct($item),
             ];
         }
         return $return;
     }
 
-    private function transformProduct(StoreProduct $product)
+    private function transformProduct($product)
     {
-        return [
-            'name' => $product->name,
-        ];
+        if ($product) {
+            $product = $product->product()->first();
+            return [
+                'name' => $product->name,
+            ];
+        }
+        return ['name' => ''];
     }
 
 }

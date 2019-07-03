@@ -309,7 +309,7 @@ class SynchronizerService extends Service
             ->table('venda')
             ->where('vend_codi', '>', $lastSourceId)
             ->where('vend_pess', '=', 957)
-            ->limit(100)
+        // ->limit(5000)
             ->get();
         if ($sourceSales) {
             foreach ($sourceSales as $sourceSale) {
@@ -317,17 +317,22 @@ class SynchronizerService extends Service
                     ->table('person')
                     ->where('source_id', '=', $sourceSale->vend_pess)
                     ->first();
-                $user = DB::connection('mysql')
-                    ->table('person')
-                    ->where('source_id', '=', $sourceSale->vend_usua)
-                    ->first();
+
+                $user = null;
+                if ($sourceSale->vend_usua) {
+                    $user = DB::connection('mysql')
+                        ->table('person')
+                        ->where('source_id', '=', $sourceSale->vend_usua)
+                        ->first();
+                }
+
                 $sale = DB::connection('mysql')
                     ->table('sale')
                     ->insert([
                         'source_id'         => $sourceSale->vend_codi,
                         'company_id'        => env('SULBAHIA_ID'),
                         'customer_id'       => $customer->id,
-                        'user_id_created'   => $user->id,
+                        'user_id_created'   => !empty($user) ? $user->id : 6,
                         'company_sale_code' => $sourceSale->vend_codi_manu,
                         'status'            => $sourceSale->vend_vest,
                         'gross_value'       => $sourceSale->vend_valo,
@@ -336,52 +341,78 @@ class SynchronizerService extends Service
                         'sale_date'         => $sourceSale->vend_dins,
                         'created_at'        => $sourceSale->vend_dins,
                     ]);
-                $sourceIds[] = $sourceSale->vend_codi;
-
-                $items = DB::connection('mysql-sulbahia-prod')
-                    ->table('venda_produto')
-                    ->where('vepr_vend', '=', $sourceSale->vend_codi)
-                    ->get();
-                if ($items) {
-                    foreach ($items as $item) {
-                        $sale = DB::connection('mysql')
-                            ->table('sale')
-                            ->orderBy('id', 'desc')
-                            ->limit(1)
-                            ->first();
-
-                        $product = DB::connection('mysql')
-                            ->table('store_product')
-                            ->where('source_id', '=', $item->vepr_prod)
-                            ->first();
-
-                        DB::connection('mysql')
-                            ->table('sale_item')
-                            ->insert([
-                                'company_id'       => env('SULBAHIA_ID'),
-                                'sale_id'          => $sale->id,
-                                'store_product_id' => $product->id,
-                                'unit_value'       => $item->vepr_valo / $item->vepr_quan,
-                                'quantity'         => $item->vepr_quan,
-                                'total_value'      => $item->vepr_valo,
-                            ]);
-                    }
-                }
             }
         }
         return $sourceIds;
     }
 
+    public function saleItems()
+    {
+
+        $lastSource = DB::connection('mysql')
+            ->table('sale_item')
+            ->whereNotNull('source_id')
+            ->orderBy('id', 'desc')
+            ->limit(1)
+            ->first();
+        $lastSourceId = count($lastSource) > 0 ? $lastSource->source_id : 0;
+
+        $items = DB::connection('mysql-sulbahia-prod')
+            ->table('venda_produto')
+            ->where('vepr_codi', '>', $lastSourceId)
+        // ->limit(10)
+            ->get();
+        if ($items) {
+            foreach ($items as $item) {
+                $sale = DB::connection('mysql')
+                    ->table('sale')
+                    ->where('source_id', '=', $item->vepr_vend)
+                    ->orderBy('id', 'desc')
+                    ->get()
+                    ->first();
+
+                $product = DB::connection('mysql')
+                    ->table('store_product')
+                    ->where('source_id', '=', $item->vepr_prod)
+                    ->get()
+                    ->first();
+
+                if ($sale && $product) {
+
+                    $totalValue = 0;
+                    if ($item->vepr_quan > 0) {
+                        $totalValue = $item->vepr_quan * $item->vepr_valo;
+                    }
+
+                    DB::connection('mysql')
+                        ->table('sale_item')
+                        ->insert([
+                            'company_id'       => env('SULBAHIA_ID'),
+                            'sale_id'          => $sale->id,
+                            'store_product_id' => $product->id,
+                            'unit_value'       => $item->vepr_valo,
+                            'quantity'         => $item->vepr_quan,
+                            'total_value'      => $totalValue,
+                            'source_id'        => $item->vepr_codi,
+                        ]);
+
+                }
+
+            }
+        }
+
+    }
+
     public function sync()
     {
-        $this->person();
-        $this->user();
-        $this->customer();
-        $this->supplier();
-        $this->personAddress();
-        $this->personContact();
-        $this->product();
-        $this->sale();
+        // $this->person();
+        // $this->user();
+        // $this->customer();
+        // $this->supplier();
+        // $this->personAddress();
+        // $this->personContact();
+        // $this->product();
+        $this->saleItems();
     }
 
 }

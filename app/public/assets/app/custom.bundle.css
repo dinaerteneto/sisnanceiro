@@ -48,3 +48,8 @@
     right: 15px;
     text-align: right;
 }
+
+.show>.dropdown-menu {
+    left: auto !important;
+    right: 0;
+}

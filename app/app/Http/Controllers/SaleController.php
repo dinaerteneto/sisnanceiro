@@ -63,11 +63,25 @@ class SaleController extends Controller
         return View('sale/ask', compact('sale'));
     }
 
-    function print($id) {
+    public function coupon($id) {
+        $model = $this->saleService->find($id);
+        $model = fractal($model, new SaleTransform());
+        $sale  = $model->toArray()['data'];
+        return view('sale/coupon', compact('sale'));
+    }
+
+    public function print($id) {
         $model = $this->saleService->find($id);
         $model = fractal($model, new SaleTransform());
         $sale  = $model->toArray()['data'];
         return view('sale/print', compact('sale'));
+    }
+
+    public function view($id) {
+        $model = $this->saleService->find($id);
+        $model = fractal($model, new SaleTransform());
+        $sale  = $model->toArray()['data'];
+        return view('sale/view', compact('sale'));
     }
 
     public function searchItem(Request $request)

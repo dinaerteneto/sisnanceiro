@@ -27,9 +27,14 @@ class SaleItem extends Model
         'quantity',
     ];
 
+    public function sale() {
+        return $this->hasOne('Sisnanceiro\Models\Sale', 'id', 'sale_id');
+    }
+
     public function product()
     {
-        return $this->hasOne('Sisnanceiro\Models\StoreProduct', 'id', 'store_product_id');
+        return \DB::table('store_product')
+            ->where('id', '=', $this->store_product_id);
     }
 
 }
