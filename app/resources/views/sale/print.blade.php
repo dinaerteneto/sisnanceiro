@@ -72,9 +72,9 @@
                             SUL BAHIA COM DE ALIMENTOS
                         </td>
                         <td align="right">
-                            (98) 6961-4406<br>
-                            JulietaSousaCunha@jourrapide.com<br>
-                            Vendedor: Julieta Sousa Cunha
+                            {{ $sale['company']['contact']['phone'] }}<br>
+                            {{ $sale['company']['contact']['email'] }}<br>
+                            Vendedor: {{ $sale['userCreated']['name'] }}
                         </td>
                     </tr>
                 </tbody>
@@ -101,27 +101,27 @@
             <tbody>
                 <tr>
                     <td><strong>Cliente:</strong></td>
-                    <td>{{$sale['customer']['name']}}</td>
+                    <td>{{ $sale['customer']['name'] }}</td>
                     <td><strong>CPF/CNPJ:</strong></td>
-                    <td>cpf ou cpf do cliente</td>
+                    <td>{{ $sale['customer']['cpf-cnpj'] }}</td>
                 </tr>
                 <tr>
                     <td><strong>Endereço:</strong></td>
-                    <td>Nome do cliente</td>
+                    <td>{{ $sale['customer']['address']['address'] }}</td>
                     <td><strong>CEP:</strong></td>
-                    <td>cpf ou cpf do cliente</td>
+                    <td>{{ $sale['customer']['address']['zip_code'] }}</td>
                 </tr>
                 <tr>
                     <td><strong>Cidade:</strong></td>
-                    <td>Nome do cliente</td>
+                    <td>{{ $sale['customer']['address']['city'] }}</td>
                     <td><strong>Estado:</strong></td>
-                    <td>cpf ou cpf do cliente</td>
+                    <td>{{ $sale['customer']['address']['uf'] }}</td>
                 </tr>
                 <tr>
                     <td><strong>Telefone:</strong></td>
-                    <td>Nome do cliente</td>
+                    <td>{{ $sale['customer']['contact']['phone'] }}</td>
                     <td><strong>E-Mail:</strong></td>
-                    <td>cpf ou cpf do cliente</td>
+                    <td>{{ $sale['customer']['contact']['email'] }}</td>
                 </tr>
             </tbody>
         </table>
@@ -157,7 +157,7 @@
             <tfoot>
                 <tr>
                     <th colspan="3" align="left">TOTAL DOS PRODUTOS</th>
-                    <th align="right">2,00</th>
+                    <th align="right">{{ $sale['itemQuantity'] }}</th>
                     <th colspan="2" align="right">{{ $sale['net_value'] }}</th>
                 </tr>
             </tfoot>
