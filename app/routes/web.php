@@ -114,6 +114,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/print/{id}', 'SaleController@print');
         Route::get('/view/{id}', 'SaleController@view');
         Route::get('/update/{id}', 'SaleController@update');
-        Route::post('/delete/{id}', 'SaleController@delete');
+        Route::post('/update/{id}', 'SaleController@update');
+        Route::post('/cancel/{id}', 'SaleController@cancel');
     });
 });

@@ -14,6 +14,7 @@ class Sale extends Model
     const STATUS_ACTIVE      = 1;
     const STATUS_CANCELED    = 2;
     const STATUS_IN_PROGRESS = 3;
+    const STATUS_RETURNED    = 4;
 
     protected $table      = 'sale';
     protected $primaryKey = 'id';
@@ -72,8 +73,21 @@ class Sale extends Model
                 $ret = 'Em andamento';
                 break;
 
+            case 4: 
+                $ret = 'Devolvida';
+                break;
         }
         return $ret;
+    }
+
+    public static function getStatues()
+    {
+        return [
+            1 => 'Finalizada',
+            2 => 'Cancelada',
+            3 => 'Em andamento',
+            4 => 'Devolvida'
+        ];
     }
 
 }

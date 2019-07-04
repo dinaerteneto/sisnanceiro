@@ -31,17 +31,17 @@ class SaleService extends Service
         'update' => [
             'customer_id'                  => 'required|int',
             'user_id_created'              => 'required|int',
-            'user_id_deleted'              => 'required|int',
-            'payment_method_id_fine_value' => 'required|int',
+            // 'user_id_deleted'              => 'required|int',
+            // 'payment_method_id_fine_value' => 'required|int',
             'company_sale_code'            => 'required|int',
             'status'                       => 'int',
             'gross_value'                  => 'required|numeric',
             'discount_value'               => 'required|numeric',
             'net_value'                    => 'required|numeric',
-            'fine_cancel_reason'           => 'string',
-            'fine_cancel_value'            => 'numeric',
+            // 'fine_cancel_reason'           => 'string',
+            // 'fine_cancel_value'            => 'numeric',
             'sale_date'                    => 'string',
-            'cancel_date'                  => 'string',
+            // 'cancel_date'                  => 'string',
         ],
     ];
 
