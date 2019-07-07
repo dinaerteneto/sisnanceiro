@@ -29,7 +29,7 @@ class SaleTransform extends TransformerAbstract
             'companyName'    => strtoupper($sale->company->person->firstname),
             'company'        => $this->transformPerson($sale->company->person),
             'userCreated'    => $this->transformUser($sale->userCreated),
-            'customer'       => $this->transformPerson($sale->customer->person),
+            'customer'       => isset($sale->customer) ? $this->transformPerson($sale->customer->person) : null,
             'items'          => $transformItems['items'],
             'itemQuantity'   => $transformItems['total_quantity'],
         ];

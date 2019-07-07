@@ -29,18 +29,18 @@ class SaleService extends Service
             'cancel_date'                  => 'string',
         ],
         'update' => [
-            'customer_id'                  => 'required|int',
-            'user_id_created'              => 'required|int',
+            'customer_id'       => 'required|int',
+            'user_id_created'   => 'required|int',
             // 'user_id_deleted'              => 'required|int',
             // 'payment_method_id_fine_value' => 'required|int',
-            'company_sale_code'            => 'required|int',
-            'status'                       => 'int',
-            'gross_value'                  => 'required|numeric',
-            'discount_value'               => 'required|numeric',
-            'net_value'                    => 'required|numeric',
+            'company_sale_code' => 'required|int',
+            'status'            => 'int',
+            'gross_value'       => 'required|numeric',
+            'discount_value'    => 'required|numeric',
+            'net_value'         => 'required|numeric',
             // 'fine_cancel_reason'           => 'string',
             // 'fine_cancel_value'            => 'numeric',
-            'sale_date'                    => 'string',
+            'sale_date'         => 'string',
             // 'cancel_date'                  => 'string',
         ],
     ];
@@ -55,7 +55,7 @@ class SaleService extends Service
     private function mapData(array $data)
     {
         $userId     = Auth::user()->id;
-        $customerId = isset($data['Sale']['customer_id']) && !empty($data['Sale']['customer_id']) ? $data['Sale']['customer_id'] : null;
+        $customerId = isset($data['customer_id']) && !empty($data['customer_id']) ? $data['customer_id'] : null;
         $saleCode   = $this->getLastSaleCode() + 1;
 
         return [

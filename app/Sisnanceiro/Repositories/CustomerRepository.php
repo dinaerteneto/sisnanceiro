@@ -58,7 +58,7 @@ class CustomerRepository extends Repository
             ->where('person.company_id', '=', $companyId)
             ->whereNull('person.deleted_at');
         if (!empty($search)) {
-            $query->where(\DB::raw("person.firstname LIKE '%{$search}%'"));
+            $query->whereRaw("firstname LIKE '%{$search}%'");
         }
         return $query;
     }
