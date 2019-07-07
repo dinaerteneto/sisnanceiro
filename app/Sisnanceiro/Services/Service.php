@@ -24,6 +24,12 @@ abstract class Service
     {
         return $this->repository;
     }
+
+    public function all()
+    {
+        return $this->repository->all();
+    }
+
     /**
      * Save a model
      * @param array $input
@@ -36,7 +42,13 @@ abstract class Service
         if ($this->validator->getErrors()) {
             return $this->validator;
         }
+        if (isset($input['id']) && !empty($input['id'])) {
+            $model = $this->repository->find($input['id']);
+            $model->update($input);
+            return $model;
+        }
         return $this->repository->create($input);
+
     }
 
     /**
@@ -111,6 +123,19 @@ abstract class Service
             $this->validator->addError('not_found', $column, 'No record found for this ' . $column . '.');
             return false;
         }
+    }
+
+    /**
+     * Delete based column
+     * @param string $column
+     * @param string $value
+     * @return boolean
+     */
+    public function deleteBy($column, $value)
+    {
+        return $this->repository
+            ->where($column, '=', $value)
+            ->delete();        
     }
 
 }

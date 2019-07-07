@@ -50,7 +50,22 @@ return [
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
-            'strict' => true,
+            'strict' => false,
+            'engine' => null,
+        ],
+
+        'mysql-sulbahia-prod' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_SULBAHIA_PROD', '127.0.0.1'),
+            'port' => env('DB_PORT_SULBAHIA_PROD', '3306'),
+            'database' => env('DB_DATABASE_SULBAHIA_PROD', 'forge'),
+            'username' => env('DB_USERNAME_SULBAHIA_PROD', 'forge'),
+            'password' => env('DB_PASSWORD_SULBAHIA_PROD', ''),
+            'unix_socket' => env('DB_SOCKET_SULBAHIA_PROD', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
             'engine' => null,
         ],
 

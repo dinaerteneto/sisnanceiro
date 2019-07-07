@@ -54,25 +54,39 @@
                                 <div class="col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
                                     <h1 class="text-red login-header-big">{{ config('app.name', 'Laravel') }}</h1>
                                     <div class="clearfix">
-                                        <div class="hero">
+                                        <div class="">
                                             <div class="pull-left login-desc-box-l">
                                                 <h4 class="paragraph-header">
                                                     Tudo bem ser esperto. Experimente a simplicidade do {{ config('app.name', 'Laravel') }}, onde quer que você vá!
                                                 </h4>
-                                                <!--
-                                                <div class="login-app-icons">
-                                                    <a href="javascript:void(0);" class="btn sa-btn-danger btn-sm">Frontend Template</a>
-                                                    <a href="javascript:void(0);" class="btn sa-btn-danger btn-sm">Find out more</a>
-                                                </div>
-                                                -->
-                                            </div>
 
+                                                <br>
+                                                @if ($message = Session::has('success'))
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    {!! Session::get('success')['message'] !!}.
+                                                </div>                
+                                                @endif
+
+                                                @if (Session::has('error'))
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <i class="fa-fw fa fa-times"></i>
+                                                    <strong>Erro!</strong> {{ Session::get('error')['message'] }} 
+                                                    @foreach(Session::get('error')['errors'] as $errors)
+                                                        <br>{{$errors['message']}} 
+                                                    @endforeach
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>             
+                                                @endif                                                
+                                                            
+                                            </div>
                                             <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
 
                                         </div>
                                     </div>
 
-
+                                    <!--
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                             <h5 class="about-heading">Sobre o {{ config('app.name', 'Laravel') }} - Você está atualizado?</h5>
@@ -87,6 +101,7 @@
                                             </p>
                                         </div>
                                     </div>
+                                    !-->
 
                                 </div>
                                 <div class="col-sm-12 col-lg-4">
@@ -96,7 +111,7 @@
                                             <header>Login</header>
                                             <fieldset>
                                                 <section>
-                                                    <label for="email" class="">{{ __('E-Mail Address') }}</label>
+                                                    <label for="email" class="">E-Mail / Login</label>
                                                     <label class="input mb-3">
                                                         <i class="icon-append fa fa-user"></i>
                                                         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
@@ -109,7 +124,7 @@
                                                     </label>
                                                 </section>
                                                 <section>
-                                                    <label for="password" class="">{{ __('Password') }}</label>
+                                                    <label for="password" class="">Senha</label>
                                                     <label class="input mb-1">
                                                         <i class="icon-append fa fa-lock"></i>
                                                         <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>

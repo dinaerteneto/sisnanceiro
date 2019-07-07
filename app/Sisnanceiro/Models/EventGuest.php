@@ -30,10 +30,12 @@ class EventGuest extends Model
         'email',
         'token_email',
         'status',
+        'whatsapp',
+        'student_name'
     ];
 
     protected $hidden = [
-        'company_id',
+        // 'company_id',
     ];
 
     /**

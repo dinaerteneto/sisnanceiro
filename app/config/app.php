@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'SiSnanceiro'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://sisnanceiro.com.br'),
 
     /*
     |--------------------------------------------------------------------------
@@ -162,6 +162,7 @@ return [
 
         Way\Generators\GeneratorsServiceProvider::class,
         Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,        
+        Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
     /*
@@ -210,6 +211,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
 
     ],
 

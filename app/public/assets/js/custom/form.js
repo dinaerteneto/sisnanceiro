@@ -2,6 +2,7 @@ Form = {
     init: function() {
         Form.masks();
         Form.checkAll();
+        Form.initSummernote();
     },
     masks: function() {
         Form.unmasks();
@@ -59,8 +60,8 @@ Form = {
 
         $('.mask-float-precision3').maskMoney({
             symbol: '',
-            decimal: '.',
-            thousands: '',
+            decimal: ',',
+            thousands: '.',
             precision: 3
         }).trigger('mask.maskMoney');
 
@@ -81,6 +82,14 @@ Form = {
 
         $('.spinner').spinner();
 
+        if ($.fn.select2) {
+            $("select.select2").each(function() {
+                var e = $(this),
+                    t = e.attr("data-select-width") || "100%";
+                e.select2({ allowClear: !0, width: t }), e = null
+            });
+        }
+
     },
     unmasks: function() {
         $('input').each(function(index, element) {
@@ -100,6 +109,26 @@ Form = {
             var bCheckbox = $(this).is(':checked');
             $('table tr td input:checkbox').prop('checked', bCheckbox);
         });
+    },
+    initSummernote: function() {
+
+        if ($('.summernote').length > 0) {
+            $('.summernote').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+
+                ]
+            });
+        }
     }
 };
 

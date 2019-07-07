@@ -5,9 +5,11 @@ Delete = {
     deleteRecord: function() {
         $('body').on('click', '.delete-record', function(e) {
             e.preventDefault();
+            var objTr = $(this).parents('tr');
             var url = $(this).attr('href');
             var title = $(this).attr('data-title');
             var ask = $(this).attr('data-ask');
+
 
             $.SmartMessageBox({
                 title: title,
@@ -25,9 +27,18 @@ Delete = {
                                 iconSmall: "fa fa-check fa-2x fadeInRight animated",
                                 timeout: 2000
                             });
-                            setTimeout(function() {
-                                location.reload(true);
-                            }, 2000);
+
+                            if (json.hasOwnProperty('remove-tr')) {
+                                var table = $('#dt_basic').DataTable();
+                                table
+                                    .row(objTr)
+                                    .remove()
+                                    .draw();
+                            } else {
+                                setTimeout(function() {
+                                    location.reload(true);
+                                }, 2000);
+                            }
                         } else {
                             $.smallBox({
                                 title: "Erro!",

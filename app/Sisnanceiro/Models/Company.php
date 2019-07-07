@@ -14,4 +14,9 @@ class Company extends Model
         'url'
     ];
 
+    public function person()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Person', 'company_id');
+    }    
+
 }

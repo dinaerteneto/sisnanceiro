@@ -56,9 +56,10 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
-        $model  = $this->eventService->find($id);
-        $action = "/event/update/{$id}";
-        $title  = "Evento {$model->name}";
+        $model        = $this->eventService->find($id);
+        $action       = "/event/update/{$id}";
+        $title        = "Evento {$model->name}";
+        $urlStartDate = null;
 
         if ($request->isMethod('post')) {
             $data  = $request->get('Event');
@@ -77,8 +78,9 @@ class EventController extends Controller
             $model->start_time  = $carbonStartDate->format('H:i');
             $model->end_time    = $carbonEndDate->format('H:i');
             $model->description = strip_tags($model->description);
+            $urlStartDate       = $carbonStartDate->format('d-m-Y');
 
-            return view('event/_form', compact('model', 'action', 'title'));
+            return view('event/_form', compact('model', 'action', 'title', 'urlStartDate'));
         }
 
     }
@@ -109,11 +111,10 @@ class EventController extends Controller
         $eventTransform = fractal($model, new EventTransform());
         $model          = (object) $eventTransform->toArray()['data'];
 
-        if ($eventGuest = $this->eventGuestService->all($eventId)) {
+        if ($eventGuest = $this->eventGuestService->getAll($eventId)) {
             $eventGuestTransform = new EventGuestsTransform();
             $guests              = $eventGuestTransform->buildTree($eventGuest->toArray());
         }
-        // dd($guests);
         return View('/event/guest', compact('model', 'guests'));
     }
 
@@ -177,6 +178,29 @@ class EventController extends Controller
         }
 
         return Response::json($return);
+    }
+
+    public function page(Request $request, $eventId)
+    {
+        $model     = $this->eventService->find($eventId);
+        $transform = fractal($model, new EventTransform());
+        $data      = $transform->toArray()['data'];
+
+        if ($request->isMethod('post')) {
+            $return = [
+                'success' => false,
+                'message' => 'Erro na tentativa de inserir os dados',
+            ];
+            if ($this->eventGuestService->addOrUpdate($model, $request->get('EventGuest'))) {
+                $return = [
+                    'success' => true,
+                    'message' => 'Seus dados foram incluído com sucesso.',
+                ];
+            }
+            return Response::json($return);
+        } else {
+            return View('event/_page', compact('data'));
+        }
     }
 
 }

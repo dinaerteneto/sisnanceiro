@@ -35,7 +35,7 @@ class BankCategoryService extends Service
      * @param int $mainParentCategoryId
      * @return array
      */
-    public function all($mainParentCategoryId)
+    public function getAll($mainParentCategoryId)
     {
         return $this->repository->getCategories($mainParentCategoryId);
     }
