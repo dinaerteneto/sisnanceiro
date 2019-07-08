@@ -20,6 +20,7 @@ class StoreProduct extends Model
         'store_product_category_id',
         'store_product_id',
         'bank_category_id',
+        'unit_measurement',
         'name',
         'sku',
         'price',
