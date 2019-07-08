@@ -30,6 +30,7 @@ class StoreProductRepository extends Repository
                  , `store_product`.`sku`
                  , `store_product`.`total_in_stock`
                  , `store_product`.`sale_with_negative_stock`
+                 , `store_product`.`unit_measurement`
                  , `store_product_has_store_product_attribute`.`store_product_attribute_id`
                  , `store_product_has_store_product_attribute`.`value`
             ")

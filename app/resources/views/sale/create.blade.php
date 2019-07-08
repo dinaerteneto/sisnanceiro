@@ -133,6 +133,8 @@
                                 <input type="hidden" name="Product[name]" id="Product_name">
                                 <input type="hidden" name="Product[id]" id="Product_id">
                                 <input type="hidden" name="Product[total_value_by_item]" id="Product_total_value_by_item">
+                                <input type="hidden" name="Product[unit_measurement]" id="Product_unit_measurement">
+
                                 <div class="form-group row">                                    
                                     <label class="col-md-3 control-label">CÓDIGO</label>
                                     <input type="text" name="Product[code]" id="Product_code" class="col-md-9 form-control input-lg" disabled>
