@@ -63,4 +63,10 @@ class BankAccountService extends Service
         return parent::store($data, $rules);
     }
 
+    public function update(\Illuminate\Database\Eloquent\Model $model, array $data, $rules = 'update')
+    {
+        $data = $this->mapData($data);
+        return parent::update($model, $data, $rules);
+    }
+
 }

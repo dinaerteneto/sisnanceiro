@@ -124,6 +124,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/', 'BankAccountController@index');
         Route::get('/create', 'BankAccountController@create');
         Route::post('/create', 'BankAccountController@create');
+        Route::get('/update/{id}', 'BankAccountController@update');
+        Route::post('/update/{id}', 'BankAccountController@update');
         Route::post('/delete/{ud}', 'BankAccountController@delete');
     });
 });
