@@ -11,8 +11,32 @@ class BankAccountService extends Service
 {
 
     protected $rules = [
-        'create' => [],
-        'update' => [],
+        'create' => [
+            // 'bank_id'              => 'int',
+            // 'default'              => 'int',
+            'legal_name'           => 'string',
+            'initial_balance'      => 'required|numeric',
+            'initial_balance_date' => 'required|string',
+            'physical'             => 'required|int',
+            'cpf_cnpj'             => 'numeric',
+            // 'account'              => 'int',
+            // 'agency'               => 'int',
+            // 'account_dv'           => 'int',
+            // 'agency_dv'            => 'int',
+        ],
+        'update' => [
+            // 'bank_id'              => 'int',
+            // 'default'              => 'int',
+            'legal_name'           => 'string',
+            'initial_balance'      => 'required|numeric',
+            'initial_balance_date' => 'required|string',
+            'physical'             => 'required|int',
+            'cpf_cnpj'             => 'numeric',
+            // 'account'              => 'int',
+            // 'agency'               => 'int',
+            // 'account_dv'           => 'int',
+            // 'agency_dv'            => 'int',
+        ],
     ];
 
     private function mapData(array $data)

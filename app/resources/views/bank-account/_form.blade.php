@@ -2,7 +2,7 @@
 
     <div class="modal-content">
 
-        <form id="bank-category-form" class="bank-category-form" method="post" action="{{ $action }}">
+        <form id="bank-account-form" class="bank-category-form" method="post" action="{{ $action }}">
         @csrf
 
         <div class="modal-header">
@@ -110,7 +110,7 @@
                             <input type="text" name="BankAccount[agency]" id="BankAccount_agency" class="form-control mask-number" value="{{ $model->agency }}" />
                         </div>
                         <div class="col-sm-2">
-                            <label class="control-label" for="BankAccount_agency">Agência DV</label>
+                            <label class="control-label" for="BankAccount_agency_dv">Agência DV</label>
                             <input type="text" name="BankAccount[agency_dv]" id="BankAccount_agency_dv" class="form-control mask-number" value="{{ $model->agency_dv }}" />
                         </div>
                         <div class="col-sm-4">
@@ -138,3 +138,91 @@
     </div>
 
 </div>
+
+
+<script type="text/javascript">
+$('document').ready(function(){
+    var validForm = $('#bank-account-form').validate({
+        ignore: null,
+        rules: {
+            'BankAccount[name]': 'required',
+            'BankAccount[physical]': 'required',
+            'BankAccount[initial_balance]': 'required',
+            'BankAccount[initial_balance_date]': 'required',
+
+            'BankAccount[bank_id]': {
+                required: function(element) {
+                    return $('#bankaccount_send_bank_account').is(':checked')
+                }
+            },
+            'BankAccount[type]': {
+                required: function(element) {
+                    return $('#bankaccount_send_bank_account').is(':checked')
+                }
+            },
+            'BankAccount[agency]': {
+                required: function(element) {
+                    return $('#bankaccount_send_bank_account').is(':checked')
+                }
+            },
+            'BankAccount[agency_dv]': {
+                required: function(element) {
+                    return $('#bankaccount_send_bank_account').is(':checked')
+                }
+            },
+            'BankAccount[account]': {
+                required: function(element) {
+                    return $('#bankaccount_send_bank_account').is(':checked')
+                }
+            },
+            'BankAccount[account_dv]': {
+                required: function(element) {
+                    return $('#bankaccount_send_bank_account').is(':checked')
+                }
+            }
+        },
+        messages: {
+            'BankAccount[name]': 'Obrigatório',
+            'BankAccount[physical]': 'Obrigatório',
+            'BankAccount[initial_balance]': 'Obrigatório',
+            'BankAccount[initial_balance_date]': 'Obrigatório',
+            'BankAccount[bank_id]': {
+                required: 'Obrigatório'
+            },
+            'BankAccount[type]': {
+                required: 'Obrigatório'
+            },
+            'BankAccount[agency]': {
+                required: 'Obrigatório'
+            },
+            'BankAccount[agency_dv]': {
+                required: 'Obrigatório'
+            },
+            'BankAccount[account]': {
+                required: 'Obrigatório'
+            },
+            'BankAccount[account_dv]': {
+                required: 'Obrigatório'
+            },
+        },
+        highlight: function(element) {
+            $(element).removeClass('is-valid').addClass('is-invalid');
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid').addClass('is-valid');
+            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+        },
+        errorElement: 'span',
+        errorClass: 'invalid-feedback',
+        errorPlacement: function(error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else {
+                error.insertAfter(element);
+            }
+        }
+    });
+
+})
+</script>
