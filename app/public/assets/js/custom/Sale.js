@@ -116,6 +116,7 @@ Sale = {
             var price = e.added.product.price;
             var totalValue = e.added.product.price;
             var productName = e.added.product.name;
+            var unitMeasurement = e.added.product.unit_measurement;
 
             $('#Product_id').val(id);
             $('#Product_code').val(code);
@@ -123,6 +124,7 @@ Sale = {
             $('#Product_unit_value').val(price);
             $('#Product_total_value').val(totalValue);
             $('#Product_name').val(productName);
+            $('#Product_unit_measurement').val(unitMeasurement);
         });
     },
 
@@ -185,12 +187,13 @@ Sale = {
             var productName = $('#Product_name').val();
             var unitValue = $('#Product_unit_value').val();
             var total = $('#Product_total_value').val();
+            var unitMeasurement = $('#Product_unit_measurement').val();
             var totalValue = total.replace(".", "");
             totalValue = totalValue.replace(",", ".");
 
             var html = "<tr id='" + id + "'>";
             html += "<td>" + code + "</td>";
-            html += "<td>" + quant + "</td>";
+            html += "<td>" + quant + " " + unitMeasurement + "</td>";
             html += "<td>" + productName + "</td>";
             if (discountType == '%') {
                 html += "<td>" + discountValue + "%</td>";

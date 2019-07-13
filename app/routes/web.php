@@ -116,5 +116,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/update/{id}', 'SaleController@update');
         Route::post('/update/{id}', 'SaleController@update');
         Route::post('/cancel/{id}', 'SaleController@cancel');
+        Route::get('/copy/{id}', 'SaleController@copy');
     });
 });

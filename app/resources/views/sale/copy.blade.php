@@ -175,13 +175,17 @@
                 <div class="col-sm-6">
                     <form id="form-sale" method="post" action="/sale/create">
                         @csrf
-                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id">
-                        <input type="hidden" name="Sale[net_value]" id="Sale_net_value">
+                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id" value="{{ $sale['customer']['id'] }}" >
+                        <input type="hidden" name="Sale[net_value]" id="Sale_net_value" value="{{ $sale['net_value_no_mask'] }}">
 
                         <div class="text-center well bg-darken well-sm text-white" style="padding: 14px">
                             <div class="row">
                                 <div class="col-sm-10">
-                                    Cliente: <span id="Sale_customer_name">AO CONSUMIDOR</span>
+                                    @if(!empty($sale['customer']['id']))
+                                        Cliente: <span id="Sale_customer_name">{{ $sale['customer']['name'] }}</span>
+                                    @else 
+                                        Cliente: <span id="Sale_customer_name">AO CONSUMIDOR</span>
+                                    @endif
                                 </div>
                                 <div class="col-sm-2">
                                     <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-customer" id="btn-customer" rel="tooltip" data-placement="top" data-original-title="Alterar cliente">
@@ -208,7 +212,29 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>                                      
+                                    <tbody>
+                                    @if($sale['items'])                                
+                                        <?php $i = 0 ?>
+                                        @foreach($sale['items'] as $item)
+                                        <?php $i++ ?>
+                                        <tr id="{{ $i }}">
+                                            <td>{{ $item['product']['sku'] }}</td>
+                                            <td>{{ $item['quantity'] }} {{ $item['product']['unit_measurement'] }} </td>
+                                            <td>{{ $item['product']['name'] }}</td>
+                                            <td>{{ $item['discount_value'] }}</td>
+                                            <td>{{ $item['total_value'] }}</td>
+                                            <td>
+                                                <a href="javascript: void(0)" class="text-danger del-item" data-id="{{ $i }}" ><i class="fa fa-times-circle"></i></a>
+                                                <input type="hidden" name="SaleItem[{{ $i }}][store_product_id]" value="{{ $i }}" class="Store_product_id">
+                                                <input type="hidden" name="SaleItem[{{ $i }}][unit_value]" value="{{ $item['quantity_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[{{ $i }}][discount_value]" value="{{ $item['discount_value_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[{{ $i }}][discount_type]" value=" {{ $item['discount_type'] }} ">
+                                                <input type="hidden" name="SaleItem[{{ $i }}][quantity]" value="{{ $item['discount_value_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[{{ $i }}][total_value]" value="{{ $item['total_value_no_mask'] }}" class="total-value-by-item">
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
                                     </tbody>
                                 </table>
                             
@@ -216,7 +242,7 @@
                         
                         <div class="pull-left">
                             <div class="text-center well bg-red well-sm text-white input-lg">
-                                TOTAL DO PEDIDO: R$ <span id="total-value"></span>
+                                TOTAL DO PEDIDO: R$ <span id="total-value">{{ $sale['net_value'] }}</span>
                             </div>                        
                         </div>
                         <div class="pull-right">

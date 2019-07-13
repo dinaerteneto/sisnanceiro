@@ -78,7 +78,7 @@ class SaleController extends Controller
             return $this->apiSuccess(['success' => false]);
         } else {
             $request->session()->flash('success', ['message' => 'Venda cancelada com sucesso.']);
-            return $this->apiSuccess(['success' => true]);            
+            return $this->apiSuccess(['success' => true]);
         }
 
     }
@@ -112,6 +112,14 @@ class SaleController extends Controller
         $model = fractal($model, new SaleTransform());
         $sale  = $model->toArray()['data'];
         return view('sale/view', compact('sale'));
+    }
+
+    public function copy($id)
+    {
+        $model = $this->saleService->find($id);
+        $model = fractal($model, new SaleTransform());
+        $sale  = $model->toArray()['data'];
+        return view('sale/copy', compact('sale'));
     }
 
     public function searchItem(Request $request)

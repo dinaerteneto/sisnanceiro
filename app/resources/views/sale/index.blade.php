@@ -82,7 +82,7 @@
                                 html+= '<a class="dropdown-item" href="/sale/coupon/'+row.id+'" target="_blank"><i class="text-info fa fa-file-text-o margin-right-5px"></i> Imprimir cupom</a>';
                             html+= '</li>';
                             html+= '<li>';
-                                html+= '<a class="dropdown-item" href=/sale/copy/'+row.id+'"><i class="text-info fa fa-copy margin-right-5px"></i> Copiar venda</a>';
+                                html+= '<a class="dropdown-item" href="/sale/copy/'+row.id+'"><i class="text-info fa fa-copy margin-right-5px"></i> Copiar venda</a>';
                             html+= '</li>';
                         html+= '</ul>';           
                         html+= '</div>';   

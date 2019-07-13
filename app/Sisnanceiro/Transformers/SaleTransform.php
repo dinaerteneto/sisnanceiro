@@ -18,20 +18,26 @@ class SaleTransform extends TransformerAbstract
         $saleCarbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $sale->created_at);
         $transformItems = $this->transformItems($sale->items);
         return [
-            'id'             => $sale->id,
-            'sale_code'      => $sale->company_sale_code,
-            'gross_value'    => Mask::currency($sale->gross_value),
-            'discount_value' => Mask::currency($sale->discount_value),
-            'net_value'      => Mask::currency($sale->net_value),
-            'sale_date'      => $saleCarbonDate->format('d/m/Y'),
-            'sale_hour'      => $saleCarbonDate->format('H:i'),
-            'status'         => Sale::getStatus($sale->status),
-            'companyName'    => strtoupper($sale->company->person->firstname),
-            'company'        => $this->transformPerson($sale->company->person),
-            'userCreated'    => $this->transformUser($sale->userCreated),
-            'customer'       => isset($sale->customer) ? $this->transformPerson($sale->customer->person) : null,
-            'items'          => $transformItems['items'],
-            'itemQuantity'   => $transformItems['total_quantity'],
+            'id'                     => $sale->id,
+            'sale_code'              => $sale->company_sale_code,
+            'gross_value'            => Mask::currency($sale->gross_value),
+            'gross_value_no_mask'    => $sale->gross_value,
+
+            'discount_value'         => Mask::currency($sale->discount_value),
+            'discount_value_no_mask' => $sale->discount_value,
+
+            'net_value'              => Mask::currency($sale->net_value),
+            'net_value_no_mask'      => $sale->net_value,
+
+            'sale_date'              => $saleCarbonDate->format('d/m/Y'),
+            'sale_hour'              => $saleCarbonDate->format('H:i'),
+            'status'                 => Sale::getStatus($sale->status),
+            'companyName'            => strtoupper($sale->company->person->firstname),
+            'company'                => $this->transformPerson($sale->company->person),
+            'userCreated'            => $this->transformUser($sale->userCreated),
+            'customer'               => isset($sale->customer) ? $this->transformPerson($sale->customer->person) : null,
+            'items'                  => $transformItems['items'],
+            'itemQuantity'           => $transformItems['total_quantity'],
         ];
     }
 
@@ -62,6 +68,7 @@ class SaleTransform extends TransformerAbstract
             }
 
             return [
+                'id'       => $person->id,
                 'name'     => "{$person->firstname} {$person->lastname}",
                 'cpf-cnpj' => $person->cpf,
                 'address'  => [
@@ -88,21 +95,33 @@ class SaleTransform extends TransformerAbstract
         $quantity = 0;
         $return   = ['items' => [], 'total_quantity' => 0];
         foreach ($items as $item) {
-            $companyName   = 'teste';
-            $discountValue = 0;
+            $companyName         = 'teste';
+            $discountValue       = 0;
+            $discountValueNoMask = $item->discount_value;
             if (!empty($discountValue) && $discountValue > 0) {
                 $discountValue = Mask::currency($item->discount_value) . ' ' . $item->discount_value_type;
             }
+
             $quantity += $item->quantity;
             $return['items'][] = [
-                'id'               => $item->id,
-                'store_product_id' => $item->store_product_id,
-                'quantity'         => Mask::float($item->quantity),
-                'unit_value'       => Mask::currency($item->unit_value),
-                'discount_value'   => $discountValue,
-                'total_value'      => Mask::currency($item->total_value),
-                'company_name'     => $companyName,
-                'product'          => $this->transformProduct($item),
+                'id'                     => $item->id,
+                'store_product_id'       => $item->store_product_id,
+
+                'quantity'               => Mask::float($item->quantity),
+                'quantity_no_mask'       => $item->quantity,
+
+                'unit_value'             => Mask::currency($item->unit_value),
+                'unit_value_no_mask'     => $item->unit_value,
+
+                'discount_value'         => $discountValue,
+                'discount_value_no_mask' => $discountValueNoMask,
+                'discount_type'          => $item->discount_value_type,
+
+                'total_value'            => Mask::currency($item->total_value),
+                'total_value_no_mask'    => $item->total_value,
+
+                'company_name'           => $companyName,
+                'product'                => $this->transformProduct($item),
             ];
         }
         $return['total_quantity'] = Mask::currency($quantity);
@@ -114,7 +133,9 @@ class SaleTransform extends TransformerAbstract
         if ($product) {
             $product = $product->product()->first();
             return [
-                'name' => $product->name,
+                'sku'              => $product->sku,
+                'name'             => $product->name,
+                'unit_measurement' => $product->unit_measurement,
             ];
         }
         return ['name' => ''];

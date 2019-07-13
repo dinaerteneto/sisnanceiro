@@ -12,7 +12,7 @@ class CreateBankInvoiceDetailsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('bank_invoice_details', function(Blueprint $table)
+		Schema::create('bank_invoice_detail', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->integer('parent_id')->unsigned()->nullable()->index('parent_id');
@@ -57,7 +57,7 @@ class CreateBankInvoiceDetailsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('bank_invoice_details');
+		Schema::drop('bank_invoice_detail');
 	}
 
 }

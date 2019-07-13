@@ -19,7 +19,7 @@ class CreateStoreProductHasStoreProductAttributeTable extends Migration {
 			$table->string('value', 100)->default('');
 			$table->timestamps();
 			$table->softDeletes();
-			$table->primary(['store_product_id','store_product_attribute_id']);
+			$table->primary(['store_product_id','store_product_attribute_id'], 'store_product_attribute_id');
 			$table->unique(['store_product_id','store_product_attribute_id','value'], 'unique');
 		});
 	}
