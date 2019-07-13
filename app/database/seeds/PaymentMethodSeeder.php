@@ -12,16 +12,16 @@ class PaymentMethodSeeder extends Seeder
     public function run()
     {
         \DB::table('payment_method')->insert([
-            ['nmae' => 'Cartão de débito'],
-            ['nmae' => 'Cartão de crédito'],
-            ['nmae' => 'Dinheiro'],
-            ['nmae' => 'Cheque'],
-            ['nmae' => 'Boleto bancário'],
-            ['nmae' => 'Transferência'],
-            ['nmae' => 'Cartão de crédito online'],
-            ['nmae' => 'Boleto bancário online'],
-            ['nmae' => 'Débito automático'],
-            ['nmae' => 'Deposito'],
+            ['name' => 'Cartão de débito'],
+            ['name' => 'Cartão de crédito'],
+            ['name' => 'Dinheiro'],
+            ['name' => 'Cheque'],
+            ['name' => 'Boleto bancário'],
+            ['name' => 'Transferência'],
+            ['name' => 'Cartão de crédito online'],
+            ['name' => 'Boleto bancário online'],
+            ['name' => 'Débito automático'],
+            ['name' => 'Deposito'],
         ]);
     }
 }

@@ -13,7 +13,7 @@ class PersonAddressTypeSeeder extends Seeder
     {
         \DB::table('person_address_type')->insert([
             'name' => 'Residencial',
-            'nmae' => 'Comercial',
+            'name' => 'Comercial',
             'name' => 'Entrega',
             'name' => 'Correspondência',
             'name' => 'Outros',

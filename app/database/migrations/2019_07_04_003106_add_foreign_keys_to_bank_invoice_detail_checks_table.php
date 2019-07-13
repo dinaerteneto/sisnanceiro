@@ -14,7 +14,7 @@ class AddForeignKeysToBankInvoiceDetailChecksTable extends Migration {
 	{
 		Schema::table('bank_invoice_detail_checks', function(Blueprint $table)
 		{
-			$table->foreign('bank_invoice_detail_id', 'bank_invoice_detail_checks_ibfk_1')->references('id')->on('bank_invoice_details')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('bank_invoice_detail_id', 'bank_invoice_detail_checks_ibfk_1')->references('id')->on('bank_invoice_detail')->onUpdate('CASCADE')->onDelete('CASCADE');
 			$table->foreign('bank_id', 'bank_invoice_detail_checks_ibfk_2')->references('id')->on('bank')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}

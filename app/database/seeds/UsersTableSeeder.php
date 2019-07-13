@@ -28,9 +28,10 @@ class UsersTableSeeder extends Seeder
         ]);
 
         \DB::table('users')->insert([
-            'company'  => 1,
-            'email'    => 'main@sisnanceiro.com.br',
-            'password' => bcrypt('secret'),
+            'id'         => 2,
+            'company_id' => 1,
+            'email'      => 'main@sisnanceiro.com.br',
+            'password'   => bcrypt('secret'),
         ]);
 
         \DB::table('user_grouping')->insert([
