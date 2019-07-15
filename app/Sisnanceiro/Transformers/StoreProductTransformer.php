@@ -9,7 +9,7 @@ use Sisnanceiro\Models\StoreProduct;
 use Sisnanceiro\Models\StoreProductBrand;
 use Sisnanceiro\Models\StoreProductCategory;
 
-class StoreProductTransform extends TransformerAbstract
+class StoreProductTransformer extends TransformerAbstract
 {
 
     /**

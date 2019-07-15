@@ -113,4 +113,16 @@ class SaleService extends Service
         return $this->repository->getAll($search);
     }
 
+    public function find($id, $with = false)
+    {
+        $with = [
+            'company', 
+            'userCreated', 
+            'customer', 
+            'items',
+        ];
+        return parent::find($id, $with)
+            ->load('company', 'userCreated', 'customer', 'items');
+    }
+
 }

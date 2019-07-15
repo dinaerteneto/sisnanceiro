@@ -4,7 +4,7 @@ namespace Sisnanceiro\Transformers;
 use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Models\Event;
 
-class EventGuestsTransform extends TransformerAbstract
+class EventGuestsTransformer extends TransformerAbstract
 {
 
     public function transform(Event $event)

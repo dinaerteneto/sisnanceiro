@@ -5,7 +5,7 @@ namespace Sisnanceiro\Transformers;
 use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Helpers\Mask;
 
-class SaleStoreProductTransform extends TransformerAbstract
+class SaleStoreProductTransformer extends TransformerAbstract
 {
     public function transform($data)
     {

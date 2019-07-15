@@ -8,9 +8,9 @@ use Sisnanceiro\Models\Sale;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\SaleService;
 use Sisnanceiro\Services\StoreProductService;
-use Sisnanceiro\Transformers\SaleCustomerTransform;
-use Sisnanceiro\Transformers\SaleStoreProductTransform;
-use Sisnanceiro\Transformers\SaleTransform;
+use Sisnanceiro\Transformers\SaleCustomerTransformer;
+use Sisnanceiro\Transformers\SaleStoreProductTransformer;
+use Sisnanceiro\Transformers\SaleTransformer;
 
 class SaleController extends Controller
 {
@@ -86,7 +86,7 @@ class SaleController extends Controller
     public function ask($id)
     {
         $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransform());
+        $model = fractal($model, new SaleTransformer());
         $sale  = $model->toArray()['data'];
         return View('sale/ask', compact('sale'));
     }
@@ -94,14 +94,14 @@ class SaleController extends Controller
     public function coupon($id)
     {
         $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransform());
+        $model = fractal($model, new SaleTransformer());
         $sale  = $model->toArray()['data'];
         return view('sale/coupon', compact('sale'));
     }
 
     function print($id) {
         $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransform());
+        $model = fractal($model, new SaleTransformer());
         $sale  = $model->toArray()['data'];
         return view('sale/print', compact('sale'));
     }
@@ -109,7 +109,7 @@ class SaleController extends Controller
     public function view($id)
     {
         $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransform());
+        $model = fractal($model, new SaleTransformer());
         $sale  = $model->toArray()['data'];
         return view('sale/view', compact('sale'));
     }
@@ -117,7 +117,7 @@ class SaleController extends Controller
     public function copy($id)
     {
         $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransform());
+        $model = fractal($model, new SaleTransformer());
         $sale  = $model->toArray()['data'];
         return view('sale/copy', compact('sale'));
     }
@@ -127,7 +127,7 @@ class SaleController extends Controller
         $search  = $request->get('term');
         $records = $this->storeProductService->getAll($search)->get();
         if ($records) {
-            $recordTransform = fractal($records, new SaleStoreProductTransform());
+            $recordTransform = fractal($records, new SaleStoreProductTransformer());
 
             $return = ['items' => $recordTransform->toArray()['data'], 'total_count' => count($records)];
             return Response::json($return);
@@ -139,7 +139,7 @@ class SaleController extends Controller
         $search  = $request->get('term');
         $records = $this->customerService->getAll($search)->get();
         if ($records) {
-            $recordTransform = fractal($records, new SaleCustomerTransform());
+            $recordTransform = fractal($records, new SaleCustomerTransformer());
 
             $return = ['items' => $recordTransform->toArray()['data'], 'total_count' => count($records)];
             return Response::json($return);

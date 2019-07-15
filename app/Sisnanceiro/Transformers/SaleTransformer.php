@@ -10,7 +10,7 @@ use Sisnanceiro\Models\PersonContactType;
 use Sisnanceiro\Models\Sale;
 use Sisnanceiro\Models\User;
 
-class SaleTransform extends TransformerAbstract
+class SaleTransformer extends TransformerAbstract
 {
 
     public function transform(Sale $sale)

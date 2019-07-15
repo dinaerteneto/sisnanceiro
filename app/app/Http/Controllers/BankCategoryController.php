@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Services\BankCategoryService;
-use Sisnanceiro\Transformers\BankCategoryTransform;
+use Sisnanceiro\Transformers\BankCategoryTransformer;
 
 class BankCategoryController extends Controller
 {
@@ -21,12 +21,12 @@ class BankCategoryController extends Controller
         $mainParentCategoryId = $request->has('mainParentCategoryId') ? $request->mainParentCategoryId : BankCategory::CATEGORY_TO_RECEIVE;
         $categoriesReceive    = [];
         if ($categoriesReceive = $this->bankCategoryService->getAll(BankCategory::CATEGORY_TO_RECEIVE)) {
-            $categoryReceiveTransform = new BankCategoryTransform();
+            $categoryReceiveTransform = new BankCategoryTransformer();
             $categoriesReceive        = $categoryReceiveTransform->buildTree($categoriesReceive->toArray(), BankCategory::CATEGORY_TO_RECEIVE);
         }
         $categoriesPay = [];
         if ($categoriesPay = $this->bankCategoryService->getAll(BankCategory::CATEGORY_TO_PAY)) {
-            $categoryPayTransform = new BankCategoryTransform();
+            $categoryPayTransform = new BankCategoryTransformer();
             $categoriesPay        = $categoryPayTransform->buildTree($categoriesPay->toArray(), BankCategory::CATEGORY_TO_PAY);
         }
         return view('bank-category/index', compact('categoriesReceive', 'categoriesPay', 'mainParentCategoryId'));
@@ -54,7 +54,7 @@ class BankCategoryController extends Controller
         } else {
             $categories = [];
             if ($categories = $this->bankCategoryService->findByParentCategory($main_parent_category_id)) {
-                $categories = fractal($categories, new BankCategoryTransform)->toArray()['data'];
+                $categories = fractal($categories, new BankCategoryTransformer)->toArray()['data'];
             }
             return view('bank-category/_form', compact('model', 'categories', 'main_parent_category_id', 'parent_category_id', 'action', 'title'));
         }
@@ -88,7 +88,7 @@ class BankCategoryController extends Controller
         } else {
             $categories = [];
             if ($categories = $this->bankCategoryService->findByParentCategory($model->main_parent_category_id)) {
-                $categories = fractal($categories, new BankCategoryTransform)->toArray()['data'];
+                $categories = fractal($categories, new BankCategoryTransformer)->toArray()['data'];
             }
             return view('bank-category/_form', compact('model', 'categories', 'main_parent_category_id', 'parent_category_id', 'action', 'title'));
         }

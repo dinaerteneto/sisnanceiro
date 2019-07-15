@@ -10,10 +10,10 @@ use Sisnanceiro\Services\StoreProductAttributeService;
 use Sisnanceiro\Services\StoreProductBrandService;
 use Sisnanceiro\Services\StoreProductCategoryService;
 use Sisnanceiro\Services\StoreProductService;
-use Sisnanceiro\Transformers\StoreProductAttributeTransform;
-use Sisnanceiro\Transformers\StoreProductBrandTransform;
-use Sisnanceiro\Transformers\StoreProductCategoryTransform;
-use Sisnanceiro\Transformers\StoreProductTransform;
+use Sisnanceiro\Transformers\StoreProductAttributeTransformer;
+use Sisnanceiro\Transformers\StoreProductBrandTransformer;
+use Sisnanceiro\Transformers\StoreProductCategoryTransformer;
+use Sisnanceiro\Transformers\StoreProductTransformer;
 
 class StoreProductController extends Controller
 {
@@ -48,15 +48,15 @@ class StoreProductController extends Controller
             return redirect("/store/product/update/{$model->id}");
         } else {
             $categories          = $this->storeProductCategoryService->all();
-            $transformCategories = fractal($categories, new StoreProductCategoryTransform());
+            $transformCategories = fractal($categories, new StoreProductCategoryTransformer());
             $categories          = $transformCategories->toArray()['data'];
 
             $brands          = $this->storeProductBrandService->all();
-            $transformBrands = fractal($brands, new StoreProductBrandTransform());
+            $transformBrands = fractal($brands, new StoreProductBrandTransformer());
             $brands          = $transformBrands->toArray()['data'];
 
             $attributes         = $this->storeProductAttributeService->all();
-            $transformAttribute = fractal($attributes, new StoreProductAttributeTransform());
+            $transformAttribute = fractal($attributes, new StoreProductAttributeTransformer());
             $attributes         = $transformAttribute->toArray()['data'];
 
             return view('store/product/create', compact('model', 'categories', 'brands', 'attributes'));
@@ -89,18 +89,18 @@ class StoreProductController extends Controller
             return redirect("/store/product/update/{$model->id}");
         } else {
             $categories          = $this->storeProductCategoryService->all();
-            $transformCategories = fractal($categories, new StoreProductCategoryTransform());
+            $transformCategories = fractal($categories, new StoreProductCategoryTransformer());
             $categories          = $transformCategories->toArray()['data'];
 
             $brands          = $this->storeProductBrandService->all();
-            $transformBrands = fractal($brands, new StoreProductBrandTransform());
+            $transformBrands = fractal($brands, new StoreProductBrandTransformer());
             $brands          = $transformBrands->toArray()['data'];
 
             $attributes         = $this->storeProductAttributeService->all();
-            $transformAttribute = fractal($attributes, new StoreProductAttributeTransform());
+            $transformAttribute = fractal($attributes, new StoreProductAttributeTransformer());
             $attributes         = $transformAttribute->toArray()['data'];
 
-            $transformProduct = fractal($model, new StoreProductTransform());
+            $transformProduct = fractal($model, new StoreProductTransformer());
             $model            = $transformProduct->toArray()['data'];
 
             $attrVariables = [];

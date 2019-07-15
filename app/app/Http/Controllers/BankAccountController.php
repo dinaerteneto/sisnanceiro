@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Sisnanceiro\Models\Bank;
 use Sisnanceiro\Models\BankAccount;
 use Sisnanceiro\Services\BankAccountService;
+use Sisnanceiro\Transformers\BankAccountTransformer;
 
 class BankAccountController extends Controller
 {
@@ -20,7 +21,9 @@ class BankAccountController extends Controller
     {
         if ($request->isMethod('post')) {
             $records = $this->bankAccountService->all();
-            $dt      = datatables()->of($records);
+            $dt      = datatables()
+                ->of($records)
+                ->setTransformer(new BankAccountTransformer);
             return $dt->make(true);
         }
         return view('/bank-account/index');
@@ -63,7 +66,7 @@ class BankAccountController extends Controller
             }
             return redirect("bank-account/");
         }
-
+        $model = (object) fractal($model, new BankAccountTransformer)->toArray()['data'];
         return view('bank-account/_form', compact('action', 'title', 'model', 'banks'));
     }
 

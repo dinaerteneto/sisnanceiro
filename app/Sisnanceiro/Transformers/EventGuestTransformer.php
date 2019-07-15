@@ -8,7 +8,7 @@ use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Helpers\Mask;
 use Sisnanceiro\Models\EventGuest;
 
-class EventGuestTransform extends TransformerAbstract
+class EventGuestTransformer extends TransformerAbstract
 {
 
     public function transform(EventGuest $guest)

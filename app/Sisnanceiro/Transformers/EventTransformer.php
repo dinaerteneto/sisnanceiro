@@ -9,7 +9,7 @@ use Sisnanceiro\Helpers\Mask;
 use Sisnanceiro\Models\Event;
 use Sisnanceiro\Models\EventGuest;
 
-class EventTransform extends TransformerAbstract
+class EventTransformer extends TransformerAbstract
 {
 
     public function transform(Event $event)

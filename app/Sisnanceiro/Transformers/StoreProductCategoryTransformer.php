@@ -5,7 +5,7 @@ namespace Sisnanceiro\Transformers;
 use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Models\StoreProductCategory;
 
-class StoreProductCategoryTransform extends TransformerAbstract
+class StoreProductCategoryTransformer extends TransformerAbstract
 {
 
     /**
