@@ -40,8 +40,8 @@
             </ul>          
         </li>
 
-        <!--
-        <li class="{{ Request::is('bank-category') ? 'active' : '' }}">
+        
+        <li class="{{ Request::is('bank-category') || Request::is('bank-account') ? 'active' : '' }}">
             
             <a class="has-arrow" href="#" title="Dashboard"><span class="fa fa-lg fa-fw fa-money"></span> <span class="menu-item-parent">Financeiro</span>
                 <b class="collapse-sign">
@@ -49,22 +49,23 @@
                     <em class="fa fa-minus-square-o"></em>
                 </b>
             </a>
+
             <ul aria-expanded="false" class="sa-sub-nav collapse">
-                second-level 
                 <li class="{{ Request::is('bank-category') ? 'active' : '' }}">
                     <a href="/bank-category"> Categorias </a>
                 </li>
-                
+
+                <li class="">
+                    <a href="/bank-account" title="Marketing Dashboard"> Contas bancárias </a>
+
+                </li>
+                <!--
                 <li class="">
                     <a href="dashboard-marketing.html" title="Marketing Dashboard"> Cartões de crédito </a>
 
                 </li>
                 <li class="">
                     <a href="dashboard-marketing.html" title="Marketing Dashboard"> Maquininhas </a>
-
-                </li>
-                <li class="">
-                    <a href="dashboard-marketing.html" title="Marketing Dashboard"> Contas bancárias </a>
 
                 </li>
                 <li class="">
@@ -75,11 +76,12 @@
                     <a href="dashboard-social.html" title="Social Wall"> Receitas </a>
 
                 </li>
-                
+                -->
+
             </ul>
 
         </li>
--->
+
         <li class="{{ Request::is('store/product') || Request::is('store/category') || Request::is('store/brand') || Request::is('sale') ? 'active' : null }}">
             <a class="" href="javascript:void(0)" title="Loja">
                 <span class="fa fa-lg fa-fw fa-tags"></span> 
