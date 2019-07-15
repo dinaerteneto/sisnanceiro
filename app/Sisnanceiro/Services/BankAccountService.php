@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Repositories\BankAccountRepository;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BankAccountService extends Service
 {
@@ -43,6 +45,13 @@ class BankAccountService extends Service
     {
         $carbonInitialBalanceDate = Carbon::createFromFormat('d/m/Y', $data['initial_balance_date']);
         $initialBalanceDate       = $carbonInitialBalanceDate->format('Y-m-d');
+        if (empty($data['send_bank_account'])) {
+            $data['bank_id']    = null;
+            $data['agency']     = null;
+            $data['agency_dv']  = null;
+            $data['account']    = null;
+            $data['account_dv'] = null;
+        }
 
         return array_merge($data, [
             'cpf_cnpj'             => preg_replace('/[^0-9]/', '', $data['cpf_cnpj']),
@@ -60,13 +69,36 @@ class BankAccountService extends Service
     public function store(array $input, $rules = false)
     {
         $data = $this->mapData($input);
-        return parent::store($data, $rules);
+        $this->resetDefault();
+        $return = parent::store($data, $rules);
+        return $return;
     }
 
-    public function update(\Illuminate\Database\Eloquent\Model $model, array $data, $rules = 'update')
+    public function update(Model $model, array $data, $rules = 'update')
     {
         $data = $this->mapData($data);
-        return parent::update($model, $data, $rules);
+        $this->resetDefault();
+        $return = parent::update($model, $data, $rules);
+        return $return;
+    }
+
+    /**
+     * remove flat default all acounts of the company
+     * @param int companyId
+     * @return int
+     */
+    private function resetDefault()
+    {
+        $companyId = Auth::user()->company_id;
+        $affected = \DB::table('bank_account')
+            ->where(
+                [
+                    'company_id' => $companyId,
+                    'deleted_at' => null,
+                ]
+            )
+            ->update(['default' => 0]);
+        return $affected;
     }
 
 }

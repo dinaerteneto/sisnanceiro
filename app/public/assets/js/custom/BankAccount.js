@@ -64,7 +64,14 @@ BankAccount = {
         Main.dataTableOptions.columns = [{
                 data: 'name',
                 name: 'name',
-                searchable: true
+                searchable: true,
+                mRender: function(data, type, row) {
+                    if (row.default == '1') {
+                        return data + ' <span class="label label-success">PADRÃO</span>';
+                    } else {
+                        return data;
+                    }
+                }
             },
             {
                 data: 'initial_balance',

@@ -37,4 +37,38 @@ class BankAccount extends Model
         'cpf_cnpj',
         'legal_name',
     ];
+
+    public static function getType($type)
+    {
+        $ret = null;
+        switch ($type) {
+            case self::CONTA_CORRENTE:
+                $ret = 'Conta corrente';
+                break;
+
+            case self::CONTA_POUPANCA:
+                $ret = 'Conta poupança';
+                break;
+
+            case self::CONTA_CORRENTE_CONJUNTA:
+                $ret = 'Conta corrente conjunta';
+                break;
+
+            case self::CONTA_POUPANCA_CONJUNTA:
+                $ret = 'Conta poupança conjunta';
+                break;
+        }
+        return $ret;
+    }
+
+    public static function getTypes()
+    {
+        return [
+            1 => 'Conta corrente',
+            2 => 'Conta poupança',
+            3 => 'Conta corrente conjunta',
+            4 => 'Conta poupança conjunta',
+        ];
+    }
+
 }

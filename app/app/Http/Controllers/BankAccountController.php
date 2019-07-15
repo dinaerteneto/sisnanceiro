@@ -35,6 +35,7 @@ class BankAccountController extends Controller
         $title  = 'Incluir conta';
         $model  = new BankAccount();
         $banks  = Bank::all();
+        $types  = BankAccount::getTypes();
 
         if ($request->isMethod('post')) {
             $postData = $request->get('BankAccount');
@@ -46,7 +47,7 @@ class BankAccountController extends Controller
             }
             return redirect("bank-account/");
         }
-        return view('bank-account/_form', compact('action', 'title', 'model', 'banks'));
+        return view('bank-account/_form', compact('action', 'title', 'model', 'banks', 'types'));
     }
 
     public function update(Request $request, $id)
@@ -55,6 +56,7 @@ class BankAccountController extends Controller
         $title  = 'Alterar conta';
         $model  = $this->bankAccountService->find($id);
         $banks  = Bank::all();
+        $types = BankAccount::getTypes();
 
         if ($request->isMethod('post')) {
             $postData = $request->get('BankAccount');
@@ -67,7 +69,7 @@ class BankAccountController extends Controller
             return redirect("bank-account/");
         }
         $model = (object) fractal($model, new BankAccountTransformer)->toArray()['data'];
-        return view('bank-account/_form', compact('action', 'title', 'model', 'banks'));
+        return view('bank-account/_form', compact('action', 'title', 'model', 'banks', 'types'));
     }
 
     public function delete($id)

@@ -69,13 +69,13 @@
                 <div class="row mb-10">
                     <div class="col-sm-6 vcheck">
                         <label>
-                            <input type="checkbox" class="checkbox style-0" name="" id="bankaccount_send_bank_account">
+                            <input type="checkbox" class="checkbox style-0" name="BankAccount[send_bank_account]" id="bankaccount_send_bank_account" {{ !empty($model->send_bank_account) ? 'checked' : null }} >
                             <span>Preencher dados bancários</span>
                         </label>
                     </div>
                     <div class="col-sm-6 vcheck">
                         <label>
-                            <input type="checkbox" class="checkbox style-0" name="BankAccount[default]" id="BankAccount_default" value="1" />
+                            <input type="checkbox" class="checkbox style-0" name="BankAccount[default]" id="BankAccount_default" value="1" {{ !empty($model->default) ? 'checked' : null }} />
                             <span>Conta padrão</span>
                         </label>
                     </div>
@@ -89,7 +89,7 @@
                                 <option value="">Selecione</option>
                                 @if(isset($banks))
                                     @foreach($banks as $bank)
-                                        <option value="{{ $bank->id }}">{{ $bank->title }}</option>
+                                        <option value="{{ $bank->id }}"  {{$model->bank_id == $bank->id ? 'selected' : null}}  >{{ $bank->title }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -98,8 +98,9 @@
                             <label class="control-label">Tipo de conta</label>
                             <select name="BankAccount[type]" id="BankAccount_type" class="form-control select2">
                                 <option value="">Selecione</option>
-                                <option value="1">Conta corrente</option>
-                                <option value="2">Conta poupança</option>
+                                @foreach($types as $key => $type)
+                                    <option value="{{ $key }}" {{ $model->type == $key ? 'selected' : null }}>{{ $type }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -142,6 +143,9 @@
 
 <script type="text/javascript">
 $('document').ready(function(){
+
+    BankAccount.requiredDataAccount();
+
     var validForm = $('#bank-account-form').validate({
         ignore: null,
         rules: {

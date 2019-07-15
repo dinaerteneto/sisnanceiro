@@ -2,17 +2,21 @@
 
 namespace Sisnanceiro\Transformers;
 
+use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 use Sisnanceiro\Helpers\Mask;
 use Sisnanceiro\Models\BankAccount;
-use Carbon\Carbon;
 
 class BankAccountTransformer extends TransformerAbstract
 {
     public function transform(BankAccount $bankAccount)
     {
         $initialBalanceDate = Carbon::createFromFormat('Y-m-d', $bankAccount->initial_balance_date);
-
+        $sendBankAccount    = false;
+        if (!empty($bankAccount->bank_id) || !empty($bankAccount->agency) || !empty($bankAccount->account) || !empty($bankAccount->agency_dv) || !empty($bankAccount->account_dv)) {
+            $sendBankAccount = true;
+        }
+        
         return [
             'id'                   => $bankAccount->id,
             'bank_id'              => $bankAccount->bank_id,
@@ -30,6 +34,7 @@ class BankAccountTransformer extends TransformerAbstract
             'account_dv'           => $bankAccount->account_dv,
             'cpf_cnpj'             => $bankAccount->cpf_cnpj,
             'legal_name'           => $bankAccount->legal_name,
+            'send_bank_account'    => $sendBankAccount,
         ];
     }
 }
