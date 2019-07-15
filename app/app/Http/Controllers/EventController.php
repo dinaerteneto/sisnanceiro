@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\Event;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
-use Sisnanceiro\Transformers\EventGuestsTransform;
-use Sisnanceiro\Transformers\EventGuestTransform;
-use Sisnanceiro\Transformers\EventTransform;
+use Sisnanceiro\Transformers\EventGuestsTransformer;
+use Sisnanceiro\Transformers\EventGuestTransformer;
+use Sisnanceiro\Transformers\EventTransformer;
 
 class EventController extends Controller
 {
@@ -91,8 +91,8 @@ class EventController extends Controller
         $end   = $request->get('end');
 
         if ($events = $this->eventService->load($start, $end)) {
-            $eventTransform = fractal($events, new EventTransform());
-            return Response::json($eventTransform);
+            $EventTransformer = fractal($events, new EventTransformer());
+            return Response::json($EventTransformer);
         }
         return Response::json([]);
     }
@@ -108,12 +108,12 @@ class EventController extends Controller
     {
         $guests         = [];
         $model          = $this->eventService->find($eventId);
-        $eventTransform = fractal($model, new EventTransform());
-        $model          = (object) $eventTransform->toArray()['data'];
+        $EventTransformer = fractal($model, new EventTransformer());
+        $model          = (object) $EventTransformer->toArray()['data'];
 
         if ($eventGuest = $this->eventGuestService->getAll($eventId)) {
-            $eventGuestTransform = new EventGuestsTransform();
-            $guests              = $eventGuestTransform->buildTree($eventGuest->toArray());
+            $EventGuestTransformer = new EventGuestsTransformer();
+            $guests              = $EventGuestTransformer->buildTree($eventGuest->toArray());
         }
         return View('/event/guest', compact('model', 'guests'));
     }
@@ -143,7 +143,7 @@ class EventController extends Controller
     public function guests($eventId)
     {
         $model     = $this->eventGuestService->confirmed($eventId);
-        $transform = fractal($model, new EventGuestTransform());
+        $transform = fractal($model, new EventGuestTransformer());
         $data      = $transform->toArray()['data'];
         return View('event/_guests', compact('data'));
     }
@@ -183,7 +183,7 @@ class EventController extends Controller
     public function page(Request $request, $eventId)
     {
         $model     = $this->eventService->find($eventId);
-        $transform = fractal($model, new EventTransform());
+        $transform = fractal($model, new EventTransformer());
         $data      = $transform->toArray()['data'];
 
         if ($request->isMethod('post')) {

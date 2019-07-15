@@ -102,7 +102,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/del-address/{id}', 'PersonController@delAddress');
     });
 
-    Route::group(['prefix' => 'sale'], function() {
+    Route::group(['prefix' => 'sale'], function () {
         Route::get('/', 'SaleController@index');
         Route::post('/', 'SaleController@index');
         Route::get('/create', 'SaleController@create');
@@ -117,5 +117,15 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/update/{id}', 'SaleController@update');
         Route::post('/cancel/{id}', 'SaleController@cancel');
         Route::get('/copy/{id}', 'SaleController@copy');
+    });
+
+    Route::group(['prefix' => 'bank-account'], function () {
+        Route::get('/', 'BankAccountController@index');
+        Route::post('/', 'BankAccountController@index');
+        Route::get('/create', 'BankAccountController@create');
+        Route::post('/create', 'BankAccountController@create');
+        Route::get('/update/{id}', 'BankAccountController@update');
+        Route::post('/update/{id}', 'BankAccountController@update');
+        Route::post('/delete/{ud}', 'BankAccountController@delete');
     });
 });

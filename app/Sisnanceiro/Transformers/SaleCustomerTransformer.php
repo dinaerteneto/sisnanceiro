@@ -3,7 +3,7 @@ namespace Sisnanceiro\Transformers;
 
 use League\Fractal\TransformerAbstract;
 
-class SaleCustomerTransform extends TransformerAbstract
+class SaleCustomerTransformer extends TransformerAbstract
 {
     public function transform($data)
     {

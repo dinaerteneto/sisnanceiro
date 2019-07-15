@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\PaymentMethod;
 use Sisnanceiro\Services\EventGuestService;
 use Sisnanceiro\Services\EventService;
-use Sisnanceiro\Transformers\EventGuestTransform;
+use Sisnanceiro\Transformers\EventGuestTransformer;
 
 class EventGuestController extends Controller
 {
@@ -23,7 +23,7 @@ class EventGuestController extends Controller
     public function index(Request $request, $tokenEmail)
     {
         $guest       = $this->eventGuestService->findBy('token_email', $tokenEmail);
-        $transform   = fractal($guest, new EventGuestTransform());
+        $transform   = fractal($guest, new EventGuestTransformer());
         $data        = $transform->toArray()['data'];
         $invitedByMe = $data['invitedByMe'];
         $event       = $data['event'];
@@ -47,7 +47,7 @@ class EventGuestController extends Controller
         $record           = $guest->toArray();
         $record['status'] = $status;
         $this->eventGuestService->update($guest, $record);
-        $transform = fractal($guest, new EventGuestTransform());
+        $transform = fractal($guest, new EventGuestTransformer());
         $data      = $transform->toArray()['data'];
         return View('event-guest/_status', compact('data'));
     }
