@@ -128,4 +128,14 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/update/{id}', 'BankAccountController@update');
         Route::post('/delete/{ud}', 'BankAccountController@delete');
     });
+
+    Route::group(['prefix' => 'bank-transaction'], function () {
+        Route::get('/', 'BankTransactionController@index');
+        Route::post('/', 'BankTransactionController@index');
+        Route::get('/create', 'BankTransactionController@create');
+        Route::post('/create', 'BankTransactionController@create');
+        Route::get('/update/{id}', 'BankTransactionController@update');
+        Route::post('/update/{id}', 'BankTransactionController@update');
+        Route::post('/delete/{ud}', 'BankTransactionController@delete');
+    });
 });

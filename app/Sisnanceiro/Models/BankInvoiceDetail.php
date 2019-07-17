@@ -2,9 +2,10 @@
 
 namespace Sisnanceiro\Models;
 
+use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
 
-class BankInvoiceDetails extends Model
+class BankInvoiceDetail extends Model
 {
     use TenantModels;
 
@@ -20,7 +21,7 @@ class BankInvoiceDetails extends Model
     const STATUS_NOT_CARD        = 10;
     const STATUS_CHARGE_BACK     = 11;
 
-    protected $table      = 'bank_invoice_details';
+    protected $table      = 'bank_invoice_detail';
     protected $primaryKey = 'id';
 
     protected $fillable = [

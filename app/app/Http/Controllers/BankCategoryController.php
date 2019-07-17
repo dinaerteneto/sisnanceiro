@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
+use Illuminate\Support\Facades\Response;
 
 class BankCategoryController extends Controller
 {
@@ -84,7 +85,7 @@ class BankCategoryController extends Controller
             } else {
                 $request->session()->flash('success', ['message' => 'Categoria alterada com sucesso.']);
             }
-            return redirect('bank-category/all');
+            return redirect('bank-category/');
         } else {
             $categories = [];
             if ($categories = $this->bankCategoryService->findByParentCategory($model->main_parent_category_id)) {
@@ -100,5 +101,4 @@ class BankCategoryController extends Controller
             return $this->apiSuccess(['success' => true]);
         }
     }
-
 }
