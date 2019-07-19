@@ -15,10 +15,10 @@ class BankTransactionController extends Controller
 {
     protected $transactionService;
 
-    public function __construct(BankTransactionService $transactionService, BankCategoryService $bankCategoryService)
+    public function __construct(BankTransactionService $bankTransactionService, BankCategoryService $bankCategoryService)
     {
-        $this->transactionService  = $transactionService;
-        $this->bankCategoryService = $bankCategoryService;
+        $this->bankTransactionService = $bankTransactionService;
+        $this->bankCategoryService    = $bankCategoryService;
     }
 
     public function index(Request $request)
@@ -46,8 +46,8 @@ class BankTransactionController extends Controller
         $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), 2));
 
         if ($request->isMethod('post')) {
-            $postData = $request->get('BankInvoiceDetail');
-            $model    = $this->bankTransaction->store($postData, 'create');
+            $postData = $request->all();
+            $model    = $this->bankTransactionService->store($postData, 'create');
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
             } else {

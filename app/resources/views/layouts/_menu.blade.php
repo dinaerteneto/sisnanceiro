@@ -59,6 +59,10 @@
                     <a href="/bank-account" title="Marketing Dashboard"> Contas bancárias </a>
 
                 </li>
+                <li class="">
+                    <a href="/bank-transaction" title="Marketing Dashboard"> Transações </a>
+
+                </li>                
                 <!--
                 <li class="">
                     <a href="dashboard-marketing.html" title="Marketing Dashboard"> Cartões de crédito </a>

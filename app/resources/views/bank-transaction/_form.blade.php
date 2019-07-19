@@ -24,18 +24,18 @@
                             <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $model->due_date }}" />
                         </div>
                        <div class="col-sm-3">
-                           <label class="control-label" for="BankInvoiceDetail_is_paid">Esta pago</label>
-                           <select class="select2" name="BankInvoiceDetail[is_paid]">
-                               <option value="0">Não</option>
-                               <option value="1">Sim</option>
+                           <label class="control-label" for="BankInvoiceDetail_status">Esta pago</label>
+                           <select class="select2" name="BankInvoiceDetail[status]">
+                               <option value="1">Não</option>
+                               <option value="3">Sim</option>
                            </select>
                         </div>
                     </div>
 
                     <div class="row mb-10">
                         <div class="col-sm-12">
-                            <label class="control-label" for="BankInvoiceDetail_description">Descrição</label>
-                            <textarea name="BankInvoiceDetail[description]" id="BankInvoiceDetail_description" class="form-control">{{$model->description}}</textarea>
+                            <label class="control-label" for="BankInvoiceTransaction_description">Descrição</label>
+                            <textarea name="BankInvoiceTransaction[description]" id="BankInvoiceTransaction_description" class="form-control">{{$model->description}}</textarea>
                         </div>
                     </div>
 
@@ -58,8 +58,8 @@
 
                     <div class="row mb-10">
                         <div class="col-sm-12">
-                            <label class="control-label" for="BankInvoiceDetail_note">Observação</label>
-                            <textarea name="BankInvoiceDetail[note]" id="BankInvoiceDetail_note" class="form-control">{{$model->note}}</textarea>
+                            <label class="control-label" for="BankInvoiceTransaction_note">Observação</label>
+                            <textarea name="BankInvoiceTransaction[note]" id="BankInvoiceTransaction_note" class="form-control">{{$model->note}}</textarea>
                         </div>
                     </div>
 
@@ -74,7 +74,7 @@
                         <div class="row mb-10">
                             <div class="col-sm-6">
                                 <label class="vcheck m-0">
-                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceDetail[fixed]" id="BankInvoiceDetail_fixed" value="1" {{ !empty($model->fixed) ? 'checked' : null }} >
+                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceTransaction[fixed]" id="BankInvoiceTransaction_fixed" value="1" {{ !empty($model->fixed) ? 'checked' : null }} >
                                     <span>Despesa fixa</span>
                                 </label>
                             </div>
@@ -84,7 +84,7 @@
                         <div class="row mb-10">
                             <div class="col-sm-4" style="margin-top: 8px">
                                 <label class="vcheck m-0">
-                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceDetail[repeat]" id="BankInvoiceDetail_repeat" value="1" {{ !empty($model->repeat) ? 'checked' : null }} >
+                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceTransaction[repeat]" id="BankInvoiceTransaction_repeat" value="1" {{ !empty($model->repeat) ? 'checked' : null }} >
                                     <span>Repetir</span>
                                 </label>
                             </div>
@@ -136,26 +136,26 @@ $('document').ready(function(){
             $('#BankInvoiceTransaction_total_invoice').prop('disabled', true);
             $('#BankInvoiceTransaction_type_cycle').prop('disabled', true);
 
-            $('#BankInvoiceDetail_repeat').prop('checked', false);
-            $('#BankInvoiceDetail_fixed').prop('checked', false);
+            $('#BankInvoiceTransaction_repeat').prop('checked', false);
+            $('#BankInvoiceTransaction_fixed').prop('checked', false);
         } else {
             $('div#more-info').addClass('d-none');
             $('#a-more-info').html('Mais informações');
         }
     });
 
-    $('#BankInvoiceDetail_fixed').on('click', function() {
+    $('#BankInvoiceTransaction_fixed').on('click', function() {
         if($(this).is(':checked')) {
-            $('#BankInvoiceDetail_repeat').prop('checked', false);
+            $('#BankInvoiceTransaction_repeat').prop('checked', false);
             $('#BankInvoiceTransaction_total_invoice').val(1);
             $('#BankInvoiceTransaction_total_invoice').prop('disabled', true);
             $('#BankInvoiceTransaction_type_cycle').prop('disabled', true);
         }
     });
 
-    $('#BankInvoiceDetail_repeat').on('click', function() {
+    $('#BankInvoiceTransaction_repeat').on('click', function() {
         if($(this).is(':checked')) {
-            $('#BankInvoiceDetail_fixed').prop('checked', false);
+            $('#BankInvoiceTransaction_fixed').prop('checked', false);
             $('#BankInvoiceTransaction_total_invoice').val(1);
             $('#BankInvoiceTransaction_total_invoice').prop('disabled', false);
             $('#BankInvoiceTransaction_type_cycle').prop('disabled', false);

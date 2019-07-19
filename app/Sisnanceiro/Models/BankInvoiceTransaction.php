@@ -9,9 +9,9 @@ class BankInvoiceTransaction extends Model
 {
     use TenantModels;
 
-    const TYPE_CYCLE_DIALY   = 0;
-    const TYPE_CYCLE_WEEKLY  = 1;
-    const TYPE_CYCLE_MONTHLY = 2;
+    const TYPE_CYCLE_DIALY   = 1;
+    const TYPE_CYCLE_WEEKLY  = 2;
+    const TYPE_CYCLE_MONTHLY = 3;
     const TYPE_CYCLE_YEARLY  = 4;
 
     protected $table      = 'bank_invoice_transaction';
@@ -21,8 +21,12 @@ class BankInvoiceTransaction extends Model
         'company_id',
         'bank_category_id',
         'total_invoices',
+        'fixed',
+        'description',
+        'note',
+        'authorization_code',
         'total_value',
-        'type_cicle',
+        'type_cycle',
         'description',
     ];
 
@@ -53,10 +57,10 @@ class BankInvoiceTransaction extends Model
     public static function getTypeCicles()
     {
         return [
-            0 => 'Dias',
-            1 => 'Semanas',
-            2 => 'Meses',
-            3 => 'Anos',
+            1 => 'Dias',
+            2 => 'Semanas',
+            3 => 'Meses',
+            4 => 'Anos',
         ];
     }
 
