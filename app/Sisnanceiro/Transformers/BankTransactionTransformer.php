@@ -31,16 +31,24 @@ class BankTransactionTransformer extends TransformerAbstract
         if ($dued) {
             $status = 'red';
         }
-
+        if ($bankInvoiceDetail->status == BankInvoiceDetail::STATUS_PAID) {
+            $status = 'green';
+        }
 
         return [
-            'id'            => $bankInvoiceDetail->id,
-            'status'        => $status,
-            'due_date'      => $dueDateCarbon->format('d/m/Y'),
-            'description'   => $bankInvoiceDetail->transaction->description,
-            'category_name' => $bankInvoiceDetail->category->name,
-            'account_name'  => $bankInvoiceDetail->account->name,
-            'net_value'     => $netValue,
+            'id'               => $bankInvoiceDetail->id,
+            'bank_account_id'  => $bankInvoiceDetail->bank_account_id,
+            'bank_category_id' => $bankInvoiceDetail->bank_category_id,
+            'status'           => $bankInvoiceDetail->status,
+            'label_status'     => $status,
+            'due_date'         => $dueDateCarbon->format('d/m/Y'),
+            'description'      => $bankInvoiceDetail->transaction->description,
+            'category_name'    => $bankInvoiceDetail->category->name,
+            'account_name'     => $bankInvoiceDetail->account->name,
+            'parcel_number'    => $bankInvoiceDetail->parcel_number,
+            'total_invoices'   => $bankInvoiceDetail->transaction->total_invoices,
+            'net_value'        => $netValue,
+            'note'             => $bankInvoiceDetail->transaction->note,
         ];
     }
 }

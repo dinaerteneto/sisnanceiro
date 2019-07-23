@@ -1,43 +1,61 @@
+jQuery.validator.addMethod("greaterThanZero", function(value, element) {
+    var val = value.replace('.', '');
+    val = val.replace(',', '.');
+    return this.optional(element) || (parseFloat(val) > 0);
+}, "* Amount must be greater than zero");
+
 BankTransaction = {
     init: function() {
-        BankTransaction.dataTableInit();
+
+        if ($('#BankInvoiceDetail_bank_category_id').length > 0) {
+            BankTransaction.initSelect2();
+        }
+        BankTransaction.formValidate();
     },
 
-    dataTableInit: function() {
-        Main.dataTableOptions.serverSide = true;
-        // Main.dataTableOptions.aaSorting = [
-        //     [0, 'desc']
-        // ];
-        Main.dataTableOptions.ajax = {
-            url: "/bank-transaction",
-            type: 'POST'
-        };
-        Main.dataTableOptions.columns = [{
-                // data: 'status',
-                // name: 'status',
-                bSortable: false,
-                mRender: function(data, type, row) {
-                    return '<i class="fa fa-circle" style="color: ' + row.status + '"></i>';
-                }
+    initSelect2: function() {
+        $('#BankInvoiceDetail_bank_category_id').select2({
+            data: data,
+            formatNoMatches: function(term) {
+                return 'Nenhum produto encontrado.';
             },
-            { data: 'due_date' },
-            { data: 'description' },
-            { data: 'category_name' },
-            { data: 'account_name' },
-            { data: 'net_value' },
-            {
-                bSortable: false,
-                mRender: function(data, type, row) {
-                    var html = '<a href="/bank-transaction/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
-                    html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="delete-record btn btn-xs btn-danger" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> ';
-                    return html;
-                }
+            formatSearching: function() {
+                return 'Procurando...';
+            },
+            formatResult: function(data) {
+                return data.html;
+            },
+            formatSelection: function(data) {
+                return data.selection;
+            },
+            escapeMarkup: function(m) {
+                return m;
             }
-        ];
-        var dataTables = $('#dt_basic').DataTable(Main.dataTableOptions);
+        });
+    },
 
-        $('#dt_basic').on('draw.dt', function() {
-            $('[rel="tooltip"]').tooltip();
+    formValidate: function() {
+
+        $('#bank-transaction-form').validate({
+            ignore: null,
+            rules: {
+                'BankInvoiceDetail[net_value]': {
+                    required: true,
+                    greaterThanZero: true
+                },
+                'BankInvoiceDetail[due_date]': 'required',
+                'BankInvoiceDetail[bank_category_id]': 'required',
+                'BankInvoiceDetail[bank_account_id]': 'required',
+            },
+            messages: {
+                'BankInvoiceDetail[net_value]': {
+                    required: 'Obrigatório',
+                    greaterThanZero: 'Deve ser um valor maior que zero'
+                },
+                'BankInvoiceDetail[due_date]': 'Obrigatório',
+                'BankInvoiceDetail[bank_category_id]': 'Obrigatório',
+                'BankInvoiceDetail[bank_account_id]': 'Obrigatório',
+            }
         });
     }
 }

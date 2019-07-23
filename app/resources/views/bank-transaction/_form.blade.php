@@ -1,7 +1,5 @@
 <div class="modal-dialog modal-lg" role="document">
-
     <div class="modal-content">
-
         <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}">
             @csrf
 
@@ -118,12 +116,10 @@
 
 @section('scripts')
 <script type="text/javascript">
-jQuery.validator.addMethod("greaterThanZero", function(value, element) {
-    var val = value.replace('.', '');
-        val = val.replace(',', '.');
-    return this.optional(element) || (parseFloat(val) > 0);
-}, "* Amount must be greater than zero");
-
+var data = {!! $categoryOptions !!}
+</script>
+<script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
+<script type="text/javascript">
 $('document').ready(function(){
 
     $('#a-more-info').on('click', function(e) {
@@ -164,48 +160,5 @@ $('document').ready(function(){
             $('#BankInvoiceTransaction_type_cycle').prop('disabled', true);
         }
     });
-
-    var data = {!! $categoryOptions !!}
-    $('#BankInvoiceDetail_bank_category_id').select2({
-        data: data,
-        formatNoMatches: function(term) {
-            return 'Nenhum produto encontrado.';
-        },
-        formatSearching: function() {
-            return 'Procurando...';
-        },
-        formatResult: function(data) {
-            return data.html;
-        },
-        formatSelection: function(data) {
-            return data.selection;
-        },
-        escapeMarkup: function(m) {
-            return m;
-        }
-    });
-
-    var validForm = $('#bank-transaction-form').validate({
-        ignore: null,
-        rules: {
-            'BankInvoiceDetail[net_value]' : {
-                required: true,
-                greaterThanZero: true
-            },
-            'BankInvoiceDetail[due_date]' : 'required',
-            'BankInvoiceDetail[bank_category_id]': 'required',
-            'BankInvoiceDetail[bank_account_id]': 'required',
-        },
-        messages: {
-            'BankInvoiceDetail[net_value]' : {
-                required: 'Obrigatório',
-                greaterThanZero: 'Deve ser um valor maior que zero'
-            },
-            'BankInvoiceDetail[due_date]' : 'Obrigatório',
-            'BankInvoiceDetail[bank_category_id]': 'Obrigatório',
-            'BankInvoiceDetail[bank_account_id]': 'Obrigatório',
-        }
-    });
-
 });
 </script>

@@ -77,10 +77,11 @@ class BankTransactionController extends Controller
             } else {
                 $request->session()->flash('success', ['message' => 'Lançamento(s) alterado(s) com sucesso.']);
             }
-            return redirect("bank-account/");
+            return redirect("bank-transaction/");
         }
+
         $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
-        return view('bank-transaction/_form', compact('action', 'title', 'model', 'bankAccounts', 'categoryOptions'));
+        return view('bank-transaction/_form_update', compact('action', 'title', 'model', 'bankAccounts', 'categoryOptions'));
     }
 
 }
