@@ -85,7 +85,7 @@
                 // name: 'status',
                 bSortable: false,
                 mRender: function(data, type, row) {
-                    return '<i class="fa fa-circle" style="color: ' + row.status + '"></i>';
+                    return '<i class="fa fa-circle" style="color: ' + row.label_status + '"></i>';
                 }
             },
             { data: 'due_date' },
