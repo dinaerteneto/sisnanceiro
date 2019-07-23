@@ -45,12 +45,12 @@
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Situação</th>
-                                            <th>Data</th>
+                                            <th width="3%"></th>
+                                            <th width="10%">Vencto</th>
                                             <th>Descrição</th>
                                             <th>Categoria</th>
                                             <th>Conta</th>
-                                            <th>Valor</th>
+                                            <th width="10%">Valor</th>
                                             <th width="7%">Ações</th>
                                         </tr>
                                     </thead>

@@ -128,4 +128,9 @@ class BankTransactionService extends Service
         return $this->bankInvoiceDetailService->store($data, 'create');
     }
 
+    public function getAll($search = null)
+    {
+        return $this->repository->getAll($search);
+    }
+
 }

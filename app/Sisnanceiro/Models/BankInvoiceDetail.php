@@ -55,4 +55,40 @@ class BankInvoiceDetail extends Model
         'authorization_code',
         'hide',
     ];
+
+    public static function getStatus($status)
+    {
+        switch ($status) {
+            case self::STATUS_ACTIVE:
+                return 'blue';
+                break;
+            case self::STATUS_CANCELLED:
+                return 'yellow'; 
+                break;
+            case self::STATUS_PAID:
+                return 'green';
+                break;
+        }
+    }
+
+
+    public function company()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Company', 'id', 'company_id');
+    }
+
+    public function category()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankCategory', 'id', 'bank_category_id');
+    }
+
+    public function account()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankAccount', 'id', 'bank_account_id');
+    }
+
+    public function transaction()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankInvoiceTransaction', 'id', 'bank_invoice_transaction_id');
+    }
 }
