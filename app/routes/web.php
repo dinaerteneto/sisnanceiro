@@ -136,6 +136,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/create', 'BankTransactionController@create');
         Route::get('/update/{id}', 'BankTransactionController@update');
         Route::post('/update/{id}', 'BankTransactionController@update');
-        Route::post('/delete/{ud}', 'BankTransactionController@delete');
+        Route::post('/delete/{id}', 'BankTransactionController@delete');
+        Route::post('/set-paid/{id}', 'BankTransactionController@setPaid');
     });
 });

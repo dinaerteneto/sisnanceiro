@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\BankAccount;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\BankInvoiceTransaction;
@@ -35,7 +36,7 @@ class BankTransactionController extends Controller
 
     public function create(Request $request)
     {
-        $action       = 'bank-transaction/create';
+        $action       = '/bank-transaction/create';
         $title        = 'Incluir transação';
         $model        = new BankInvoiceDetail();
         $cycles       = BankInvoiceTransaction::getTypeCicles();
@@ -60,9 +61,9 @@ class BankTransactionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $action       = "bank-transaction/update/{$id}";
+        $action       = "/bank-transaction/update/{$id}";
         $title        = 'Alterar lançamento';
-        $model        = $this->bankTransactionService->find($id);
+        $model        = $this->bankTransactionService->findByInvoice($id);
         $bankAccounts = BankAccount::all();
 
         $categories        = $this->bankCategoryService->getAll(2);
@@ -71,7 +72,9 @@ class BankTransactionController extends Controller
 
         if ($request->isMethod('post')) {
             $postData = $request->all();
-            $model    = $this->bankTransactionService->update($model, $postData, 'update');
+            $option   = $request->get('BankInvoiceTransaction')['option_update'];
+
+            $model = $this->bankTransactionService->updateInvoices($model, $postData, $option);
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o lançamento.', 'errors' => $model->getErrors()]);
             } else {
@@ -82,6 +85,19 @@ class BankTransactionController extends Controller
 
         $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
         return view('bank-transaction/_form_update', compact('action', 'title', 'model', 'bankAccounts', 'categoryOptions'));
+    }
+
+    public function setPaid($id)
+    {
+        $return = ['success' => false];
+        $model  = $this->bankTransactionService->findByInvoice($id);
+        $data   = ['status' => BankInvoiceDetail::STATUS_PAID];
+
+        $model = $this->bankTransactionService->findByInvoice($id);
+        if ($model->update($data)) {
+            $return = ['success' => true];
+        }
+        return Response::json($return);
     }
 
 }

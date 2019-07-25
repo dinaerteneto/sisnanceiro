@@ -10,6 +10,7 @@ BankTransaction = {
         if ($('#BankInvoiceDetail_bank_category_id').length > 0) {
             BankTransaction.initSelect2();
         }
+        BankTransaction.setPaid();
         BankTransaction.formValidate();
     },
 
@@ -31,6 +32,25 @@ BankTransaction = {
             escapeMarkup: function(m) {
                 return m;
             }
+        });
+    },
+
+    setPaid: function() {
+        $('body').on('click', '.set-paid', function(e) {
+            e.preventDefault();
+            var href = $(this).attr('href');
+            $.post(href, function(response) {
+                if (response.success) {
+                    $.smallBox({
+                        title: "Sucesso!",
+                        content: "<i class='fa fa-clock-o'></i> <i>Lançamento definido como pago com sucesso.</i>",
+                        color: "#659265",
+                        iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                        timeout: 4000
+                    });
+                    dataTables.ajax.reload();
+                }
+            }, 'json');
         });
     },
 

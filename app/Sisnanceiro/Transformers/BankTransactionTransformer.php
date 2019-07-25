@@ -36,19 +36,21 @@ class BankTransactionTransformer extends TransformerAbstract
         }
 
         return [
-            'id'               => $bankInvoiceDetail->id,
-            'bank_account_id'  => $bankInvoiceDetail->bank_account_id,
-            'bank_category_id' => $bankInvoiceDetail->bank_category_id,
-            'status'           => $bankInvoiceDetail->status,
-            'label_status'     => $status,
-            'due_date'         => $dueDateCarbon->format('d/m/Y'),
-            'description'      => $bankInvoiceDetail->transaction->description,
-            'category_name'    => $bankInvoiceDetail->category->name,
-            'account_name'     => $bankInvoiceDetail->account->name,
-            'parcel_number'    => $bankInvoiceDetail->parcel_number,
-            'total_invoices'   => $bankInvoiceDetail->transaction->total_invoices,
-            'net_value'        => $netValue,
-            'note'             => $bankInvoiceDetail->transaction->note,
+            'id'                          => $bankInvoiceDetail->id,
+            'bank_invoice_transaction_id' => $bankInvoiceDetail->bank_invoice_transaction_id,
+            'bank_account_id'             => $bankInvoiceDetail->bank_account_id,
+            'bank_category_id'            => $bankInvoiceDetail->bank_category_id,
+            'main_category_id'            => $bankInvoiceDetail->category->main_parent_category_id,
+            'status'                      => $bankInvoiceDetail->status,
+            'label_status'                => $status,
+            'due_date'                    => $dueDateCarbon->format('d/m/Y'),
+            'description'                 => $bankInvoiceDetail->transaction->description,
+            'category_name'               => $bankInvoiceDetail->category->name,
+            'account_name'                => $bankInvoiceDetail->account->name,
+            'parcel_number'               => $bankInvoiceDetail->parcel_number,
+            'total_invoices'              => $bankInvoiceDetail->transaction->total_invoices,
+            'net_value'                   => $netValue,
+            'note'                        => $bankInvoiceDetail->transaction->note,
         ];
     }
 }

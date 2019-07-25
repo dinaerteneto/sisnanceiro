@@ -1,6 +1,8 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}">
+            <input type="hidden" name="BankInvoiceTransaction[id]" value="{{ $model->bank_invoice_transaction_id }}" />
+            <input type="hidden" name="BankInvoiceDetail[id]" value="{{ $model->id }}" />
             @csrf
 
             <div class="modal-header">
@@ -45,7 +47,7 @@
                         </div>
                         <div class="col-sm-6">
                             <label class="control-label" for="BankInvoiceDetail_bank_account_id">Conta</label>
-                            <select name="BankInvoiceDetail[bank_account_id]" id="BankInvoiceDetail_bank_account_id" class="select2">
+                            <select name="BankInvoiceDetail[bank_account_id]" id="BankInvoiceDetail_bank_account_id" class="select2" data-original-value="{{ $model->bank_account_id }}">
                                 @if($bankAccounts)
                                     @foreach($bankAccounts as $bankAccount)
                                         <option value="{{ $bankAccount->id }}" {{ $model->bank_account_id == $bankAccount->id ? 'selected' : null }}>{{ $bankAccount->name }}</option>
@@ -81,15 +83,15 @@
                     <div class="row mb-10">
                         <div class="col-sm-12">
                             <label class="radio radio-inline">
-                                <input type="radio" class="radiobox BankTransaction_option_update" name="BankTransaction[option_update]" value="1">
+                                <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="1">
                                 <span>Somente esta</span>                                    
                             </label>
                             <label class="radio radio-inline">
-                                <input type="radio" class="radiobox BankTransaction_option_update" name="BankTransaction[option_update]" value="2">
+                                <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="2">
                                 <span>Esta, e as futuras</span>                                    
                             </label>
                             <label class="radio radio-inline">
-                                <input type="radio" class="radiobox BankTransaction_option_update" name="BankTransaction[option_update]" value="3">
+                                <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="3">
                                 <span>Todas (incluíndo efetivadas)</span>                                    
                             </label>
                         </div>
@@ -102,6 +104,8 @@
                         </div>
                     </div>
                 </fieldset>
+                @else
+                <input type="hidden" value="1" name="BankInvoiceTransaction[option_update]" />
                 @endif
 
             </div>
@@ -117,21 +121,25 @@
 
 @section('scripts')
 <script type="text/javascript">
-var data = {!! $categoryOptions !!}
+var data = {!! $categoryOptions !!};
+
 $('document').ready(function() {
-    $('.BankTransaction_option_update').on('change', function(e) {
+    $('.BankInvoiceTransaction_option_update').on('change', function(e) {
         e.preventDefault();
         $('#BankInvoiceDetail_due_date').val( $('#BankInvoiceDetail_due_date').attr('data-original-value') );
         $('#BankInvoiceDetail_net_value').val( $('#BankInvoiceDetail_net_value').attr('data-original-value') );
         $('#BankInvoiceDetail_status').val( $('#BankInvoiceDetail_status').attr('data-original-value') );
         $('#BankInvoiceDetail_status').trigger('change');
+        $('#BankInvoiceDetail_bank_account_id').val( $('#BankInvoiceDetail_bank_account_id').attr('data-original-value') );
+        $('#BankInvoiceDetail_bank_account_id').trigger('change');
 
         $('#BankInvoiceDetail_due_date').attr('disabled', false);
         $('#BankInvoiceDetail_status').attr('disabled', false);
+        $('#BankInvoiceDetail_bank_account_id').attr('disabled', false);
         $('#BankInvoiceDetail_net_value').attr('disabled', false);
         $('#msg-option').addClass('d-none');
 
-        var value = $('.BankTransaction_option_update:checked').val();
+        var value = $('.BankInvoiceTransaction_option_update:checked').val();
         var msg = '';
 
         switch (value) {
@@ -144,6 +152,7 @@ $('document').ready(function() {
             case '3':
                 $('#BankInvoiceDetail_due_date').attr('disabled', true);
                 $('#BankInvoiceDetail_status').attr('disabled', true);
+                $('#BankInvoiceDetail_bank_account_id').attr('disabled', true);
                 $('#BankInvoiceDetail_net_value').attr('disabled', true);
                 $('#msg-option').removeClass('d-none');
                 msg = '<i class="fa-fw fa fa-warning"></i> Não é possível alterar o Valor, Data, Conta ou Efetivar a despesa.';

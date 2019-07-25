@@ -21,13 +21,13 @@ class BankInvoiceDetailService extends Service
         ],
         'update' => [
             'bank_category_id'            => 'required',
-            'bank_account_id'             => 'required',
+            // 'bank_account_id'             => 'required',
             'bank_invoice_transaction_id' => 'required',
-            'gross_value'                 => 'required|numeric',
-            'net_value'                   => 'required|numeric',
-            'parcel_number'               => 'required',
-            'due_date'                    => 'required',
-            'status'                      => 'required',
+            // 'gross_value'                 => 'required|numeric',
+            // 'net_value'                   => 'required|numeric',
+            // 'parcel_number'               => 'required',
+            // 'due_date'                    => 'required',
+            // 'status'                      => 'required',
         ],
     ];
 

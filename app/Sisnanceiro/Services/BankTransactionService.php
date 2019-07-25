@@ -3,33 +3,40 @@
 namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankInvoiceTransaction;
+use Sisnanceiro\Repositories\BankInvoiceDetailRepository;
 use Sisnanceiro\Repositories\BankInvoiceTransactionRepository;
 use Sisnanceiro\Services\BankInvoiceDetailService;
 
 class BankTransactionService extends Service
 {
 
+    const UPDATE_OPTION_ONLY_THIS   = 1;
+    const UPDATE_OPTION_THIS_FUTURE = 2;
+    const UPDATE_OPTION_ALL         = 3;
+
     protected $rules = [
         'create' => [
             'bank_category_id' => 'required',
-            'total_invoice'    => 'required|int|min:1',
+            'total_invoices'   => 'required|int|min:1',
             'total_value'      => 'required|numeric',
             'type_cycle'       => 'required',
         ],
         'update' => [
             'bank_category_id' => 'required',
-            'total_invoice'    => 'required|int',
-            'total_value'      => 'required|numeric',
+            // 'total_invoices'   => 'required|int',
+            // 'total_value'      => 'required|numeric',
         ],
     ];
 
-    public function __construct(Validator $validator, BankInvoiceTransactionRepository $repository, BankInvoiceDetailService $bankInvoiceDetailService)
+    public function __construct(Validator $validator, BankInvoiceTransactionRepository $repository, BankInvoiceDetailService $bankInvoiceDetailService, BankInvoiceDetailRepository $bankInvoiceRepository)
     {
         $this->validator                = $validator;
         $this->repository               = $repository;
+        $this->bankInvoiceRepository    = $bankInvoiceRepository;
         $this->bankInvoiceDetailService = $bankInvoiceDetailService;
     }
 
@@ -39,27 +46,62 @@ class BankTransactionService extends Service
         $dataDetail      = $data['BankInvoiceDetail'];
 
         $totalInvoices = isset($dataTransaction['total_invoice']) && !empty($dataTransaction['total_invoice']) ? (int) $dataTransaction['total_invoice'] : 1;
-        $netValue      = FloatConversor::convert($dataDetail['net_value']);
 
-        return array_merge($dataTransaction, $dataDetail, [
+        $netValue   = null;
+        $totalValue = null;
+        if (isset($dataDetail['net_value'])) {
+            $netValue   = FloatConversor::convert($dataDetail['net_value']);
+            $totalValue = $totalInvoices * $netValue;
+        }
+
+        $ret = array_merge($dataTransaction, $dataDetail, [
             'description'    => nl2br($dataTransaction['description']),
             'note'           => nl2br($dataTransaction['note']),
             'total_invoices' => $totalInvoices,
-            'total_value'    => $totalInvoices * $netValue,
-            'net_value'      => FloatConversor::convert($dataDetail['net_value']),
+            'total_value'    => $totalValue,
+            'net_value'      => $netValue,
             'type_cycle'     => isset($dataTransaction['type_cycle']) ? $dataTransaction['type_cycle'] : 0,
         ]);
+        if (isset($ret['id'])) {
+            $ret['id'] = $dataTransaction['id'];
+        }
+        if (empty($ret['total_value'])) {
+            unset($ret['total_value']);
+        }
+        if (empty($ret['net_value'])) {
+            unset($ret['net_value']);
+        }
+
+        return $ret;
     }
 
     private function mapDataDetail(array $data = [], $transactionId)
     {
-        $dueDate = Carbon::createFromFormat('d/m/Y', $data['due_date']);
-        return array_merge($data, [
+        $dueDate  = null;
+        $netValue = null;
+        if (isset($data['due_date'])) {
+            $dueDate = Carbon::createFromFormat('d/m/Y', $data['due_date']);
+            $dueDate = $dueDate->format('Y-m-d');
+        }
+        if (isset($data['net_value'])) {
+            $netValue = FloatConversor::convert($data['net_value']);
+        }
+
+        $ret = array_merge($data, [
             'bank_invoice_transaction_id' => $transactionId,
-            'due_date'                    => $dueDate->format('Y-m-d'),
-            'net_value'                   => FloatConversor::convert($data['net_value']),
-            'gross_value'                 => FloatConversor::convert($data['net_value']),
+            'due_date'                    => $dueDate,
+            'net_value'                   => $netValue,
+            'gross_value'                 => $netValue,
         ]);
+
+        if (empty($dueDate)) {
+            unset($ret['due_date']);
+        }
+        if (empty($netValue)) {
+            unset($ret['net_value']);
+        }
+
+        return $ret;
     }
 
     public function store(array $input, $rules = false)
@@ -126,6 +168,62 @@ class BankTransactionService extends Service
     {
         $data = array_merge($data, ['parcel_number' => $parcelNumber]);
         return $this->bankInvoiceDetailService->store($data, 'create');
+    }
+
+    public function updateInvoices(Model $model, array $input, $updateOption = self::UPDATE_OPTION_ONLY_THIS)
+    {
+
+        \DB::beginTransaction();
+        try {
+            $dataTransaction = $this->mapData($input);
+            unset($dataTransaction['total_invoices']);
+            unset($dataTransaction['type_cycle']);
+            $recordTransaction = parent::store($dataTransaction, 'update');
+
+            $dataDetail   = $this->mapDataDetail($input['BankInvoiceDetail'], $recordTransaction->id);
+            $recordDetail = $this->bankInvoiceDetailService->store($dataDetail, 'update');
+
+            switch ($updateOption) {
+                case self::UPDATE_OPTION_THIS_FUTURE:
+                    $dataDetailFuture = $dataDetail;
+                    unset($dataDetailFuture['id']);
+                    unset($dataDetailFuture['due_date']);
+                    unset($dataDetailFuture['status']);
+
+                    $this->bankInvoiceDetailService
+                        ->repository
+                        ->where('bank_invoice_transaction_id', '=', $recordDetail->bank_invoice_transaction_id)
+                        ->where('parcel_number', '>', $recordDetail->parcel_number)
+                        ->update($dataDetailFuture);
+
+                    break;
+                case self::UPDATE_OPTION_ALL:
+                    $dataDetailAll = $dataDetail;
+                    unset($dataDetailAll['id']);
+                    unset($dataDetailAll['due_date']);
+                    unset($dataDetailAll['status']);
+                    unset($dataDetailAll['bank_account_id']);
+
+                    $this->bankInvoiceDetailService
+                        ->repository
+                        ->where('bank_invoice_transaction_id', $recordDetail->bank_invoice_transaction_id)
+                        ->update($dataDetailAll);
+                    break;
+            }
+
+            \DB::commit();
+            return $recordDetail;
+
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa de criar o lançamento.');
+        }
+        return null;
+    }
+
+    public function findByInvoice($id)
+    {
+        return $this->bankInvoiceRepository->find($id);
     }
 
     public function getAll($search = null)

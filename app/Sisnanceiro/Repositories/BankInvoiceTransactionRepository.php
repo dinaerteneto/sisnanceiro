@@ -12,10 +12,10 @@ class BankInvoiceTransactionRepository extends Repository
         $this->bankInvoiceDetail = $bankInvoiceDetail;
     }
 
-    public function find($id) {
+/*     public function find($id) {
         return $this->bankInvoiceDetail->find($id);
     }
-
+ */
     public function getAll($search = null)
     {
         return $this->bankInvoiceDetail
