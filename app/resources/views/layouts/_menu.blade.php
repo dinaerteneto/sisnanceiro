@@ -43,7 +43,7 @@
         
         <li class="{{ Request::is('bank-category') || Request::is('bank-account') ? 'active' : '' }}">
             
-            <a class="has-arrow" href="#" title="Dashboard"><span class="fa fa-lg fa-fw fa-money"></span> <span class="menu-item-parent">Financeiro</span>
+            <a class="has-arrow" href="#" title="Financeiro"><span class="fa fa-lg fa-fw fa-money"></span> <span class="menu-item-parent">Financeiro</span>
                 <b class="collapse-sign">
                     <em class="fa fa-plus-square-o"></em>
                     <em class="fa fa-minus-square-o"></em>
@@ -56,12 +56,13 @@
                 </li>
 
                 <li class="">
-                    <a href="/bank-account" title="Marketing Dashboard"> Contas bancárias </a>
+                    <a href="/bank-account" title="Contas bancárias"> Contas bancárias </a>
 
                 </li>
                 <li class="">
-                    <a href="/bank-transaction" title="Marketing Dashboard"> Transações </a>
-
+                    <a href="/bank-transaction" title="Transações de receita e despesas"> Transações </a>
+                    <a href="/bank-transaction/pay" title="Contas a receber"> Contas a pagar </a>
+                    <a href="/bank-transaction/receive" title="Contas a pagar"> Contas a receber </a>
                 </li>                
                 <!--
                 <li class="">
@@ -109,7 +110,7 @@
                 </li>        
                 -->
                 <li class="{{ Request::is('sale') ? 'active' : '' }}">
-                    <a href="/sale" title=""> Vendas </a>
+                    <a href="/sale" title="Vendas"> Vendas </a>
                 </li>        
             </ul>        
         </li>

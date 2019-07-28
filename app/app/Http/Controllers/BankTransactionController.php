@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\BankAccount;
+use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\BankInvoiceTransaction;
 use Sisnanceiro\Services\BankCategoryService;
@@ -24,6 +25,16 @@ class BankTransactionController extends Controller
 
     public function index(Request $request)
     {
+        $urlCreate = null;
+        $title     = 'Transações';
+        if (isset($request->route()->getAction()['main_category_id']) && $request->route()->getAction()['main_category_id'] == BankCategory::CATEGORY_TO_RECEIVE) {
+            $urlCreate = '/bank-transaction/receive/create';
+            $title     = 'Contas a receber';
+        } else if (isset($request->route()->getAction()['main_category_id']) && $request->route()->getAction()['main_category_id'] == BankCategory::CATEGORY_TO_PAY) {
+            $urlCreate = '/bank-transaction/pay/create';
+            $title     = 'Contas a pagar';
+        }
+
         if ($request->isMethod('post')) {
             $records = $this->bankTransactionService->getAll(null);
             $dt      = datatables()
@@ -31,20 +42,21 @@ class BankTransactionController extends Controller
                 ->setTransformer(new BankTransactionTransformer);
             return $dt->make(true);
         }
-        return view('/bank-transaction/index');
+        return view('/bank-transaction/index', compact('urlCreate', 'title'));
     }
 
     public function create(Request $request)
     {
-        $action       = '/bank-transaction/create';
-        $title        = 'Incluir transação';
-        $model        = new BankInvoiceDetail();
-        $cycles       = BankInvoiceTransaction::getTypeCicles();
-        $bankAccounts = BankAccount::all();
+        $mainCategoryId = $request->route()->getAction()['main_category_id'];
+        $action         = '/bank-transaction/create';
+        $title          = $mainCategoryId == BankCategory::CATEGORY_TO_PAY ? 'Incluir conta a pagar' : 'Incluir contas a receber';
+        $model          = new BankInvoiceDetail();
+        $cycles         = BankInvoiceTransaction::getTypeCicles();
+        $bankAccounts   = BankAccount::all();
 
-        $categories        = $this->bankCategoryService->getAll(2);
+        $categories        = $this->bankCategoryService->getAll($mainCategoryId);
         $categoryTransform = new BankCategoryTransformer();
-        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), 2));
+        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
         if ($request->isMethod('post')) {
             $postData = $request->all();
@@ -61,14 +73,15 @@ class BankTransactionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $action       = "/bank-transaction/update/{$id}";
-        $title        = 'Alterar lançamento';
-        $model        = $this->bankTransactionService->findByInvoice($id);
-        $bankAccounts = BankAccount::all();
+        $mainCategoryId = $request->route()->getAction()['main_category_id'];
+        $action         = "/bank-transaction/update/{$id}";
+        $title          = $mainCategoryId == BankCategory::CATEGORY_TO_PAY ? 'Alterar conta a pagar' : 'Alterar contas a receber';
+        $model          = $this->bankTransactionService->findByInvoice($id);
+        $bankAccounts   = BankAccount::all();
 
-        $categories        = $this->bankCategoryService->getAll(2);
+        $categories        = $this->bankCategoryService->getAll($mainCategoryId);
         $categoryTransform = new BankCategoryTransformer();
-        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), 2));
+        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
         if ($request->isMethod('post')) {
             $postData = $request->all();
@@ -85,6 +98,14 @@ class BankTransactionController extends Controller
 
         $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
         return view('bank-transaction/_form_update', compact('action', 'title', 'model', 'bankAccounts', 'categoryOptions'));
+    }
+
+    public function delete($id)
+    {
+        if ($this->bankTransactionService->destroy($id)) {
+            return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
+        }
+        return $this->apiSuccess(['success' => false]);
     }
 
     public function setPaid($id)

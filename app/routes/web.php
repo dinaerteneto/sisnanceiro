@@ -132,11 +132,26 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::group(['prefix' => 'bank-transaction'], function () {
         Route::get('/', 'BankTransactionController@index');
         Route::post('/', 'BankTransactionController@index');
-        Route::get('/create', 'BankTransactionController@create');
-        Route::post('/create', 'BankTransactionController@create');
-        Route::get('/update/{id}', 'BankTransactionController@update');
-        Route::post('/update/{id}', 'BankTransactionController@update');
         Route::post('/delete/{id}', 'BankTransactionController@delete');
         Route::post('/set-paid/{id}', 'BankTransactionController@setPaid');
+
+        Route::group(['prefix' => 'pay'], function () {
+            Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
+            Route::post('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
+            Route::get('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 2]);
+            Route::post('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 2]);
+            Route::get('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 2]);
+            Route::post('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 2]);
+        });
+
+        Route::group(['prefix' => 'receive'], function () {
+            Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 3]);
+            Route::post('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 3]);
+            Route::get('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 3]);
+            Route::post('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 3]);
+            Route::get('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 3]);
+            Route::post('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 3]);
+        });
+
     });
 });

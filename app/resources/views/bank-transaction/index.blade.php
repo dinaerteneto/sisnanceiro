@@ -4,8 +4,48 @@
 
 <div class="d-flex w-100 home-header">
     <div>
-        <h1 class="page-header"><i class="fa fa-list-ul"></i> Transações </h1>
+        <h1 class="page-header"><i class="fa fa-list-ul"></i> {{ $title }} </h1>
     </div>
+    <div class="ml-auto">
+        <ul class="sa-sparks">
+            <li class="sparks-info">
+                <h5>
+                    <small>Despesa</small>
+                    <span class="text-red">
+                        <i class="fa fa-arrow-circle-down"></i>
+                        R$ 47,171
+                    </span>
+                </h5>
+            </li>
+            <li class="sparks-info">
+                <h5>
+                    <small>Receita</small>
+                    <span class="text-green">
+                        <i class="fa fa-arrow-circle-up"></i>
+                        R$ 47,171
+                    </span>
+                </h5>
+            </li>
+            <li class="sparks-info">
+                <h5>
+                    <small>Balanço mensal</small>
+                    <span class="text-green">
+                        <i class="fa fa-bank"></i>
+                        R$ 47,171
+                    </span>
+                </h5>
+            </li>
+            <li class="sparks-info">
+                <h5>
+                    <small>Saldo atual</small>
+                    <span class="text-green">
+                        <i class="fa fa-money"></i>
+                        R$ 47,171
+                    </span>
+                </h5>
+            </li>
+        </ul>   
+    </div> 
 </div>
 
 <div id="content" style="opacity:1;">
@@ -13,28 +53,18 @@
         
         <section id="widget-grid" class="w-100">
 
-            <div class="row">
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            resds
-                        </div>
-                    </div>
-                </div>   
-                         
-            </div>
-
+            @if(!empty($urlCreate))
             <div class="mb-10">
                 <a 
-                    href="/bank-transaction/create" 
+                    href="{!! $urlCreate !!}" 
                     class="btn btn-sm btn-success open-modal"
                     target = "#remoteModal"
                     rel = "tooltip"
                     data-placement = "top"
                     title = "Adicionar nova transação"    
-
-                > <i class="fa fa-plus"></i> Incluir transação </a>
-            </div>            
+                > <i class="fa fa-plus"></i> Incluir </a>
+            </div>       
+            @endif     
 
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
