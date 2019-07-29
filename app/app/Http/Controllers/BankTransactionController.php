@@ -23,17 +23,36 @@ class BankTransactionController extends Controller
         $this->bankCategoryService    = $bankCategoryService;
     }
 
+    private function getMainCategory(Request $request)
+    {
+        $mainCategoryId = null;
+        $urlMain        = null;
+        $title          = 'Transações';
+
+        if (isset($request->route()->getAction()['main_category_id'])) {
+            $mainCategoryId = $request->route()->getAction()['main_category_id'];
+            if ($request->route()->getAction()['main_category_id'] == BankCategory::CATEGORY_TO_RECEIVE) {
+                $urlMain = '/bank-transaction/receive';
+                $title   = 'Contas a receber';
+            } else {
+                $urlMain = '/bank-transaction/pay';
+                $title   = 'Contas a pagar';
+            }
+        }
+
+        return [
+            'main_category_id' => $mainCategoryId,
+            'title'            => $title,
+            'url'              => $urlMain,
+        ];
+
+    }
+
     public function index(Request $request)
     {
-        $urlMain = null;
-        $title   = 'Transações';
-        if (isset($request->route()->getAction()['main_category_id']) && $request->route()->getAction()['main_category_id'] == BankCategory::CATEGORY_TO_RECEIVE) {
-            $urlMain = '/bank-transaction/receive';
-            $title   = 'Contas a receber';
-        } else if (isset($request->route()->getAction()['main_category_id']) && $request->route()->getAction()['main_category_id'] == BankCategory::CATEGORY_TO_PAY) {
-            $urlMain = '/bank-transaction/pay';
-            $title   = 'Contas a pagar';
-        }
+        $mainCategory = $this->getMainCategory($request);
+        $title        = $mainCategory['title'];
+        $urlMain      = $mainCategory['url'];
 
         if ($request->isMethod('post')) {
             $records = $this->bankTransactionService->getAll(null);
@@ -47,12 +66,16 @@ class BankTransactionController extends Controller
 
     public function create(Request $request)
     {
-        $mainCategoryId = $request->route()->getAction()['main_category_id'];
-        $action         = '/bank-transaction/create';
-        $title          = $mainCategoryId == BankCategory::CATEGORY_TO_PAY ? 'Incluir conta a pagar' : 'Incluir contas a receber';
-        $model          = new BankInvoiceDetail();
-        $cycles         = BankInvoiceTransaction::getTypeCicles();
-        $bankAccounts   = BankAccount::all();
+        $mainCategory   = $this->getMainCategory($request);
+        $title          = $mainCategory['title'];
+        $urlMain        = $mainCategory['url'];
+        $mainCategoryId = $mainCategory['main_category_id'];
+
+        $action       = "{$urlMain}/create";
+        $title        = $mainCategoryId == BankCategory::CATEGORY_TO_PAY ? 'Incluir conta a pagar' : 'Incluir contas a receber';
+        $model        = new BankInvoiceDetail();
+        $cycles       = BankInvoiceTransaction::getTypeCicles();
+        $bankAccounts = BankAccount::all();
 
         $categories        = $this->bankCategoryService->getAll($mainCategoryId);
         $categoryTransform = new BankCategoryTransformer();
@@ -66,15 +89,20 @@ class BankTransactionController extends Controller
             } else {
                 $request->session()->flash('success', ['message' => 'Transação criada com sucesso.']);
             }
-            return redirect("bank-transaction/");
+            return redirect($urlMain);
         }
         return view('bank-transaction/_form', compact('action', 'title', 'model', 'cycles', 'bankAccounts', 'categoryOptions'));
     }
 
     public function update(Request $request, $id)
     {
+        $mainCategory   = $this->getMainCategory($request);
+        $title          = $mainCategory['title'];
+        $urlMain        = $mainCategory['url'];
+        $mainCategoryId = $mainCategory['main_category_id'];
+
         $mainCategoryId = $request->route()->getAction()['main_category_id'];
-        $action         = "/bank-transaction/update/{$id}";
+        $action         = "{$urlMain}/update/{$id}";
         $title          = $mainCategoryId == BankCategory::CATEGORY_TO_PAY ? 'Alterar conta a pagar' : 'Alterar contas a receber';
         $model          = $this->bankTransactionService->findByInvoice($id);
         $bankAccounts   = BankAccount::all();
@@ -93,7 +121,7 @@ class BankTransactionController extends Controller
             } else {
                 $request->session()->flash('success', ['message' => 'Lançamento(s) alterado(s) com sucesso.']);
             }
-            return redirect("bank-transaction/");
+            return redirect($urlMain);
         }
 
         $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
