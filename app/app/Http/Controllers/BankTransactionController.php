@@ -101,11 +101,10 @@ class BankTransactionController extends Controller
         $urlMain        = $mainCategory['url'];
         $mainCategoryId = $mainCategory['main_category_id'];
 
-        $mainCategoryId = $request->route()->getAction()['main_category_id'];
-        $action         = "{$urlMain}/update/{$id}";
-        $title          = $mainCategoryId == BankCategory::CATEGORY_TO_PAY ? 'Alterar conta a pagar' : 'Alterar contas a receber';
-        $model          = $this->bankTransactionService->findByInvoice($id);
-        $bankAccounts   = BankAccount::all();
+        $action       = "{$urlMain}/update/{$id}";
+        $title        = $mainCategoryId == BankCategory::CATEGORY_TO_PAY ? 'Alterar conta a pagar' : 'Alterar contas a receber';
+        $model        = $this->bankTransactionService->findByInvoice($id);
+        $bankAccounts = BankAccount::all();
 
         $categories        = $this->bankCategoryService->getAll($mainCategoryId);
         $categoryTransform = new BankCategoryTransformer();
@@ -137,11 +136,15 @@ class BankTransactionController extends Controller
             } else {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de excluir o lançamento.']);
             }
-            return redirect("bank-transaction/");
+
+            $mainCategory = $this->getMainCategory($request);
+            $urlMain      = $mainCategory['url'];
+            return redirect($urlMain);
         } else {
-            $model = $this->bankTransactionService->findByInvoice($id);
-            $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
-            return view('bank-transaction/_form_delete', compact('model'));
+            $model  = $this->bankTransactionService->findByInvoice($id);
+            $model  = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
+            $action = $model->main_category_id == BankCategory::CATEGORY_TO_PAY ? "/bank-transaction/pay/delete/{$model->id}" : "/bank-transaction/receive/delete/{$model->id}";
+            return view('bank-transaction/_form_delete', compact('model', 'action'));
         }
     }
 

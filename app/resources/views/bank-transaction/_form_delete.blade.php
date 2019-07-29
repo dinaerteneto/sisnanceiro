@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="/bank-transaction/delete/{{ $model->id }}">
+        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}">
             <input type="hidden" name="BankInvoiceTransaction[id]" value="{{ $model->bank_invoice_transaction_id }}" />
             <input type="hidden" name="BankInvoiceDetail[id]" value="{{ $model->id }}" />
             @csrf
