@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
+use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\BankInvoiceTransaction;
 use Sisnanceiro\Repositories\BankInvoiceDetailRepository;
 use Sisnanceiro\Repositories\BankInvoiceTransactionRepository;
@@ -14,9 +15,10 @@ use Sisnanceiro\Services\BankInvoiceDetailService;
 class BankTransactionService extends Service
 {
 
-    const UPDATE_OPTION_ONLY_THIS   = 1;
-    const UPDATE_OPTION_THIS_FUTURE = 2;
-    const UPDATE_OPTION_ALL         = 3;
+    const OPTION_ONLY_THIS   = 1;
+    const OPTION_THIS_FUTURE = 2;
+    const OPTION_ALL         = 3;
+    const OPTION_ALL_PENDENT = 4;
 
     protected $rules = [
         'create' => [
@@ -170,7 +172,7 @@ class BankTransactionService extends Service
         return $this->bankInvoiceDetailService->store($data, 'create');
     }
 
-    public function updateInvoices(Model $model, array $input, $updateOption = self::UPDATE_OPTION_ONLY_THIS)
+    public function updateInvoices(Model $model, array $input, $updateOption = self::OPTION_ONLY_THIS)
     {
 
         \DB::beginTransaction();
@@ -184,7 +186,7 @@ class BankTransactionService extends Service
             $recordDetail = $this->bankInvoiceDetailService->store($dataDetail, 'update');
 
             switch ($updateOption) {
-                case self::UPDATE_OPTION_THIS_FUTURE:
+                case self::OPTION_THIS_FUTURE:
                     $dataDetailFuture = $dataDetail;
                     unset($dataDetailFuture['id']);
                     unset($dataDetailFuture['due_date']);
@@ -197,7 +199,7 @@ class BankTransactionService extends Service
                         ->update($dataDetailFuture);
 
                     break;
-                case self::UPDATE_OPTION_ALL:
+                case self::OPTION_ALL:
                     $dataDetailAll = $dataDetail;
                     unset($dataDetailAll['id']);
                     unset($dataDetailAll['due_date']);
@@ -217,6 +219,40 @@ class BankTransactionService extends Service
         } catch (\PDOException $e) {
             \DB::rollBack();
             abort(500, 'Erro na tentativa de criar o lançamento.');
+        }
+        return null;
+    }
+
+    public function destroyInvoices($id, $deleteOption = self::OPTION_ALL)
+    {
+        $recordDetail = $this->findByInvoice($id);
+        \DB::beginTransaction();
+        try {
+            switch ($deleteOption) {
+                case self::OPTION_ONLY_THIS:
+                    $recordDetail->delete();
+                    break;
+                case self::OPTION_ALL_PENDENT:
+                    $this->bankInvoiceDetailService
+                        ->repository
+                        ->where('bank_invoice_transaction_id', '=', $recordDetail->bank_invoice_transaction_id)
+                        ->where('status', '<>', BankInvoiceDetail::STATUS_PAID)
+                        ->delete();
+                    break;
+                case self::OPTION_ALL:
+                    $recordDetail->delete();
+
+                    $this->bankInvoiceDetailService
+                        ->repository
+                        ->where('bank_invoice_transaction_id', $recordDetail->bank_invoice_transaction_id)
+                        ->delete();
+                    break;
+            }
+            \DB::commit();
+            return true;
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa de excluir o lançamento.');
         }
         return null;
     }

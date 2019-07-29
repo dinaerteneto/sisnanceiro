@@ -132,6 +132,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::group(['prefix' => 'bank-transaction'], function () {
         Route::get('/', 'BankTransactionController@index');
         Route::post('/', 'BankTransactionController@index');
+        Route::get('/delete/{id}', 'BankTransactionController@delete');
         Route::post('/delete/{id}', 'BankTransactionController@delete');
         Route::post('/set-paid/{id}', 'BankTransactionController@setPaid');
 

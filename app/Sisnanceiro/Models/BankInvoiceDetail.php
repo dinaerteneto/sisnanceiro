@@ -4,10 +4,12 @@ namespace Sisnanceiro\Models;
 
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BankInvoiceDetail extends Model
 {
     use TenantModels;
+    use SoftDeletes;
 
     const STATUS_ACTIVE          = 1;
     const STATUS_CANCELLED       = 2;

@@ -25,14 +25,14 @@ class BankTransactionController extends Controller
 
     public function index(Request $request)
     {
-        $urlCreate = null;
-        $title     = 'Transações';
+        $urlMain = null;
+        $title   = 'Transações';
         if (isset($request->route()->getAction()['main_category_id']) && $request->route()->getAction()['main_category_id'] == BankCategory::CATEGORY_TO_RECEIVE) {
-            $urlCreate = '/bank-transaction/receive/create';
-            $title     = 'Contas a receber';
+            $urlMain = '/bank-transaction/receive';
+            $title   = 'Contas a receber';
         } else if (isset($request->route()->getAction()['main_category_id']) && $request->route()->getAction()['main_category_id'] == BankCategory::CATEGORY_TO_PAY) {
-            $urlCreate = '/bank-transaction/pay/create';
-            $title     = 'Contas a pagar';
+            $urlMain = '/bank-transaction/pay';
+            $title   = 'Contas a pagar';
         }
 
         if ($request->isMethod('post')) {
@@ -42,7 +42,7 @@ class BankTransactionController extends Controller
                 ->setTransformer(new BankTransactionTransformer);
             return $dt->make(true);
         }
-        return view('/bank-transaction/index', compact('urlCreate', 'title'));
+        return view('/bank-transaction/index', compact('urlMain', 'title'));
     }
 
     public function create(Request $request)
@@ -100,12 +100,21 @@ class BankTransactionController extends Controller
         return view('bank-transaction/_form_update', compact('action', 'title', 'model', 'bankAccounts', 'categoryOptions'));
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
-        if ($this->bankTransactionService->destroy($id)) {
-            return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
+        if ($request->isMethod('post')) {
+            $option = $request->get('BankInvoiceTransaction')['option_delete'];
+            if ($this->bankTransactionService->destroyInvoices($id, $option)) {
+                $request->session()->flash('success', ['message' => 'Lançamento(s) excluído(s) com sucesso.']);
+            } else {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de excluir o lançamento.']);
+            }
+            return redirect("bank-transaction/");
+        } else {
+            $model = $this->bankTransactionService->findByInvoice($id);
+            $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
+            return view('bank-transaction/_form_delete', compact('model'));
         }
-        return $this->apiSuccess(['success' => false]);
     }
 
     public function setPaid($id)

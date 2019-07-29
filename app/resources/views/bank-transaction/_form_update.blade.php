@@ -70,7 +70,7 @@
                 <fieldset>
                     <div class="row">
                         <div class="col-sm-12 text-center font-italic">
-                            <strong>Atenção! Esta é uma despesa repetida {{ $model->description }} ({{ $model->parcel_number }}/{{ $model->total_invoices }}) </strong>
+                            <strong>Atenção! Esta é um lançamento repetido {{ $model->description }} ({{ $model->parcel_number }}/{{ $model->total_invoices }}) </strong>
                         </div>
                     </div>
 
@@ -84,15 +84,15 @@
                         <div class="col-sm-12">
                             <label class="radio radio-inline">
                                 <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="1">
-                                <span>Somente esta</span>                                    
+                                <span>Somente este</span>                                    
                             </label>
                             <label class="radio radio-inline">
                                 <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="2">
-                                <span>Esta, e as futuras</span>                                    
+                                <span>Este, e os futuros</span>                                    
                             </label>
                             <label class="radio radio-inline">
                                 <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="3">
-                                <span>Todas (incluíndo efetivadas)</span>                                    
+                                <span>Todos (incluíndo efetivados)</span>                                    
                             </label>
                         </div>
                     </div>
@@ -124,6 +124,19 @@
 var data = {!! $categoryOptions !!};
 
 $('document').ready(function() {
+
+    $('#bank-transaction-form').on('submit', function(e) {
+        if($('.BankInvoiceTransaction_option_update').length > 0) {
+            var value = $('.BankInvoiceTransaction_option_update:checked').val();
+            if(isNaN(value)) {
+                swal("Oops...", "Você deve selecionar uma opção", "error");
+                return false;
+            } else {
+                $('#bank-transaction-form').submit();
+            }
+        }
+    });
+
     $('.BankInvoiceTransaction_option_update').on('change', function(e) {
         e.preventDefault();
         $('#BankInvoiceDetail_due_date').val( $('#BankInvoiceDetail_due_date').attr('data-original-value') );
