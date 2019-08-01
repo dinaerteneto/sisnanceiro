@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
+use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\BankInvoiceTransaction;
 use Sisnanceiro\Repositories\BankInvoiceDetailRepository;
@@ -34,12 +35,18 @@ class BankTransactionService extends Service
         ],
     ];
 
-    public function __construct(Validator $validator, BankInvoiceTransactionRepository $repository, BankInvoiceDetailService $bankInvoiceDetailService, BankInvoiceDetailRepository $bankInvoiceRepository)
-    {
+    public function __construct(
+        Validator $validator,
+        BankInvoiceTransactionRepository $repository,
+        BankInvoiceDetailService $bankInvoiceDetailService,
+        BankInvoiceDetailRepository $bankInvoiceRepository,
+        BankCategoryService $bankCategoryService
+    ) {
         $this->validator                = $validator;
         $this->repository               = $repository;
         $this->bankInvoiceRepository    = $bankInvoiceRepository;
         $this->bankInvoiceDetailService = $bankInvoiceDetailService;
+        $this->bankCategoryService      = $bankCategoryService;
     }
 
     private function mapData(array $data = [])
@@ -52,7 +59,10 @@ class BankTransactionService extends Service
         $netValue   = null;
         $totalValue = null;
         if (isset($dataDetail['net_value'])) {
-            $netValue   = FloatConversor::convert($dataDetail['net_value']);
+            $netValue = FloatConversor::convert($dataDetail['net_value']);
+            if ($dataDetail['main_parent_category_id'] == BankCategory::CATEGORY_TO_PAY) {
+                $netValue *= -1;
+            }
             $totalValue = $totalInvoices * $netValue;
         }
 
@@ -87,6 +97,9 @@ class BankTransactionService extends Service
         }
         if (isset($data['net_value'])) {
             $netValue = FloatConversor::convert($data['net_value']);
+            if ($data['main_parent_category_id'] == BankCategory::CATEGORY_TO_PAY) {
+                $netValue *= -1;
+            }
         }
 
         $ret = array_merge($data, [
@@ -110,7 +123,12 @@ class BankTransactionService extends Service
     {
         \DB::beginTransaction();
         try {
-            $details           = [];
+            $details = [];
+
+            $mainCategory = $this->bankCategoryService->findBy('id', $input['BankInvoiceDetail']['bank_category_id']);
+
+            $input['BankInvoiceDetail']['main_parent_category_id'] = $mainCategory->main_parent_category_id;
+
             $dataTransaction   = $this->mapData($input);
             $recordTransaction = parent::store($dataTransaction, $rules);
 
