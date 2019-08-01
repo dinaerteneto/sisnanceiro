@@ -123,9 +123,9 @@ class BankTransactionService extends Service
     {
         \DB::beginTransaction();
         try {
-            $details = [];
+            $details      = [];
+            $mainCategory = $this->bankCategoryService->findBy('id', $input['BankInvoiceDetail']['bank_category_id']);
 
-            $mainCategory                                          = $this->bankCategoryService->findBy('id', $input['BankInvoiceDetail']['bank_category_id']);
             $input['BankInvoiceDetail']['main_parent_category_id'] = $mainCategory->main_parent_category_id;
 
             $dataTransaction   = $this->mapData($input);
@@ -212,13 +212,13 @@ class BankTransactionService extends Service
                     unset($dataDetailFuture['id']);
                     unset($dataDetailFuture['due_date']);
                     unset($dataDetailFuture['status']);
+                    unset($dataDetailFuture['main_parent_category_id']);
 
                     $this->bankInvoiceDetailService
                         ->repository
                         ->where('bank_invoice_transaction_id', '=', $recordDetail->bank_invoice_transaction_id)
                         ->where('parcel_number', '>', $recordDetail->parcel_number)
                         ->update($dataDetailFuture);
-
                     break;
                 case self::OPTION_ALL:
                     $dataDetailAll = $dataDetail;
@@ -226,6 +226,7 @@ class BankTransactionService extends Service
                     unset($dataDetailAll['due_date']);
                     unset($dataDetailAll['status']);
                     unset($dataDetailAll['bank_account_id']);
+                    unset($dataDetailAll['main_parent_category_id']);
 
                     $this->bankInvoiceDetailService
                         ->repository
@@ -238,6 +239,7 @@ class BankTransactionService extends Service
             return $recordDetail;
 
         } catch (\PDOException $e) {
+            dd($e);
             \DB::rollBack();
             abort(500, 'Erro na tentativa de criar o lançamento.');
         }
