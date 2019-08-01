@@ -14,7 +14,7 @@ class BankTransactionTransformer extends TransformerAbstract
     {
         $status        = BankInvoiceDetail::getStatus($bankInvoiceDetail->status);
         $dueDateCarbon = Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->due_date);
-        $netValue      = Mask::currency($bankInvoiceDetail->net_value);
+        $netValue      = Mask::currency($bankInvoiceDetail->net_value < 0 ? $bankInvoiceDetail->net_value * -1 : $bankInvoiceDetail->net_value);
 
         $dued = false;
         if ($bankInvoiceDetail->category->main_parent_category_id == BankCategory::CATEGORY_TO_PAY) {
