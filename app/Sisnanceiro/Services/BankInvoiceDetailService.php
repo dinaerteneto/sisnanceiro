@@ -17,7 +17,7 @@ class BankInvoiceDetailService extends Service
             'net_value'                   => 'required|numeric',
             'parcel_number'               => 'required',
             'due_date'                    => 'required',
-            'status'                      => 'required',
+            // 'status'                      => 'required',
         ],
         'update' => [
             'bank_category_id'            => 'required',

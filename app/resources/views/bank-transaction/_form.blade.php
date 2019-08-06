@@ -1,3 +1,7 @@
+<?php
+use Sisnanceiro\Models\BankCategory;
+?>
+
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}">
@@ -13,7 +17,7 @@
             <div class="modal-body">
                 <fieldset>
                     <div class="row mb-10">
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <label class="control-label" for="BankInvoiceDetail_net_value">Insira o valor</label>
                             <input type="text" name="BankInvoiceDetail[net_value]" id="BankInvoiceDetail_net_value" class="form-control mask-currency" value="{{ $model->net_value }}" />
                         </div>
@@ -21,13 +25,31 @@
                             <label class="control-label" for="BankInvoiceDetail_due_date">Data de vencto</label>
                             <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $model->due_date }}" />
                         </div>
-                       <div class="col-sm-3">
-                           <label class="control-label" for="BankInvoiceDetail_status">Esta pago</label>
-                           <select class="select2" name="BankInvoiceDetail[status]">
-                               <option value="1">Não</option>
-                               <option value="3">Sim</option>
-                           </select>
+
+                        @if($mainCategory['main_category_id'] == BankCategory::CATEGORY_TO_PAY)
+                        <div class="col-sm-6">
+                            <label class="control-label" for="BankInvoiceDetail_supplier_id">Fornecedor</label>
+                            <select name="BankInvoiceDetail[supplier_id]" id="BankInvoiceDetail_supplier_id" class="select2">
+                                @if($suppliers)
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}" {{ $model->supplier_id == $supplier->id ? 'selected' : null }}>{{ $supplier->firstname }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
+                        @else
+                        <div class="col-sm-6">
+                            <label class="control-label" for="BankInvoiceDetail_customer_id">Cliente</label>
+                            <select name="BankInvoiceDetail[customer_id]" id="BankInvoiceDetail_customer_id" class="select2">
+                                @if($customers)
+                                    @foreach($customers as $customer)
+                                        <option value="{{ $customer->id }}" {{ $model->customer_id == $customer->id ? 'selected' : null }}>{{ $customer->firstname }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        @endif
+
                     </div>
 
                     <div class="row mb-10">
@@ -73,7 +95,7 @@
                             <div class="col-sm-6">
                                 <label class="vcheck m-0">
                                     <input type="checkbox" class="checkbox style-0" name="BankInvoiceTransaction[fixed]" id="BankInvoiceTransaction_fixed" value="1" {{ !empty($model->fixed) ? 'checked' : null }} >
-                                    <span>Despesa fixa</span>
+                                    <span>Fixa</span>
                                 </label>
                             </div>
                             <div class="col-sm-6"></div>
@@ -97,6 +119,18 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="row mb-10">
+                            <div class="col-sm-4">
+                                <label class="vcheck m-0">
+                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceDetail[status]" id="BankInvoiceDetail_status" value="1" {{ ($model->status == 3) ? 'checked' : null }} >
+                                    <span>Esta pago</span>
+                                </label>
+                            </div>      
+                            <div class="col-sm-4">
+                                <input type="text" name="BankInvoiceDetail[payment_date]" id="BankInvoiceDetail_payment_date" class="form-control datepicker" value="" disabled />
+                            </div>                                            
                         </div>
 
                     </div>
@@ -158,6 +192,16 @@ $('document').ready(function(){
         } else {
             $('#BankInvoiceTransaction_total_invoice').prop('disabled', true);
             $('#BankInvoiceTransaction_type_cycle').prop('disabled', true);
+        }
+    });
+
+    $('#BankInvoiceDetail_status').on('click', function() {
+        $('#BankInvoiceDetail_payment_date').val('');
+        if($(this).is(':checked')) {
+            $('#BankInvoiceDetail_payment_date').prop('disabled', false);
+        }
+        else {
+            $('#BankInvoiceDetail_payment_date').prop('disabled', true);
         }
     });
 });

@@ -36,7 +36,10 @@ class BankCategoryController extends Controller
     public function create(Request $request, $main_parent_category_id, $parent_category_id = null)
     {
         $model  = new BankCategory;
-        $action = "/bank-category/create/{$main_parent_category_id}/{$parent_category_id}";
+        $action = "/bank-category/create/{$main_parent_category_id}";
+        if(!empty($parent_category_id)) {
+            $action = "/bank-category/create/{$main_parent_category_id}/{$parent_category_id}";
+        }
         $title  = 'Incluir categoria';
 
         if ($request->isMethod('post')) {

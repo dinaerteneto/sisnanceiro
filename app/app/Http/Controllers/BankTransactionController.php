@@ -10,6 +10,8 @@ use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\BankInvoiceTransaction;
 use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Services\BankTransactionService;
+use Sisnanceiro\Services\CustomerService;
+use Sisnanceiro\Services\SupplierService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
 use Sisnanceiro\Transformers\BankTransactionTransformer;
 
@@ -17,10 +19,16 @@ class BankTransactionController extends Controller
 {
     protected $transactionService;
 
-    public function __construct(BankTransactionService $bankTransactionService, BankCategoryService $bankCategoryService)
-    {
+    public function __construct(
+        BankTransactionService $bankTransactionService,
+        BankCategoryService $bankCategoryService,
+        CustomerService $customerService,
+        SupplierService $supplierService
+    ) {
         $this->bankTransactionService = $bankTransactionService;
         $this->bankCategoryService    = $bankCategoryService;
+        $this->customerService        = $customerService;
+        $this->supplierService        = $supplierService;
     }
 
     private function getMainCategory(Request $request)
@@ -53,6 +61,7 @@ class BankTransactionController extends Controller
         $mainCategory = $this->getMainCategory($request);
         $title        = $mainCategory['title'];
         $urlMain      = $mainCategory['url'];
+        $mainCategoryId = $mainCategory['main_category_id'];
 
         if ($request->isMethod('post')) {
             $records = $this->bankTransactionService->getAll(null);
@@ -61,7 +70,7 @@ class BankTransactionController extends Controller
                 ->setTransformer(new BankTransactionTransformer);
             return $dt->make(true);
         }
-        return view('/bank-transaction/index', compact('urlMain', 'title'));
+        return view('/bank-transaction/index', compact('urlMain', 'title', 'mainCategoryId'));
     }
 
     public function create(Request $request)
@@ -81,6 +90,9 @@ class BankTransactionController extends Controller
         $categoryTransform = new BankCategoryTransformer();
         $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
+        $customers = $this->customerService->getAll()->get();
+        $suppliers = $this->supplierService->getAll()->get();
+
         if ($request->isMethod('post')) {
             $postData = $request->all();
             $model    = $this->bankTransactionService->store($postData, 'create');
@@ -91,7 +103,7 @@ class BankTransactionController extends Controller
             }
             return redirect($urlMain);
         }
-        return view('bank-transaction/_form', compact('action', 'title', 'model', 'cycles', 'bankAccounts', 'categoryOptions'));
+        return view('bank-transaction/_form', compact('action', 'title', 'model', 'cycles', 'bankAccounts', 'categoryOptions', 'mainCategory', 'suppliers', 'customers'));
     }
 
     public function update(Request $request, $id)
@@ -110,6 +122,9 @@ class BankTransactionController extends Controller
         $categoryTransform = new BankCategoryTransformer();
         $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
+        $customers = $this->customerService->getAll()->get();
+        $suppliers = $this->supplierService->getAll()->get();
+
         if ($request->isMethod('post')) {
             $postData = $request->all();
             $option   = $request->get('BankInvoiceTransaction')['option_update'];
@@ -124,7 +139,7 @@ class BankTransactionController extends Controller
         }
 
         $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
-        return view('bank-transaction/_form_update', compact('action', 'title', 'model', 'bankAccounts', 'categoryOptions'));
+        return view('bank-transaction/_form_update', compact('action', 'title', 'model', 'bankAccounts', 'categoryOptions', 'mainCategory', 'suppliers', 'customers'));
     }
 
     public function delete(Request $request, $id)

@@ -134,7 +134,7 @@ select.input-lg {
     padding: 0;
     margin: 0;
     top: 50%;
-    margin-top: -3%;
+    margin-top: -2%;
 }
 
 .icon-addon.addon-lg .fa {
@@ -180,6 +180,10 @@ select.input-lg {
     .form-horizontal .control-label {
         text-align: left;
     }
+}
+
+.box-shadow-none {
+    box-shadow: none !important;
 }
 
 

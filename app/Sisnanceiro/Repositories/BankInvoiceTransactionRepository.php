@@ -6,7 +6,10 @@ use Sisnanceiro\Models\BankInvoiceTransaction;
 
 class BankInvoiceTransactionRepository extends Repository
 {
-    public function __construct(BankInvoiceTransaction $model, BankInvoiceDetail $bankInvoiceDetail)
+    public function __construct(
+        BankInvoiceTransaction $model, 
+        BankInvoiceDetail $bankInvoiceDetail
+        )
     {
         $this->model             = $model;
         $this->bankInvoiceDetail = $bankInvoiceDetail;
@@ -19,7 +22,7 @@ class BankInvoiceTransactionRepository extends Repository
     public function getAll($search = null)
     {
         return $this->bankInvoiceDetail
-            ->load('company', 'transaction', 'account', 'category')
+            ->load('company', 'transaction', 'account', 'category', 'customer', 'supplier')
             ->all();
     }
 }

@@ -65,14 +65,13 @@ class BankInvoiceDetail extends Model
                 return 'blue';
                 break;
             case self::STATUS_CANCELLED:
-                return 'yellow'; 
+                return 'yellow';
                 break;
             case self::STATUS_PAID:
                 return 'green';
                 break;
         }
     }
-
 
     public function company()
     {
@@ -92,5 +91,15 @@ class BankInvoiceDetail extends Model
     public function transaction()
     {
         return $this->hasOne('Sisnanceiro\Models\BankInvoiceTransaction', 'id', 'bank_invoice_transaction_id');
+    }
+
+    public function supplier()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Supplier', 'id', 'supplier_id');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Customer', 'id', 'customer_id');
     }
 }

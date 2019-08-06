@@ -89,11 +89,21 @@ class BankTransactionService extends Service
 
     private function mapDataDetail(array $data = [], $transactionId)
     {
-        $dueDate  = null;
-        $netValue = null;
+        $dueDate        = null;
+        $paymentDate    = null;
+        $competenceDate = null;
+        $netValue       = null;
         if (isset($data['due_date'])) {
             $dueDate = Carbon::createFromFormat('d/m/Y', $data['due_date']);
             $dueDate = $dueDate->format('Y-m-d');
+        }
+        if (isset($data['payment_date']) && !empty($data['payment_date'])) {
+            $paymentDate = Carbon::createFromFormat('d/m/Y', $data['payment_date']);
+            $paymentDate = $paymentDate->format('Y-m-d');
+        }
+        if (isset($data['competence_date']) && !empty($data['competence_date'])) {
+            $competenceDate = Carbon::createFromFormat('d/m/Y', $data['competence_date']);
+            $competenceDate = $competenceDate->format('Y-m-d');
         }
         if (isset($data['net_value'])) {
             $netValue = FloatConversor::convert($data['net_value']);
@@ -105,6 +115,8 @@ class BankTransactionService extends Service
         $ret = array_merge($data, [
             'bank_invoice_transaction_id' => $transactionId,
             'due_date'                    => $dueDate,
+            'competence_date'             => $competenceDate,
+            'payment_date'                => $paymentDate,
             'net_value'                   => $netValue,
             'gross_value'                 => $netValue,
         ]);
@@ -138,7 +150,11 @@ class BankTransactionService extends Service
                     $dueDate                = $this->setNewDueDateTypeCycle($dataTransaction['type_cycle'], $firstDueDate, ($parcelNumber - 1));
                     $dataDetail['due_date'] = $dueDate->format('Y-m-d');
                 }
-                $details[] = $this->addInvoice($dataDetail, $parcelNumber);
+                $invoice = $this->addInvoice($dataDetail, $parcelNumber);
+                if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
+                    throw new \Exception("Erro na tentativa de incluir a parcela.", 500);
+                }
+                $details[] = $invoice;
             }
             \DB::commit();
             return $details;
