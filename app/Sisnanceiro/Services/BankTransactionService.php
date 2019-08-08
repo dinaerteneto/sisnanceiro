@@ -301,7 +301,7 @@ class BankTransactionService extends Service
         return $this->bankInvoiceRepository->find($id);
     }
 
-    public function getAll($search = null)
+    public function getAll(array $search = [])
     {
         return $this->repository->getAll($search);
     }

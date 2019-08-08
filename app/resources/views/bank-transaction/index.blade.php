@@ -1,5 +1,6 @@
 <?php
 use Sisnanceiro\Models\BankCategory;
+use Carbon\Carbon;
 ?>
 
 @extends('layouts.app')
@@ -75,23 +76,27 @@ use Sisnanceiro\Models\BankCategory;
                     <div class="well" style="margin-bottom: 2px">
                         <div class="widget-body">
 
-                            <input type="hidden" value="2019-08-01" id="filter-range-start-date" />
-                            <input type="hidden" value="2019-08-04" id="filter-range-end-date" />
+                            <input type="hidden" name="Filter[start_date]" value="{{ Carbon::now()->subMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
+                            <input type="hidden" name="Filter[end_date]" value="{{ Carbon::now()->format('Y-m-d') }}" id="filter-range-end-date" />
+                            <input type="hidden" name="Filter[main_parent_category_id]" value="{{ $mainCategoryId }}" id="Filter_main_parent_category_id" />
 
                             <div class="row mb-10">
 
                                 <div class="col-sm-3">
-                                   <select name="" multiple="multiple" id="Filter_bank_account_id">
-                                       <option value="1">Conta 1</option>
-                                       <option value="2">Conta 2</option>
+                                   <select name="Filter[bank_account_id]" class="form-control selectpicker" id="Filter_bank_account_id" title="Selecione as Conta" multiple>
+                                        @if($bankAccounts)
+                                            @foreach($bankAccounts as $bankAccount)
+                                                <option value="{{ $bankAccount->id }}">{{ $bankAccount->name }}</option>
+                                            @endforeach
+                                        @endif
                                    </select> 
                                 </div>
 
                                 <div class="col-sm-3">
-                                   <select name="" multiple="multiple" id="Filter_status_id">
+                                   <select name="Filter[status_id]" class="form-control selectpicker" title="Selecione os Estatos" id="Filter_status_id" multiple>
                                        <option value="1">Pendente</option>
                                        <option value="2">Vencida</option>
-                                       <option value="2">Paga</option>
+                                       <option value="3">Paga</option>
                                    </select> 
                                 </div>
 
@@ -110,14 +115,14 @@ use Sisnanceiro\Models\BankCategory;
                             <div class="row">
                                 <div class="col-sm-9">
                                     <div class="icon-addon addon-md">
-                                        <input type="text" name="search" class="form-control" />
+                                        <input type="text" name="Filter[description]" id="Filter_description" class="form-control" />
                                         <label for="email" class="fa fa-search" rel="tooltip" title="" data-original-title="email"></label>                                         
                                     </div>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <div class="pull-right">
-                                        <button class="btn btn-success" type="submit">
+                                        <button class="btn btn-success" id="btn-search">
                                             <i class="fa fa-search"></i> Pesquisar
                                         </button>
 
@@ -176,15 +181,27 @@ use Sisnanceiro\Models\BankCategory;
 @section('scripts')
 <script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
 <script type="text/javascript">
-    
+
+        var filter = { 
+            'start_date': $('#filter-range-start-date').val(),
+            'end_date': $('#filter-range-end-date').val(),
+            'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
+            'bank_account_id': '',
+            'status': '',
+            'description': ''
+        };
+
         Main.dataTableOptions.sDom = '';
         Main.dataTableOptions.serverSide = true;
-        // Main.dataTableOptions.aaSorting = [
-        //     [0, 'desc']
-        // ];
+        Main.dataTableOptions.aaSorting = [
+            [1, 'asc']
+        ];
         Main.dataTableOptions.ajax = {
             url: "/bank-transaction",
-            type: 'POST'
+            type: 'POST',
+            data: function(d) {
+                d.extra_search = filter;
+            }
         };
         Main.dataTableOptions.columns = [{
                 // data: 'status',
@@ -238,28 +255,24 @@ use Sisnanceiro\Models\BankCategory;
             $('[rel="tooltip"]').tooltip();
         });
 
-        $(document).ready(function() {
-            $('#Filter_bank_account_id').multiselect({
-                enableClickableOptGroups: true,
-                includeSelectAllOption: true,
-                nSelectedText: ' Várias selec..',
-                allSelectedText: 'Contas',
-                nonSelectedText: 'Todas as contas',
-                selectAllText: 'Sel. todas',
-                buttonWidth: '100%',
-                buttonClass: 'multiselect dropdown-toggle btn btn-default text-left box-shadow-none'
-            });        
-            $('#Filter_status_id').multiselect({
-                enableClickableOptGroups: true,
-                includeSelectAllOption: true,
-                nSelectedText: ' Várias selec..',
-                allSelectedText: 'Estatos',
-                nonSelectedText: 'Todos Estatos',
-                selectAllText: 'Sel. todos',
-                buttonWidth: '100%',
-                buttonClass: 'multiselect dropdown-toggle btn btn-default text-left box-shadow-none'
-            });        
-        })
+        $('#btn-search').click( function() {
+            filter = { 
+                'start_date': $('#filter-range-start-date').val(),
+                'end_date': $('#filter-range-end-date').val(),
+                'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
+                'description': $('#Filter_description').val(),
+                'bank_account_id': $('#Filter_bank_account_id').val(),
+                'status': $('#Filter_status_id').val(),
+            };
+            dataTables.ajax.json(filter);
+            dataTables.draw();
+        });
+
+        /* 
+        $(document).ready(function() {      
+            $('.selectpicker').selectepicker();         
+        }); 
+        */
     
 </script>
 @endsection

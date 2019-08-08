@@ -10,7 +10,7 @@ use Sisnanceiro\Models\BankInvoiceDetail;
 
 class BankTransactionTransformer extends TransformerAbstract
 {
-    public function transform(BankInvoiceDetail $bankInvoiceDetail)
+    public function transform($bankInvoiceDetail)
     {
         $status            = BankInvoiceDetail::getStatus($bankInvoiceDetail->status);
         $dueDateCarbon     = Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->due_date);
@@ -19,17 +19,17 @@ class BankTransactionTransformer extends TransformerAbstract
 
         $name = null;
         $dued = false;
-        if ($bankInvoiceDetail->category->main_parent_category_id == BankCategory::CATEGORY_TO_PAY) {
-            if ($bankInvoiceDetail->supplier) {
-                $name = $bankInvoiceDetail->supplier->person->firstname;
+        if ($bankInvoiceDetail->main_parent_category_id == BankCategory::CATEGORY_TO_PAY) {
+            if (!empty($bankInvoiceDetail->supplier_firstname)) {
+                $name = $bankInvoiceDetail->supplier_firstname;
             }
             if (empty($bankInvoiceDetail->payment_date) && $dueDateCarbon->isPast()) {
                 $dued = true;
             }
         }
-        if ($bankInvoiceDetail->category->main_parent_category_id == BankCategory::CATEGORY_TO_RECEIVE) {
-            if ($bankInvoiceDetail->customer) {
-                $name = $bankInvoiceDetail->customer->person->firstname;
+        if ($bankInvoiceDetail->main_parent_category_id == BankCategory::CATEGORY_TO_RECEIVE) {
+            if (!empty($bankInvoiceDetail->customer_firstname)) {
+                $name = $bankInvoiceDetail->customer_firstname;
             }
             if (empty($bankInvoiceDetail->receive_date) && $dueDateCarbon->isPast()) {
                 $dued = true;
@@ -50,18 +50,19 @@ class BankTransactionTransformer extends TransformerAbstract
             'customer_id'                 => $bankInvoiceDetail->customer_id,
             'bank_account_id'             => $bankInvoiceDetail->bank_account_id,
             'bank_category_id'            => $bankInvoiceDetail->bank_category_id,
-            'main_category_id'            => $bankInvoiceDetail->category->main_parent_category_id,
+            'main_category_id'            => $bankInvoiceDetail->main_parent_category_id,
             'status'                      => $bankInvoiceDetail->status,
             'label_status'                => $status,
             'due_date'                    => $dueDateCarbon->format('d/m/Y'),
-            'payment_date'                => !empty($paymentDateCarbon) ?  $paymentDateCarbon->format('d/m/Y') : null,
-            'description'                 => $bankInvoiceDetail->transaction->description,
-            'category_name'               => $bankInvoiceDetail->category->name,
-            'account_name'                => $bankInvoiceDetail->account->name,
+            'payment_date'                => !empty($paymentDateCarbon) ? $paymentDateCarbon->format('d/m/Y') : null,
+            'description'                 => $bankInvoiceDetail->note,
+            'category_name'               => $bankInvoiceDetail->bank_category_name,
+            'account_name'                => $bankInvoiceDetail->bank_account_name,
             'parcel_number'               => $bankInvoiceDetail->parcel_number,
-            'total_invoices'              => $bankInvoiceDetail->transaction->total_invoices,
+            'total_invoices'              => $bankInvoiceDetail->total_invoices,
             'net_value'                   => $netValue,
-            'note'                        => $bankInvoiceDetail->transaction->note,
+            'note'                        => $bankInvoiceDetail->note,
+            'description'                 => $bankInvoiceDetail->description,
             'name'                        => $name,
         ];
     }

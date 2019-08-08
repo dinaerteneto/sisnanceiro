@@ -62,15 +62,16 @@ class BankTransactionController extends Controller
         $title        = $mainCategory['title'];
         $urlMain      = $mainCategory['url'];
         $mainCategoryId = $mainCategory['main_category_id'];
+        $bankAccounts = BankAccount::all();
 
         if ($request->isMethod('post')) {
-            $records = $this->bankTransactionService->getAll(null);
+            $records = $this->bankTransactionService->getAll($request->get('extra_search'));
             $dt      = datatables()
                 ->of($records)
                 ->setTransformer(new BankTransactionTransformer);
             return $dt->make(true);
         }
-        return view('/bank-transaction/index', compact('urlMain', 'title', 'mainCategoryId'));
+        return view('/bank-transaction/index', compact('urlMain', 'title', 'mainCategoryId', 'bankAccounts'));
     }
 
     public function create(Request $request)

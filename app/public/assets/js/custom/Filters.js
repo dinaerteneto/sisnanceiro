@@ -6,7 +6,7 @@ Filters = {
 
         Filters.cb(start, end);
         Filters.initDateRangePicker(start, end);
-        Filters.postFilter();
+        // Filters.postFilter();
     },
     cb: function(start, end) {
         $('#filter-range span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));

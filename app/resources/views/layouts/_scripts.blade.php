@@ -7,7 +7,9 @@
 
 <script type="text/javascript" src="{{ asset('assets/js/libs/bootstrap-daterangepicker/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/libs/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/js/libs/bootstrap-multiselect/bootstrap-multiselect.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('assets/js/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/libs/bootstrap-select-1.13.9/dist/js/i18n/defaults-pt_BR.min.js') }}"></script>
 
 <script type="text/javascript" src="{{ asset('assets/js/custom/delete.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/custom/form.js') }}"></script>

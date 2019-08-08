@@ -19,7 +19,7 @@
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/app.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/custom.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css') }}">
-    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/js/libs/bootstrap-multiselect/bootstrap-multiselect.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/js/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/form.css') }}">
 
     <!-- favicons -->

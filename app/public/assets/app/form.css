@@ -186,5 +186,9 @@ select.input-lg {
     box-shadow: none !important;
 }
 
-
-/*# sourceMappingURL=forms.css.map */
+.btn-light,
+.bs-placeholder {
+    border-color: #ced4da !important;
+    box-shadow: none !important;
+    color: #495057 !important;
+}
