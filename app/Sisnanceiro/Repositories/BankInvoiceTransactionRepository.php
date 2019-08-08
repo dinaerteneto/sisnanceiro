@@ -55,7 +55,8 @@ return $this->bankInvoiceDetail->find($id);
         ->join('bank_category', 'bank_category.id', '=', 'bank_invoice_detail.bank_category_id')
         ->join('bank_account', 'bank_account.id', '=', 'bank_invoice_detail.bank_account_id')
         ->leftJoin('person as person_customer', \DB::raw('person_customer.id'), '=', 'bank_invoice_detail.customer_id')
-        ->leftJoin('person as person_supplier', \DB::raw('person_supplier.id'), '=', 'bank_invoice_detail.supplier_id');
+        ->leftJoin('person as person_supplier', \DB::raw('person_supplier.id'), '=', 'bank_invoice_detail.supplier_id')
+        ->whereNull('bank_invoice_detail.deleted_at');
 
         if(isset($search['start_date']) && !empty($search['start_date'])) {
             $query = $query->whereBetween('due_date', [$search['start_date'], $search['end_date']]);
