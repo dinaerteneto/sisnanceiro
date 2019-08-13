@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Item;
+use League\Fractal\Serializer\DataArraySerializer;
 use Sisnanceiro\Models\Sale;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\SaleService;
@@ -93,24 +96,30 @@ class SaleController extends Controller
 
     public function coupon($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/coupon', compact('sale'));
     }
 
     function print($id) {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/print', compact('sale'));
     }
 
     public function view($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/view', compact('sale'));
     }
 

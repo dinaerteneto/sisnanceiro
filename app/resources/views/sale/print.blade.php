@@ -72,8 +72,10 @@
                             SUL BAHIA COM DE ALIMENTOS
                         </td>
                         <td align="right">
-                            {{ $sale['company']['contact']['phone'] }}<br>
-                            {{ $sale['company']['contact']['email'] }}<br>
+                            @if(isset($sale['company']['contact']))
+                                {{ $sale['company']['contact']['phone'] }}<br>
+                                {{ $sale['company']['contact']['email'] }}<br>
+                            @endif
                             Vendedor: {{ $sale['userCreated']['name'] }}
                         </td>
                     </tr>

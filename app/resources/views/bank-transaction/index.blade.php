@@ -17,8 +17,8 @@ use Carbon\Carbon;
                 <h5>
                     <small>Despesa</small>
                     <span class="text-red">
-                        <i class="fa fa-arrow-circle-down"></i>
-                        R$ 47,171
+                        <i class="fa fa-arrow-circle-down"></i>&nbsp;
+                        <span id="total-to-receive" class="pull-right">47,171</span>
                     </span>
                 </h5>
             </li>
@@ -26,8 +26,8 @@ use Carbon\Carbon;
                 <h5>
                     <small>Receita</small>
                     <span class="text-green">
-                        <i class="fa fa-arrow-circle-up"></i>
-                        R$ 47,171
+                        <i class="fa fa-arrow-circle-up"></i>&nbsp;
+                        <span id="total-to-pay" class="pull-right">47,171</span>
                     </span>
                 </h5>
             </li>
@@ -36,7 +36,7 @@ use Carbon\Carbon;
                     <small>Balanço mensal</small>
                     <span class="text-green">
                         <i class="fa fa-bank"></i>
-                        R$ 47,171
+                        47,171
                     </span>
                 </h5>
             </li>
@@ -45,7 +45,7 @@ use Carbon\Carbon;
                     <small>Saldo atual</small>
                     <span class="text-green">
                         <i class="fa fa-money"></i>
-                        R$ 47,171
+                        47,171
                     </span>
                 </h5>
             </li>
@@ -182,97 +182,120 @@ use Carbon\Carbon;
 <script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
 <script type="text/javascript">
 
-        var filter = { 
+    var filter = { 
+        'start_date': $('#filter-range-start-date').val(),
+        'end_date': $('#filter-range-end-date').val(),
+        'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
+        'bank_account_id': '',
+        'status': '',
+        'description': ''
+    };
+
+    updateTotal(filter);
+
+    Main.dataTableOptions.sDom = '';
+    Main.dataTableOptions.serverSide = true;
+    Main.dataTableOptions.aaSorting = [
+        [1, 'asc']
+    ];
+    Main.dataTableOptions.ajax = {
+        url: "/bank-transaction",
+        type: 'POST',
+        data: function(d) {
+            d.extra_search = filter;
+        }
+    };
+    Main.dataTableOptions.columns = [{
+            // data: 'status',
+            // name: 'status',
+            bSortable: false,
+            mRender: function(data, type, row) {
+                return '<i class="fa fa-circle" style="color: ' + row.label_status + '"></i>';
+            }
+        },
+        { data: 'due_date' },
+        { data: 'account_name' },
+        { data: 'category_name' },
+        { data: 'name'},
+        { 
+            data: 'description',
+            mRender: function(data, type, row) {
+                if(row.total_invoices > 1) {
+                    return row.description + " (" + row.parcel_number + "/" + row.total_invoices + ") ";
+                }
+                return row.description;
+            } 
+        },
+        { 
+            data: 'net_value' ,
+            mRender: function(data, type, row) {
+                if(row.main_category_id == 2) {
+                    return '<span class="text-red">'+ row.net_value +'</span>';
+                } else {
+                    return '<span style="color: #0000FF">'+ row.net_value +'</span>';
+                }
+            }
+        },
+        {
+            bSortable: false,
+            mRender: function(data, type, row) {
+                var html = '<div class="text-right">';
+                if(row.status != 3) {
+                        html += '<a href="/bank-transaction/set-paid/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Pago" class="btn btn-xs btn-success set-paid"><i class="fa fa-check"></i></a> ';
+                }
+                html += '<a href="{!! $urlMain !!}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
+                html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger open-modal" target="#remoteModal"><i class="fa fa-times"></i></a> ';
+                html + '</div>';
+                return html;
+            }
+        }
+    ];
+
+    var dataTables = $('#dt_basic').DataTable(Main.dataTableOptions);
+
+    $('#dt_basic').on('draw.dt', function() {
+        $('[rel="tooltip"]').tooltip();
+    });
+
+    $('#btn-search').click( function() {
+        filter = { 
             'start_date': $('#filter-range-start-date').val(),
             'end_date': $('#filter-range-end-date').val(),
             'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
-            'bank_account_id': '',
-            'status': '',
-            'description': ''
+            'description': $('#Filter_description').val(),
+            'bank_account_id': $('#Filter_bank_account_id').val(),
+            'status': $('#Filter_status_id').val(),
         };
+        dataTables.ajax.json(filter);
+        dataTables.draw();
 
-        Main.dataTableOptions.sDom = '';
-        Main.dataTableOptions.serverSide = true;
-        Main.dataTableOptions.aaSorting = [
-            [1, 'asc']
-        ];
-        Main.dataTableOptions.ajax = {
-            url: "/bank-transaction",
-            type: 'POST',
-            data: function(d) {
-                d.extra_search = filter;
-            }
-        };
-        Main.dataTableOptions.columns = [{
-                // data: 'status',
-                // name: 'status',
-                bSortable: false,
-                mRender: function(data, type, row) {
-                    return '<i class="fa fa-circle" style="color: ' + row.label_status + '"></i>';
-                }
-            },
-            { data: 'due_date' },
-            { data: 'account_name' },
-            { data: 'category_name' },
-            { data: 'name'},
-            { 
-                data: 'description',
-                mRender: function(data, type, row) {
-                    if(row.total_invoices > 1) {
-                        return row.description + " (" + row.parcel_number + "/" + row.total_invoices + ") ";
-                    }
-                    return row.description;
-                } 
-            },
-            { 
-                data: 'net_value' ,
-                mRender: function(data, type, row) {
-                    if(row.main_category_id == 2) {
-                        return '<span class="text-red">'+ row.net_value +'</span>';
-                    } else {
-                        return '<span style="color: #0000FF">'+ row.net_value +'</span>';
-                    }
-                }
-            },
-            {
-                bSortable: false,
-                mRender: function(data, type, row) {
-                    var html = '<div class="text-right">';
-                    if(row.status != 3) {
-                         html += '<a href="/bank-transaction/set-paid/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Pago" class="btn btn-xs btn-success set-paid"><i class="fa fa-check"></i></a> ';
-                    }
-                    html += '<a href="{!! $urlMain !!}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
-                    html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger open-modal" target="#remoteModal"><i class="fa fa-times"></i></a> ';
-                    html + '</div>';
-                    return html;
+        updateTotal(filter);
+    });
+
+
+    function updateTotal(filter) {
+        var extraSearch = {extra_search: filter};
+        $.post('/bank-transaction/get-total-by-main-category', extraSearch, function(json) {
+
+            for (let i = 0; i < json.length; ++i) {
+                if(json[i].main_parent_category_id == 2) {
+                    $("#total-to-receive").html(json[i].total * -1);
+                } else {
+                    $("#total-to-pay").html(json[i].total);
                 }
             }
-        ];
+            
+        }, 'json');
+    }
 
-        var dataTables = $('#dt_basic').DataTable(Main.dataTableOptions);
 
-        $('#dt_basic').on('draw.dt', function() {
-            $('[rel="tooltip"]').tooltip();
-        });
+    
 
-        $('#btn-search').click( function() {
-            filter = { 
-                'start_date': $('#filter-range-start-date').val(),
-                'end_date': $('#filter-range-end-date').val(),
-                'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
-                'description': $('#Filter_description').val(),
-                'bank_account_id': $('#Filter_bank_account_id').val(),
-                'status': $('#Filter_status_id').val(),
-            };
-            dataTables.ajax.json(filter);
-            dataTables.draw();
-        });
-
-        /* 
-        $(document).ready(function() {      
-            $('.selectpicker').selectepicker();         
-        }); 
-        */
+    /* 
+    $(document).ready(function() {      
+        $('.selectpicker').selectepicker();         
+    }); 
+    */
     
 </script>
 @endsection

@@ -177,4 +177,9 @@ class BankTransactionController extends Controller
         return Response::json($return);
     }
 
+    public function getTotalByMainCategory(Request $request) {
+        $return = $this->bankTransactionService->getTotalByMainCategory($request->get('extra_search'));
+        return Response::json($return);
+    }
+
 }

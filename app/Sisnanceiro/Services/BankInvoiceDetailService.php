@@ -3,6 +3,7 @@
 namespace Sisnanceiro\Services;
 
 use Sisnanceiro\Helpers\Validator;
+use Sisnanceiro\Models\BankAccount;
 use Sisnanceiro\Repositories\BankInvoiceDetailRepository;
 
 class BankInvoiceDetailService extends Service
@@ -35,6 +36,16 @@ class BankInvoiceDetailService extends Service
     {
         $this->validator  = $validator;
         $this->repository = $repository;
+    }
+
+    /**
+     * return BankInvoice of the inicial balance
+     * @param BankAccount $bankAccount
+     * @return BankInvoiceDetail
+     */
+    public function findInitialBalance(BankAccount $bankAccount)
+    {
+        return $this->repository->findInitialBalance($bankAccount);
     }
 
 }

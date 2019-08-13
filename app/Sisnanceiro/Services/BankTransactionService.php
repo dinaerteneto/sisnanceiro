@@ -138,7 +138,7 @@ class BankTransactionService extends Service
             $details      = [];
             $mainCategory = $this->bankCategoryService->findBy('id', $input['BankInvoiceDetail']['bank_category_id']);
 
-            $input['BankInvoiceDetail']['main_parent_category_id'] = $mainCategory->main_parent_category_id;
+            $input['BankInvoiceDetail']['main_parent_category_id'] = !empty($mainCategory) ? $mainCategory->main_parent_category_id : null;
 
             $dataTransaction   = $this->mapData($input);
             $recordTransaction = parent::store($dataTransaction, $rules);
@@ -212,15 +212,16 @@ class BankTransactionService extends Service
         try {
             $mainCategory = $this->bankCategoryService->findBy('id', $input['BankInvoiceDetail']['bank_category_id']);
 
-            $input['BankInvoiceDetail']['main_parent_category_id'] = $mainCategory->main_parent_category_id;
+            $input['BankInvoiceDetail']['main_parent_category_id'] = !empty($mainCategory) ? $mainCategory->main_parent_category_id : null;
 
             $dataTransaction = $this->mapData($input);
             unset($dataTransaction['total_invoices']);
             unset($dataTransaction['type_cycle']);
+            
             $recordTransaction = parent::store($dataTransaction, 'update');
 
             $dataDetail   = $this->mapDataDetail($input['BankInvoiceDetail'], $recordTransaction->id);
-            $recordDetail = $this->bankInvoiceDetailService->store($dataDetail, 'update');
+            $recordDetail = $model->update($dataDetail);
 
             switch ($updateOption) {
                 case self::OPTION_THIS_FUTURE:
@@ -257,7 +258,7 @@ class BankTransactionService extends Service
         } catch (\PDOException $e) {
             dd($e);
             \DB::rollBack();
-            abort(500, 'Erro na tentativa de criar o lançamento.');
+            abort(500, 'Erro na tentativa de alterar o lançamento.');
         }
         return null;
     }
@@ -304,6 +305,11 @@ class BankTransactionService extends Service
     public function getAll(array $search = [])
     {
         return $this->repository->getAll($search);
+    }
+
+    public function getTotalByMainCategory(array $search = [])
+    {
+        return $this->repository->getTotalByMainCategory($search);
     }
 
 }

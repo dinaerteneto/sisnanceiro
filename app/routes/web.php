@@ -134,6 +134,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/', 'BankTransactionController@index');
         Route::get('/delete/{id}', 'BankTransactionController@delete');
         Route::post('/set-paid/{id}', 'BankTransactionController@setPaid');
+        Route::post('/get-total-by-main-category', 'BankTransactionController@getTotalByMainCategory');
 
         Route::group(['prefix' => 'pay'], function () {
             Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
