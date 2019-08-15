@@ -217,7 +217,7 @@ class BankTransactionService extends Service
             $dataTransaction = $this->mapData($input);
             unset($dataTransaction['total_invoices']);
             unset($dataTransaction['type_cycle']);
-            
+
             $recordTransaction = parent::store($dataTransaction, 'update');
 
             $dataDetail   = $this->mapDataDetail($input['BankInvoiceDetail'], $recordTransaction->id);
@@ -307,9 +307,27 @@ class BankTransactionService extends Service
         return $this->repository->getAll($search);
     }
 
-    public function getTotalByMainCategory(array $search = [])
+    public function getTotal(array $search = [])
     {
-        return $this->repository->getTotalByMainCategory($search);
+        $return = [
+            'to_receive' => 0,
+            'to_pay'     => 0,
+            'total'      => 0,
+        ];
+        $records = $this->repository->getTotalByMainCategory($search);
+        if ($records) {
+            foreach ($records as $record) {
+                if ($record->main_parent_category_id == BankCategory::CATEGORY_TO_RECEIVE) {
+                    $return['to_receive'] = $record->total;
+                }
+                if ($record->main_parent_category_id == BankCategory::CATEGORY_TO_PAY) {
+                    $return['to_pay'] = $record->total;
+                }
+            }
+            $return['total'] = $return['to_receive'] + $return['to_pay'];
+        }
+
+        return $return;
     }
 
 }

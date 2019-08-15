@@ -13,6 +13,7 @@ use Sisnanceiro\Services\BankTransactionService;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\SupplierService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
+use Sisnanceiro\Transformers\BankTransactionTotalTransformer;
 use Sisnanceiro\Transformers\BankTransactionTransformer;
 
 class BankTransactionController extends Controller
@@ -58,11 +59,11 @@ class BankTransactionController extends Controller
 
     public function index(Request $request)
     {
-        $mainCategory = $this->getMainCategory($request);
-        $title        = $mainCategory['title'];
-        $urlMain      = $mainCategory['url'];
+        $mainCategory   = $this->getMainCategory($request);
+        $title          = $mainCategory['title'];
+        $urlMain        = $mainCategory['url'];
         $mainCategoryId = $mainCategory['main_category_id'];
-        $bankAccounts = BankAccount::all();
+        $bankAccounts   = BankAccount::all();
 
         if ($request->isMethod('post')) {
             $records = $this->bankTransactionService->getAll($request->get('extra_search'));
@@ -177,9 +178,11 @@ class BankTransactionController extends Controller
         return Response::json($return);
     }
 
-    public function getTotalByMainCategory(Request $request) {
-        $return = $this->bankTransactionService->getTotalByMainCategory($request->get('extra_search'));
-        return Response::json($return);
+    public function getTotalByMainCategory(Request $request)
+    {
+        $model    = (object) $this->bankTransactionService->getTotal($request->get('extra_search'));
+        $response = fractal($model, new BankTransactionTotalTransformer)->toArray()['data'];
+        return Response::json($response);
     }
 
 }

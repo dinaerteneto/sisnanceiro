@@ -18,7 +18,7 @@ use Carbon\Carbon;
                     <small>Despesa</small>
                     <span class="text-red">
                         <i class="fa fa-arrow-circle-down"></i>&nbsp;
-                        <span id="total-to-receive" class="pull-right">47,171</span>
+                        <span id="total-to-pay" class="pull-right">0</span>
                     </span>
                 </h5>
             </li>
@@ -27,25 +27,14 @@ use Carbon\Carbon;
                     <small>Receita</small>
                     <span class="text-green">
                         <i class="fa fa-arrow-circle-up"></i>&nbsp;
-                        <span id="total-to-pay" class="pull-right">47,171</span>
+                        <span id="total-to-receive" class="pull-right">0</span>
                     </span>
                 </h5>
             </li>
             <li class="sparks-info">
                 <h5>
-                    <small>Balanço mensal</small>
-                    <span class="text-green">
-                        <i class="fa fa-bank"></i>
-                        47,171
-                    </span>
-                </h5>
-            </li>
-            <li class="sparks-info">
-                <h5>
-                    <small>Saldo atual</small>
-                    <span class="text-green">
-                        <i class="fa fa-money"></i>
-                        47,171
+                    <small>Total</small>
+                    <span id="total" class="">
                     </span>
                 </h5>
             </li>
@@ -76,7 +65,7 @@ use Carbon\Carbon;
                     <div class="well" style="margin-bottom: 2px">
                         <div class="widget-body">
 
-                            <input type="hidden" name="Filter[start_date]" value="{{ Carbon::now()->subMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
+                            <input type="hidden" name="Filter[start_date]" value="{{ Carbon::now()->startOfMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
                             <input type="hidden" name="Filter[end_date]" value="{{ Carbon::now()->format('Y-m-d') }}" id="filter-range-end-date" />
                             <input type="hidden" name="Filter[main_parent_category_id]" value="{{ $mainCategoryId }}" id="Filter_main_parent_category_id" />
 
@@ -276,15 +265,19 @@ use Carbon\Carbon;
     function updateTotal(filter) {
         var extraSearch = {extra_search: filter};
         $.post('/bank-transaction/get-total-by-main-category', extraSearch, function(json) {
-
-            for (let i = 0; i < json.length; ++i) {
-                if(json[i].main_parent_category_id == 2) {
-                    $("#total-to-receive").html(json[i].total * -1);
-                } else {
-                    $("#total-to-pay").html(json[i].total);
-                }
+            $("#total-to-receive").html(json.mask.to_receive);    
+            $("#total-to-pay").html(json.mask.to_pay);          
+            if(json.total < 0) {
+                $('#total').addClass('text-red');
+            } else {
+                $('#total').addClass('text-green');
             }
-            
+            if(json.current_balance < 0) {
+                $('#current-balance').addClass('text-red');
+            } else {
+                $('#current-balance').addClass('text-green');
+            }
+            $("#total").html('<i class="fa fa-money"></i><span class="pull-right">&nbsp;'+ json.mask.total +'</span>');            
         }, 'json');
     }
 
