@@ -20,12 +20,12 @@ class StoreProductService extends Service
             'price'                     => 'required|numeric',
         ],
         'update' => [
-            'name'                      => 'required|max:255',
-            'store_product_category_id' => 'required|int',
-            'store_product_brand_id'    => 'required|int',
-            'status'                    => 'required',
-            'sale_with_negative_stock'  => 'required',
-            'price'                     => 'required|numeric',
+            'name'                     => 'required|max:255',
+            // 'store_product_category_id' => 'required|int',
+            // 'store_product_brand_id'    => 'required|int',
+            'status'                   => 'required',
+            'sale_with_negative_stock' => 'required',
+            'price'                    => 'required|numeric',
         ],
     ];
 
@@ -52,6 +52,7 @@ class StoreProductService extends Service
             'status'                    => isset($data['status']) ? $data['status'] : 0,
             'sale_with_negative_stock'  => isset($data['sale_with_negative_stock']) ? $data['sale_with_negative_stock'] : 0,
             'price'                     => FloatConversor::convert($data['price']),
+            'cost_price'                => FloatConversor::convert($data['cost_price']),
             'sku'                       => $data['sku'],
             'weight'                    => (float) $data['weight'],
             'total_in_stock'            => !empty($data['total_in_stock']) ? $data['total_in_stock'] : 0,
@@ -75,6 +76,7 @@ class StoreProductService extends Service
             'weight'           => (float) $data['weight'],
             'total_in_stock'   => !empty($data['total_in_stock']) ? $data['total_in_stock'] : 0,
             'price'            => FloatConversor::convert($data['price']),
+            'cost_price'       => FloatConversor::convert($data['cost_price']),
         ];
         return array_replace($dataMap, $dataReplace);
     }
@@ -117,10 +119,10 @@ class StoreProductService extends Service
      */
     public function store(array $data, $rules = false)
     {
-        $idsChecked = [];
+        $idsChecked  = [];
         $productData = $this->mapDataStoreProduct($data['StoreProduct']);
         $mainProduct = parent::store($productData, $rules);
-        if (null !== $data['subproduct-checked']) {
+        if (isset($data['subproduct-checked']) && null !== $data['subproduct-checked']) {
             foreach ($data['subproduct-checked'] as $key => $subproduct) {
                 $idsChecked[] = $subproduct['checkbox'];
                 $this->storeSubproduct($mainProduct, $data['subproduct'][$key], $data['StoreProductAttributes']);

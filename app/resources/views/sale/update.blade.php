@@ -16,7 +16,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label>Cód da venda</label>
-                            #{{ $model->company_sale_code }}
+                            #{{ $model->sale_code }}
                         </div>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
                                                         <div class="form-group">
                                                             <label>Categoria</label>
                                                             <select class="select2" name="StoreProduct[store_product_category_id]" id="StoreProduct_store_product_category_id">
-                                                                <option>Selecione</option>
+                                                                <option value="">Selecione</option>
                                                                 @foreach($categories as $category)
                                                                     <option value="{{ $category['id'] }}" {{ $category['id'] == $model['category']['id'] ? 'selected' : null }}>{{ $category['name'] }}</option>
                                                                 @endforeach
@@ -63,7 +63,7 @@
                                                         <div class="form-group">
                                                             <label>Marca</label>
                                                             <select class="select2" name="StoreProduct[store_product_brand_id]" id="StoreProduct_store_product_brand_id">
-                                                                <option>Selecione</option>
+                                                                <option value="">Selecione</option>
                                                                 @foreach($brands as $brand)
                                                                     <option value="{{ $brand['id'] }}" {{ $brand['id'] == $model['brand']['id'] ? 'selected' : null }}>{{ $brand['name'] }}</option>
                                                                 @endforeach                                                                
@@ -109,19 +109,23 @@
                                             <fieldset class="without-attributes">
                                                 <legend><i class="fa fa-list-alt"></i> Especificações do produto</legend>
                                                 <div class="row">
-                                                    <div class="col-sm-3 field-StoreProduct_price">
+                                                    <div class="col-sm-2 field-StoreProduct_price">
                                                         <label class="control-label" for="StoreProduct_price">Preço</label>
                                                         <input type="text" id="StoreProduct_price" class="form-control mask-currency" name="StoreProduct[price]" autocomplete="off" value="{{ $model['price'] }}">
                                                     </div>
-                                                    <div class="col-sm-3 field-StoreProduct_sku">
-                                                        <label class="control-label" for="StoreProduct_sku">SKU <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></label>
-                                                        <input type="text" id="StoreProduct_sku" class="form-control" name="StoreProduct[sku]" maxlength="45">
+                                                    <div class="col-sm-2 field-StoreProduct_price">
+                                                        <label class="control-label" for="StoreProduct_cost_price">Preço de compra</label>
+                                                        <input type="text" id="StoreProduct_cost_price" class="form-control mask-currency" name="StoreProduct[cost_price]" autocomplete="off" value="{{ $model['cost_price'] }}">
                                                     </div>
-                                                    <div class="col-sm-3 field-StoreProduct_weight">
+                                                    <div class="col-sm-2 field-StoreProduct_sku">
+                                                        <label class="control-label" for="StoreProduct_sku">SKU <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></label>
+                                                        <input type="text" id="StoreProduct_sku" class="form-control" name="StoreProduct[sku]" maxlength="45" value="{{ $model['sku'] }}">
+                                                    </div>
+                                                    <div class="col-sm-2 field-StoreProduct_weight">
                                                         <label class="control-label" for="StoreProduct_weight">Peso</label>
                                                         <input type="text" id="StoreProduct_weight" class="form-control mask-float" name="StoreProduct[weight]" maxlength="45" value="{{ $model['weight'] }}">
                                                     </div>
-                                                    <div class="col-sm-3 field-StoreProduct_total_in_stock">
+                                                    <div class="col-sm-2 field-StoreProduct_total_in_stock">
                                                         <label class="control-label" for="StoreProduct_total_in_stock">Total no estoque</label>
                                                         <input type="text" id="StoreProduct_total_in_stock" class="form-control mask-number" name="StoreProduct[total_in_stock]" value="{{ $model['total_in_stock'] }}">
                                                     </div>
@@ -149,7 +153,7 @@
                                                                         <td>Variação 1</td>
                                                                         <td>
                                                                             <select name="StoreProductAttributes[{{ $key }}]" class="select2 select2-container store-product-attributes" id="StoreProduct-attributes-first" style="width: auto !important;">
-                                                                                <option>Selecione</option>
+                                                                                <option value="">Selecione</option>
                                                                                 @foreach($attributes as $attribute)
                                                                                     <option value="{{ $attribute['id'] }}" @if( isset($attr['id']) && $attr['id']  ===  $attribute['id'] ) selected @endif>
                                                                                         {{ $attribute['name'] }}

@@ -199,7 +199,7 @@ use Carbon\Carbon;
             // name: 'status',
             bSortable: false,
             mRender: function(data, type, row) {
-                return '<i class="fa fa-circle" style="color: ' + row.label_status + '"></i>';
+                return '<a href="javascript:void(0)" rel="tooltip" data-placement="top" data-original-title="'+ row.label_legend +'"><i class="fa fa-circle" style="color: ' + row.label_status + '"></i></a>';
             }
         },
         { data: 'due_date' },
@@ -228,13 +228,17 @@ use Carbon\Carbon;
         {
             bSortable: false,
             mRender: function(data, type, row) {
-                var html = '<div class="text-right">';
-                if(row.status != 3) {
-                        html += '<a href="/bank-transaction/set-paid/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Pago" class="btn btn-xs btn-success set-paid"><i class="fa fa-check"></i></a> ';
+                if (row.bank_category_id == 1) {
+                    var html = '';
+                } else {
+                    var html = '<div class="text-right">';
+                    if(row.status != 3) {
+                            html += '<a href="/bank-transaction/set-paid/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Pago" class="btn btn-xs btn-success set-paid"><i class="fa fa-check"></i></a> ';
+                    }
+                    html += '<a href="{!! $urlMain !!}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
+                    html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger open-modal" target="#remoteModal"><i class="fa fa-times"></i></a> ';
+                    html + '</div>';
                 }
-                html += '<a href="{!! $urlMain !!}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
-                html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger open-modal" target="#remoteModal"><i class="fa fa-times"></i></a> ';
-                html + '</div>';
                 return html;
             }
         }

@@ -129,6 +129,8 @@ class SaleTransformer extends TransformerAbstract
                 'discount_value_no_mask' => $discountValueNoMask,
                 'discount_type'          => $item->discount_type,
 
+                'unit_measurement'      => $item->unit_measurement,
+
                 'total_value'            => Mask::currency($item->total_value),
                 'total_value_no_mask'    => $item->total_value,
 

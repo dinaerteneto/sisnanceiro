@@ -12,7 +12,6 @@ class BankTransactionTransformer extends TransformerAbstract
 {
     public function transform($bankInvoiceDetail)
     {
-        $status            = BankInvoiceDetail::getStatus($bankInvoiceDetail->status);
         $dueDateCarbon     = Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->due_date);
         $paymentDateCarbon = !empty($bankInvoiceDetail->payment_date) ? Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->payment_date) : null;
         $netValue          = Mask::currency($bankInvoiceDetail->net_value < 0 ? $bankInvoiceDetail->net_value * -1 : $bankInvoiceDetail->net_value);
@@ -36,12 +35,22 @@ class BankTransactionTransformer extends TransformerAbstract
             }
         }
 
-        if ($dued) {
-            $status = 'red';
+        $labelStatus = null;
+        if ($bankInvoiceDetail->bank_category_id != BankCategory::CATEGORY_INITIAL_BALANCE) {
+            $labelStatus = 'yellow';
+            if ($dued) {
+                $labelStatus = 'red';
+            }
+            if ($bankInvoiceDetail->status == BankInvoiceDetail::STATUS_PAID) {
+                $labelStatus = 'green';
+            }
         }
-        if ($bankInvoiceDetail->status == BankInvoiceDetail::STATUS_PAID) {
-            $status = 'green';
-        }
+
+        $labelLegend = [
+            'yellow' => 'Pendente',
+            'red'    => 'Vencida',
+            'green'  => $bankInvoiceDetail->main_parent_category_id == BankCategory::CATEGORY_TO_PAY ? 'Paga' : 'Recebida',
+        ];
 
         return [
             'id'                          => $bankInvoiceDetail->id,
@@ -52,7 +61,8 @@ class BankTransactionTransformer extends TransformerAbstract
             'bank_category_id'            => $bankInvoiceDetail->bank_category_id,
             'main_category_id'            => $bankInvoiceDetail->main_parent_category_id,
             'status'                      => $bankInvoiceDetail->status,
-            'label_status'                => $status,
+            'label_status'                => $labelStatus,
+            'label_legend'                => isset($labelLegend[$labelStatus]) ? $labelLegend[$labelStatus] : null,
             'due_date'                    => $dueDateCarbon->format('d/m/Y'),
             'payment_date'                => !empty($paymentDateCarbon) ? $paymentDateCarbon->format('d/m/Y') : null,
             'description'                 => $bankInvoiceDetail->note,

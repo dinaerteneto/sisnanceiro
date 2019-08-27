@@ -8,7 +8,7 @@ Sale = {
         Sale.submitFormCustomer();
         Sale.clearCustomer();
         Sale.shortcuts();
-        $('#Product_quant, #Product_unit_value, #Product_discount, #Product_discount_type').on('blur', function() {
+        $('#Product_quant, #Product_unit_value, #Product_discount, #Product_discount_type').on('keyup', function() {
             Sale.calculateTotalValue();
         });
         $('#Product_discount_type').on('change', function() {

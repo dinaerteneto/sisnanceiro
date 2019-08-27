@@ -12,6 +12,8 @@ BankTransaction = {
         }
         BankTransaction.setPaid();
         BankTransaction.formValidate();
+        BankTransaction.submitForm();
+
     },
 
     initSelect2: function() {
@@ -55,9 +57,11 @@ BankTransaction = {
     },
 
     formValidate: function() {
-
         $('#bank-transaction-form').validate({
             ignore: null,
+            submitHandler: function(form) {
+                form.submit();
+            },
             rules: {
                 'BankInvoiceDetail[net_value]': {
                     required: true,
@@ -76,6 +80,23 @@ BankTransaction = {
                 'BankInvoiceDetail[bank_category_id]': 'Obrigatório',
                 'BankInvoiceDetail[bank_account_id]': 'Obrigatório',
             }
+        });
+    },
+
+    submitForm: function() {
+        $('body').on('submit', '#bank-transaction-form', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('action');
+            var data = $(this).serialize();
+            $.post(url, data, function(json) {
+                if (json.success) {
+                    $('#btn-search').trigger('click');
+                    $('#remoteModal').modal().hide();
+                    swal("Sucesso", "Sucesso!!!.", "success");
+                } else {
+                    swal("Oops...", "Ocorreu algum erro!!!.", "error");
+                }
+            }, 'json')
         });
     }
 }

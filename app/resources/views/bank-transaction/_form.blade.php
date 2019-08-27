@@ -4,7 +4,7 @@ use Sisnanceiro\Models\BankCategory;
 
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}">
+        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}" onsubmit="return false">
             @csrf
 
             <div class="modal-header">

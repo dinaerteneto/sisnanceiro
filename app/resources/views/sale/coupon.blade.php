@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: "courier";
-            font-size:10pt;
+            font-size: 9pt;
             background: #CCCCCC;
             margin: 0;
             font-weight: bold;
@@ -19,7 +19,7 @@
             width: 400px;
             background: #FFFFFF;
             margin: 0 auto;
-            padding: 10px;
+            padding: 1px;
             height:90%;
         }
 
@@ -38,14 +38,14 @@
 
     <script type="text/javascript" src="./CUPOM_files/jquery-1.7.1.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
         window.print();
-            setTimeout(function () {
-                window.onmouseover = function () {
-                    window.close();
-                }
-            }, 1000);
-        });
+        /*
+        setTimeout(function () {
+            window.onmouseover = function () {
+                window.close();
+            }
+        }, 1000);      
+        */  
     </script>    
 </head>
 <body cz-shortcut-listen="true">
@@ -67,9 +67,9 @@
         </table>
         
         <div>
-            <div>==================================================</div>
+            <div>=======================================================</div>
             <div class="text-center">PEDIDO Nº {{ $sale['sale_code'] }}</div>
-            <div>==================================================</div>
+            <div>=======================================================</div>
 
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tbody>
@@ -82,7 +82,7 @@
         </div>
 
         <div>
-            <div>=====================PRODUTOS=====================</div>
+            <div>======================= PRODUTOS ======================</div>
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tbody>
                     <tr>
@@ -94,7 +94,7 @@
                     </tr>
                     <tr>
                         <td colspan="5">
-                        --------------------------------------------------
+                        -------------------------------------------------------
                         </td>
                     </tr>
                     @foreach($sale['items'] as $item)
@@ -108,7 +108,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <div>=====================PAGAMENTO====================</div>
+            <div>====================== PAGAMENTO ======================</div>
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tbody>
                     <tr>
@@ -117,7 +117,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            --------------------------------------------------
+                            -------------------------------------------------------
                         </td>
                     </tr>
                 </tbody>

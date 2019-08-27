@@ -54,10 +54,10 @@ class SaleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $model = $this->saleService->find($id);
         if ($request->isMethod('post')) {
-            $data = $request->get('Sale');
-            $data = array_replace($model->getAttributes(), $data);
+            $model = $this->saleService->findBy('id', $id);
+            $data  = $request->get('Sale');
+            $data  = array_replace($model->getAttributes(), $data);
 
             $model = $this->saleService->update($model, $data, 'update');
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
@@ -67,7 +67,12 @@ class SaleController extends Controller
             }
             return redirect('sale');
         } else {
+            $model   = $this->saleService->find($id);
             $statues = Sale::getStatues();
+            $manager = new Manager();
+            $manager->setSerializer(new DataArraySerializer());
+            $resource = new Item($model, new SaleTransformer());
+            $model    = (object) $manager->createData($resource)->toArray()['data'];
             return view('sale/update', compact('model', 'statues'));
         }
     }
@@ -88,9 +93,11 @@ class SaleController extends Controller
 
     public function ask($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return View('sale/ask', compact('sale'));
     }
 
@@ -125,9 +132,11 @@ class SaleController extends Controller
 
     public function copy($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/copy', compact('sale'));
     }
 

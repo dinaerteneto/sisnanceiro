@@ -1,27 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+@extends('layouts.app')
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,500,700">
-
-    <!-- Styles -->
-    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/vendors/vendors.bundle.css') }}">
-    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/app.bundle.css') }}">
-    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/custom.bundle.css') }}">
-    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/form.css') }}">
-
-    <!-- favicons -->
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" type="image/x-icon">
+@section('content')
     <style>
     #contact {
         position: relative;
@@ -31,7 +10,7 @@
         -webkit-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
         -moz-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
         box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
-        min-height: 85vh;    
+        min-height: 75vh;    
     }       
 
     #contact .teclas {
@@ -63,9 +42,6 @@
     }
 
     </style>
-</head>
-
-<body class="">
 
     <div class="modal fade" id="modal-customer" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
@@ -101,9 +77,7 @@
         </div>
     </div>
 
-    <header class="sa-page-header">
-        @include('layouts/_header')
-    </header>
+
 
     <section id="contact" class="home-section text-center">
         <div class="container">
@@ -226,10 +200,10 @@
                                             <td>
                                                 <a href="javascript: void(0)" class="text-danger del-item" data-id="{{ $i }}" ><i class="fa fa-times-circle"></i></a>
                                                 <input type="hidden" name="SaleItem[{{ $i }}][store_product_id]" value="{{ $i }}" class="Store_product_id">
-                                                <input type="hidden" name="SaleItem[{{ $i }}][unit_value]" value="{{ $item['quantity_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[{{ $i }}][unit_value]" value="{{ $item['unit_value_no_mask'] }}">
                                                 <input type="hidden" name="SaleItem[{{ $i }}][discount_value]" value="{{ $item['discount_value_no_mask'] }}">
                                                 <input type="hidden" name="SaleItem[{{ $i }}][discount_type]" value=" {{ $item['discount_type'] }} ">
-                                                <input type="hidden" name="SaleItem[{{ $i }}][quantity]" value="{{ $item['discount_value_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[{{ $i }}][quantity]" value="{{ $item['quantity_no_mask'] }}">
                                                 <input type="hidden" name="SaleItem[{{ $i }}][total_value]" value="{{ $item['total_value_no_mask'] }}" class="total-value-by-item">
                                             </td>
                                         </tr>
@@ -242,7 +216,7 @@
                         
                         <div class="pull-left">
                             <div class="text-center well bg-red well-sm text-white input-lg">
-                                TOTAL DO PEDIDO: R$ <span id="total-value">{{ $sale['net_value'] }}</span>
+                                TOTAL: R$ <span id="total-value">{{ $sale['net_value'] }}</span>
                             </div>                        
                         </div>
                         <div class="pull-right">
@@ -259,18 +233,8 @@
             </div>
         </div>
     </section>
-
+    @endsection
     
-    @section('scripts')
-    <script type="text/javascript" src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>    
-    <script type="text/javascript" src="{{ asset('assets/js/libs/jquery.maskMoney.0.2.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/libs/sweetalert/sweetalert.min.js') }}"></script>
-
-    <script type="text/javascript" src="{{ asset('assets/js/custom/form.js') }}"></script>
+@section('scripts')
     <script type="text/javascript" src="{{ asset('assets/js/custom/Sale.js') }}"></script>    
-
-</body>
-    
-
-</html>
+@endsection

@@ -136,10 +136,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <th align="left">ITEM</th>
-                    <th align="left">NOME</th>
-                    <th align="right">UND.</th>
-                    <th align="right">QTD.</th>
+                    <th align="left" width="10%">QTD.</th>
+                    <th align="left">PRODUTO</th>
+                    <th align="right">DESC.</th>
                     <th align="right">VL UNIT.</th>
                     <th align="right">SUBTOTAL</th>
                 </tr>
@@ -147,10 +146,9 @@
 
                 @foreach($sale['items'] as $item)
                 <tr>
-                    <td>{{ $i++ }}</td>
+                    <td align="left">{{ $item['quantity'] }} {{ $item['unit_measurement'] }}</td>
                     <td>{{ $item['product']['name'] }}</td>
-                    <td align="right">UN</td>
-                    <td align="right">{{ $item['quantity'] }}</td>
+                    <td align="right">{{ $item['discount_value'] }}</td>
                     <td align="right">{{ $item['unit_value'] }}</td>
                     <td align="right">{{ $item['total_value'] }}</td>
                 </tr>
@@ -158,8 +156,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="3" align="left">TOTAL DOS PRODUTOS</th>
-                    <th align="right">{{ $sale['itemQuantity'] }}</th>
+                    <th colspan="4" align="right">TOTAL DOS PRODUTOS</th>
                     <th colspan="2" align="right">{{ $sale['net_value'] }}</th>
                 </tr>
             </tfoot>

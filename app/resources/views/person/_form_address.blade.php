@@ -9,7 +9,7 @@
             <div class="form-group">
                 <label>Tipo</label>
                 <select name="PersonAddress[{{ $modelAddress->id }}][person_address_type_id]" class="form-control select2" id="PersonAddress_{{ $modelAddress->id }}_person_address_type_id">
-                    <option>Selecione</option>
+                    <option value="">Selecione</option>
                     @foreach($typeAddresses as $address)
                         <option value="{{ $address->id }}" {{ isset($modelAddress->person_address_type_id) && $address->id == $modelAddress->person_address_type_id ? 'selected' : null }}>{{ $address->name }}</option>
                     @endforeach                    
