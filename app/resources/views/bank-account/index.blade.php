@@ -4,7 +4,7 @@
 
 <div class="d-flex w-100 home-header">
     <div>
-        <h1 class="page-header"><i class="fa fa-shopping-cart"></i> Contas </h1>
+        <h1 class="page-header"><i class="fa fa-bank"></i> Contas </h1>
     </div>
 </div>
 

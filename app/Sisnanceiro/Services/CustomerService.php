@@ -42,13 +42,13 @@ class CustomerService extends PersonService
 
     public function mapData(array $data)
     {
-        $carbonBirthdate = Carbon::createFromFormat('d/m/Y', $data['birthdate']);
+        $carbonBirthdate = isset($data['birthdate']) && !empty($data['birthdate']) ? Carbon::createFromFormat('d/m/Y', $data['birthdate']) : null;
         return [
             'id'        => isset($data['id']) && !empty($data['id']) ? $data['id'] : null,
             'physical'  => $data['physical'],
             'firstname' => $data['firstname'],
             'lastname'  => $data['lastname'],
-            'birthdate' => $carbonBirthdate->format('Y-m-d'),
+            'birthdate' => !empty($carbonBirthdate) ? $carbonBirthdate->format('Y-m-d') : null,
             'cpf'       => preg_replace("/[^0-9]/", "", $data['cpf']),
             'rg'        => preg_replace("/[^0-9]/", "", $data['rg']),
             'gender'    => $data['gender'],
@@ -63,47 +63,60 @@ class CustomerService extends PersonService
      */
     public function store(array $input, $rules = false)
     {
-        $data  = $this->mapData($input['Customer']);
-        $model = parent::store($data, $rules);
 
-        if (!isset($data['id'])) {
-            $this->customerRepository->insert(['id' => $model->id]);
-        }
-        if (isset($input['PersonAddress'])) {
-            foreach ($input['PersonAddress'] as $keyCustomerAddress => $postCustomerAddress) {
-                $address = $this->personService->storeAddress($model, $postCustomerAddress);
-                $addressIds[] = $address->id; 
+        \DB::beginTransaction();
+
+        try {
+
+            $data  = $this->mapData($input['Customer']);
+            $model = parent::store($data, $rules);
+
+            if (!isset($data['id'])) {
+                $this->customerRepository->insert(['id' => $model->id]);
             }
-        }
-        if (isset($input['PersonContact'])) {
-            foreach ($input['PersonContact'] as $keyCustomerContact => $postCustomerContact) {
-                $contact = $this->personService->storeContact($model, $postCustomerContact);
-                $contactIds[] = $contact->id;
+            $addressIds = [];
+            if (isset($input['PersonAddress'])) {
+                foreach ($input['PersonAddress'] as $keyCustomerAddress => $postCustomerAddress) {
+                    $address      = $this->personService->storeAddress($model, $postCustomerAddress);
+                    $addressIds[] = $address->id;
+                }
             }
+            $contactIds = [];
+            if (isset($input['PersonContact'])) {
+                foreach ($input['PersonContact'] as $keyCustomerContact => $postCustomerContact) {
+                    $contact      = $this->personService->storeContact($model, $postCustomerContact);
+                    $contactIds[] = $contact->id;
+                }
+            }
+
+            // remove addresses removed on frontend
+            $unsetAddresses = $this->personAddressRepository
+                ->select('id')
+                ->where('person_id', '=', $model->id)
+                ->whereNotIn('id', $addressIds)
+                ->get()
+                ->toArray();
+            if ($unsetAddresses) {
+                $this->personAddressRepository->destroy($unsetAddresses);
+            }
+            // remove contacts removed on frontend
+            $unsetContacts = $this->personContactRepository
+                ->select('id')
+                ->where('person_id', '=', $model->id)
+                ->whereNotIn('id', $contactIds)
+                ->get()
+                ->toArray();
+            if ($unsetContacts) {
+                $this->personContactRepository->destroy($unsetContacts);
+            }
+            \DB::commit();
+            return $model;
+
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa.');
         }
 
-        // remove addresses removed on frontend
-        $unsetAddresses = $this->personAddressRepository
-            ->select('id')
-            ->where('person_id', '=', $model->id)
-            ->whereNotIn('id', $addressIds)
-            ->get()
-            ->toArray();
-        if ($unsetAddresses) {
-            $this->personAddressRepository->destroy($unsetAddresses);
-        }
-        // remove contacts removed on frontend
-        $unsetContacts = $this->personContactRepository
-            ->select('id')
-            ->where('person_id', '=', $model->id)
-            ->whereNotIn('id', $contactIds)
-            ->get()
-            ->toArray();
-        if ($unsetContacts) {
-            $this->personContactRepository->destroy($unsetContacts);
-        }
-
-        return $model;
     }
 
     public function getAll($search = null)

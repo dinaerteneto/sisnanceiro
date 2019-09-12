@@ -2,11 +2,14 @@
 
 namespace Sisnanceiro\Models;
 
+use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BankInvoiceDetails extends Model
+class BankInvoiceDetail extends Model
 {
     use TenantModels;
+    use SoftDeletes;
 
     const STATUS_ACTIVE          = 1;
     const STATUS_CANCELLED       = 2;
@@ -20,7 +23,7 @@ class BankInvoiceDetails extends Model
     const STATUS_NOT_CARD        = 10;
     const STATUS_CHARGE_BACK     = 11;
 
-    protected $table      = 'bank_invoice_details';
+    protected $table      = 'bank_invoice_detail';
     protected $primaryKey = 'id';
 
     protected $fillable = [
@@ -54,4 +57,34 @@ class BankInvoiceDetails extends Model
         'authorization_code',
         'hide',
     ];
+
+    public function company()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Company', 'id', 'company_id');
+    }
+
+    public function category()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankCategory', 'id', 'bank_category_id');
+    }
+
+    public function account()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankAccount', 'id', 'bank_account_id');
+    }
+
+    public function transaction()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankInvoiceTransaction', 'id', 'bank_invoice_transaction_id');
+    }
+
+    public function supplier()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Supplier', 'id', 'supplier_id');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Customer', 'id', 'customer_id');
+    }
 }

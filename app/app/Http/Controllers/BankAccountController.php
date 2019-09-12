@@ -64,7 +64,7 @@ class BankAccountController extends Controller
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar a conta.', 'errors' => $model->getErrors()]);
             } else {
-                $request->session()->flash('success', ['message' => 'Conta criada com sucesso.']);
+                $request->session()->flash('success', ['message' => 'Conta alterada com sucesso.']);
             }
             return redirect("bank-account/");
         }

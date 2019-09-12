@@ -9,7 +9,7 @@
             <div class="form-group">
                 <label>Tipo</label>
                 <select id="PersonContact_{{ $modelContact->id }}_person_contact_type_id" name="PersonContact[{{ $modelContact->id }}][person_contact_type_id]" class="form-control select2">
-                    <option>Selecione</option>
+                    <option value="">Selecione</option>
                     @foreach($typeContacts as $contact)
                         <option value="{{ $contact->id }}" {{ isset($modelContact->person_contact_type_id) && $contact->id == $modelContact->person_contact_type_id ? 'selected' : null }}>{{ $contact->type }}</option>
                     @endforeach                      

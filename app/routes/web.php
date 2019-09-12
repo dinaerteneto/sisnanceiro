@@ -116,7 +116,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/update/{id}', 'SaleController@update');
         Route::post('/update/{id}', 'SaleController@update');
         Route::post('/cancel/{id}', 'SaleController@cancel');
+        Route::post('/delete/{id}', 'SaleController@delete');
         Route::get('/copy/{id}', 'SaleController@copy');
+
+        Route::post('/add-temp-item', 'SaleController@addTempItem');
+        Route::post('/del-temp-item', 'SaleController@delTempItem');
     });
 
     Route::group(['prefix' => 'bank-account'], function () {
@@ -126,6 +130,35 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/create', 'BankAccountController@create');
         Route::get('/update/{id}', 'BankAccountController@update');
         Route::post('/update/{id}', 'BankAccountController@update');
-        Route::post('/delete/{ud}', 'BankAccountController@delete');
+        Route::post('/delete/{id}', 'BankAccountController@delete');
+    });
+
+    Route::group(['prefix' => 'bank-transaction'], function () {
+        Route::get('/', 'BankTransactionController@index');
+        Route::post('/', 'BankTransactionController@index');
+        Route::get('/delete/{id}', 'BankTransactionController@delete');
+        Route::post('/set-paid/{id}', 'BankTransactionController@setPaid');
+        Route::post('/get-total-by-main-category', 'BankTransactionController@getTotalByMainCategory');
+
+        Route::group(['prefix' => 'pay'], function () {
+            Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
+            Route::post('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
+            Route::get('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 2]);
+            Route::post('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 2]);
+            Route::get('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 2]);
+            Route::post('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 2]);
+            Route::post('/delete/{id}', ['uses' => 'BankTransactionController@delete', 'main_category_id' => 2]);
+        });
+
+        Route::group(['prefix' => 'receive'], function () {
+            Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 3]);
+            Route::post('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 3]);
+            Route::get('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 3]);
+            Route::post('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 3]);
+            Route::get('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 3]);
+            Route::post('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 3]);
+            Route::post('/delete/{id}', ['uses' => 'BankTransactionController@delete', 'main_category_id' => 3]);
+        });
+
     });
 });

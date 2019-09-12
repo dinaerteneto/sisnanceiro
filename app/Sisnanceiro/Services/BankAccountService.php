@@ -3,11 +3,12 @@
 namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
-use Sisnanceiro\Helpers\FloatConversor;
-use Sisnanceiro\Helpers\Validator;
-use Sisnanceiro\Repositories\BankAccountRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Sisnanceiro\Helpers\FloatConversor;
+use Sisnanceiro\Helpers\Validator;
+use Sisnanceiro\Models\BankCategory;
+use Sisnanceiro\Repositories\BankAccountRepository;
 
 class BankAccountService extends Service
 {
@@ -60,26 +61,88 @@ class BankAccountService extends Service
         ]);
     }
 
-    public function __construct(Validator $validator, BankAccountRepository $repository)
-    {
-        $this->validator  = $validator;
-        $this->repository = $repository;
+    public function __construct(
+        Validator $validator,
+        BankAccountRepository $repository,
+        BankTransactionService $bankTransactionService,
+        BankInvoiceDetailService $bankInvoiceDetailService
+    ) {
+        $this->validator                = $validator;
+        $this->repository               = $repository;
+        $this->bankTransactionService   = $bankTransactionService;
+        $this->bankInvoiceDetailService = $bankInvoiceDetailService;
     }
 
     public function store(array $input, $rules = false)
     {
-        $data = $this->mapData($input);
-        $this->resetDefault();
-        $return = parent::store($data, $rules);
-        return $return;
+        \DB::beginTransaction();
+        try {
+            $data = $this->mapData($input);
+            $this->resetDefault();
+            $bankAccount = parent::store($data, $rules);
+
+            $data = [
+                'BankInvoiceTransaction' => [
+                    'bank_category_id' => BankCategory::CATEGORY_INITIAL_BALANCE,
+                    'description'      => 'Saldo inicial',
+                    'note'             => 'Saldo inicial',
+                    'total_invoices'   => 1,
+                    'total_value'      => $input['initial_balance'],
+                ],
+                'BankInvoiceDetail'      => [
+                    'bank_category_id' => BankCategory::CATEGORY_INITIAL_BALANCE,
+                    'bank_account_id'  => $bankAccount->id,
+                    'net_value'        => $input['initial_balance'],
+                    'due_date'         => $input['initial_balance_date'],
+                ],
+            ];
+
+            $this->bankTransactionService->store($data, 'create');
+            \DB::commit();
+            return $bankAccount;
+
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa de criar o lançamento.');
+        }
     }
 
-    public function update(Model $model, array $data, $rules = 'update')
+    public function update(Model $model, array $input, $rules = 'update')
     {
-        $data = $this->mapData($data);
-        $this->resetDefault();
-        $return = parent::update($model, $data, $rules);
-        return $return;
+        
+        try {
+
+            $data = $this->mapData($input);
+            $this->resetDefault();
+            $bankAccount = parent::update($model, $data, $rules);
+            $bankInvoice = $this->bankInvoiceDetailService->findInitialBalance($model);
+
+            $data = [
+                'BankInvoiceTransaction' => [
+                    'id'               => $bankInvoice->bank_invoice_transaction_id,
+                    'bank_category_id' => BankCategory::CATEGORY_INITIAL_BALANCE,
+                    'description'      => 'Saldo inicial',
+                    'note'             => 'Saldo inicial',
+                    'total_invoices'   => 1,
+                    'total_value'      => $input['initial_balance'],
+                ],
+                'BankInvoiceDetail'      => [
+                    'id'               => $bankInvoice->id,
+                    'bank_category_id' => BankCategory::CATEGORY_INITIAL_BALANCE,
+                    'bank_account_id'  => $model->id,
+                    'net_value'        => $input['initial_balance'],
+                    'due_date'         => $input['initial_balance_date'],
+                ],
+            ];
+            
+            $this->bankTransactionService->updateInvoices($bankInvoice, $data);
+            
+
+            return $bankAccount;
+        } catch (\Exception $e) {
+          
+            abort(500, 'Erro na tentativa de alterar o lançamento.');
+        }
     }
 
     /**
@@ -90,7 +153,7 @@ class BankAccountService extends Service
     private function resetDefault()
     {
         $companyId = Auth::user()->company_id;
-        $affected = \DB::table('bank_account')
+        $affected  = \DB::table('bank_account')
             ->where(
                 [
                     'company_id' => $companyId,

@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <label>Tipo de cliente</label>
                     <select name="Customer[physical]" id="Customer_physical" class="form-control select2">
-                        <option>Selecione</option>
+                        <option value="">Selecione</option>
                         <option value="1" {{  isset($model) && $model->physical == "1" ? 'selected' : null}}>Física</option>
                         <option value="0" {{  isset($model) && $model->physical != "1" ? 'selected' : null}}>Jurídica</option>
                     </select>
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label>Sexo</label>
                     <select name="Customer[gender]" id="Customer_gender" class="form-control select2">
-                        <option>Selecione</option>
+                        <option value="">Selecione</option>
                         <option value="M" {{ isset($model) && $model->gender == 'M' ? 'selected' : null}}>Masculino</option>
                         <option value="F" {{ isset($model) && $model->gender == 'F' ? 'selected' : null}}>Feminino</option>
                     </select>                    

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Item;
+use League\Fractal\Serializer\DataArraySerializer;
 use Sisnanceiro\Models\Sale;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\SaleService;
@@ -41,6 +46,7 @@ class SaleController extends Controller
             $model    = $this->saleService->create($postData);
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a venda.', 'errors' => $model->getErrors()]);
+                Log::debug(json_encode($request->all()));
                 return redirect("sale/index");
             } else {
                 return redirect("sale/ask/{$model->id}");
@@ -51,12 +57,11 @@ class SaleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $model = $this->saleService->find($id);
         if ($request->isMethod('post')) {
-            $data = $request->get('Sale');
-            $data = array_replace($model->getAttributes(), $data);
+            $model = $this->saleService->findBy('id', $id);
+            $postData = $request->all();
 
-            $model = $this->saleService->update($model, $data, 'update');
+            $model = $this->saleService->update($model, $postData, 'update');
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Falha na tentativa de alterar a venda.']);
             } else {
@@ -65,9 +70,17 @@ class SaleController extends Controller
             return redirect('sale');
         } else {
             $statues = Sale::getStatues();
-            return view('sale/update', compact('model', 'statues'));
+
+            $model   = $this->saleService->find($id);
+            $manager = new Manager();
+            $manager->setSerializer(new DataArraySerializer());
+            $resource = new Item($model, new SaleTransformer());
+            $sale     = $manager->createData($resource)->toArray()['data'];
+
+            return view('sale/update', compact('sale', 'statues'));
         }
     }
+
 
     public function cancel(Request $request, $id)
     {
@@ -85,40 +98,50 @@ class SaleController extends Controller
 
     public function ask($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return View('sale/ask', compact('sale'));
     }
 
     public function coupon($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/coupon', compact('sale'));
     }
 
     function print($id) {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/print', compact('sale'));
     }
 
     public function view($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/view', compact('sale'));
     }
 
     public function copy($id)
     {
-        $model = $this->saleService->find($id);
-        $model = fractal($model, new SaleTransformer());
-        $sale  = $model->toArray()['data'];
+        $model   = $this->saleService->find($id);
+        $manager = new Manager();
+        $manager->setSerializer(new DataArraySerializer());
+        $resource = new Item($model, new SaleTransformer());
+        $sale     = $manager->createData($resource)->toArray()['data'];
         return view('sale/copy', compact('sale'));
     }
 
@@ -151,6 +174,14 @@ class SaleController extends Controller
         if ($this->saleService->destroy($id)) {
             return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
         }
+    }
+
+    public function addTempItem(Request $request) {
+        return $this->apiSuccess(['success' => true]);
+    }
+
+    public function delTempItem(Request $request) {
+        return $this->apiSuccess(['success' => true]);
     }
 
 }

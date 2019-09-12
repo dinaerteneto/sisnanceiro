@@ -45,26 +45,63 @@ class BankCategoryTransformer extends TransformerAbstract
     }
 
     /**
-     * return html structured <div> based on buildTree function
+     * return tree (multidimensional array) of categories
      * warning: function only two tree nivel category
-     * @param array $elements
+     * @param  array   $elements array record categories
+     * @param  integer $parentId id of parent parent
+     * return array
+     */
+    public function buildHtmlDiv(array $elements = [], $parentId = 0)
+    {
+        $return = [];
+        $html   = '';
+        $data   = $this->buildTree($elements, $parentId);
+
+        if ($data) {
+            foreach ($data as $node) {
+                $html .= "<div>{$node['text']}</div>";
+
+                $return[] = [
+                    'id'        => (int) $node['id'],
+                    'html'      => "<div>{$node['text']}</div>",
+                    'selection' => $node['text'],
+                ];
+
+                if (isset($node['children'])) {
+                    foreach ($node['children'] as $child) {
+                        $html .= "<div style=\"padding-left: 10px\"><i class=\"fa fa-arrow-right\"></i> {$child['text']}</div>";
+                        $return[] = [
+                            'id'        => (int) $child['id'],
+                            'html'      => "<div style=\"padding-left: 10px\"><i class=\"fa fa-arrow-right\"></i> {$child['text']}</div>",
+                            'selection' => $child['text'],
+                        ];
+                    }
+                }
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * return option values format html
+     * warning: function only two tree nivel category
+     * @param  array   $elements array record categories
+     * @param  integer $parentId id of parent parent
      * return string
      */
-    public function buildHtmlDiv($elements = [])
+    public function buildDropDownOptions(array $elements = [], $parentId = 0)
     {
-        $style = "";
-        $html  = null;
-        foreach ($elements as $element) {
-            if (!in_array($element['parent_category_id'], [2, 3])) {
-                $style = "padding-left: 20px";
-            }
-            if (isset($element['text'])) {
-                $html .= "<div style=\"$style\" data-id=\"{$element['id']}\" data-parent-id=\"{$element['parent_category_id']}\" data-text=\"{$element['text']}\">";
-                $html .= "{$element['text']}";
-                $html .= "</div>\n";
-            }
-            if (isset($element['children'])) {
-                $html .= $this->buildHtmlDiv($element['children']);
+        $html = '';
+        $data = $this->buildTree($elements, $parentId);
+        if ($data) {
+            foreach ($data as $node) {
+                $html .= "<optgroup label=\"{$node['text']}\" value=\"{$node['id']}\">";
+                if (isset($node['children'])) {
+                    foreach ($node['children'] as $child) {
+                        $html.="<option value=\"{$child['id']}\">{$child['text']}</option>";
+                    }
+                }
+                $html.="</optgroup>";
             }
         }
         return $html;

@@ -36,9 +36,11 @@
                                                 <li class="nav-item">
                                                     <a href="#s1" data-toggle="tab" class="nav-link active show">Dados básicos</a>
                                                 </li>
+                                                <!--
                                                 <li class="nav-item">
                                                     <a href="#s2" data-toggle="tab" class="nav-link">Ficha técnica</a>
                                                 </li>
+-->
                                             </ul>
 
                                             <div id="myTabContent1" class="tab-content padding-10">
@@ -54,7 +56,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
+    <!--
                                                         <div class="row">
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
@@ -88,18 +90,19 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
+    -->
                                                         <div class="row mb-10">
                                                             <div class="col-sm-6">
                                                                 <span class="onoffswitch">
-                                                                    <input type="checkbox" name="StoreProduct[status]" class="onoffswitch-checkbox" id="StoreProduct_status" value="1">
+                                                                    <input type="checkbox" name="StoreProduct[status]" class="onoffswitch-checkbox" id="StoreProduct_status" value="1" checked>
                                                                     <label class="onoffswitch-label" for="StoreProduct_status">
                                                                         <span class="onoffswitch-inner" data-swchon-text="SIM" data-swchoff-text="NÃO"></span>
                                                                         <span class="onoffswitch-switch"></span>
                                                                     </label>
                                                                 </span>
                                                                 Ativo
-                                                            </div>                                                    
+                                                            </div>                 
+                                                            <!--                                   
                                                             <div class="col-sm-6">
                                                                 <span class="onoffswitch">
                                                                     <input type="checkbox" name="StoreProduct[sale_with_negative_stock]" class="onoffswitch-checkbox" id="StoreProduct_sale_with_negative_stock" value="1">
@@ -109,11 +112,13 @@
                                                                     </label>
                                                                 </span>
                                                                 Venda com estoque negativo
-                                                            </div>                                                    
+                                                            </div>    
+                                                            -->                                                
                                                         </div>
 
                                                     </fieldset>
 
+                                                    <!--
                                                     <fieldset>
 
                                                         <div class="row mb-10">
@@ -130,23 +135,28 @@
                                                         </div>
 
                                                     </fieldset>
+                                                    -->  
 
                                                     <fieldset class="without-attributes">
-                                                        <legend><i class="fa fa-list-alt"></i> Especificações do produto</legend>
+                                                        <!--<legend><i class="fa fa-list-alt"></i> Especificações do produto</legend>-->
                                                         <div class="row">
-                                                            <div class="col-sm-3 field-StoreProduct_price">
+                                                            <div class="col-sm-2 field-StoreProduct_price">
                                                                 <label class="control-label" for="StoreProduct_price">Preço</label>
                                                                 <input type="text" id="StoreProduct_price" class="form-control mask-currency" name="StoreProduct[price]" autocomplete="off">
                                                             </div>
-                                                            <div class="col-sm-3 field-StoreProduct_sku">
-                                                                <label class="control-label" for="StoreProduct_sku">SKU <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></label>
+                                                            <div class="col-sm-2 field-StoreProduct_price">
+                                                                <label class="control-label" for="StoreProduct_cost_price">Preço de compra</label>
+                                                                <input type="text" id="StoreProduct_cost_price" class="form-control mask-currency" name="StoreProduct[cost_price]" autocomplete="off" value="{{ $model['cost_price'] }}">
+                                                            </div>
+                                                            <div class="col-sm-2 field-StoreProduct_sku">
+                                                                <label class="control-label" for="StoreProduct_sku">Código <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></label>
                                                                 <input type="text" id="StoreProduct_sku" class="form-control" name="StoreProduct[sku]" maxlength="45">
                                                             </div>
-                                                            <div class="col-sm-3 field-StoreProduct_weight">
+                                                            <div class="col-sm-2 field-StoreProduct_weight">
                                                                 <label class="control-label" for="StoreProduct_weight">Peso</label>
-                                                                <input type="text" id="StoreProduct_weight" class="form-control mask-float" name="StoreProduct[weight]" maxlength="45">
+                                                                <input type="text" id="StoreProduct_weight" class="form-control mask-float-precision3" name="StoreProduct[weight]" maxlength="45">
                                                             </div>
-                                                            <div class="col-sm-3 field-StoreProduct_total_in_stock">
+                                                            <div class="col-sm-2 field-StoreProduct_total_in_stock">
                                                                 <label class="control-label" for="StoreProduct_total_in_stock">Total no estoque</label>
                                                                 <input type="text" id="StoreProduct_total_in_stock" class="form-control mask-number" name="StoreProduct[total_in_stock]">
                                                             </div>
@@ -201,7 +211,7 @@
                                                                             <th>Variações </th>
                                                                             <th width="">Preço de venda</th>
                                                                             <th>Peso</th>
-                                                                            <th>SKU <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></th>
+                                                                            <th>Código <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></th>
                                                                             <th width="">Quant. estoque</th>
                                                                         </tr>
                                                                     </thead>

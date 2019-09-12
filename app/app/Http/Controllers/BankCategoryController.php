@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
+use Illuminate\Support\Facades\Response;
 
 class BankCategoryController extends Controller
 {
@@ -35,7 +36,10 @@ class BankCategoryController extends Controller
     public function create(Request $request, $main_parent_category_id, $parent_category_id = null)
     {
         $model  = new BankCategory;
-        $action = "/bank-category/create/{$main_parent_category_id}/{$parent_category_id}";
+        $action = "/bank-category/create/{$main_parent_category_id}";
+        if(!empty($parent_category_id)) {
+            $action = "/bank-category/create/{$main_parent_category_id}/{$parent_category_id}";
+        }
         $title  = 'Incluir categoria';
 
         if ($request->isMethod('post')) {
@@ -84,7 +88,7 @@ class BankCategoryController extends Controller
             } else {
                 $request->session()->flash('success', ['message' => 'Categoria alterada com sucesso.']);
             }
-            return redirect('bank-category/all');
+            return redirect('bank-category/');
         } else {
             $categories = [];
             if ($categories = $this->bankCategoryService->findByParentCategory($model->main_parent_category_id)) {
@@ -100,5 +104,4 @@ class BankCategoryController extends Controller
             return $this->apiSuccess(['success' => true]);
         }
     }
-
 }
