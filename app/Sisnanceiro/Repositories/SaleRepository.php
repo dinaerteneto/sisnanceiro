@@ -97,6 +97,7 @@ class SaleRepository extends Repository
             ->leftJoin('person AS customer', \DB::raw('customer.id'), '=', \DB::raw('sale.customer_id'))
             ->where('sale.company_id', '=', $companyId)
             ->whereNull('sale.deleted_at')
+            ->whereNull('sale_item.deleted_at')
             ->where('sale.id', '=', $id);
 
         return $query->get();

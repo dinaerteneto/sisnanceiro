@@ -116,7 +116,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/update/{id}', 'SaleController@update');
         Route::post('/update/{id}', 'SaleController@update');
         Route::post('/cancel/{id}', 'SaleController@cancel');
+        Route::post('/delete/{id}', 'SaleController@delete');
         Route::get('/copy/{id}', 'SaleController@copy');
+
+        Route::post('/add-temp-item', 'SaleController@addTempItem');
+        Route::post('/del-temp-item', 'SaleController@delTempItem');
     });
 
     Route::group(['prefix' => 'bank-account'], function () {
@@ -126,7 +130,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/create', 'BankAccountController@create');
         Route::get('/update/{id}', 'BankAccountController@update');
         Route::post('/update/{id}', 'BankAccountController@update');
-        Route::post('/delete/{ud}', 'BankAccountController@delete');
+        Route::post('/delete/{id}', 'BankAccountController@delete');
     });
 
     Route::group(['prefix' => 'bank-transaction'], function () {

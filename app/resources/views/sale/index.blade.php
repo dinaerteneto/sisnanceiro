@@ -70,8 +70,8 @@
                 bSortable: false,
                 mRender: function(data, type, row) {
                     var html = '<a href="/sale/view/'+row.id+'" rel="tooltip" data-placement="top" data-original-title="Visualizar" class="btn btn-xs btn-primary open-modal" target="#remoteModal"><i class="fa fa-search"></i></a> ';
-                        html+= '<a href="/sale/update/'+row.id+'" rel="tooltip" data-placement="top" data-original-title="Alterar status da venda" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
-                        html+= '<a href="/sale/cancel/'+row.id+'" rel="tooltip" data-placement="top" data-original-title="Cancelar venda" class="delete-record btn btn-xs btn-danger" data-title="Cancelar esta venda?" data-ask="Tem certeza que deseja cancelar a venda: '+ row.company_sale_code +'?"><i class="fa fa-times"></i></a> ';
+                        html+= '<a href="/sale/update/'+row.id+'" rel="tooltip" data-placement="top" data-original-title="Alterar a venda" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i></a> ';
+                        html+= '<a href="/sale/delete/'+row.id+'" rel="tooltip" data-placement="top" data-original-title="Cancelar venda" class="delete-record btn btn-xs btn-danger" data-title="Cancelar esta venda?" data-ask="Tem certeza que deseja cancelar a venda: '+ row.company_sale_code +'?"><i class="fa fa-times"></i></a> ';
                         html+= '<div class="btn-group">';
                         html+= '<button class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown"></button> ';
                         html+= '<ul class="dropdown-menu">';

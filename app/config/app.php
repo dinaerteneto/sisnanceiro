@@ -105,7 +105,7 @@ return [
     */
 
     'key' => env('APP_KEY'),
-
+    'log' => 'daily',
     'cipher' => 'AES-256-CBC',
 
     /*

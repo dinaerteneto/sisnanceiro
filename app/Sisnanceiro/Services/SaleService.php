@@ -3,7 +3,9 @@
 namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\Sale;
@@ -36,7 +38,7 @@ class SaleService extends Service
             'company_sale_code' => 'required|int',
             'status'            => 'int',
             'gross_value'       => 'required|numeric',
-            'discount_value'    => 'required|numeric',
+            // 'discount_value'    => 'required|numeric',
             'net_value'         => 'required|numeric',
             // 'fine_cancel_reason'           => 'string',
             // 'fine_cancel_value'            => 'numeric',
@@ -97,15 +99,51 @@ class SaleService extends Service
 
     public function create(array $data)
     {
-        $saleData  = $this->mapData($data['Sale']);
-        $saleModel = $this->store($saleData);
-        if (isset($data['SaleItem'])) {
-            foreach ($data['SaleItem'] as $item) {
-                $itemData = $this->mapItem($saleModel, $item);
-                $this->repositorySaleItem->create($itemData);
+        \DB::beginTransaction();
+        try {
+            $saleData  = $this->mapData($data['Sale']);
+            $saleModel = $this->store($saleData);
+            if (isset($data['SaleItem'])) {
+                foreach ($data['SaleItem'] as $item) {
+                    $itemData = $this->mapItem($saleModel, $item);
+                    $this->repositorySaleItem->create($itemData);
+                }
             }
+            \DB::commit();
+            return $saleModel;
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            $error = ['message' => 'erro na tentativa de criar a venda', 'postData' => $data, 'PDOException' => $e->getMessage()];
+            Log::debug(json_encode($error));
+            abort(500, 'Erro na tentativa de criar a venda.');
         }
-        return $saleModel;
+    }
+
+    public function update(Model $model, array $data, $rules = 'update')
+    {
+        \DB::beginTransaction();
+        try {
+            $saleData  = $this->mapData($data['Sale']);
+            $saleModel = $model->update($saleData);
+
+            // remove all items before add
+            $model->items()->delete();
+
+            if (isset($data['SaleItem'])) {
+                foreach ($data['SaleItem'] as $item) {
+                    $itemData = $this->mapItem($model, $item);
+                    $this->repositorySaleItem->create($itemData);
+                }
+            }
+
+            parent::update($model, $data, $rules);
+            \DB::commit();
+
+            return $saleModel;
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa.');
+        }
     }
 
     public function getAll($search = null)

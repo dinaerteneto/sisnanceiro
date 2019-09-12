@@ -65,13 +65,16 @@
                 <i class="fa fa-shopping-cart fa-5x text-success"></i>
                 <h1 class="text-success">VENDA <b>{{ $sale['sale_code'] }}</b> FINALIZADA COM SUCESSO</h1>
                 <a id="sale-create" href="/sale/create" class="btn btn-success btn-lg">CRIAR NOVA VENDA</a>
-                <a id="sale-print" href="/sale/coupon/{{ $sale['id'] }}" target="_blank" class="btn btn-info btn-lg">IMPRIMIR CUPOM</a>
+                <a id="sale-print" href="/sale/coupon/{{ $sale['id'] }}" target="_blank" class="btn btn-warning btn-lg">IMPRIMIR CUPOM</a>
+                <a id="sale-print-A4" href="/sale/print/{{ $sale['id'] }}" target="_blank" class="btn btn-info btn-lg">IMPRIMIR A4</a>
             </div>
         </div>
 
         <div class="row">
             <div class="hidden-xs teclas">
-                <b>F2</b> = Nova venda <b>|</b> <b>F3</b> = Imprimir cupom <b>
+                <b>F2</b> = Nova venda <b>|</b> 
+                <b>F3</b> = Imprimir cupom <b>|</b>
+                <b>F4</b> = Imprimir A4
             </div>                
         </div>
 
@@ -91,6 +94,10 @@
             }
             if (event.which == 114) { //F3
                 var href = $("#sale-print").attr('href');
+                window.open(href, '_blank');
+            }
+            if (event.which == 115) { //F4
+                var href = $("#sale-print-A4").attr('href');
                 window.open(href, '_blank');
             }
         });

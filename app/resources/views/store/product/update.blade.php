@@ -47,6 +47,7 @@
                                                     </div>
                                                 </div>
 
+                                                <!--
                                                 <div class="row">
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
@@ -71,6 +72,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                
 
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -80,7 +82,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+-->
                                                 <div class="row mb-10">
                                                     <div class="col-sm-6">
                                                         <span class="onoffswitch">
@@ -91,7 +93,8 @@
                                                             </label>
                                                         </span>
                                                         Ativo
-                                                    </div>                                                    
+                                                    </div>          
+                                                    <!--
                                                     <div class="col-sm-6">
                                                         <span class="onoffswitch">
                                                             <input type="checkbox" name="StoreProduct[sale_with_negative_stock]" class="onoffswitch-checkbox" id="StoreProduct_sale_with_negative_stock" value="1" @if(!empty($model['sale_with_negative_stock'])) checked @endif>
@@ -101,7 +104,8 @@
                                                             </label>
                                                         </span>
                                                         Venda com estoque negativo
-                                                    </div>                                                    
+                                                    </div>     
+                                                    -->
                                                 </div>
 
                                             </fieldset>
@@ -118,12 +122,12 @@
                                                         <input type="text" id="StoreProduct_cost_price" class="form-control mask-currency" name="StoreProduct[cost_price]" autocomplete="off" value="{{ $model['cost_price'] }}">
                                                     </div>
                                                     <div class="col-sm-2 field-StoreProduct_sku">
-                                                        <label class="control-label" for="StoreProduct_sku">SKU <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></label>
+                                                        <label class="control-label" for="StoreProduct_sku">Código <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></label>
                                                         <input type="text" id="StoreProduct_sku" class="form-control" name="StoreProduct[sku]" maxlength="45" value="{{ $model['sku'] }}">
                                                     </div>
                                                     <div class="col-sm-2 field-StoreProduct_weight">
                                                         <label class="control-label" for="StoreProduct_weight">Peso</label>
-                                                        <input type="text" id="StoreProduct_weight" class="form-control mask-float" name="StoreProduct[weight]" maxlength="45" value="{{ $model['weight'] }}">
+                                                        <input type="text" id="StoreProduct_weight" class="form-control mask-float-precision3" name="StoreProduct[weight]" maxlength="45" value="{{ $model['weight'] }}">
                                                     </div>
                                                     <div class="col-sm-2 field-StoreProduct_total_in_stock">
                                                         <label class="control-label" for="StoreProduct_total_in_stock">Total no estoque</label>
@@ -186,7 +190,7 @@
                                                                     <th>Variações </th>
                                                                     <th width="">Preço de venda</th>
                                                                     <th>Peso</th>
-                                                                    <th>SKU <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></th>
+                                                                    <th>Código <a href="#" class="tooltips" data-original-title="Código único do produto"><i class="fa fa-info-circle"></i></a></th>
                                                                     <th width="">Quant. estoque</th>
                                                                 </tr>
                                                             </thead>

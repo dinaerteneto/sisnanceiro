@@ -191,20 +191,20 @@
                                         <?php $i = 0 ?>
                                         @foreach($sale['items'] as $item)
                                         <?php $i++ ?>
-                                        <tr id="{{ $i }}">
+                                        <tr id="A{{ $item['store_product_id'] }}">
                                             <td>{{ $item['product']['sku'] }}</td>
                                             <td>{{ $item['quantity'] }} {{ $item['product']['unit_measurement'] }} </td>
                                             <td>{{ $item['product']['name'] }}</td>
                                             <td>{{ $item['discount_value'] }}</td>
                                             <td>{{ $item['total_value'] }}</td>
                                             <td>
-                                                <a href="javascript: void(0)" class="text-danger del-item" data-id="{{ $i }}" ><i class="fa fa-times-circle"></i></a>
-                                                <input type="hidden" name="SaleItem[{{ $i }}][store_product_id]" value="{{ $i }}" class="Store_product_id">
-                                                <input type="hidden" name="SaleItem[{{ $i }}][unit_value]" value="{{ $item['unit_value_no_mask'] }}">
-                                                <input type="hidden" name="SaleItem[{{ $i }}][discount_value]" value="{{ $item['discount_value_no_mask'] }}">
-                                                <input type="hidden" name="SaleItem[{{ $i }}][discount_type]" value=" {{ $item['discount_type'] }} ">
-                                                <input type="hidden" name="SaleItem[{{ $i }}][quantity]" value="{{ $item['quantity_no_mask'] }}">
-                                                <input type="hidden" name="SaleItem[{{ $i }}][total_value]" value="{{ $item['total_value_no_mask'] }}" class="total-value-by-item">
+                                                <a href="javascript: void(0)" class="text-danger del-item" data-id="A{{ $item['store_product_id'] }}" ><i class="fa fa-times-circle"></i></a>
+                                                <input type="hidden" name="SaleItem[A{{ $i }}][store_product_id]" value="{{ $item['store_product_id'] }}" class="Store_product_id">
+                                                <input type="hidden" name="SaleItem[A{{ $i }}][unit_value]" value="{{ $item['unit_value_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[A{{ $i }}][discount_value]" value="{{ $item['discount_value_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[A{{ $i }}][discount_type]" value=" {{ $item['discount_type'] }} ">
+                                                <input type="hidden" name="SaleItem[A{{ $i }}][quantity]" value="{{ $item['quantity_no_mask'] }}">
+                                                <input type="hidden" name="SaleItem[A{{ $i }}][total_value]" value="{{ $item['total_value_no_mask'] }}" class="total-value-by-item">
                                             </td>
                                         </tr>
                                         @endforeach

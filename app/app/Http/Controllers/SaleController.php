@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use League\Fractal\Manager;
@@ -44,6 +46,7 @@ class SaleController extends Controller
             $model    = $this->saleService->create($postData);
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a venda.', 'errors' => $model->getErrors()]);
+                Log::debug(json_encode($request->all()));
                 return redirect("sale/index");
             } else {
                 return redirect("sale/ask/{$model->id}");
@@ -56,10 +59,9 @@ class SaleController extends Controller
     {
         if ($request->isMethod('post')) {
             $model = $this->saleService->findBy('id', $id);
-            $data  = $request->get('Sale');
-            $data  = array_replace($model->getAttributes(), $data);
+            $postData = $request->all();
 
-            $model = $this->saleService->update($model, $data, 'update');
+            $model = $this->saleService->update($model, $postData, 'update');
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Falha na tentativa de alterar a venda.']);
             } else {
@@ -67,15 +69,18 @@ class SaleController extends Controller
             }
             return redirect('sale');
         } else {
-            $model   = $this->saleService->find($id);
             $statues = Sale::getStatues();
+
+            $model   = $this->saleService->find($id);
             $manager = new Manager();
             $manager->setSerializer(new DataArraySerializer());
             $resource = new Item($model, new SaleTransformer());
-            $model    = (object) $manager->createData($resource)->toArray()['data'];
-            return view('sale/update', compact('model', 'statues'));
+            $sale     = $manager->createData($resource)->toArray()['data'];
+
+            return view('sale/update', compact('sale', 'statues'));
         }
     }
+
 
     public function cancel(Request $request, $id)
     {
@@ -169,6 +174,14 @@ class SaleController extends Controller
         if ($this->saleService->destroy($id)) {
             return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
         }
+    }
+
+    public function addTempItem(Request $request) {
+        return $this->apiSuccess(['success' => true]);
+    }
+
+    public function delTempItem(Request $request) {
+        return $this->apiSuccess(['success' => true]);
     }
 
 }

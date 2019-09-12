@@ -13,8 +13,8 @@ class StoreProductService extends Service
     protected $rules = [
         'create' => [
             'name'                      => 'required|max:255',
-            'store_product_category_id' => 'required|int',
-            'store_product_brand_id'    => 'required|int',
+            // 'store_product_category_id' => 'required|int',
+            // 'store_product_brand_id'    => 'required|int',
             'status'                    => 'required',
             'sale_with_negative_stock'  => 'required',
             'price'                     => 'required|numeric',
@@ -47,8 +47,8 @@ class StoreProductService extends Service
         return [
             'id'                        => isset($data['id']) ? (int) $data['id'] : null,
             'name'                      => $data['name'],
-            'store_product_category_id' => $data['store_product_category_id'],
-            'store_product_brand_id'    => $data['store_product_brand_id'],
+            'store_product_category_id' => isset($data['store_product_category_id']) ? $data['store_product_category_id'] : null,
+            'store_product_brand_id'    => isset($data['store_product_brand_id']) ? $data['store_product_brand_id'] : null,
             'status'                    => isset($data['status']) ? $data['status'] : 0,
             'sale_with_negative_stock'  => isset($data['sale_with_negative_stock']) ? $data['sale_with_negative_stock'] : 0,
             'price'                     => FloatConversor::convert($data['price']),
@@ -56,7 +56,7 @@ class StoreProductService extends Service
             'sku'                       => $data['sku'],
             'weight'                    => (float) $data['weight'],
             'total_in_stock'            => !empty($data['total_in_stock']) ? $data['total_in_stock'] : 0,
-            'description'               => $data['description'],
+            'description'               => isset($data['description']) ? $data['description'] : null,
         ];
     }
 

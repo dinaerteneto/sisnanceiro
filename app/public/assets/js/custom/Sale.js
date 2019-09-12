@@ -220,6 +220,43 @@ Sale = {
 
             $("#Sale_search").select2('val', '');
             $("#Sale_search").select2('open');
+
+            var product = {
+                id: id,
+                __token: $('#form-sale [name="_token"]').val(),
+                sale: {
+                    token: $('#form-sale [name="_token"]').val(),
+                    net_value: $('#Sale_net_value').val(),
+                    customer_id: $('#Sale_customer_id').val()
+                },
+                item: {
+                    id: id,
+                    unit_value: unitValue,
+                    discount_value: discountValue,
+                    discount_type: discountType,
+                    quantity: quant,
+                    total_value: totalValue
+                },
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/sale/add-temp-item', product, function(json) {
+                    console.log(json);
+                })
+                .fail(function() {
+                    $.smallBox({
+                        title: "Atenção!",
+                        content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de incluir este produto de forma temporária.</i>",
+                        color: "#C46A69",
+                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                        timeout: 4000
+                    });
+                });
+
         });
     },
 
@@ -230,6 +267,30 @@ Sale = {
             $('#table-items tbody tr#' + id).remove();
             $("#Sale_search").focus();
             Sale.calcTotalPedido();
+
+            var product = {
+                id: id,
+                __token: $('#form-sale [name="_token"]').val()
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/sale/del-temp-item', product, function(json) {
+                    console.log(json);
+                })
+                .fail(function() {
+                    $.smallBox({
+                        title: "Atenção!",
+                        content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de excluir este produto de forma temporária.</i>",
+                        color: "#C46A69",
+                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                        timeout: 4000
+                    });
+                });
+
         });
     },
 
