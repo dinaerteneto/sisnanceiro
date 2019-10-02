@@ -4,6 +4,7 @@ Sale = {
         Sale.searchItem();
         Sale.addProduct();
         Sale.updProduct();
+        Sale.discountBlur();
         Sale.delProduct();
         Sale.submitFormSale();
         Sale.submitFormCustomer();
@@ -170,6 +171,15 @@ Sale = {
         $('#Product_total_value').val(totalValue);
     },
 
+    discountBlur: function() {
+        $('#Sale_discount_value').on('blur', function() {
+            $('#table-items input:first').trigger('blur');
+        });
+        $('#Sale_discount_type').on('change', function() {
+            $('#table-items input:first').trigger('blur');
+        });
+    },
+
     addTempProduct: function(product) {
         $.ajaxSetup({
             headers: {
@@ -272,13 +282,17 @@ Sale = {
 
     updProduct: function() {
         $('body').on('blur', '#table-items input', function(e) {
-            console.log('aqui');
             var id = $(this).attr('data-id');
 
             var valorUnitario = Sale.convertToNumber($(`#SaleItem_${id}_unit_value`).val());
             var quantidade = Sale.convertToNumber($(`#SaleItem_${id}_quantity`).val());
             var valorDesconto = Sale.convertToNumber($(`#SaleItem_${id}_discount_value`).val());
             var totalValue = (valorUnitario * quantidade) - valorDesconto;
+
+            $(`#SaleItem_${id}_total_value`).val(totalValue);
+            $(`#SaleItem_${id}_label_total_value`).html(totalValue.toFixed(2));
+            Sale.calcTotalPedido();
+
             var product = {
                 id: id,
                 __token: $('#Sale_token').val(),
@@ -301,13 +315,9 @@ Sale = {
 
             Sale.tempDelProduct(product);
             Sale.addTempProduct(product);
-            Sale.calcTotalPedido();
 
-            $(`#SaleItem_${id}_total_value`).val(totalValue);
-            $(`#SaleItem_${id}_label_total_value`).html(totalValue.toFixed(2));
         });
     },
-
 
     tempDelProduct: function(product) {
         $.ajaxSetup({
@@ -346,14 +356,24 @@ Sale = {
     },
 
     calcTotalPedido: function() {
-        var sum = 0;
+        var grossValue = 0;
         $(".total-value-by-item").each(function() {
-            sum += parseFloat(this.value);
+            grossValue += parseFloat(this.value);
         });
-        $('#Sale_net_value').val(sum);
-        sum = sum.toFixed(2);
-        labelTotal = sum.toString().replace(",", "");
+
+        var discountType = $('#Sale_discount_type').val();
+        var discountValue = Sale.convertToNumber($('#Sale_discount_value').val());
+        discountValue = isNaN(discountValue) ? 0 : discountValue;
+        if (discountType == '%') {
+            discountValue = (grossValue / 100) * discountValue;
+        }
+        var netValue = grossValue - discountValue;
+        netValue = netValue.toFixed(2);
+        labelTotal = netValue.toString().replace(",", "");
         labelTotal = labelTotal.replace(".", ",");
+
+        $('#Sale_gross_value').val(grossValue);
+        $('#Sale_net_value').val(netValue);
         $('#total-value').text(labelTotal);
     },
 

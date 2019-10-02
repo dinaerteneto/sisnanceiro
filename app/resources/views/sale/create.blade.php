@@ -113,34 +113,34 @@
                                 <input type="hidden" name="Product[unit_measurement]" id="Product_unit_measurement">
 
                                 <div class="form-group row">                                    
-                                    <label class="col-md-4 control-label">CÓDIGO</label>
-                                    <input type="text" name="Product[code]" id="Product_code" class="col-md-8 form-control input-lg" disabled>
+                                    <label class="col-md-6 control-label">CÓDIGO</label>
+                                    <input type="text" name="Product[code]" id="Product_code" class="col-md-6 form-control input-lg" disabled>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-md-4 control-label">QUANTIDADE</label>
-                                    <input type="text" name="Product[quant]" id="Product_quant" class="col-md-8 form-control input-lg mask-float-precision3">
+                                    <label class="col-md-6 control-label">QUANTIDADE</label>
+                                    <input type="text" name="Product[quant]" id="Product_quant" class="col-md-6 form-control input-lg mask-float-precision3">
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-4 control-label">VALOR UNITÁRIO</label>
-                                    <input type="text" name="Product[unit_value]" id="Product_unit_value" class="col-md-8 form-control input-lg mask-currency">
+                                    <label class="col-md-6 control-label">VALOR UNITÁRIO</label>
+                                    <input type="text" name="Product[unit_value]" id="Product_unit_value" class="col-md-6 form-control input-lg mask-currency">
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-4 control-label">DESCONTO</label>
-                                    <input type="text" name="Product[discount]" id="Product_discount" class="col-md-6 form-control input-lg mask-currency">
+                                    <label class="col-md-6 control-label">DESCONTO</label>
+                                    <input type="text" name="Product[discount]" id="Product_discount" class="col-md-4 form-control input-lg mask-currency">
                                     <select class="col-md-2" name="Product[discount_type]" id="Product_discount_type">
                                         <option value="R$">R$</option>
                                         <option value="%">%</option>
                                     </select>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-4 control-label">VALOR TOTAL</label>
-                                    <input type="text" name="Product[total_value]" id="Product_total_value" class="col-md-8 form-control input-lg" disabled>
+                                    <label class="col-md-6 control-label">VALOR TOTAL</label>
+                                    <input type="text" name="Product[total_value]" id="Product_total_value" class="col-md-6 form-control input-lg" disabled>
                                 </div>
                                 
                                 <div class="form-group row">
-                                    <label class="col-md-4 control-label"></label>
-                                    <input type="submit" value="ADD PRODUTO" class="btn bg-dark text-white col-md-8 input-lg">
+                                    <label class="col-md-6 control-label"></label>
+                                    <input type="submit" value="ADD PRODUTO" class="btn bg-dark text-white col-md-6 input-lg">
                                 </div>
                             </form>
                         </div>
@@ -154,7 +154,6 @@
                         @csrf
                         <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id">
                         <input type="hidden" name="Sale[net_value]" id="Sale_net_value">
-                        <input type="hidden" name="Sale[discount_value]" id="Sale_discount_value">
                         <input type="hidden" name="Sale[gross_value]" id="Sale_gross_value">
                         <input type="hidden" name="Sale[token]" id="Sale_token" value="<?= time() ?>">
 
@@ -175,42 +174,76 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive" style="height: 301px; margin-top: -5px; overflow: auto; ">
+                        <div class="table-responsive" style="height: 307px; margin-top: -5px; overflow: auto; ">
                             
-                                <table class="table table-hover table-striped" id="table-items">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-left" width="35%">Produto</th>
-                                            <th width="15%">Vl Unit</th>
-                                            <th width="15%">Qtd.</th>
-                                            <th width="15%">Vl Desc.</th>
-                                            <th width="15%">Vl Total</th>
-                                            <th width="5%">Preço</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>                                      
-                                    </tbody>
-                                </table>
+                            <table class="table table-hover table-striped" id="table-items">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left" width="35%">Produto</th>
+                                        <th width="15%">Vl Unit</th>
+                                        <th width="15%">Qtd.</th>
+                                        <th width="15%">Vl Desc.</th>
+                                        <th width="15%">Vl Total</th>
+                                        <th width="5%">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                      
+                                </tbody>
+                            </table>
                             
                         </div>
                         
-                        <div class="pull-left">
-                            <div class="text-center well bg-red well-sm text-white input-lg">
-                                TOTAL: R$ <span id="total-value"></span>
-                            </div>                        
+                        <div class="table-responsive" style="margin-top: -5px; overflow: auto; ">
+                            
+                            <table class="table table-hover table-striped" >
+                                <thead>
+                                    <tr>
+                                        <th width="35%" class="text-left"></th>
+                                        
+                                        <th width="45%" colspan="3">
+                                            Desconto
+                                            <input type="text" name="Sale[discount_value]" id="Sale_discount_value" class="col-sm-4 mask-float" />
+                                            <select name="Sale[discount_type]" id="Sale_discount_type" class="col-sm-2">
+                                                <option value="R$" selected>R$</option>
+                                                <option value="%">%</option>
+                                            </select>
+                                        </th>
+                                        <th width="15%">R$ <span id="total-value">0,00</span></th>
+                                        <th width="5%">&nbsp;</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+
+                <!--
+
+                            <div class="form-group row">
+                                <label class="col-md-6 control-label">DESC VENDA</label>
+                                <input class="col-md-6 form-control input-lg mask-currency" type="text" name="Sale[discount_value]" id="Sale_discount_value" />
+                            </div>
+                            
+                            <div class="form-group row">
+                                <div class="text-center well bg-red well-sm text-white input-lg">
+                                    TOTAL: R$ <span id="total-value"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <input type="submit" class="btn btn-primary input-lg pull-right" value="FINALIZAR VENDA">
+                            </div>
                         </div>
-                        <div class="pull-right">
-                            <input type="submit" class="btn btn-primary input-lg" value="FINALIZAR VENDA">
-                        </div>
+-->
                     </form>
                 </div>
+            </div>
 
                 <div class="row">
                     <div class="hidden-xs teclas">
                         <b>F2</b> = Nova Busca <b>|</b> <b>F3</b> = Adicionar Produto <b>|</b> <b>F4</b> = Finalizar Venda <b>
                     </div>                
                 </div>
-            </div>
+
+
         </div>
     </section>
 @endsection

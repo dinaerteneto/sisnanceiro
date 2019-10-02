@@ -38,7 +38,7 @@ class CartService extends Service
             'store_product_id' => $data['id'],
             'discount_type' => $data['discount_type'],
             'unit_value' => $data['unit_value'],
-            'discount_value' => $data['discount_value'],
+            'discount_value' => FloatConversor::convert($data['discount_value']),
             'quantity' => FloatConversor::convert($data['quantity']),
             'total_value' => FloatConversor::convert($data['total_value']),
         ];
