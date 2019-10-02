@@ -4,8 +4,8 @@
     <style>
     #contact {
         position: relative;
-        margin: 20px auto;
-        width: 90%;
+        margin: 10px auto;
+        width: 100%;
         padding: 1%;
         -webkit-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
         -moz-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
@@ -83,7 +83,7 @@
     <section id="contact" class="home-section text-center">
         <div class="container">
             <div class="row">			
-                <div class="col-sm-6">
+                <div class="col-sm-4">
 
                     <div class="row">
                         <div class="col-sm-12">
@@ -95,6 +95,7 @@
 
                     <div class="row">
                         
+                        <!--
                         <div class="col-sm-4">
                             <div class="row">
                                 <div class="hidden-xs">
@@ -102,8 +103,9 @@
                                 </div>
                             </div>
                         </div>
+                        -->
 
-                        <div class="col-sm-8">
+                        <div class="col-sm-12">
                             <form class="form-horizontal smart-form" id="form-add-product" method="post" action="">
                                 <input type="hidden" name="Product[name]" id="Product_name">
                                 <input type="hidden" name="Product[id]" id="Product_id">
@@ -147,11 +149,14 @@
                     
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-sm-8">
                     <form id="form-sale" method="post" action="/sale/create">
                         @csrf
                         <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id">
                         <input type="hidden" name="Sale[net_value]" id="Sale_net_value">
+                        <input type="hidden" name="Sale[discount_value]" id="Sale_discount_value">
+                        <input type="hidden" name="Sale[gross_value]" id="Sale_gross_value">
+                        <input type="hidden" name="Sale[token]" id="Sale_token" value="<?= time() ?>">
 
                         <div class="text-center well bg-darken well-sm text-white" style="padding: 14px">
                             <div class="row">
@@ -172,15 +177,15 @@
 
                         <div class="table-responsive" style="height: 301px; margin-top: -5px; overflow: auto; ">
                             
-                                <table class="table table-hover" id="table-items">
+                                <table class="table table-hover table-striped" id="table-items">
                                     <thead>
                                         <tr>
-                                            <th>Cód</th>
-                                            <th>Qtd.</th>
-                                            <th>Produto</th>
-                                            <th>Desc.</th>
-                                            <th>Preço</th>
-                                            <th></th>
+                                            <th class="text-left" width="35%">Produto</th>
+                                            <th width="15%">Vl Unit</th>
+                                            <th width="15%">Qtd.</th>
+                                            <th width="15%">Vl Desc.</th>
+                                            <th width="15%">Vl Total</th>
+                                            <th width="5%">Preço</th>
                                         </tr>
                                     </thead>
                                     <tbody>                                      

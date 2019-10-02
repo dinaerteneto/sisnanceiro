@@ -3,6 +3,7 @@ Sale = {
         Sale.searchCustomer();
         Sale.searchItem();
         Sale.addProduct();
+        Sale.updProduct();
         Sale.delProduct();
         Sale.submitFormSale();
         Sale.submitFormCustomer();
@@ -128,6 +129,14 @@ Sale = {
         });
     },
 
+    convertToNumber: function(str) {
+        var newStr = str.replace(',', '.');
+        if (isNaN(newStr)) {
+            return 0;
+        }
+        return newStr;
+    },
+
     calculateTotalValue: function() {
         var quant = $('#Product_quant').val();
         quant = quant.replace(".", "");
@@ -161,6 +170,26 @@ Sale = {
         $('#Product_total_value').val(totalValue);
     },
 
+    addTempProduct: function(product) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post('/sale/add-temp-item', product, function(json) {
+                console.log(json);
+            })
+            .fail(function() {
+                $.smallBox({
+                    title: "Atenção!",
+                    content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de incluir este produto de forma temporária.</i>",
+                    color: "#C46A69",
+                    iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                    timeout: 4000
+                });
+            });
+    },
+
     addProduct: function() {
         $('#form-add-product').on('submit', function(e) {
             e.preventDefault();
@@ -191,31 +220,26 @@ Sale = {
             var totalValue = total.replace(".", "");
             totalValue = totalValue.replace(",", ".");
 
-            var html = "<tr id='" + id + "'>";
-            html += "<td>" + code + "</td>";
-            html += "<td>" + quant + " " + unitMeasurement + "</td>";
-            html += "<td>" + productName + "</td>";
-            if (discountType == '%') {
-                html += "<td>" + discountValue + "%</td>";
-            } else {
-                html += "<td>" + discountValue + "</td>";
-            }
-            html += "<td>" + total + "</td>";
-            html += "<td>";
-            html += "<a href='javascript: void(0)' class='text-danger del-item' data-id='" + id + "' ><i class='fa fa-times-circle'></i></a>";
-            html += "<input type='hidden' name='SaleItem[" + id + "][store_product_id]' value='" + id + "' class='Store_product_id'>";
-            html += "<input type='hidden' name='SaleItem[" + id + "][unit_value]' value='" + unitValue + "'>";
-            html += "<input type='hidden' name='SaleItem[" + id + "][discount_value]' value='" + discountValue + "'>";
-            html += "<input type='hidden' name='SaleItem[" + id + "][discount_type]' value='" + discountType + "'>";
-            html += "<input type='hidden' name='SaleItem[" + id + "][quantity]' value='" + quant + "'>";
-            html += "<input type='hidden' name='SaleItem[" + id + "][total_value]' value='" + totalValue + "' class='total-value-by-item'>";
-            html += "</td>";
-            html += "</tr>";
+            var html = `
+            <tr id="${id}">
+                <td class="text-left">${productName}</td>    
+                <td><input type="text" name="SaleItem[${id}][unit_value]" value="${unitValue}" data-id="${id}" id="SaleItem_${id}_unit_value" class="col-sm-12  mask-float" /></td>
+                <td><input type="text" name="SaleItem[${id}][quantity]" value="${quant}" data-id="${id}" id="SaleItem_${id}_quantity" class="col-sm-12 mask-float-precision3" /></td>
+                <td><input type="text" name="SaleItem[${id}][discount_value]" data-id="${id}" id="SaleItem_${id}_discount_value" value="${discountValue}" class="col-sm-12 mask-float" /></td>
+                <td id="SaleItem_${id}_label_total_value">${total}</td>
+                <td>
+                    <a href="javascript: void(0)" class="text-danger del-item" data-id="${id}"><i class="fa fa-times-circle"></i></a>
+                    <input type="hidden" name="SaleItem[${id}][store_product_id]" value="${id}" class="Store_product_id" />
+                    <input type="hidden" name="SaleItem[${id}][discount_value]" value="${discountValue}" />
+                    <input type="hidden" name="SaleItem[${id}][total_value]" id="SaleItem_${id}_total_value" value="${totalValue}" class="total-value-by-item" />
+                </td>
+            </tr>`;
 
             $('#table-items tbody').append(html);
 
             $('#form-add-product')[0].reset();
             $('#Product_id').val('');
+            Form.masks();
             Sale.calcTotalPedido();
 
             $("#Sale_search").select2('val', '');
@@ -223,11 +247,13 @@ Sale = {
 
             var product = {
                 id: id,
-                __token: $('#form-sale [name="_token"]').val(),
+                __token: $('#Sale_token').val(),
                 sale: {
-                    token: $('#form-sale [name="_token"]').val(),
+                    token: $('#Sale_token').val(),
                     net_value: $('#Sale_net_value').val(),
-                    customer_id: $('#Sale_customer_id').val()
+                    customer_id: $('#Sale_customer_id').val(),
+                    discount_value: $('#Sale_discount_value').val(),
+                    gross_value: $('#Sale_gross_value').val(),
                 },
                 item: {
                     id: id,
@@ -235,29 +261,72 @@ Sale = {
                     discount_value: discountValue,
                     discount_type: discountType,
                     quantity: quant,
+                    total_value: totalValue,
+                },
+            }
+
+            Sale.addTempProduct(product);
+
+        });
+    },
+
+    updProduct: function() {
+        $('body').on('blur', '#table-items input', function(e) {
+            console.log('aqui');
+            var id = $(this).attr('data-id');
+
+            var valorUnitario = Sale.convertToNumber($(`#SaleItem_${id}_unit_value`).val());
+            var quantidade = Sale.convertToNumber($(`#SaleItem_${id}_quantity`).val());
+            var valorDesconto = Sale.convertToNumber($(`#SaleItem_${id}_discount_value`).val());
+            var totalValue = (valorUnitario * quantidade) - valorDesconto;
+            var product = {
+                id: id,
+                __token: $('#Sale_token').val(),
+                sale: {
+                    token: $('#Sale_token').val(),
+                    net_value: $('#Sale_net_value').val(),
+                    customer_id: $('#Sale_customer_id').val(),
+                    discount_value: $('#Sale_discount_value').val(),
+                    gross_value: $('#Sale_gross_value').val(),
+                },
+                item: {
+                    id: id,
+                    unit_value: valorUnitario,
+                    discount_value: valorDesconto,
+                    discount_type: 'R$',
+                    quantity: quantidade,
                     total_value: totalValue
                 },
             }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post('/sale/add-temp-item', product, function(json) {
-                    console.log(json);
-                })
-                .fail(function() {
-                    $.smallBox({
-                        title: "Atenção!",
-                        content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de incluir este produto de forma temporária.</i>",
-                        color: "#C46A69",
-                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
-                        timeout: 4000
-                    });
-                });
+            Sale.tempDelProduct(product);
+            Sale.addTempProduct(product);
+            Sale.calcTotalPedido();
 
+            $(`#SaleItem_${id}_total_value`).val(totalValue);
+            $(`#SaleItem_${id}_label_total_value`).html(totalValue.toFixed(2));
         });
+    },
+
+
+    tempDelProduct: function(product) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post('/sale/del-temp-item', product, function(json) {
+                console.log(json);
+            })
+            .fail(function() {
+                $.smallBox({
+                    title: "Atenção!",
+                    content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de excluir este produto de forma temporária.</i>",
+                    color: "#C46A69",
+                    iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                    timeout: 4000
+                });
+            });
     },
 
     delProduct: function() {
@@ -270,27 +339,9 @@ Sale = {
 
             var product = {
                 id: id,
-                __token: $('#form-sale [name="_token"]').val()
+                __token: $('#Sale_token').val()
             }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post('/sale/del-temp-item', product, function(json) {
-                    console.log(json);
-                })
-                .fail(function() {
-                    $.smallBox({
-                        title: "Atenção!",
-                        content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de excluir este produto de forma temporária.</i>",
-                        color: "#C46A69",
-                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
-                        timeout: 4000
-                    });
-                });
-
+            Sale.tempDelProduct(product);
         });
     },
 
