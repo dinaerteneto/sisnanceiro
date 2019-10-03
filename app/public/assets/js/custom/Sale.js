@@ -235,12 +235,17 @@ Sale = {
                 <td class="text-left">${productName}</td>    
                 <td><input type="text" name="SaleItem[${id}][unit_value]" value="${unitValue}" data-id="${id}" id="SaleItem_${id}_unit_value" class="col-sm-12  mask-float" /></td>
                 <td><input type="text" name="SaleItem[${id}][quantity]" value="${quant}" data-id="${id}" id="SaleItem_${id}_quantity" class="col-sm-12 mask-float-precision3" /></td>
-                <td><input type="text" name="SaleItem[${id}][discount_value]" data-id="${id}" id="SaleItem_${id}_discount_value" value="${discountValue}" class="col-sm-12 mask-float" /></td>
+                <td>
+                    <input type="text" name="SaleItem[${id}][discount_value]" data-id="${id}" id="SaleItem_${id}_discount_value" value="${discountValue}" class="col-sm-7 mask-float" />
+                    <select name="SaleItem[${id}][discount_type]" data-id="${id}" id="SaleItem_${id}_discount_type">
+                        <option value="R$" ${ discountType != '%' ? 'selected' : null } >R$</option>
+                        <option value="%" ${ discountType == '%' ? 'selected' : null }>%</option>
+                    </select>
+                </td>
                 <td id="SaleItem_${id}_label_total_value">${total}</td>
                 <td>
                     <a href="javascript: void(0)" class="text-danger del-item" data-id="${id}"><i class="fa fa-times-circle"></i></a>
                     <input type="hidden" name="SaleItem[${id}][store_product_id]" value="${id}" class="Store_product_id" />
-                    <input type="hidden" name="SaleItem[${id}][discount_value]" value="${discountValue}" />
                     <input type="hidden" name="SaleItem[${id}][total_value]" id="SaleItem_${id}_total_value" value="${totalValue}" class="total-value-by-item" />
                 </td>
             </tr>`;
@@ -263,6 +268,7 @@ Sale = {
                     net_value: $('#Sale_net_value').val(),
                     customer_id: $('#Sale_customer_id').val(),
                     discount_value: $('#Sale_discount_value').val(),
+                    discount_type: $('#Sale_discount_type').val(),
                     gross_value: $('#Sale_gross_value').val(),
                 },
                 item: {
@@ -281,12 +287,17 @@ Sale = {
     },
 
     updProduct: function() {
-        $('body').on('blur', '#table-items input', function(e) {
+        $('body').on('blur', '#table-items input, #table-items select', function(e) {
             var id = $(this).attr('data-id');
 
             var valorUnitario = Sale.convertToNumber($(`#SaleItem_${id}_unit_value`).val());
             var quantidade = Sale.convertToNumber($(`#SaleItem_${id}_quantity`).val());
             var valorDesconto = Sale.convertToNumber($(`#SaleItem_${id}_discount_value`).val());
+            var valorOriginalDesconto = valorDesconto;
+            var tipoDesconto = $(`#SaleItem_${id}_discount_type`).val();
+            if (tipoDesconto == '%') {
+                valorDesconto = (valorUnitario / 100) * valorDesconto;
+            }
             var totalValue = (valorUnitario * quantidade) - valorDesconto;
 
             $(`#SaleItem_${id}_total_value`).val(totalValue);
@@ -301,13 +312,14 @@ Sale = {
                     net_value: $('#Sale_net_value').val(),
                     customer_id: $('#Sale_customer_id').val(),
                     discount_value: $('#Sale_discount_value').val(),
+                    discount_type: $('#Sale_discount_type').val(),
                     gross_value: $('#Sale_gross_value').val(),
                 },
                 item: {
                     id: id,
                     unit_value: valorUnitario,
-                    discount_value: valorDesconto,
-                    discount_type: 'R$',
+                    discount_value: valorOriginalDesconto,
+                    discount_type: tipoDesconto,
                     quantity: quantidade,
                     total_value: totalValue
                 },

@@ -174,15 +174,15 @@
                             </div>
                         </div>
 
-                        <div class="table-responsive" style="height: 307px; margin-top: -5px; overflow: auto; ">
+                        <div class="table-responsive" style="height: 253px; margin-top: -5px; overflow: auto; ">
                             
                             <table class="table table-hover table-striped" id="table-items">
                                 <thead>
                                     <tr>
-                                        <th class="text-left" width="35%">Produto</th>
+                                        <th class="text-left" width="30%">Produto</th>
                                         <th width="15%">Vl Unit</th>
                                         <th width="15%">Qtd.</th>
-                                        <th width="15%">Vl Desc.</th>
+                                        <th width="20%">Vl Desc.</th>
                                         <th width="15%">Vl Total</th>
                                         <th width="5%">&nbsp;</th>
                                     </tr>
@@ -215,24 +215,9 @@
 
                             </table>
 
-                <!--
-
-                            <div class="form-group row">
-                                <label class="col-md-6 control-label">DESC VENDA</label>
-                                <input class="col-md-6 form-control input-lg mask-currency" type="text" name="Sale[discount_value]" id="Sale_discount_value" />
+                            <div class="col-sm-12 row">
+                                <input type="submit" class="btn btn-primary input-lg" value="FINALIZAR VENDA">
                             </div>
-                            
-                            <div class="form-group row">
-                                <div class="text-center well bg-red well-sm text-white input-lg">
-                                    TOTAL: R$ <span id="total-value"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <input type="submit" class="btn btn-primary input-lg pull-right" value="FINALIZAR VENDA">
-                            </div>
-                        </div>
--->
                     </form>
                 </div>
             </div>

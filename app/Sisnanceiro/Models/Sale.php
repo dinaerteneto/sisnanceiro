@@ -29,6 +29,7 @@ class Sale extends Model
         'status',
         'gross_value',
         'discount_value',
+        'discount_type',
         'net_value',
         'fine_cancel_reason',
         'fine_cancel_value',

@@ -21,8 +21,8 @@ class SaleItem extends Model
         'type',
         'unit_value',
         'discount_value',
-        'discount_reason',
         'discount_type',
+        'discount_reason',
         'total_value',
         'quantity',
     ];

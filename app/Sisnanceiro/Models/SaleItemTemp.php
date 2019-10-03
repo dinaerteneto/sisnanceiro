@@ -17,10 +17,10 @@ class SaleItemTemp extends Model
         'sale_temp_id',
         'store_product_id',
         'quantity',
+        'discount_value',
         'discount_type',
         'unit_value',
         'total_value',
-        'discount_value',
     ];
 
     public function company()

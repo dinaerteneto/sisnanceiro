@@ -18,6 +18,7 @@ class SaleTemp extends Model
         'token',
         'gross_value',
         'discount_value',
+        'discount_type',
         'net_value',
     ];
 

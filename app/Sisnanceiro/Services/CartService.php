@@ -25,6 +25,7 @@ class CartService extends Service
             'token' => $data['token'],
             'customer_id' => $customerId,
             'discount_value' => FloatConversor::convert($data['discount_value']),
+            'discount_type' => $data['discount_type'],
             'gross_value' => FloatConversor::convert($data['gross_value']),
             'net_value' => FloatConversor::convert($data['net_value']),
             'sale_date' => Carbon::now()->format('Y-m-d'),
@@ -77,6 +78,7 @@ class CartService extends Service
     {
         $modelSaleTemp = $this->modelSaleTemp
             ->where('token', '=', $token)
+            ->where('company_id', '=', Auth::user()->company_id)
             ->first();
 
         $modelItemTemp = $this->modelSaleItemTemp
@@ -90,6 +92,23 @@ class CartService extends Service
             return true;
         }
         return false;
+    }
+
+    public function deleteByToken($token) 
+    {
+        $modelSaleTemp = $this->modelSaleTemp
+            ->where('token', '=', $token)
+            ->where('company_id', '=', Auth::user()->company_id)
+            ->first();
+
+        $this->modelSaleItemTemp
+            ->where('sale_temp_id', '=', $modelSaleTemp->id)
+            ->where('company_id', '=', Auth::user()->company_id)
+            ->delete();        
+
+        $modelSaleTemp->delete();
+
+        return true;
     }
 
 }
