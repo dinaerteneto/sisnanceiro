@@ -16,10 +16,47 @@
             </div>            
 
             <div class="row">
+                @if($tempItems)
+                
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+                    
+                    <p class="text-red">Vendas que ñ foram concluídas</p>
+                    
+                    <div class="jarviswidget well jarviswidget-color-darken">
+                        <div class="widget-body no-padding">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Cliente</th>
+                                        <th>Operador</th>
+                                        <th width="20%">Valor</th>
+                                        <th width="10%" class="text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($tempItems as $item)
+                                    <tr>
+                                        <td>{{ $item['sale_date'] }}</td>
+                                        <td>{{ $item['customer']['name'] }}</td>
+                                        <td>{{ $item['userCreated']['name'] }}</td>
+                                        <td>{{ $item['net_value'] }}</td>
+                                        <td class="text-right">
+                                            <a href="/sale/create/{{ $item['id'] }}" rel="tooltip" data-placement="top" data-original-title="Continuar esta venda" class="btn btn-xs btn-success" data-title="Continuar esta venda" data-ask="Continuar com esta venda"><i class="fa fa-thumbs-o-up"></i></a>
+                                            <a href="/sale/del-temp/{{ $item['token'] }}" rel="tooltip" data-placement="top" data-original-title="Não continuar esta venda" class="delete-record btn btn-xs btn-danger" data-title="Cancelar venda não incluída" data-ask="Cancelar venda não incluída"><i class="fa fa-times"></i></a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </article>
+                @endif
+
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                     <div class="jarviswidget well jarviswidget-color-darken">
                         <div class="widget-body no-padding">
-
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover">
                                     <thead>
@@ -37,7 +74,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </article>

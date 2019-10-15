@@ -121,6 +121,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
         Route::post('/add-temp-item', 'SaleController@addTempItem');
         Route::post('/del-temp-item', 'SaleController@delTempItem');
+        Route::post('/del-temp/{token}', 'SaleController@delTemp');
     });
 
     Route::group(['prefix' => 'bank-account'], function () {

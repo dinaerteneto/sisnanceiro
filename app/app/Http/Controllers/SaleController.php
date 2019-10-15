@@ -16,6 +16,7 @@ use Sisnanceiro\Services\StoreProductService;
 use Sisnanceiro\Transformers\SaleCustomerTransformer;
 use Sisnanceiro\Transformers\SaleStoreProductTransformer;
 use Sisnanceiro\Transformers\SaleTransformer;
+use Sisnanceiro\Transformers\CartTransformer;
 
 class SaleController extends Controller
 {
@@ -37,7 +38,13 @@ class SaleController extends Controller
                 $query->whereRaw("firstname LIKE ?", ["%{$keyword}%"]);
             })->make(true);
         }
-        return view('/sale/index');
+
+        $tempItems = fractal($this->cartService->getAll(), new CartTransformer());
+        if($tempItems) {
+            $tempItems = $tempItems->toArray()['data'];
+        }
+
+        return view('/sale/index', compact('tempItems'));
     }
 
     public function create(Request $request)
@@ -48,7 +55,7 @@ class SaleController extends Controller
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a venda.', 'errors' => $model->getErrors()]);
                 Log::debug(json_encode($request->all()));
-                return redirect("sale/index");
+                return redirect("sale/index"); 
             } else {
                 return redirect("sale/ask/{$model->id}");
             }
@@ -189,6 +196,13 @@ class SaleController extends Controller
 
         $return = $this->cartService->delItem($token, $productId);
         return $this->apiSuccess(['success' => $return]);
+    }
+
+    public function delTemp($token) {
+        if($this->cartService->deleteByToken($token)) {
+            return $this->apiSuccess(['success' => true]);
+        }
+        return $this->apiSuccess(['success' => error]);
     }
 
 }

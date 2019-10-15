@@ -4,10 +4,10 @@ namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Models\SaleItemTemp;
 use Sisnanceiro\Models\SaleTemp;
-use Illuminate\Support\Facades\Log;
 
 class CartService extends Service
 {
@@ -58,7 +58,7 @@ class CartService extends Service
             if (!$modelTempSale) {
                 $modelTempSale = $this->modelSaleTemp->create($saleData);
             }
-            
+
             $modelTempSale->fill($saleData);
             $modelTempSale->save();
 
@@ -94,7 +94,7 @@ class CartService extends Service
         return false;
     }
 
-    public function deleteByToken($token) 
+    public function deleteByToken($token)
     {
         $modelSaleTemp = $this->modelSaleTemp
             ->where('token', '=', $token)
@@ -104,11 +104,16 @@ class CartService extends Service
         $this->modelSaleItemTemp
             ->where('sale_temp_id', '=', $modelSaleTemp->id)
             ->where('company_id', '=', Auth::user()->company_id)
-            ->delete();        
+            ->delete();
 
         $modelSaleTemp->delete();
 
         return true;
+    }
+
+    public function getAll()
+    {
+        return $this->modelSaleTemp->all();
     }
 
 }
