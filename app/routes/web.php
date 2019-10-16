@@ -119,6 +119,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/delete/{id}', 'SaleController@delete');
         Route::get('/copy/{id}', 'SaleController@copy');
 
+        Route::get('/create/{token}', 'SaleController@createTemp');
         Route::post('/add-temp-item', 'SaleController@addTempItem');
         Route::post('/del-temp-item', 'SaleController@delTempItem');
         Route::post('/del-temp/{token}', 'SaleController@delTemp');

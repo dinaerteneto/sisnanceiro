@@ -44,7 +44,6 @@
     </style>
 
 
-
     <div class="modal fade" id="modal-customer" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
             <form id="form-customer" method="post" action="">
@@ -152,15 +151,22 @@
                 <div class="col-sm-8">
                     <form id="form-sale" method="post" action="/sale/create">
                         @csrf
-                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id">
-                        <input type="hidden" name="Sale[net_value]" id="Sale_net_value">
-                        <input type="hidden" name="Sale[gross_value]" id="Sale_gross_value">
-                        <input type="hidden" name="Sale[token]" id="Sale_token" value="<?= time() ?>">
+                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id" value="{{ isset($tempItems) ? $tempItems->customer['id'] : null }}" />
+                        <input type="hidden" name="Sale[net_value]" id="Sale_net_value" value="{{ isset($tempItems) ? $tempItems->net_value_no_mask : null }}" />
+                        <input type="hidden" name="Sale[gross_value]" id="Sale_gross_value" value="{{ isset($tempItems) ? $tempItems->gross_value_no_mask : null }}" />
+                        <input type="hidden" name="Sale[token]" id="Sale_token" value="<?= isset($tempItems) ? $tempItems->token : time() ?>" />
 
                         <div class="text-center well bg-darken well-sm text-white" style="padding: 14px">
                             <div class="row">
                                 <div class="col-sm-10">
-                                    Cliente: <span id="Sale_customer_name">AO CONSUMIDOR</span>
+                                    Cliente: 
+                                        <span id="Sale_customer_name">
+                                            @if( isset($tempItems) && !empty($tempItems->customer['id']) )
+                                                {{ $tempItems->customer['name'] }}
+                                            @else
+                                                AO CONSUMIDOR
+                                            @endif
+                                        </span>                                    
                                 </div>
                                 <div class="col-sm-2">
                                     <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-customer" id="btn-customer" rel="tooltip" data-placement="top" data-original-title="Alterar cliente">
@@ -187,8 +193,32 @@
                                         <th width="5%">&nbsp;</th>
                                     </tr>
                                 </thead>
-                                <tbody>                                      
+                                
+                                <tbody>      
+                                    @if(isset($tempItems))
+                                        @foreach($tempItems->items as $product)                                
+                                        <tr id="{{ $product['store_product_id'] }}">
+                                            <td class="text-left">{{ $product['product']['name'] }}</td>    
+                                            <td><input type="text" name="SaleItem[{{ $product['store_product_id'] }}][unit_value]" value="{{ $product['unit_value'] }}" data-id="{{ $product['store_product_id'] }}" id="SaleItem_{{ $product['store_product_id'] }}_unit_value" class="col-sm-12  mask-float" /></td>
+                                            <td><input type="text" name="SaleItem[{{ $product['store_product_id'] }}][quantity]" value="{{ $product['quantity'] }}" data-id="{{ $product['store_product_id'] }}" id="SaleItem_{{ $product['store_product_id'] }}_quantity" class="col-sm-12 mask-float-precision3" /></td>
+                                            <td>
+                                                <input type="text" name="SaleItem[{{ $product['store_product_id'] }}][discount_value]" data-id="{{ $product['store_product_id'] }}" id="SaleItem_{{ $product['store_product_id'] }}_discount_value" value="{{ $product['discount_value'] }}" class="col-sm-7 mask-float" />
+                                                <select name="SaleItem[{{ $product['store_product_id'] }}][discount_type]" data-id="{{ $product['store_product_id'] }}" id="SaleItem_{{ $product['store_product_id'] }}_discount_type">
+                                                    <option value="R$" {{ $product['discount_type'] != '%' ? 'selected' : null }} >R$</option>
+                                                    <option value="%"  {{ $product['discount_type'] == '%' ? 'selected' : null }} >%</option>
+                                                </select>
+                                            </td>
+                                            <td id="SaleItem_{{ $product['store_product_id'] }}_label_total_value">{{ $product['total_value'] }}</td>
+                                            <td>
+                                                <a href="javascript: void(0)" class="text-danger del-item" data-id="{{ $product['store_product_id'] }}"><i class="fa fa-times-circle"></i></a>
+                                                <input type="hidden" name="SaleItem[{{ $product['store_product_id'] }}][store_product_id]" value="{{ $product['store_product_id'] }}" class="Store_product_id" />
+                                                <input type="hidden" name="SaleItem[{{ $product['store_product_id'] }}][total_value]" id="SaleItem_{{ $product['store_product_id'] }}_total_value" value="{{ $product['total_value_no_mask'] }}" class="total-value-by-item" />
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
                                 </tbody>
+                                
                             </table>
                             
                         </div>
@@ -202,13 +232,13 @@
                                         
                                         <th width="45%" colspan="3">
                                             Desconto
-                                            <input type="text" name="Sale[discount_value]" id="Sale_discount_value" class="col-sm-4 mask-float" />
+                                            <input type="text" name="Sale[discount_value]" id="Sale_discount_value" value="{{ isset($tempItems) ? $tempItems->discount_value : null }}" class="col-sm-4 mask-float" />
                                             <select name="Sale[discount_type]" id="Sale_discount_type" class="col-sm-2">
-                                                <option value="R$" selected>R$</option>
-                                                <option value="%">%</option>
+                                                <option value="R$" {{ isset($tempItems) && $tempItems->discount_type != '%' ? 'selected' : null }} >R$</option>
+                                                <option value="%"  {{ isset($tempItems) && $tempItems->discount_type == '%' ? 'selected' : null }} >%</option>
                                             </select>
                                         </th>
-                                        <th width="15%">R$ <span id="total-value">0,00</span></th>
+                                        <th width="15%">R$ <span id="total-value">{{ isset($tempItems) ? $tempItems->net_value : '0,00' }}</span></th>
                                         <th width="5%">&nbsp;</th>
                                     </tr>
                                 </thead>

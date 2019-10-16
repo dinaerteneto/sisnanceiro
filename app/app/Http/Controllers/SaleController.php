@@ -13,10 +13,10 @@ use Sisnanceiro\Services\CartService;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\SaleService;
 use Sisnanceiro\Services\StoreProductService;
+use Sisnanceiro\Transformers\CartTransformer;
 use Sisnanceiro\Transformers\SaleCustomerTransformer;
 use Sisnanceiro\Transformers\SaleStoreProductTransformer;
 use Sisnanceiro\Transformers\SaleTransformer;
-use Sisnanceiro\Transformers\CartTransformer;
 
 class SaleController extends Controller
 {
@@ -40,7 +40,7 @@ class SaleController extends Controller
         }
 
         $tempItems = fractal($this->cartService->getAll(), new CartTransformer());
-        if($tempItems) {
+        if ($tempItems) {
             $tempItems = $tempItems->toArray()['data'];
         }
 
@@ -55,7 +55,7 @@ class SaleController extends Controller
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a venda.', 'errors' => $model->getErrors()]);
                 Log::debug(json_encode($request->all()));
-                return redirect("sale/index"); 
+                return redirect("sale/index");
             } else {
                 return redirect("sale/ask/{$model->id}");
             }
@@ -183,6 +183,16 @@ class SaleController extends Controller
         }
     }
 
+    public function createTemp($token)
+    {
+        $tempItems = fractal($this->cartService->getByToken($token), new CartTransformer());
+        if ($tempItems) {
+            $tempItems = (object) $tempItems->toArray()['data'];
+        }
+        // dd($tempItems);
+        return view('/sale/create', compact('tempItems'));
+    }
+
     public function addTempItem(Request $request)
     {
         $this->cartService->addItem($request->all());
@@ -198,8 +208,9 @@ class SaleController extends Controller
         return $this->apiSuccess(['success' => $return]);
     }
 
-    public function delTemp($token) {
-        if($this->cartService->deleteByToken($token)) {
+    public function delTemp($token)
+    {
+        if ($this->cartService->deleteByToken($token)) {
             return $this->apiSuccess(['success' => true]);
         }
         return $this->apiSuccess(['success' => error]);

@@ -111,6 +111,14 @@ class CartService extends Service
         return true;
     }
 
+    public function getByToken($token)
+    {
+        return $this->modelSaleTemp
+            ->where('token', '=', $token)
+            ->where('company_id', '=', Auth::user()->company_id)
+            ->first();
+    }
+
     public function getAll()
     {
         return $this->modelSaleTemp->all();

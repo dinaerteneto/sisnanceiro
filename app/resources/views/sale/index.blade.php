@@ -42,7 +42,7 @@
                                         <td>{{ $item['userCreated']['name'] }}</td>
                                         <td>{{ $item['net_value'] }}</td>
                                         <td class="text-right">
-                                            <a href="/sale/create/{{ $item['id'] }}" rel="tooltip" data-placement="top" data-original-title="Continuar esta venda" class="btn btn-xs btn-success" data-title="Continuar esta venda" data-ask="Continuar com esta venda"><i class="fa fa-thumbs-o-up"></i></a>
+                                            <a href="/sale/create/{{ $item['token'] }}" rel="tooltip" data-placement="top" data-original-title="Continuar esta venda" class="btn btn-xs btn-success" data-title="Continuar esta venda" data-ask="Continuar com esta venda"><i class="fa fa-thumbs-o-up"></i></a>
                                             <a href="/sale/del-temp/{{ $item['token'] }}" rel="tooltip" data-placement="top" data-original-title="Não continuar esta venda" class="delete-record btn btn-xs btn-danger" data-title="Cancelar venda não incluída" data-ask="Cancelar venda não incluída"><i class="fa fa-times"></i></a>
                                         </td>
                                     </tr>
