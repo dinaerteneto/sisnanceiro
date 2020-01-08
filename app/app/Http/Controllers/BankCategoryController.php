@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response
 
 class BankCategoryController extends Controller
 {

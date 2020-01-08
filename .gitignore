@@ -1,0 +1,4 @@
+vendor
+database
+.vscode
+app/.env

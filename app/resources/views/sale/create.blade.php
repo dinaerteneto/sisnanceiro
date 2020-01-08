@@ -151,7 +151,7 @@
                 <div class="col-sm-8">
                     <form id="form-sale" method="post" action="/sale/create">
                         @csrf
-                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id" value="{{ isset($tempItems) ? $tempItems->customer['id'] : null }}" />
+                        <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id" value="{{ isset($tempItems) && isset($tempItems->customer['id']) ? $tempItems->customer['id'] : null }}" />
                         <input type="hidden" name="Sale[net_value]" id="Sale_net_value" value="{{ isset($tempItems) ? $tempItems->net_value_no_mask : null }}" />
                         <input type="hidden" name="Sale[gross_value]" id="Sale_gross_value" value="{{ isset($tempItems) ? $tempItems->gross_value_no_mask : null }}" />
                         <input type="hidden" name="Sale[token]" id="Sale_token" value="<?= isset($tempItems) ? $tempItems->token : time() ?>" />
