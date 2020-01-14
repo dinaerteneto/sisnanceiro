@@ -88,7 +88,7 @@ Sale = {
             placeholder: "Pesquise pelo nome ou código do produto...",
             minimumInputLength: 3,
             ajax: {
-                url: "search-item",
+                url: "/sale/search-item",
                 dataType: "json",
                 quietMillis: 250,
                 data: function(term, page) {
