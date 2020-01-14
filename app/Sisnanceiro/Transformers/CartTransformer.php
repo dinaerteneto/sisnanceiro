@@ -125,7 +125,7 @@ class CartTransformer extends TransformerAbstract
                 'unit_value' => Mask::currency($item->unit_value),
                 'unit_value_no_mask' => $item->unit_value,
 
-                'discount_value' => $discountValue,
+                'discount_value' => Mask::currency($discountValueNoMask),
                 'discount_value_no_mask' => $discountValueNoMask,
                 'discount_type' => $item->discount_type,
 

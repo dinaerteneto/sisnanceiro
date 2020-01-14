@@ -10,8 +10,8 @@
         -webkit-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
         -moz-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
         box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
-        min-height: 75vh;    
-    }       
+        min-height: 75vh;
+    }
 
     #contact .teclas {
         position: absolute;
@@ -20,8 +20,8 @@
         padding: 1%;
         text-align: center;
         background: #E9E9E9;
-        left: 0;        
-    } 
+        left: 0;
+    }
 
     #btn-customer, #btn-customer-clear {
         color: #fff;
@@ -65,14 +65,14 @@
                                     <input type="text" name="Customer[search]" id="Customer_search" class="form-control" placeholder="Nome/Razão social do cliente" />
                                 </div>
                             </div>
-                        </fieldset>                            
+                        </fieldset>
                     </div>
                     <div class="modal-footer">
                         <div class="align-right col-sm-6">
                             <button type="submit" class="btn btn-primary">Enviar</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         </div>
-                    </div>          
+                    </div>
                 </div>
             </form>
         </div>
@@ -81,7 +81,7 @@
 
     <section id="contact" class="home-section text-center">
         <div class="container">
-            <div class="row">			
+            <div class="row">
                 <div class="col-sm-4">
 
                     <div class="row">
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="row">
-                        
+
                         <!--
                         <div class="col-sm-4">
                             <div class="row">
@@ -111,7 +111,7 @@
                                 <input type="hidden" name="Product[total_value_by_item]" id="Product_total_value_by_item">
                                 <input type="hidden" name="Product[unit_measurement]" id="Product_unit_measurement">
 
-                                <div class="form-group row">                                    
+                                <div class="form-group row">
                                     <label class="col-md-6 control-label">CÓDIGO</label>
                                     <input type="text" name="Product[code]" id="Product_code" class="col-md-6 form-control input-lg" disabled>
                                 </div>
@@ -136,7 +136,7 @@
                                     <label class="col-md-6 control-label">VALOR TOTAL</label>
                                     <input type="text" name="Product[total_value]" id="Product_total_value" class="col-md-6 form-control input-lg" disabled>
                                 </div>
-                                
+
                                 <div class="form-group row">
                                     <label class="col-md-6 control-label"></label>
                                     <input type="submit" value="ADD PRODUTO" class="btn bg-dark text-white col-md-6 input-lg">
@@ -144,12 +144,12 @@
                             </form>
                         </div>
 
-                    </div>  
-                    
+                    </div>
+
                 </div>
 
                 <div class="col-sm-8">
-                    <form id="form-sale" method="post" action="/sale/create">
+                    <form id="form-sale" method="post" action="{{ url('sale/create') }}">
                         @csrf
                         <input type="hidden" name="Sale[customer_id]" id="Sale_customer_id" value="{{ isset($tempItems) && isset($tempItems->customer['id']) ? $tempItems->customer['id'] : null }}" />
                         <input type="hidden" name="Sale[net_value]" id="Sale_net_value" value="{{ isset($tempItems) ? $tempItems->net_value_no_mask : null }}" />
@@ -159,14 +159,14 @@
                         <div class="text-center well bg-darken well-sm text-white" style="padding: 14px">
                             <div class="row">
                                 <div class="col-sm-10">
-                                    Cliente: 
+                                    Cliente:
                                         <span id="Sale_customer_name">
                                             @if( isset($tempItems) && !empty($tempItems->customer['id']) )
                                                 {{ $tempItems->customer['name'] }}
                                             @else
                                                 AO CONSUMIDOR
                                             @endif
-                                        </span>                                    
+                                        </span>
                                 </div>
                                 <div class="col-sm-2">
                                     <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-customer" id="btn-customer" rel="tooltip" data-placement="top" data-original-title="Alterar cliente">
@@ -181,7 +181,7 @@
                         </div>
 
                         <div class="table-responsive" style="height: 253px; margin-top: -5px; overflow: auto; ">
-                            
+
                             <table class="table table-hover table-striped" id="table-items">
                                 <thead>
                                     <tr>
@@ -193,12 +193,12 @@
                                         <th width="5%">&nbsp;</th>
                                     </tr>
                                 </thead>
-                                
-                                <tbody>      
+
+                                <tbody>
                                     @if(isset($tempItems))
-                                        @foreach($tempItems->items as $product)                                
+                                        @foreach($tempItems->items as $product)
                                         <tr id="{{ $product['store_product_id'] }}">
-                                            <td class="text-left">{{ $product['product']['name'] }}</td>    
+                                            <td class="text-left">{{ $product['product']['name'] }}</td>
                                             <td><input type="text" name="SaleItem[{{ $product['store_product_id'] }}][unit_value]" value="{{ $product['unit_value'] }}" data-id="{{ $product['store_product_id'] }}" id="SaleItem_{{ $product['store_product_id'] }}_unit_value" class="col-sm-12  mask-float" /></td>
                                             <td><input type="text" name="SaleItem[{{ $product['store_product_id'] }}][quantity]" value="{{ $product['quantity'] }}" data-id="{{ $product['store_product_id'] }}" id="SaleItem_{{ $product['store_product_id'] }}_quantity" class="col-sm-12 mask-float-precision3" /></td>
                                             <td>
@@ -218,18 +218,18 @@
                                         @endforeach
                                     @endif
                                 </tbody>
-                                
+
                             </table>
-                            
+
                         </div>
-                        
+
                         <div class="table-responsive" style="margin-top: -5px; overflow: auto; ">
-                            
+
                             <table class="table table-hover table-striped" >
                                 <thead>
                                     <tr>
                                         <th width="35%" class="text-left"></th>
-                                        
+
                                         <th width="45%" colspan="3">
                                             Desconto
                                             <input type="text" name="Sale[discount_value]" id="Sale_discount_value" value="{{ isset($tempItems) ? $tempItems->discount_value : null }}" class="col-sm-4 mask-float" />
@@ -255,14 +255,14 @@
                 <div class="row">
                     <div class="hidden-xs teclas">
                         <b>F2</b> = Nova Busca <b>|</b> <b>F3</b> = Adicionar Produto <b>|</b> <b>F4</b> = Finalizar Venda <b>
-                    </div>                
+                    </div>
                 </div>
 
 
         </div>
     </section>
 @endsection
-    
+
 @section('scripts')
-    <script type="text/javascript" src="{{ asset('assets/js/custom/Sale.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('assets/js/custom/Sale.js') }}"></script>
 @endsection

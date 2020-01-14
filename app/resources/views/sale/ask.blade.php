@@ -31,8 +31,8 @@
         -webkit-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
         -moz-box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
         box-shadow: 0px 1px 22px 0px rgba(50, 50, 50, 0.75);
-        min-height: 85vh;    
-    }       
+        min-height: 85vh;
+    }
 
     #contact .teclas {
         position: absolute;
@@ -41,14 +41,14 @@
         padding: 1%;
         text-align: center;
         background: #E9E9E9;
-        left: 0;        
-    } 
+        left: 0;
+    }
 
     .center {
         position: relative;
         -ms-transform: translate(0%, 50%);
-        transform: translate(0%, 70%);        
-    }    
+        transform: translate(0%, 70%);
+    }
 
     </style>
 </head>
@@ -64,25 +64,25 @@
             <div class="center">
                 <i class="fa fa-shopping-cart fa-5x text-success"></i>
                 <h1 class="text-success">VENDA <b>{{ $sale['sale_code'] }}</b> FINALIZADA COM SUCESSO</h1>
-                <a id="sale-create" href="/sale/create" class="btn btn-success btn-lg">CRIAR NOVA VENDA</a>
-                <a id="sale-print" href="/sale/coupon/{{ $sale['id'] }}" target="_blank" class="btn btn-warning btn-lg">IMPRIMIR CUPOM</a>
-                <a id="sale-print-A4" href="/sale/print/{{ $sale['id'] }}" target="_blank" class="btn btn-info btn-lg">IMPRIMIR A4</a>
+                <a id="sale-create" href="<?= url("/sale/create") ?>" class="btn btn-success btn-lg">CRIAR NOVA VENDA</a>
+                <a id="sale-print" href="<?= url("/sale/coupon/{$sale['id']}") ?>" target="_blank" class="btn btn-warning btn-lg">IMPRIMIR CUPOM</a>
+                <a id="sale-print-A4" href="<?= url("/sale/print/{$sale['id']}") ?>" target="_blank" class="btn btn-info btn-lg">IMPRIMIR A4</a>
             </div>
         </div>
 
         <div class="row">
             <div class="hidden-xs teclas">
-                <b>F2</b> = Nova venda <b>|</b> 
+                <b>F2</b> = Nova venda <b>|</b>
                 <b>F3</b> = Imprimir cupom <b>|</b>
                 <b>F4</b> = Imprimir A4
-            </div>                
+            </div>
         </div>
 
     </section>
 
 @section('scripts')
     <script type="text/javascript" src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('assets/app/app.bundle.js') }}"></script>
 
     <script type="text/javascript">
     $('document').ready(function() {

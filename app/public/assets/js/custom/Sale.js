@@ -88,7 +88,7 @@ Sale = {
             placeholder: "Pesquise pelo nome ou código do produto...",
             minimumInputLength: 3,
             ajax: {
-                url: "/sale/search-item",
+                url: "search-item",
                 dataType: "json",
                 quietMillis: 250,
                 data: function(term, page) {
@@ -181,23 +181,32 @@ Sale = {
     },
 
     addTempProduct: function(product) {
-        $.ajaxSetup({
+
+        $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/sale/add-temp-item',
+            type: 'post',
+            dataType: 'json',
+            data: product,
+            success: function(json) {
+                console.log(json)
+            },
+            beforeSend: function() {
+                $.blockUI({
+                    theme: false,
+                    message: 'Aguarde',
+                    baseZ: 999999,
+                    css: {
+                        top: '50%'
+                    }
+                });
+            },
+            complete: function() {
+                $.unblockUI();
             }
         });
-        $.post('/sale/add-temp-item', product, function(json) {
-                console.log(json);
-            })
-            .fail(function() {
-                $.smallBox({
-                    title: "Atenção!",
-                    content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de incluir este produto de forma temporária.</i>",
-                    color: "#C46A69",
-                    iconSmall: "fa fa-times fa-2x fadeInRight animated",
-                    timeout: 4000
-                });
-            });
     },
 
     addProduct: function() {
@@ -232,7 +241,7 @@ Sale = {
 
             var html = `
             <tr id="${id}">
-                <td class="text-left">${productName}</td>    
+                <td class="text-left">${productName}</td>
                 <td><input type="text" name="SaleItem[${id}][unit_value]" value="${unitValue}" data-id="${id}" id="SaleItem_${id}_unit_value" class="col-sm-12  mask-float" /></td>
                 <td><input type="text" name="SaleItem[${id}][quantity]" value="${quant}" data-id="${id}" id="SaleItem_${id}_quantity" class="col-sm-12 mask-float-precision3" /></td>
                 <td>
@@ -332,6 +341,43 @@ Sale = {
     },
 
     tempDelProduct: function(product) {
+
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/sale/del-temp-item',
+            type: 'post',
+            dataType: 'json',
+            data: product,
+            success: function(json) {
+                console.log(json)
+            },
+            fail: function() {
+                $.smallBox({
+                    title: "Atenção!",
+                    content: "<i class='fa fa-clock-o'></i> <i>Erro na tenttiva de excluir este produto de forma temporária.</i>",
+                    color: "#C46A69",
+                    iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                    timeout: 4000
+                });
+            },
+            beforeSend: function() {
+                $.blockUI({
+                    theme: false,
+                    message: 'Aguarde',
+                    baseZ: 999999,
+                    css: {
+                        top: '50%'
+                    }
+                });
+            },
+            complete: function() {
+                $.unblockUI();
+            }
+        });
+/*
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -348,7 +394,7 @@ Sale = {
                     iconSmall: "fa fa-times fa-2x fadeInRight animated",
                     timeout: 4000
                 });
-            });
+            });*/
     },
 
     delProduct: function() {

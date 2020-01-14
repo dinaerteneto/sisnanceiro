@@ -189,7 +189,6 @@ class SaleController extends Controller
         if ($tempItems) {
             $tempItems = (object) $tempItems->toArray()['data'];
         }
-        // dd($tempItems);
         return view('/sale/create', compact('tempItems'));
     }
 
