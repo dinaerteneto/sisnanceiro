@@ -4,37 +4,39 @@ namespace Sisnanceiro\Models;
 
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SaleItem extends Model
+class SaleItemTemp extends Model
 {
     use TenantModels;
-    use SoftDeletes;
 
-    protected $table      = 'sale_item';
+    protected $table = 'sale_item_temp';
     protected $primaryKey = 'id';
 
     protected $fillable = [
         'company_id',
-        'sale_id',
+        'sale_temp_id',
         'store_product_id',
-        'type',
-        'unit_value',
+        'quantity',
         'discount_value',
         'discount_type',
-        'discount_reason',
+        'unit_value',
         'total_value',
-        'quantity',
     ];
 
-    public function sale() {
-        return $this->hasOne('Sisnanceiro\Models\Sale', 'id', 'sale_id');
+    public function company()
+    {
+        return $this->hasOne('Sisnanceiro\Models\Company', 'id', 'company_id');
+    }
+
+    public function SaleTemp()
+    {
+        return $this->hasOne('Sisnanceiro\Models\SaleTemp', 'id', 'sale_temp_id');
     }
 
     public function product()
     {
         return \DB::table('store_product')
             ->where('id', '=', $this->store_product_id);
-    }
+    }    
 
 }
