@@ -10,6 +10,7 @@ Person = {
         Person.addContact();
         Person.addAddress();
         Person.removeContainer();
+        Person.formValidate();
 
         $('#Customer_physical').trigger('change');
     },
@@ -123,6 +124,41 @@ Person = {
                     });
                 }
             }, 'json');
+        });
+    },
+
+
+    formValidate: function() {
+        $('#form1').validate({
+            ignore: null,
+            submitHandler: function(form) {
+                form.submit();
+            },
+            rules: {
+                '#Customer_physical': 'required',
+                'Customer[firstname]': 'required',
+            },
+            messages: {
+                '#Customer_physical': 'Obrigatório',
+                'Customer[firstname]': 'Obrigatório',
+            },
+            highlight: function(element) {
+                $(element).removeClass('is-valid').addClass('is-invalid');
+                $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid').addClass('is-valid');
+                $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+            },
+            errorElement: 'span',
+            errorClass: 'invalid-feedback',
+            errorPlacement: function(error, element) {
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
         });
     }
 

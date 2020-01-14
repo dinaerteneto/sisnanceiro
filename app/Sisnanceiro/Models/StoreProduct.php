@@ -24,6 +24,7 @@ class StoreProduct extends Model
         'name',
         'sku',
         'price',
+        'cost_price',
         'weight',
         'description',
         'total_in_stock',

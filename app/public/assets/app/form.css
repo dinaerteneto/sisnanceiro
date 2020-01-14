@@ -134,7 +134,7 @@ select.input-lg {
     padding: 0;
     margin: 0;
     top: 50%;
-    margin-top: -3%;
+    margin-top: -2%;
 }
 
 .icon-addon.addon-lg .fa {
@@ -182,5 +182,13 @@ select.input-lg {
     }
 }
 
+.box-shadow-none {
+    box-shadow: none !important;
+}
 
-/*# sourceMappingURL=forms.css.map */
+.btn-light,
+.bs-placeholder {
+    border-color: #ced4da !important;
+    box-shadow: none !important;
+    color: #495057 !important;
+}

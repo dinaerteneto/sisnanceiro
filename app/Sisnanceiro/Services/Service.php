@@ -75,7 +75,7 @@ abstract class Service
      */
     public function destroy($id)
     {
-        $model = $this->repository->find($id);
+        $model = $this->repository->findBy('id', $id);
         return $model->delete();
     }
 
