@@ -2,7 +2,8 @@
     <img src="assets/img/avatars/sunny.png" alt="" class="online">
     <span>
         @if(Auth::user())
-        {{ Auth::user()->person->firstname }}
+            <?php $person = Auth::user()->load('person')->person; ?>
+            {{ $person->firstname }}
         @endif
         <span class="fa fa-angle-down"></span>
     </span>
