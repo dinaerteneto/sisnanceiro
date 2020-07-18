@@ -15,6 +15,7 @@ class Person extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'id',
         'company_id',
         'physical',
         'firstname',
@@ -25,6 +26,10 @@ class Person extends Model
         'email',
         'birthdate',
     ];
+
+    public function user() {
+        return $this->hasOne('App\Models\User', 'id');
+    }
 
     public function addresses() {
         return $this->hasMany('Sisnanceiro\Models\PersonAddress', 'person_id');

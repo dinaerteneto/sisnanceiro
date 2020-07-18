@@ -17,6 +17,8 @@ class User extends Model
         'id', 'company_id', 'email', 'remember_token', 'password',
     ];
 
+    protected $hidden = ['password'];
+
     public function username()
     {
         return 'login';
@@ -29,7 +31,7 @@ class User extends Model
 
     public function person()
     {
-        return $this->hasOne('Sisnanceiro\Models\Person', 'id', 'id');
+        return $this->belongsTo('Sisnanceiro\Models\Person', 'id', 'id');
     }
 
 }
