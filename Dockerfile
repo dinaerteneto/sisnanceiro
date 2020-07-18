@@ -34,7 +34,12 @@ RUN apk --update add --no-cache \
         php7-session \
         php7-tokenizer \
         php7-xml \
-        php7-xmlwriter \ 
+        php7-xmlwriter \
+        php7-fileinfo \
+        php7-gd \
+        php7-iconv \
+        php7-xmlreader \
+        php7-zip \
         php7-simplexml
 # Limpando o cache das instalações
 # é sempre recomendável remover do
@@ -63,6 +68,17 @@ WORKDIR /app
 
 # Dando permissões para a pasta do projeto
 RUN chmod -R 755 /app
+
+# Rodando composer install
+RUN composer install
+
+# Renomeando o .env
+COPY app/.env-example app/.env
+
+# Rodando alguns comando do laravel
+RUN php artisan key:generate
+RUN php php artisan migrate
+RUN php artisan db:seed
 
 # Expondo as portas
 EXPOSE 80 443
