@@ -10,6 +10,7 @@ use Sisnanceiro\Services\StoreProductAttributeService;
 use Sisnanceiro\Services\StoreProductBrandService;
 use Sisnanceiro\Services\StoreProductCategoryService;
 use Sisnanceiro\Services\StoreProductService;
+use Sisnanceiro\Services\SettingService;
 use Sisnanceiro\Transformers\StoreProductAttributeTransformer;
 use Sisnanceiro\Transformers\StoreProductBrandTransformer;
 use Sisnanceiro\Transformers\StoreProductCategoryTransformer;
@@ -27,12 +28,14 @@ class StoreProductController extends Controller
         StoreProductService $storeProductService,
         StoreProductCategoryService $storeProductCategoryService,
         StoreProductBrandService $storeProductBrandService,
-        StoreProductAttributeService $storeProductAttributeService
+        StoreProductAttributeService $storeProductAttributeService,
+        SettingService $settingService
     ) {
         $this->storeProductService          = $storeProductService;
         $this->storeProductCategoryService  = $storeProductCategoryService;
         $this->storeProductBrandService     = $storeProductBrandService;
         $this->storeProductAttributeService = $storeProductAttributeService;
+        $this->settingService               = $settingService;
     }
 
     public function create(Request $request)
@@ -47,6 +50,9 @@ class StoreProductController extends Controller
             }
             return redirect("/store/product/update/{$model->id}");
         } else {
+
+            $settings = $this->settingService->get();
+
             $categories          = $this->storeProductCategoryService->all();
             $transformCategories = fractal($categories, new StoreProductCategoryTransformer());
             $categories          = $transformCategories->toArray()['data'];
@@ -59,7 +65,7 @@ class StoreProductController extends Controller
             $transformAttribute = fractal($attributes, new StoreProductAttributeTransformer());
             $attributes         = $transformAttribute->toArray()['data'];
 
-            return view('store/product/create', compact('model', 'categories', 'brands', 'attributes'));
+            return view('store/product/create', compact('model', 'categories', 'brands', 'attributes', 'settings'));
         }
     }
 
@@ -164,5 +170,5 @@ class StoreProductController extends Controller
         if ($this->storeProductService->destroy($id)) {
             return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
         }
-    }    
+    }
 }

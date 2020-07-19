@@ -56,7 +56,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-    <!--
+                                                        @if(!$settings->simple_product)
                                                         <div class="row">
                                                             <div class="col-sm-6">
                                                                 <div class="form-group">
@@ -76,7 +76,7 @@
                                                                         <option>Selecione</option>
                                                                         @foreach($brands as $brand)
                                                                             <option value="{{ $brand['id'] }}" {{ $brand['id'] == $model->store_product_brand_id ? 'selected' : null }}>{{ $brand['name'] }}</option>
-                                                                        @endforeach                                                                
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -90,7 +90,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-    -->
+                                                        @endif
                                                         <div class="row mb-10">
                                                             <div class="col-sm-6">
                                                                 <span class="onoffswitch">
@@ -101,8 +101,9 @@
                                                                     </label>
                                                                 </span>
                                                                 Ativo
-                                                            </div>                 
-                                                            <!--                                   
+                                                            </div>
+
+                                                            @if(!$settings->simple_product)
                                                             <div class="col-sm-6">
                                                                 <span class="onoffswitch">
                                                                     <input type="checkbox" name="StoreProduct[sale_with_negative_stock]" class="onoffswitch-checkbox" id="StoreProduct_sale_with_negative_stock" value="1">
@@ -112,13 +113,13 @@
                                                                     </label>
                                                                 </span>
                                                                 Venda com estoque negativo
-                                                            </div>    
-                                                            -->                                                
+                                                            </div>
+                                                            @endif
                                                         </div>
 
                                                     </fieldset>
 
-                                                    <!--
+                                                    @if(!$settings->simple_product)
                                                     <fieldset>
 
                                                         <div class="row mb-10">
@@ -135,7 +136,7 @@
                                                         </div>
 
                                                     </fieldset>
-                                                    -->  
+                                                    @endif
 
                                                     <fieldset class="without-attributes">
                                                         <!--<legend><i class="fa fa-list-alt"></i> Especificações do produto</legend>-->
@@ -160,7 +161,7 @@
                                                                 <label class="control-label" for="StoreProduct_total_in_stock">Total no estoque</label>
                                                                 <input type="text" id="StoreProduct_total_in_stock" class="form-control mask-number" name="StoreProduct[total_in_stock]">
                                                             </div>
-                                                        </div>                                                    
+                                                        </div>
                                                     </fieldset>
 
                                                     <fieldset class="with-attributes" style="display: none">
@@ -194,7 +195,7 @@
                                                                                 <input class="form-control" id="StoreProdutct-attributes-0-value" name="StoreProductAttributeValues[0][]" value="" >
                                                                             </td>
                                                                             <td>
-                                                                                                                                                        
+
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -202,7 +203,7 @@
                                                                 <button class="btn btn-sm btn-primary" id="add-attribute">Adicionar variação</button>
                                                             </div>
 
-                                                            
+
                                                             <div class="col-sm-12">
                                                                 <table class="table" id="table-subproducts">
                                                                     <thead>
@@ -219,7 +220,7 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            
+
 
                                                         </div>
 
@@ -316,7 +317,7 @@
                                                                 <tr>
                                                                     <td colspan="6" class="align-right">
                                                                         Total
-                                                                    </td>  
+                                                                    </td>
                                                                     <td>510,00</td>
                                                                 </tr>
                                                             </tfoot>
@@ -340,7 +341,7 @@
                                                                 <input type="text" class="form-control">
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="row">
                                                             <div class="col-sm-12">
                                                                 <label class="control-label">Modo de preparo</label>
@@ -351,7 +352,7 @@
                                                 </div>
                                             </div>
 
-                                            
+
                                             <div class="row" style="margin-top: 10px">
                                                 <div class="col-sm-12">
                                                     <button type="submit" class="btn btn-primary">Salvar</button>
