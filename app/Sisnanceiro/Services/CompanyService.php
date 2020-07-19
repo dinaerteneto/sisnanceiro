@@ -6,6 +6,7 @@ use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Repositories\CompanyRepository;
 use Sisnanceiro\Services\PersonService;
 use Sisnanceiro\Services\UserService;
+use Sisnanceiro\Services\SettingService;
 
 class CompanyService extends Service
 {
@@ -25,12 +26,14 @@ class CompanyService extends Service
         Validator $validator,
         CompanyRepository $companyRepository,
         PersonService $personService,
-        UserService $userService
+        UserService $userService,
+        SettingService $settingService
     ) {
         $this->validator     = $validator;
         $this->repository    = $companyRepository;
         $this->personService = $personService;
         $this->userService   = $userService;
+        $this->settingService= $settingService;
     }
 
     /**
@@ -56,8 +59,15 @@ class CompanyService extends Service
             'email'      => $data['email'],
             'phisycal'   => 1,
         ];
+
+        $settingData = [
+            'company_id' => $companyPersonService->id,
+            'simple_product' => false
+        ];
+
         $person = $this->personService->store($personData, 'create');
         $this->userService->create($person);
+        $this->settingService->store($settingData);
 
         return $repository;
     }
