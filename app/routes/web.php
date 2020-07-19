@@ -95,6 +95,16 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/delete/{id}', 'CustomerController@delete');
     });
 
+    Route::group(['prefix' => 'supplier'], function () {
+        Route::name('Fornecedor')->get('/', 'SupplierController@index');
+        Route::post('/', 'SupplierController@index');
+        Route::name('Incluir')->get('/create', 'SupplierController@create');
+        Route::post('/create', 'SupplierController@create');
+        Route::name('Alterar')->get('/update/{id}', 'SupplierController@update');
+        Route::post('/update/{id}', 'SupplierController@update');
+        Route::post('/delete/{id}', 'SupplierController@delete');
+    });
+
     Route::group(['prefix' => 'person'], function () {
         Route::get('/add-contact', 'PersonController@addContact');
         Route::get('/add-address', 'PersonController@addAddress');

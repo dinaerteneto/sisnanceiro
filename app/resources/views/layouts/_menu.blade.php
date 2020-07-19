@@ -3,7 +3,9 @@
     <span>
         @if(Auth::user())
             <?php $person = Auth::user()->load('person')->person; ?>
-            {{ $person->firstname }}
+            @if($person)
+                {{ $person->firstname }}
+            @endif
         @endif
         <span class="fa fa-angle-down"></span>
     </span>
@@ -34,10 +36,11 @@
                 <li class="{{ Request::is('user') ? 'active' : '' }}">
                     <a href="{{ url('/user') }}" title="Clientes">Usuários </a>
                 </li>
+                -->
                 <li class="{{ Request::is('supplier') ? 'active' : '' }}">
                     <a href="{{ url('/supplier') }}" title="Clientes">Fornecedores </a>
                 </li>
-                -->
+
             </ul>
         </li>
 

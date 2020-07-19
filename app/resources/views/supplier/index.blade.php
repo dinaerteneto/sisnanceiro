@@ -4,7 +4,7 @@
 
 <div class="d-flex w-100 home-header">
     <div>
-        <h1 class="page-header"><i class="fa fa-group"></i> Clientes </h1>
+        <h1 class="page-header"><i class="fa fa-group"></i> Fornecedores </h1>
     </div>
 </div>
 
@@ -12,7 +12,7 @@
     <div class="d-flex w-100">
         <section id="widget-grid" class="w-100">
             <div class="mb-10">
-                <a href="{{ url('/supplier/create') }}" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> Incluir cliente </a>
+                <a href="{{ url('/supplier/create') }}" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> Incluir fornecedor </a>
             </div>
 
             <div class="row">
@@ -64,7 +64,7 @@
             bSortable: false,
             mRender: function(data, type, row) {
                 var html = '<a href="supplier/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
-                    html+= '<a href="supplier/delete/'+row.id+'" class="delete-record" data-title="Excluir este cliente?" data-ask="Tem certeza que deseja excluir o cliente: '+ row.firstname +'?"><i class="fa fa-trash"></i></a>';
+                    html+= '<a href="supplier/delete/'+row.id+'" class="delete-record" data-title="Excluir este fornecedor?" data-ask="Tem certeza que deseja excluir o fornecedor: '+ row.firstname +'?"><i class="fa fa-trash"></i></a>';
                 return html;
             }
         }

@@ -42,13 +42,13 @@ class SupplierService extends PersonService
 
     public function mapData(array $data)
     {
-        $carbonBirthdate = Carbon::createFromFormat('d/m/Y', $data['birthdate']);
+        $carbonBirthdate = !empty($data['birthdate']) ? Carbon::createFromFormat('d/m/Y', $data['birthdate']) : null;
         return [
             'id'        => isset($data['id']) && !empty($data['id']) ? $data['id'] : null,
             'physical'  => $data['physical'],
             'firstname' => $data['firstname'],
             'lastname'  => $data['lastname'],
-            'birthdate' => $carbonBirthdate->format('Y-m-d'),
+            'birthdate' => !empty($carbonBirthdate) ? $carbonBirthdate->format('Y-m-d') : null,
             'cpf'       => preg_replace("/[^0-9]/", "", $data['cpf']),
             'rg'        => preg_replace("/[^0-9]/", "", $data['rg']),
             'gender'    => $data['gender'],
@@ -75,6 +75,7 @@ class SupplierService extends PersonService
                 $addressIds[] = $address->id;
             }
         }
+        $contactIds = [];
         if (isset($input['PersonContact'])) {
             foreach ($input['PersonContact'] as $keySupplierContact => $postSupplierContact) {
                 $contact      = $this->personService->storeContact($model, $postSupplierContact);

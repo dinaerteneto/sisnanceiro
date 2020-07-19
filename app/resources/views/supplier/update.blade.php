@@ -4,7 +4,7 @@
 
 <div class="d-flex w-100 home-header">
     <div>
-        <h1 class="page-header"><i class="fa fa-fw fa-user"></i> Alterando cliente </h1>
+        <h1 class="page-header"><i class="fa fa-fw fa-user"></i> Alterando fornecedor </h1>
     </div>
 </div>
 
