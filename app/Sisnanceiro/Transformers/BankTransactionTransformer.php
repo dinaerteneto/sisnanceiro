@@ -52,6 +52,8 @@ class BankTransactionTransformer extends TransformerAbstract
             'green'  => $bankInvoiceDetail->main_parent_category_id == BankCategory::CATEGORY_TO_PAY ? 'Paga' : 'Recebida',
         ];
 
+        $transaction = isset($bankInvoiceDetail->transaction) ? $bankInvoiceDetail->transaction : $bankInvoiceDetail;
+
         return [
             'id'                          => $bankInvoiceDetail->id,
             'bank_invoice_transaction_id' => $bankInvoiceDetail->bank_invoice_transaction_id,
@@ -65,13 +67,13 @@ class BankTransactionTransformer extends TransformerAbstract
             'label_legend'                => isset($labelLegend[$labelStatus]) ? $labelLegend[$labelStatus] : null,
             'due_date'                    => $dueDateCarbon->format('d/m/Y'),
             'payment_date'                => !empty($paymentDateCarbon) ? $paymentDateCarbon->format('d/m/Y') : null,
-            'description'                 => $bankInvoiceDetail->transaction->description,
+            'description'                 => $transaction->description,
             'category_name'               => $bankInvoiceDetail->bank_category_name,
             'account_name'                => $bankInvoiceDetail->bank_account_name,
             'parcel_number'               => $bankInvoiceDetail->parcel_number,
             'total_invoices'              => $bankInvoiceDetail->total_invoices,
             'net_value'                   => $netValue,
-            'note'                        => $bankInvoiceDetail->transaction->note,
+            'note'                        => $transaction->note,
             'name'                        => $name,
         ];
     }
