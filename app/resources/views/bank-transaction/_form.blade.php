@@ -127,10 +127,10 @@ use Sisnanceiro\Models\BankCategory;
                                     <input type="checkbox" class="checkbox style-0" name="BankInvoiceDetail[status]" id="BankInvoiceDetail_status" value="1" {{ ($model->status == 3) ? 'checked' : null }} >
                                     <span>Esta pago</span>
                                 </label>
-                            </div>      
+                            </div>
                             <div class="col-sm-4">
                                 <input type="text" name="BankInvoiceDetail[payment_date]" id="BankInvoiceDetail_payment_date" class="form-control datepicker" value="" disabled />
-                            </div>                                            
+                            </div>
                         </div>
 
                     </div>
@@ -160,7 +160,7 @@ $('document').ready(function(){
         e.preventDefault();
         if ($('div#more-info').hasClass('d-none')) {
             $('div#more-info').removeClass('d-none');
-            $('#a-more-info').html('Menos informações');            
+            $('#a-more-info').html('Menos informações');
 
             $('#BankInvoiceTransaction_total_invoice').val(1);
             $('#BankInvoiceTransaction_total_invoice').prop('disabled', true);

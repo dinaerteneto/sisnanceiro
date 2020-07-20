@@ -65,14 +65,13 @@ class BankTransactionTransformer extends TransformerAbstract
             'label_legend'                => isset($labelLegend[$labelStatus]) ? $labelLegend[$labelStatus] : null,
             'due_date'                    => $dueDateCarbon->format('d/m/Y'),
             'payment_date'                => !empty($paymentDateCarbon) ? $paymentDateCarbon->format('d/m/Y') : null,
-            'description'                 => $bankInvoiceDetail->note,
+            'description'                 => $bankInvoiceDetail->transaction->description,
             'category_name'               => $bankInvoiceDetail->bank_category_name,
             'account_name'                => $bankInvoiceDetail->bank_account_name,
             'parcel_number'               => $bankInvoiceDetail->parcel_number,
             'total_invoices'              => $bankInvoiceDetail->total_invoices,
             'net_value'                   => $netValue,
-            'note'                        => $bankInvoiceDetail->note,
-            'description'                 => $bankInvoiceDetail->description,
+            'note'                        => $bankInvoiceDetail->transaction->note,
             'name'                        => $name,
         ];
     }
