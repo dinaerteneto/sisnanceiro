@@ -38,27 +38,27 @@ use Carbon\Carbon;
                     </span>
                 </h5>
             </li>
-        </ul>   
-    </div> 
+        </ul>
+    </div>
 </div>
 
 <div id="content" style="opacity:1;">
     <div class="d-flex w-100">
-        
+
         <section id="widget-grid" class="w-100">
 
             @if(!empty($urlMain))
             <div class="mb-10">
-                <a 
-                    href="{!! $urlMain !!}/create" 
+                <a
+                    href="{!! $urlMain !!}/create"
                     class="btn btn-sm btn-success open-modal"
                     target = "#remoteModal"
                     rel = "tooltip"
                     data-placement = "top"
-                    title = "Adicionar nova transação"    
+                    title = "Adicionar nova transação"
                 > <i class="fa fa-plus"></i> Incluir </a>
-            </div>       
-            @endif     
+            </div>
+            @endif
 
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
@@ -78,15 +78,16 @@ use Carbon\Carbon;
                                                 <option value="{{ $bankAccount->id }}">{{ $bankAccount->name }}</option>
                                             @endforeach
                                         @endif
-                                   </select> 
+                                   </select>
                                 </div>
 
                                 <div class="col-sm-3">
-                                   <select name="Filter[status_id]" class="form-control selectpicker" title="Selecione os Estatos" id="Filter_status_id" multiple>
+                                   <select name="Filter[status_id]" class="form-control selectpicker multiple" title="Selecione os Estatos" id="Filter_status_id" multiple>
                                        <option value="1">Pendente</option>
                                        <option value="2">Vencida</option>
                                        <option value="3">Paga</option>
-                                   </select> 
+                                       <option value="4">Cancelada</option>
+                                   </select>
                                 </div>
 
                                 <div class="drp-container col-sm-3">
@@ -96,16 +97,16 @@ use Carbon\Carbon;
                                         <i class="fa fa-caret-down"></i>
                                     </div>
                                 </div>
-                                
-                                
 
-                            </div>     
-                            
+
+
+                            </div>
+
                             <div class="row">
                                 <div class="col-sm-9">
                                     <div class="icon-addon addon-md">
                                         <input type="text" name="Filter[description]" id="Filter_description" class="form-control" />
-                                        <label for="email" class="fa fa-search" rel="tooltip" title="" data-original-title="email"></label>                                         
+                                        <label for="email" class="fa fa-search" rel="tooltip" title="" data-original-title="email"></label>
                                     </div>
                                 </div>
 
@@ -120,7 +121,7 @@ use Carbon\Carbon;
                                         </button>
                                     </div>
 
-                                </div>                                 
+                                </div>
                             </div>
 
                         </div>
@@ -171,7 +172,7 @@ use Carbon\Carbon;
 <script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
 <script type="text/javascript">
 
-    var filter = { 
+    var filter = {
         'start_date': $('#filter-range-start-date').val(),
         'end_date': $('#filter-range-end-date').val(),
         'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
@@ -206,16 +207,16 @@ use Carbon\Carbon;
         { data: 'account_name' },
         { data: 'category_name' },
         { data: 'name'},
-        { 
+        {
             data: 'description',
             mRender: function(data, type, row) {
                 if(row.total_invoices > 1) {
                     return row.description + " (" + row.parcel_number + "/" + row.total_invoices + ") ";
                 }
                 return row.description;
-            } 
+            }
         },
-        { 
+        {
             data: 'net_value' ,
             mRender: function(data, type, row) {
                 if(row.main_category_id == 2) {
@@ -251,7 +252,7 @@ use Carbon\Carbon;
     });
 
     $('#btn-search').click( function() {
-        filter = { 
+        filter = {
             'start_date': $('#filter-range-start-date').val(),
             'end_date': $('#filter-range-end-date').val(),
             'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
@@ -269,8 +270,8 @@ use Carbon\Carbon;
     function updateTotal(filter) {
         var extraSearch = {extra_search: filter};
         $.post('/bank-transaction/get-total-by-main-category', extraSearch, function(json) {
-            $("#total-to-receive").html(json.mask.to_receive);    
-            $("#total-to-pay").html(json.mask.to_pay);          
+            $("#total-to-receive").html(json.mask.to_receive);
+            $("#total-to-pay").html(json.mask.to_pay);
             if(json.total < 0) {
                 $('#total').addClass('text-red');
             } else {
@@ -281,18 +282,18 @@ use Carbon\Carbon;
             } else {
                 $('#current-balance').addClass('text-green');
             }
-            $("#total").html('<i class="fa fa-money"></i><span class="pull-right">&nbsp;'+ json.mask.total +'</span>');            
+            $("#total").html('<i class="fa fa-money"></i><span class="pull-right">&nbsp;'+ json.mask.total +'</span>');
         }, 'json');
     }
 
 
-    
 
-    /* 
-    $(document).ready(function() {      
-        $('.selectpicker').selectepicker();         
-    }); 
+
+    /*
+    $(document).ready(function() {
+        $('.selectpicker').selectepicker();
+    });
     */
-    
+
 </script>
 @endsection
