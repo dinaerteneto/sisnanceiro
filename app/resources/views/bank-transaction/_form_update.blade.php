@@ -89,15 +89,15 @@ use Sisnanceiro\Models\BankCategory;
                                 <input type="checkbox" class="checkbox style-0" name="BankInvoiceDetail[status]" id="BankInvoiceDetail_status" value="3" {{ ($model->status == 3) ? 'checked' : null }} >
                                 <span>Esta pago</span>
                             </label>
-                        </div>      
+                        </div>
                         <div class="col-sm-4">
                             <input type="text" name="BankInvoiceDetail[payment_date]" id="BankInvoiceDetail_payment_date" class="form-control datepicker" value="{{ $model->payment_date }}" data_original_value="{{ $model->payment_date }}" {{ ($model->status != 3) ? 'disabled' : null }} />
-                        </div>                                            
+                        </div>
                     </div>
 
                 </fieldset>
 
-                @if($model->total_invoices > 1) 
+                @if($model->total_invoices > 1)
                 <fieldset>
                     <div class="row">
                         <div class="col-sm-12 text-center font-italic">
@@ -115,15 +115,15 @@ use Sisnanceiro\Models\BankCategory;
                         <div class="col-sm-12">
                             <label class="radio radio-inline">
                                 <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="1">
-                                <span>Somente este</span>                                    
+                                <span>Somente este</span>
                             </label>
                             <label class="radio radio-inline">
                                 <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="2">
-                                <span>Este, e os futuros</span>                                    
+                                <span>Este, e os futuros</span>
                             </label>
                             <label class="radio radio-inline">
                                 <input type="radio" class="radiobox BankInvoiceTransaction_option_update" name="BankInvoiceTransaction[option_update]" value="3">
-                                <span>Todos (incluíndo efetivados)</span>                                    
+                                <span>Todos (incluíndo efetivados)</span>
                             </label>
                         </div>
                     </div>
@@ -151,6 +151,7 @@ use Sisnanceiro\Models\BankCategory;
 </div>
 
 @section('scripts')
+@include('layouts/_partial_scripts')
 <script type="text/javascript">
 var data = {!! $categoryOptions !!};
 
@@ -215,6 +216,6 @@ $('document').ready(function() {
 
         $('#msg-option').html(msg);
     });
-})  
+})
 </script>
 <script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>

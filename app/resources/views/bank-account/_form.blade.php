@@ -8,9 +8,9 @@
         <div class="modal-header">
             <h4 class="modal-title">{{ $title }}</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                <span aria-hidden="true">×</span>                
+                <span aria-hidden="true">×</span>
             </button>
-            
+
         </div>
         <div class="modal-body">
             <fieldset>
@@ -30,7 +30,7 @@
                                 <option value="1" {{$model->physical == 1 ? 'selected' : null}} >Física</option>
                             </select>
                         </div>
-                    </div>    
+                    </div>
                 </div>
 
                 <div class="row">
@@ -44,7 +44,7 @@
                             <label class="control-label" for="BankAccount_cpf_cnpj">CNPJ</label>
                             <input type="text" name="BankAccount[cpf_cnpj]" value="{{ $model->cpf_cnpj }}" id="BankAccount_cpf_cnpj" class="form-control mask-cnpj" />
                         </div>
-                    </div>            
+                    </div>
                 </div>
 
                 <div class="row">
@@ -140,7 +140,7 @@
 
 </div>
 
-
+@include('layouts/_partial_scripts')
 <script type="text/javascript">
 $('document').ready(function(){
 

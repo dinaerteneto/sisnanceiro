@@ -92,6 +92,7 @@
 </div>
 
 @section('scripts')
+@include('layouts/_partial_scripts')
 <script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
 <script type="text/javascript">
     $('#bank-transaction-form').on('submit', function(e) {
