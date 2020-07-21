@@ -21,7 +21,13 @@ class UserService extends Service
             'id' => 'required|int',
         ],
         'update' => [
+
         ],
+        'change_password' => [
+            'current_password'          => 'required',
+            'new_password'              => 'required',
+            'new_password_confirmation' => 'required|same:new_password'
+        ]
     ];
 
     protected $personRepository;
@@ -66,6 +72,27 @@ class UserService extends Service
         Mail::to($user)->send(new MailNewUser($user, $passwordGenerated));
 
         return $user;
+    }
+
+    /**
+     * change password of the user
+     * @param int $userId
+     * @oaram array $input
+     * @return Sisnanceiro\Models\User
+     */
+    public function changePassword(int $userId, array $input) {
+        $model = $this->repository->find($userId);
+
+        $this->validator->validate($input, $this->rules['change_password']);
+        if(!Hash::check($input['current_password'], $model->password)) {
+            $this->validator->addError('password', 'current_password', 'A senha atual esta incorreta!');
+        }
+        if ($this->validator->getErrors()) {
+            return $this->validator;
+        }
+
+        $model->update(['password' => Hash::make($input['new_password'])]);
+        return $model;
     }
 
 }

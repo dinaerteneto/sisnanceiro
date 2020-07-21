@@ -27,6 +27,11 @@ Route::group(['prefix' => 'sync'], function () {
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/home', function () {return view('home');});
 
+    Route::group(['prefix' => 'profile'], function() {
+        Route::name('My Profile')->get('/', 'ProfileController@index');
+        Route::post('/', 'ProfileController@index');
+    });
+
     Route::group(['prefix' => 'bank-category'], function () {
         Route::get('/', 'BankCategoryController@index');
         Route::get('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');

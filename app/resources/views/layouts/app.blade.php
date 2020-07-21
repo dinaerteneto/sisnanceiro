@@ -37,7 +37,7 @@
 
         <div class="sa-shortcuts-section">
             <ul>
-                <li><a class="bg-pink-dark" href="profile.html"><span class="fa fa-user fa-4x"></span><span class="box-caption">Minha conta</span><em class="counter"></em></a></li>
+                <li><a class="bg-pink-dark" href="/profile"><span class="fa fa-user fa-4x"></span><span class="box-caption">Minha conta</span><em class="counter"></em></a></li>
             </ul>
         </div>
         <!-- END .sa-shortcuts -->
@@ -78,22 +78,22 @@
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
-                </div>                
+                </div>
                 @endif
 
                 @if (Session::has('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
 					<i class="fa-fw fa fa-times"></i>
-                    <strong>Erro!</strong> {{ Session::get('error')['message'] }} 
+                    <strong>Erro!</strong> {{ Session::get('error')['message'] }}
                     @foreach(Session::get('error')['errors'] as $errors)
-                        <br>{{$errors['message']}} 
+                        <br>{{$errors['message']}}
                     @endforeach
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
-				</div>             
+				</div>
                 @endif
-                
+
                 @yield('content')
             </div>
 
