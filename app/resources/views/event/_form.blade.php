@@ -5,10 +5,10 @@
         <div class="modal-header">
             <h4 class="modal-title">{{ $title }}</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                <span aria-hidden="true">×</span>                
+                <span aria-hidden="true">×</span>
             </button>
         </div>
-            
+
         <form id="event-form" class="" method="post" action="{{ $action }}">
             @csrf
 
@@ -50,10 +50,10 @@
                                         <div class="input-group">
                                             <input class="form-control hasClockpicker" id="Event_start_time" autocomplete="off" value="{{ $model->start_time }}" type="text" placeholder="Hora do início" data-autoclose="true" name="Event[start_time]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
-                                        </div>             
+                                        </div>
                                     </div>
-                                </div> 
-                            </div>                       
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <label class="align-right">Data e hora final do evento</label>
@@ -72,10 +72,10 @@
                                         <div class="input-group">
                                             <input class="form-control hasClockpicker" id="Event_end_time" autocomplete="off" value="{{ $model->end_time }}" type="text" placeholder="Hora do término" data-autoclose="true" name="Event[end_time]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
-                                        </div>             
+                                        </div>
                                     </div>
-                                </div> 
-                            </div>                       
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -139,8 +139,8 @@
                                     <option value="0" {{ $model->accept_money_payment <> '1' ? 'selected' : null }} >Não</option>
                                     <option value="1" {{ $model->accept_money_payment == '1' ? 'selected' : null }}>Sim</option>
                                 </select>
-                                    
-                            </div>                            
+
+                            </div>
                         </div>
 
                     </div>
@@ -149,26 +149,26 @@
 
                 <fieldset>
                     <legend>Local do evento</legend>
-                    
+
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label>Cep</label>
                                 <input type="text" name="Event[zipcode]" value="{{ $model->zipcode }}" id="Event_zipcode" class="mask-cep form-control" placeholder="Cep" data-mask="99999-999" />
                             </div>
-                        </div>                        
+                        </div>
                         <div class="col-sm-7">
                             <div class="form-group">
                                 <label>Endereço</label>
                                 <input type="text" name="Event[address]" value="{{ $model->address }}" id="Event_address" class="form-control" placeholder="Endereço" />
                             </div>
-                        </div>                        
+                        </div>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label>Número</label>
                                 <input type="text" name="Event[address_number]" value="{{ $model->address_number }}" id="Event_address_number" class="form-control" placeholder="Número" />
                             </div>
-                        </div>                        
+                        </div>
                     </div>
 
                     <div class="row">
@@ -183,7 +183,7 @@
                                 <label>Estado</label>
                                 <input type="text" name="Event[uf]" value="{{ $model->uf }}" id="Event_uf" class="form-control" placeholder="UF" />
                             </div>
-                        </div>                        
+                        </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Bairro</label>
@@ -204,7 +204,7 @@
                                 <label>Referência</label>
                                 <input type="text" name="Event[reference]" value="{{ $model->reference }}" id="Event_reference" class="form-control" placeholder="Referência" />
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </fieldset>
 
@@ -215,27 +215,27 @@
             <div class="modal-footer">
                 <div style="width: 100%">
                     @if(!empty($model->id))
-                    
-                        <div class="align-left pull-left"> 
+
+                        <div class="align-left pull-left">
                             <a href="/event/{{$model->id}}" class="btn btn-success">Convidados</a>
                             <a href="/event/delete/{{$model->id}}" class="btn btn-danger delete-record" data-title="Excluir evento" data-ask="Tem certeza que deseja excluir este evento?">Excluir evento</a>
                         </div>
                         <div class="align-right">
                             <button type="submit" class="btn btn-primary">
-                                @if(empty($model->id)) 
-                                    Criar 
+                                @if(empty($model->id))
+                                    Criar
                                 @else
                                     Alterar
                                 @endif
                             </button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         </div>
-                    
-                    @else 
+
+                    @else
                     <div class="align-right">
                         <button type="submit" class="btn btn-primary">
-                            @if(empty($model->id)) 
-                                Criar 
+                            @if(empty($model->id))
+                                Criar
                             @else
                                 Alterar
                             @endif
@@ -244,7 +244,7 @@
                     </div>
                     @endif
                 </div>
-                
+
             </div>
 
         </form>
@@ -266,22 +266,22 @@ EventModal = {
                 'Event[start_date]': 'required',
                 'Event[start_time]': 'required',
                 'Event[end_date]': 'required',
-                'Event[end_time]': 'required',
-                'Event[zipcode]': 'required',
-                'Event[address]': 'required',
-                'Event[address_number]': 'required',
-                'Event[city]': 'required'
+                'Event[end_time]': 'required'
+                // 'Event[zipcode]': 'required',
+                // 'Event[address]': 'required',
+                // 'Event[address_number]': 'required',
+                // 'Event[city]': 'required'
             },
             messages: {
                 'Event[name]': 'Obrigatório',
                 'Event[start_date]': 'Obrigatório',
                 'Event[start_time]': 'Obrigatório',
                 'Event[end_date]': 'Obrigatório',
-                'Event[end_time]': 'Obrigatório',
-                'Event[zipcode]': 'Obrigatório',
-                'Event[address]': 'Obrigatório',
-                'Event[address_number]': 'Obrigatório',
-                'Event[city]': 'Obrigatório'
+                'Event[end_time]': 'Obrigatório'
+                // 'Event[zipcode]': 'Obrigatório',
+                // 'Event[address]': 'Obrigatório',
+                // 'Event[address_number]': 'Obrigatório',
+                // 'Event[city]': 'Obrigatório'
             },
             highlight: function(element) {
                 $(element).removeClass('is-valid').addClass('is-invalid');
@@ -301,7 +301,7 @@ EventModal = {
                 }
             }
         });
-    }        
+    }
 };
 $('document').ready(function() {
     EventModal.init();
