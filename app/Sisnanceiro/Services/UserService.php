@@ -25,7 +25,7 @@ class UserService extends Service
         ],
         'change_password' => [
             'current_password'          => 'required',
-            'new_password'              => 'required',
+            'new_password'              => 'required|min:6',
             'new_password_confirmation' => 'required|same:new_password'
         ]
     ];

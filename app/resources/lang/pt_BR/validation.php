@@ -182,7 +182,10 @@ return [
         'guest_limit_per_person' => 'limite de convidados por pessoa',
         'days_for_cancel' => 'dias para cancelar',
         'zipcode' => 'cep',
-        'address_number' => 'número'
+        'address_number' => 'número',
+
+        'new_password' => 'Nova senha',
+        'new_password_confirmation' => 'Confirme a nova senha'
     ],
 
 ];

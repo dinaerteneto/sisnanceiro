@@ -13,6 +13,7 @@ Person = {
         Person.formValidate();
 
         $('#Customer_physical').trigger('change');
+        $('#Supplier_physical').trigger('change');
     },
 
     addContact: function() {
@@ -58,15 +59,22 @@ Person = {
     },
 
     changeTypePerson: function() {
-        $('#Customer_physical').on('change', function(e) {
+        $('#Customer_physical, #Supplier_physical').on('change', function (e) {
             var sValue = parseInt($(this).val());
             $('#Customer_cpf').removeClass('mask-cpf');
             $('#Customer_cpf').unmask();
+
+            $('#Supplier_cpf').removeClass('mask-cpf');
+            $('#Supplier_cpf').unmask();
             if (sValue == 1 || sValue != 0) {
                 //pessoa fisica
                 $('#Customer_cpf').mask('999.999.999-99');
                 $('#Customer_name').prev().html('Nome');
                 $('#Customer_cpf').prev().html('CPF');
+
+                $('#Supplier_cpf').mask('999.999.999-99');
+                $('#Supplier_name').prev().html('Nome');
+                $('#Supplier_cpf').prev().html('CPF');
 
                 $('#container-lastname').show();
                 $('#container-birthdate').show();
@@ -77,6 +85,10 @@ Person = {
                 $('#Customer_name').prev().html('Razão social');
                 $('#Customer_cpf').prev().html('CNPJ');
                 $('#Customer_cpf').mask('99.999.999/9999-99');
+
+                $('#Supplier_name').prev().html('Razão social');
+                $('#Supplier_cpf').prev().html('CNPJ');
+                $('#Supplier_cpf').mask('99.999.999/9999-99');
 
                 $('#container-lastname').hide();
                 $('#container-birthdate').hide();
@@ -137,10 +149,41 @@ Person = {
             rules: {
                 '#Customer_physical': 'required',
                 'Customer[firstname]': 'required',
+
+                '#Supplier_physical': 'required',
+                'Supplier[firstname]': 'required',
+
+                'Profile[firstname]': 'required',
+
+                current_password: {
+                    minlength: 6
+                },
+                new_password: {
+                    minlength: 6,
+                    required: function (element) {
+                        return $('#current_password').val() != '';
+                    }
+                },
+                new_password_confirmation: {
+					minlength: 8,
+					equalTo: '#new_password'
+				}
             },
             messages: {
                 '#Customer_physical': 'Obrigatório',
                 'Customer[firstname]': 'Obrigatório',
+
+                '#Supplier_physical': 'Obrigatório',
+                'Supplier[firstname]': 'Obrigatório',
+
+                'Profile[firstname]': 'Obrigatório',
+
+                current_password: { minlength: 'Deve possuir ao menos 6 caracteres' },
+                new_password: { minlength: 'Deve possuir ao menos 6 caracteres' },
+                new_password_confirmation: {
+                    minlength: 'Deve possuir ao menos 6 caracteres',
+                    equalTo: 'Deve ser igual ao campo nova senha'
+                },
             },
             highlight: function(element) {
                 $(element).removeClass('is-valid').addClass('is-invalid');
