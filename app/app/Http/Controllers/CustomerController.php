@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Services\CustomerService;
 use Sisnanceiro\Services\PersonService;
 
@@ -82,6 +83,17 @@ class CustomerController extends Controller
         if ($this->personService->destroy($id)) {
             return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
         }
-    }       
+    }
+
+    public function createMin(Request $request) {
+        if($request->isMethod('post')) {
+            $customerPost  = $request->all();
+            $customerModel = $this->customerService->store($customerPost, 'create');
+            if (method_exists($customerModel, 'getErrors') && $customerModel->getErrors()) {
+                return $this->errorJson([]);
+            }
+        }
+        return Response::json($customerModel->getAttributes());
+    }
 
 }

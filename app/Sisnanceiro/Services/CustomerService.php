@@ -45,13 +45,13 @@ class CustomerService extends PersonService
         $carbonBirthdate = isset($data['birthdate']) && !empty($data['birthdate']) ? Carbon::createFromFormat('d/m/Y', $data['birthdate']) : null;
         return [
             'id'        => isset($data['id']) && !empty($data['id']) ? $data['id'] : null,
-            'physical'  => $data['physical'],
+            'physical'  => isset($data['physical']) ? $data['physical'] : true,
             'firstname' => $data['firstname'],
-            'lastname'  => $data['lastname'],
+            'lastname'  => isset($data['lastname']) ? $data['lastname'] : null,
             'birthdate' => !empty($carbonBirthdate) ? $carbonBirthdate->format('Y-m-d') : null,
-            'cpf'       => preg_replace("/[^0-9]/", "", $data['cpf']),
-            'rg'        => preg_replace("/[^0-9]/", "", $data['rg']),
-            'gender'    => $data['gender'],
+            'cpf'       => !empty($data['cpf']) ? preg_replace("/[^0-9]/", "", $data['cpf']) : null,
+            'rg'        => !empty($data['rg']) ? preg_replace("/[^0-9]/", "", $data['rg']) : null,
+            'gender'    => !empty($data['gender']) ? $data['gender'] : null,
         ];
     }
 

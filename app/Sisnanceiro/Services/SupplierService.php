@@ -45,13 +45,13 @@ class SupplierService extends PersonService
         $carbonBirthdate = !empty($data['birthdate']) ? Carbon::createFromFormat('d/m/Y', $data['birthdate']) : null;
         return [
             'id'        => isset($data['id']) && !empty($data['id']) ? $data['id'] : null,
-            'physical'  => $data['physical'],
+            'physical'  => isset($data['physical']) ? $data['physical'] : false,
             'firstname' => $data['firstname'],
-            'lastname'  => $data['lastname'],
+            'lastname'  => isset($data['lastname']) ? $data['lastname'] : null,
             'birthdate' => !empty($carbonBirthdate) ? $carbonBirthdate->format('Y-m-d') : null,
-            'cpf'       => preg_replace("/[^0-9]/", "", $data['cpf']),
-            'rg'        => preg_replace("/[^0-9]/", "", $data['rg']),
-            'gender'    => $data['gender'],
+            'cpf'       => !empty($data['cpf']) ? preg_replace("/[^0-9]/", "", $data['cpf']) : null,
+            'rg'        => !empty($data['rg']) ? preg_replace("/[^0-9]/", "", $data['rg']) : null,
+            'gender'    => !empty($data['gender']) ? $data['gender'] : null,
         ];
     }
 
@@ -69,6 +69,7 @@ class SupplierService extends PersonService
         if (!isset($data['id'])) {
             $this->supplierRepository->insert(['id' => $model->id]);
         }
+        $addressIds = [];
         if (isset($input['PersonAddress'])) {
             foreach ($input['PersonAddress'] as $keySupplierAddress => $postSupplierAddress) {
                 $address      = $this->personService->storeAddress($model, $postSupplierAddress);

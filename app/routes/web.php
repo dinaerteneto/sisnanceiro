@@ -98,6 +98,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::name('Alterar')->get('/update/{id}', 'CustomerController@update');
         Route::post('/update/{id}', 'CustomerController@update');
         Route::post('/delete/{id}', 'CustomerController@delete');
+        Route::post('/min-create', 'CustomerController@createMin');
     });
 
     Route::group(['prefix' => 'supplier'], function () {
@@ -108,6 +109,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::name('Alterar')->get('/update/{id}', 'SupplierController@update');
         Route::post('/update/{id}', 'SupplierController@update');
         Route::post('/delete/{id}', 'SupplierController@delete');
+        Route::post('/min-create', 'SupplierController@createMin');
     });
 
     Route::group(['prefix' => 'person'], function () {

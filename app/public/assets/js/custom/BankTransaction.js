@@ -16,6 +16,49 @@ BankTransaction = {
 
     },
 
+    loading: function() {
+        $.blockUI({
+            message: "Aguarde...",
+            css: {
+                top: "20%"
+            }
+        });
+    },
+    removeLoading: function() {
+        $.unblockUI();
+    },
+
+    addSupplier(term) {
+        BankTransaction.loading();
+        $.post('/supplier/min-create', {
+            'Supplier[firstname]': term
+        }, function(json) {
+            $('#BankInvoiceDetail_supplier_id').append("<option value=\"" + json.id + "\">" + json.firstname + "</option>");
+            $('#BankInvoiceDetail_supplier_id').val(json.id).trigger("change");
+        }).done(function() {
+            BankTransaction.removeLoading();
+        }).fail(function () {
+            swal("Oops...", "Ocorreu algum erro!!!.", "error");
+            BankTransaction.removeLoading();
+        });
+    },
+
+    addCustomer(term) {
+        BankTransaction.loading();
+        $.post('/customer/min-create', {
+            'Customer[firstname]': term
+        }, function(json) {
+            $('#BankInvoiceDetail_customer_id').append("<option value=\"" + json.id + "\">" + json.firstname + "</option>");
+            $('#BankInvoiceDetail_customer_id').val(json.id).trigger("change");
+        }).done(function() {
+            BankTransaction.removeLoading();
+        }).fail(function () {
+            swal("Oops...", "Ocorreu algum erro!!!.", "error");
+            BankTransaction.removeLoading();
+        });
+    },
+
+
     initSelect2: function() {
         $('#BankInvoiceDetail_bank_category_id').select2({
             data: data,
@@ -35,6 +78,18 @@ BankTransaction = {
                 return m;
             }
         });
+
+        $('#BankInvoiceDetail_supplier_id').select2({
+            formatNoMatches: function(term) {
+                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"BankTransaction.addSupplier('" + term + "')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
+            }
+        });
+        $('#BankInvoiceDetail_customer_id').select2({
+            formatNoMatches: function(term) {
+                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"BankTransaction.addCustomer('" + term + "')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
+            }
+        });
+
     },
 
     setPaid: function() {

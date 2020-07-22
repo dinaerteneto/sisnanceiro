@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Services\SupplierService;
 use Sisnanceiro\Services\PersonService;
 
@@ -84,4 +85,14 @@ class SupplierController extends Controller
         }
     }
 
+    public function createMin(Request $request) {
+        if($request->isMethod('post')) {
+            $supplierPost  = $request->all();
+            $supplierModel = $this->SupplierService->store($supplierPost, 'create');
+            if (method_exists($supplierModel, 'getErrors') && $supplierModel->getErrors()) {
+                return $this->errorJson([]);
+            }
+        }
+        return Response::json($supplierModel->getAttributes());
+    }
 }
