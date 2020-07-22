@@ -15,7 +15,7 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                     <div class="jarviswidget well jarviswidget-color-darken">
                         <div class="widget-body">
-                            @include('supplier/_form', compact('modelAddress', 'typeAddresses', 'addresses', 'contacts'))
+                            @include('customer/_form', compact('modelAddress', 'typeAddresses', 'addresses', 'contacts'))
                         </div>
                     </div>
                 </article>

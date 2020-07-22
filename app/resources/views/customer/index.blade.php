@@ -12,7 +12,7 @@
     <div class="d-flex w-100">
         <section id="widget-grid" class="w-100">
             <div class="mb-10">
-                <a href="{{ url('/supplier/create') }}" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> Incluir cliente </a>
+                <a href="{{ url('/customer/create') }}" class="btn btn-sm btn-success"> <i class="fa fa-plus"></i> Incluir cliente </a>
             </div>
 
             <div class="row">
@@ -50,7 +50,7 @@
 <script type="text/javascript">
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.ajax = {
-            url: "supplier",
+            url: "customer",
             type: 'POST'
     };
     Main.dataTableOptions.columns = [
@@ -63,8 +63,8 @@
         {
             bSortable: false,
             mRender: function(data, type, row) {
-                var html = '<a href="supplier/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
-                    html+= '<a href="supplier/delete/'+row.id+'" class="delete-record" data-title="Excluir este cliente?" data-ask="Tem certeza que deseja excluir o cliente: '+ row.firstname +'?"><i class="fa fa-trash"></i></a>';
+                var html = '<a href="customer/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
+                    html+= '<a href="customer/delete/'+row.id+'" class="delete-record" data-title="Excluir este cliente?" data-ask="Tem certeza que deseja excluir o cliente: '+ row.firstname +'?"><i class="fa fa-trash"></i></a>';
                 return html;
             }
         }

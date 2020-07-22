@@ -38,7 +38,7 @@
                 </li>
                 -->
                 <li class="{{ Request::is('supplier') ? 'active' : '' }}">
-                    <a href="{{ url('/supplier') }}" title="Clientes">Fornecedores </a>
+                    <a href="{{ url('/supplier') }}" title="Fornecedores">Fornecedores </a>
                 </li>
 
             </ul>
