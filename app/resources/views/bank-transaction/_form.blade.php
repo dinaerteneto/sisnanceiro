@@ -7,6 +7,8 @@ use Sisnanceiro\Models\BankCategory;
         <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}" onsubmit="return false">
             @csrf
 
+            <input type="hidden" value="{{ $mainCategory['main_category_id'] }}" id="main_category_id" />
+
             <div class="modal-header">
                 <h4 class="modal-title">{{ $title }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">

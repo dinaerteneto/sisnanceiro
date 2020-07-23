@@ -65,6 +65,7 @@ class BankCategoryTransformer extends TransformerAbstract
                     'id'        => (int) $node['id'],
                     'html'      => "<div>{$node['text']}</div>",
                     'selection' => $node['text'],
+                    'text'      => $node['text']
                 ];
 
                 if (isset($node['children'])) {
@@ -74,6 +75,7 @@ class BankCategoryTransformer extends TransformerAbstract
                             'id'        => (int) $child['id'],
                             'html'      => "<div style=\"padding-left: 10px\"><i class=\"fa fa-arrow-right\"></i> {$child['text']}</div>",
                             'selection' => $child['text'],
+                            'text'      => $child['text']
                         ];
                     }
                 }

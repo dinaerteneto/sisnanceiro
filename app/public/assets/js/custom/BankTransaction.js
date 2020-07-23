@@ -28,6 +28,32 @@ BankTransaction = {
         $.unblockUI();
     },
 
+    addCategory(term) {
+        var newData = {};
+        var mainParentCategoryId = $('#main_category_id').val();
+        BankTransaction.loading();
+        $.post('/bank-category/min-create/' + mainParentCategoryId, {
+            'BankCategory[name]': term
+        }, function (json) {
+
+            newData = {
+                id: json.id,
+                html: `<div>${json.name}</div>`,
+                selection: json.name,
+                text: json.name
+            }
+            data.push(newData);
+
+        }).done(function() {
+            BankTransaction.removeLoading();
+            BankTransaction.initBankCategory();
+            $('#BankInvoiceDetail_bank_category_id').val(newData.id).trigger("change");
+        }).fail(function () {
+            swal("Oops...", "Ocorreu algum erro!!!.", "error");
+            BankTransaction.removeLoading();
+        });
+    },
+
     addSupplier(term) {
         BankTransaction.loading();
         $.post('/supplier/min-create', {
@@ -58,12 +84,12 @@ BankTransaction = {
         });
     },
 
-
-    initSelect2: function() {
+    initBankCategory: function () {
         $('#BankInvoiceDetail_bank_category_id').select2({
             data: data,
             formatNoMatches: function(term) {
-                return 'Nenhum produto encontrado.';
+                // return 'Nenhuma categoria encontrada.';
+                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"BankTransaction.addCategory('" + term + "')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
             },
             formatSearching: function() {
                 return 'Procurando...';
@@ -78,6 +104,11 @@ BankTransaction = {
                 return m;
             }
         });
+    },
+
+
+    initSelect2: function() {
+        BankTransaction.initBankCategory();
 
         $('#BankInvoiceDetail_supplier_id').select2({
             formatNoMatches: function(term) {

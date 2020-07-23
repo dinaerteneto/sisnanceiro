@@ -36,6 +36,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/', 'BankCategoryController@index');
         Route::get('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
         Route::post('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
+        Route::post('min-create/{main_parent_category_id}', 'BankCategoryController@createMin');
         Route::get('update/{id}', 'BankCategoryController@update');
         Route::post('update/{id}', 'BankCategoryController@update');
         Route::post('delete/{id}', 'BankCategoryController@delete');

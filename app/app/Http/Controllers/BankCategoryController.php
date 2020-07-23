@@ -104,4 +104,20 @@ class BankCategoryController extends Controller
             return $this->apiSuccess(['success' => true]);
         }
     }
+
+    public function createMin(Request $request, $main_parent_category_id) {
+        if($request->isMethod('post')) {
+            $data = array_merge($request->get('BankCategory'), [
+                'main_parent_category_id' => $main_parent_category_id,
+                'parent_category_id'      => !empty($parent_category_id) ? $parent_category_id : $main_parent_category_id,
+                'status'                  => BankCategory::STATUS_ACTIVE,
+            ]);
+            $model = $this->bankCategoryService->store($data, 'create');
+            if (method_exists($model, 'getErrors') && $model->getErrors()) {
+                return $this->errorJson([]);
+            }
+            return Response::json($model->getAttributes());
+        }
+    }
+
 }
