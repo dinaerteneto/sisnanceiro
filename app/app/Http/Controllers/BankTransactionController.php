@@ -149,14 +149,10 @@ class BankTransactionController extends Controller
         if ($request->isMethod('post')) {
             $option = $request->get('BankInvoiceTransaction')['option_delete'];
             if ($this->bankTransactionService->destroyInvoices($id, $option)) {
-                $request->session()->flash('success', ['message' => 'Lançamento(s) excluído(s) com sucesso.']);
+                return $this->apiSuccess(['success' => true]);
             } else {
-                $request->session()->flash('error', ['message' => 'Erro na tentativa de excluir o lançamento.']);
+                return Response::json(['success' => false, 'message' => 'Erro na tentativa de excluir o(s) lançamentos.']);
             }
-
-            $mainCategory = $this->getMainCategory($request);
-            $urlMain      = $mainCategory['url'];
-            return redirect($urlMain);
         } else {
             $model  = $this->bankTransactionService->findByInvoice($id);
             $model  = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];

@@ -71,7 +71,7 @@ class BankTransactionTransformer extends TransformerAbstract
             'category_name'               => $bankInvoiceDetail->bank_category_name,
             'account_name'                => $bankInvoiceDetail->bank_account_name,
             'parcel_number'               => $bankInvoiceDetail->parcel_number,
-            'total_invoices'              => $bankInvoiceDetail->total_invoices,
+            'total_invoices'              => $transaction->total_invoices,
             'net_value'                   => $netValue,
             'note'                        => $transaction->note,
             'name'                        => $name,

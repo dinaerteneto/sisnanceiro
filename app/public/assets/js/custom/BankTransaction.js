@@ -146,7 +146,7 @@ BankTransaction = {
             $.post(url, data, function(json) {
                 if (json.success) {
                     $('#btn-search').trigger('click');
-                    $('#remoteModal').modal().hide();
+                    $('#remoteModal').modal('hide');
                     swal("Sucesso", "Sucesso!!!.", "success");
                 } else {
                     swal("Oops...", "Ocorreu algum erro!!!.", "error");

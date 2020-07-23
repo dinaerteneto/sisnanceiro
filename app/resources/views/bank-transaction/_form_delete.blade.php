@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}">
+        <form id="bank-transaction-form-delete" class="bank-transaction-form" method="post" action="{{ $action }}">
             <input type="hidden" name="BankInvoiceTransaction[id]" value="{{ $model->bank_invoice_transaction_id }}" />
             <input type="hidden" name="BankInvoiceDetail[id]" value="{{ $model->id }}" />
             @csrf
@@ -36,7 +36,6 @@
                         </div>
                     </div>
                 </fieldset>
-
 
                 @if($model->total_invoices > 1)
                 <fieldset>
@@ -93,17 +92,36 @@
 
 @section('scripts')
 @include('layouts/_partial_scripts')
-<script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
 <script type="text/javascript">
-    $('#bank-transaction-form').on('submit', function(e) {
+    $('#bank-transaction-form-delete').on('submit', function(e) {
+        e.preventDefault();
+
         if($('.BankInvoiceTransaction_option_update').length > 0) {
             var value = $('.BankInvoiceTransaction_option_update:checked').val();
             if(isNaN(value)) {
                 swal("Oops...", "Você deve selecionar uma opção", "error");
                 return false;
             } else {
-                $('#bank-transaction-form').submit();
+
+                var url = $(this).attr('action');
+                var data = $(this).serialize();
+                $.post(url, data, function(json) {
+                    if (json.success) {
+                        $('#btn-search').trigger('click');
+                        $('#remoteModal').modal('hide');
+                        $.smallBox({
+                            title: "Sucesso!",
+                            content: "<i class='fa fa-clock-o'></i> <i>Lançamento(s) removido(s) com sucesso!</i>",
+                            color: "#659265",
+                            iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                            timeout: 2000
+                        });
+                    } else {
+                        swal("Oops...", "Ocorreu algum erro!!!.", "error");
+                    }
+                }, 'json');
             }
         }
+
     });
 </script>
