@@ -8,9 +8,9 @@
         <div class="modal-header">
             <h4 class="modal-title">{{ $title }}</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                <span aria-hidden="true">×</span>                
+                <span aria-hidden="true">×</span>
             </button>
-            
+
         </div>
         <div class="modal-body">
             <div class="form-group">
@@ -22,6 +22,7 @@
             <div class="form-group">
                 <label for="Bank_Category_parent_category_id">Categoria pai</label>
                 <select name="BankCategory[parent_category_id]" id="BankCategory_parent_category_id" class="form-control">
+                    <option value="">-- RAIZ --</option>
                     @foreach($categories as $category)
                         <option value="{{ $category['id'] }}" {{ $category['id'] == $parent_category_id ? 'selected' : null }}>{{ $category['name'] }}</option>
                     @endforeach

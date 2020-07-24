@@ -75,6 +75,7 @@ class BankCategoryController extends Controller
         $parent_category_id      = $model->parent_category_id;
 
         if ($request->isMethod('post')) {
+            $parent_category_id = $request->get('BankCategory')['parent_category_id'];
             $data = $request->get('BankCategory');
             $data = array_merge($request->get('BankCategory'), [
                 'id'                      => $model->id,
