@@ -102,6 +102,8 @@ class BankCategoryController extends Controller
     {
         if ($this->bankCategoryService->destroy($id)) {
             return $this->apiSuccess(['success' => true]);
+        } else {
+            return $this->apiSuccess(['success' => false, 'message' => 'Verique se esta categoria possuí algum lançamento atrelado.']);
         }
     }
 

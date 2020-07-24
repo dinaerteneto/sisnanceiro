@@ -21,10 +21,14 @@ class BankCategory extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'company_id', 
-        'main_parent_category_id', 
-        'parent_category_id', 'name', 
+        'company_id',
+        'main_parent_category_id',
+        'parent_category_id', 'name',
         'status',
     ];
+
+    public function invoices() {
+        return $this->hasMany('Sisnanceiro\Models\BankInvoiceDetail', 'bank_category_id');
+    }
 
 }

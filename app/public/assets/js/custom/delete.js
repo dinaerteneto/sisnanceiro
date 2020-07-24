@@ -40,9 +40,10 @@ Delete = {
                                 }, 2000);
                             }
                         } else {
+                            const msg = json.message ? json.message : 'Erro na tentativa de excluir';
                             $.smallBox({
                                 title: "Erro!",
-                                content: "<i class='fa fa-clock-o'></i> <i>Erro na tentativa de excluir</i>",
+                                content: `<i class='fa fa-clock-o'></i> <i>${json.message}</i>`,
                                 color: "#C46A69",
                                 iconSmall: "fa fa-times fa-2x fadeInRight animated",
                                 timeout: 4000
