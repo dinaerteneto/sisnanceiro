@@ -2,7 +2,6 @@
 namespace Sisnanceiro\Repositories;
 
 use Illuminate\Support\Facades\Auth;
-use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\BankInvoiceTransaction;
 
@@ -21,7 +20,7 @@ return $this->bankInvoiceDetail->find($id);
 }
  */
 
-    
+
     public function getAll(array $search = [])
     {
         $companyId = Auth::user()->company_id;
