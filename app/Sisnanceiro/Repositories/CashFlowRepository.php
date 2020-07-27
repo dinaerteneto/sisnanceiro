@@ -467,11 +467,6 @@ class CashFlowRepository extends Repository
                   ORDER BY date) total) x
         WHERE date >= '{$periodFrom}'
         ";
-
-  echo '<pre>';
-  echo $sql;
-  echo '<pre>';
-
   return \DB::select($sql);
  }
 
