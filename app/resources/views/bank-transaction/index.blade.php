@@ -1,6 +1,4 @@
 <?php
-use Sisnanceiro\Models\BankCategory;
-use Carbon\Carbon;
 ?>
 
 @extends('layouts.app')

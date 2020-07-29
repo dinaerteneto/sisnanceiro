@@ -2,7 +2,7 @@
     <img src="assets/img/avatars/sunny.png" alt="" class="online">
     <span>
         @if(Auth::user())
-            <?php $person = Auth::user()->load('person')->person; ?>
+            <?php $person = Auth::user()->load('person')->person;?>
             @if($person)
                 {{ $person->firstname }}
             @endif
@@ -45,9 +45,10 @@
         </li>
 
 
-        <li class="{{ Request::is('bank-category') || Request::is('bank-account') ? 'active' : '' }}">
+        <li class="{{ Request::is('bank-category') || Request::is('bank-account') || Request::is('bank-transaction') ? 'active' : '' }}">
 
-            <a class="has-arrow" href="#" title="Financeiro"><span class="fa fa-lg fa-fw fa-money"></span> <span class="menu-item-parent">Financeiro</span>
+            <a class="has-arrow" href="#" title="Financeiro"><span class="fa fa-lg fa-fw fa-money"></span>
+                <span class="menu-item-parent">Financeiro</span>
                 <b class="collapse-sign">
                     <em class="fa fa-plus-square-o"></em>
                     <em class="fa fa-minus-square-o"></em>
@@ -61,12 +62,12 @@
 
                 <li class="">
                     <a href="{{ url('/bank-account') }}" title="Contas bancárias"> Contas bancárias </a>
-
                 </li>
                 <li class="">
                     <a href="{{ url('/bank-transaction') }}" title="Transações de receita e despesas"> Transações </a>
                     <a href="{{ url('/bank-transaction/pay') }}" title="Contas a receber"> Contas a pagar </a>
                     <a href="{{ url('/bank-transaction/receive') }}" title="Contas a pagar"> Contas a receber </a>
+                    <a href="{{ url('/reports/cash-flow') }}" title="Fluxo de caixa"> Fluxo de caixa </a>
                 </li>
                 <!--
                 <li class="">

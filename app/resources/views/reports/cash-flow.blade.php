@@ -15,7 +15,41 @@
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                     <div class="jarviswidget well jarviswidget-color-darken">
-                        <div class="widget-body no-padding">
+                        <div class="widget-body">
+
+                            <input type="hidden" name="Filter[start_date]" value="{{ Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
+                            <input type="hidden" name="Filter[end_date]" value="{{ Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}" id="filter-range-end-date" />
+
+                            <div class="row mb-10">
+                                <div class="col-sm-3">
+                                   <select name="Filter[bank_account_id]" class="form-control selectpicker" id="Filter_bank_account_id" title="Todas as contas" multiple>
+                                        @if($bankAccounts)
+                                            @foreach($bankAccounts as $bankAccount)
+                                                <option value="{{ $bankAccount->id }}">{{ $bankAccount->name }}</option>
+                                            @endforeach
+                                        @endif
+                                   </select>
+                                </div>
+
+                                <div class="drp-container col-sm-3">
+                                    <div id="filter-range" class="form-control" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ced4da; width: 100%">
+                                        <i class="fa fa-calendar"></i>&nbsp;
+                                        <span></span>
+                                        <i class="fa fa-caret-down"></i>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="pull-right">
+                                        <button class="btn btn-success" id="btn-search">
+                                            <i class="fa fa-search"></i> Pesquisar
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
 
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover">
@@ -44,11 +78,22 @@
 
 @section('scripts')
 <script type="text/javascript">
+
+    var filter = {
+        'start_date': $('#filter-range-start-date').val(),
+        'end_date': $('#filter-range-end-date').val(),
+        'bank_account_id': '',
+    };
+
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.bPaginate = false;
+    Main.dataTableOptions.searching = false;
     Main.dataTableOptions.ajax = {
-            url: "/reports/cash-flow",
-            type: 'POST'
+        url: "/reports/cash-flow",
+        type: 'POST',
+        data: function(d) {
+            d.extra_search = filter;
+        }
     };
     Main.dataTableOptions.columns = [
         {
@@ -112,6 +157,17 @@
             tr.addClass('shown');
         }
     } );
+
+    $('#btn-search').click( function() {
+        filter = {
+            'start_date': $('#filter-range-start-date').val(),
+            'end_date': $('#filter-range-end-date').val(),
+            'bank_account_id': $('#Filter_bank_account_id').val()
+        };
+        console.log(filter);
+        dataTables.ajax.json(filter);
+        dataTables.draw();
+    });
 
     function format ( rowData ) {
         var div = $('<div/>')

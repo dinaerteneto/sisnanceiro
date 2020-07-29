@@ -254,6 +254,7 @@ class CashFlowRepository extends Repository {
 	 * @return array
 	 */
 	public static function pastAndFuture($periodFrom, $periodTo, $bankAccountId = []) {
+
 		$companyId = \Auth::user()->company_id;
 		$sql = "
             SELECT `date` ,
