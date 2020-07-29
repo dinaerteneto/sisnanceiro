@@ -3,6 +3,7 @@
         <thead>
             <tr>
                 <th>Nome</th>
+                <th>Conta</th>
                 <th>Forma de pagto</th>
                 <th>Descrição</th>
                 <th>Valor bruto</th>
@@ -14,6 +15,7 @@
             @foreach($data as $item)
                 <tr class="{{ $item['net_value_original'] < 0 ? 'text-red' : 'text-blue' }}" >
                     <td> {{ $item['username'] }} </td>
+                    <td> {{ $item['bank_account_name'] }} </td>
                     <td> Dinheiro </td>
                     <td> {{ $item['note'] }} </td>
                     <td> {{ $item['gross_value'] }} </td>

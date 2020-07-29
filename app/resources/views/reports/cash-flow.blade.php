@@ -177,7 +177,8 @@
         $.ajax({
             url: '/reports/cash-flow/detail',
             data: {
-                date: rowData.date_value
+                date: rowData.date_value,
+                bank_account_id: $('#Filter_bank_account_id').val()
             },
             success: function ( html ) {
                 div

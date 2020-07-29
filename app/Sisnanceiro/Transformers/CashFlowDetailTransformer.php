@@ -21,6 +21,7 @@ class CashFlowDetailTransformer extends TransformerAbstract {
 				'gross_value' => Mask::currency($data->gross_value),
 				'tax_value' => Mask::currency($data->tax_value),
 				'date' => $date->format('d/m/Y'),
+				'bank_account_name' => $data->bank_account_name,
 
 				'date_original' => $data->date,
 				'net_value_original' => $data->net_value,

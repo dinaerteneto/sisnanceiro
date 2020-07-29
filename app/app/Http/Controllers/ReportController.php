@@ -52,7 +52,17 @@ class ReportController extends Controller {
 
 	public function cashFlowDetail(Request $request) {
 		$date = $request->date;
-		$records = $this->service->cashFlowPast($date, $date, [13, 14, 15], 'day');
+		$bankAccountIds = null !== $request->get('bank_account_id') ? $request->get('bank_account_id') : [];
+		if (count($bankAccountIds) <= 0) {
+			//get all bankAccounts if not filtered by bank account
+			$bankAccounts = $this->bankAccountService->all();
+			if ($bankAccounts) {
+				foreach ($bankAccounts as $bankAccount) {
+					$bankAccountIds[] = $bankAccount->id;
+				}
+			}
+		}
+		$records = $this->service->cashFlowPast($date, $date, $bankAccountIds, 'day');
 		$data = (object) fractal($records, new CashFlowDetailTransformer)->toArray()['data'];
 		return view('/reports/_cash-flow-detail', compact('data'));
 	}

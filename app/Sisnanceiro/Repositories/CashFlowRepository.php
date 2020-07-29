@@ -193,7 +193,8 @@ class CashFlowRepository extends Repository {
                    BC.name as category,
                    BID.company_id,
                    U.id AS user_id,
-                   'user' AS type_user
+                   'user' AS type_user,
+                   BA.name AS bank_account_name
             FROM bank_invoice_detail BID
             JOIN bank_category BC ON BC.id = BID.bank_category_id
             LEFT JOIN bank_account BA ON BA.id = BID.bank_account_id
@@ -224,7 +225,8 @@ class CashFlowRepository extends Repository {
                    BC.name as category,
                    BID.company_id,
                    SP.id AS user_id,
-                   'supplier' AS type_user
+                   'supplier' AS type_user,
+                   BA.name AS bank_account_name
             FROM bank_invoice_detail BID
             JOIN bank_category BC ON BC.id = BID.bank_category_id
             LEFT JOIN bank_invoice_transaction BIT ON BIT.id = BID.bank_invoice_transaction_id
@@ -233,6 +235,7 @@ class CashFlowRepository extends Repository {
             LEFT JOIN users U ON U.id = BID.user_id
             LEFT JOIN supplier SP ON SP.id = BID.supplier_id
             LEFT JOIN person P_SP ON P_SP.id = SP.id
+
             WHERE BID.payment_date = '{$periodFrom}'
               AND BID.company_id = '{$companyId}'
               AND BID.bank_account_id IN (" . implode(',', $bankAccountId) . ")
@@ -710,7 +713,8 @@ class CashFlowRepository extends Repository {
                    BC.name as category,
                    BID.company_id,
                    U.id AS user_id,
-                   'user' AS type_user
+                   'user' AS type_user,
+                   BA.name AS bank_account_name
             FROM bank_invoice_detail BID
             JOIN bank_category BC ON BC.id = BID.bank_category_id
             LEFT JOIN bank_invoice_transaction BIT ON BIT.id = BID.bank_invoice_transaction_id
@@ -718,6 +722,7 @@ class CashFlowRepository extends Repository {
             LEFT JOIN users U ON U.id = BID.user_id
             LEFT JOIN person P ON P.id = U.id
             LEFT JOIN sale S ON S.id = BID.sale_id
+            LEFT JOIN bank_account BA ON BA.id = BID.bank_account_id
             WHERE BID.receive_date = '{$periodFrom}'
               AND BID.company_id = '{$companyId}'
               AND BID.bank_account_id IN (" . implode(',', $bankAccountId) . ")
@@ -748,6 +753,7 @@ class CashFlowRepository extends Repository {
             LEFT JOIN users U ON U.id = BID.user_id
             LEFT JOIN supplier SP ON SP.id = BID.supplier_id
             LEFT JOIN person P_SP ON P_SP.id = SP.id
+            LEFT JOIN bank_account BA ON BA.id = BID.bank_account_id
             WHERE ((BID.due_date = '{$periodFrom}' AND BID.status not in (" . BankInvoiceDetail::STATUS_CANCELLED . "," . BankInvoiceDetail::STATUS_PAID . ")) OR (BID.payment_date = '{$periodFrom}' AND BID.status = " . BankInvoiceDetail::STATUS_PAID . "))
               AND BID.company_id = '{$companyId}'
               AND BID.bank_account_id IN (" . implode(',', $bankAccountId) . ")
