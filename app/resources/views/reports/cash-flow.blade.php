@@ -12,9 +12,6 @@
     <div class="d-flex w-100">
         <section id="widget-grid" class="w-100">
 
-
-
-
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                     <div class="jarviswidget well jarviswidget-color-darken">
@@ -24,6 +21,7 @@
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
+                                            <th width="3%">&nbsp;</th>
                                             <th>Data</th>
                                             <th>Saldo inicial</th>
                                             <th>Saídas</th>
@@ -53,6 +51,12 @@
             type: 'POST'
     };
     Main.dataTableOptions.columns = [
+        {
+            className:      'details-control',
+            orderable:      false,
+            data:           null,
+            defaultContent: ''
+        },
         { data: 'date', 'searchable': false },
         { data: 'initial_balance', 'searchable': false,
             mRender: function(data, type, row) {
@@ -93,6 +97,40 @@
     ];
 
     var dataTables = $('#dt_basic').DataTable(Main.dataTableOptions);
+
+
+    $('#dt_basic tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = dataTables.row( tr );
+
+        if ( row.child.isShown() ) {
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+
+    function format ( rowData ) {
+        var div = $('<div/>')
+            .addClass( 'loading' )
+            .text( 'Aguarde...' );
+
+        $.ajax({
+            url: '/reports/cash-flow/detail',
+            data: {
+                date: rowData.date_value
+            },
+            success: function ( html ) {
+                div
+                .html( html )
+                .removeClass( 'loading' );
+            }
+        });
+    return div;
+}
 
 </script>
 @endsection

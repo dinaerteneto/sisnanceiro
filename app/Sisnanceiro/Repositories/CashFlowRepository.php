@@ -5,25 +5,22 @@ namespace Sisnanceiro\Repositories;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 
-class CashFlowRepository extends Repository
-{
+class CashFlowRepository extends Repository {
 
- public function __construct(BankInvoiceDetail $model)
- {
-  $this->model = $model;
- }
+	public function __construct(BankInvoiceDetail $model) {
+		$this->model = $model;
+	}
 
- /**
-  * get cash flow when periodFrom between periodTo in past
-  * @param  string $periodFrom   period from (yyyy-mm-dd)
-  * @param  string $periodTo     period to (yyyy-mm-dd)
-  * @param  array $bankAccountId ids of bankAccount
-  * @return array
-  */
- public static function past($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date')
- {
-  $companyId = \Auth::user()->company_id;
-  $sql       = "
+	/**
+	 * get cash flow when periodFrom between periodTo in past
+	 * @param  string $periodFrom   period from (yyyy-mm-dd)
+	 * @param  string $periodTo     period to (yyyy-mm-dd)
+	 * @param  array $bankAccountId ids of bankAccount
+	 * @return array
+	 */
+	public static function past($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date') {
+		$companyId = \Auth::user()->company_id;
+		$sql = "
             SELECT `date` ,
                    initial_balance,
                    credit,
@@ -179,8 +176,8 @@ class CashFlowRepository extends Repository
             WHERE date >= '{$periodFrom}'
         ";
 
-  if ('day' == $groupBy) {
-   $sql = "
+		if ('day' == $groupBy) {
+			$sql = "
             SELECT BID.id ,
                    BID.receive_date AS `date` ,
                    BID.net_value,
@@ -190,11 +187,11 @@ class CashFlowRepository extends Repository
                    parcel_number,
                    total_invoices AS total_parcels,
                    PM.name AS payment_method,
-                   CONCAT(U.name, ' ', U.last_name) AS user_name,
-                   S.box_sale_code,
+                   CONCAT(P.firstname, ' ', P.lastname) AS user_name,
+                   S.company_sale_code,
                    S.id AS sale_id,
                    BC.name as category,
-                   BID.box_id,
+                   BID.company_id,
                    U.id AS user_id,
                    'user' AS type_user
             FROM bank_invoice_detail BID
@@ -202,7 +199,8 @@ class CashFlowRepository extends Repository
             LEFT JOIN bank_account BA ON BA.id = BID.bank_account_id
             LEFT JOIN bank_invoice_transaction BIT ON BIT.id = BID.bank_invoice_transaction_id
             LEFT JOIN payment_method PM ON PM.id = BID.payment_method_id
-            LEFT JOIN user U ON U.id = BID.user_id
+            LEFT JOIN users U ON U.id = BID.user_id
+            LEFT JOIN person P ON P.id = U.id
             LEFT JOIN sale S ON S.id = BID.sale_id
             WHERE BID.receive_date = '{$periodFrom}'
               AND BID.company_id = '{$companyId}'
@@ -220,11 +218,11 @@ class CashFlowRepository extends Repository
                    parcel_number,
                    total_invoices AS total_parcels,
                    PM.name AS payment_method,
-                   SP.name AS user_name,
-                   '' AS box_sale_code,
+                   P_SP.firstname AS user_name,
+                   '' AS company_sale_code,
                    '' AS sale_id,
                    BC.name as category,
-                   BID.box_id,
+                   BID.company_id,
                    SP.id AS user_id,
                    'supplier' AS type_user
             FROM bank_invoice_detail BID
@@ -232,8 +230,9 @@ class CashFlowRepository extends Repository
             LEFT JOIN bank_invoice_transaction BIT ON BIT.id = BID.bank_invoice_transaction_id
             LEFT JOIN bank_account BA ON BA.id = BID.bank_account_id
             LEFT JOIN payment_method PM ON PM.id = BID.payment_method_id
-            LEFT JOIN user U ON U.id = BID.user_id
-            LEFT JOIN suppliers SP ON SP.id = BID.supplier_id
+            LEFT JOIN users U ON U.id = BID.user_id
+            LEFT JOIN supplier SP ON SP.id = BID.supplier_id
+            LEFT JOIN person P_SP ON P_SP.id = SP.id
             WHERE BID.payment_date = '{$periodFrom}'
               AND BID.company_id = '{$companyId}'
               AND BID.bank_account_id IN (" . implode(',', $bankAccountId) . ")
@@ -242,22 +241,21 @@ class CashFlowRepository extends Repository
               AND BC.main_parent_category_id = " . BankCategory::CATEGORY_TO_PAY . "
             ORDER BY user_name
             ";
-  }
+		}
 
-  return \DB::select($sql);
- }
+		return \DB::select($sql);
+	}
 
- /**
-  * get cash flow when periodFrom between periodTo in past and
-  * @param  string $periodFrom    period from (yyyy-mm-dd)
-  * @param  string $periodTo      period to (yyyy-mm-dd)
-  * @param  array $bankAccountId    ids of bankAccount
-  * @return array
-  */
- public static function pastAndFuture($periodFrom, $periodTo, $bankAccountId = [])
- {
-  $companyId = \Auth::user()->company_id;
-  $sql       = "
+	/**
+	 * get cash flow when periodFrom between periodTo in past and
+	 * @param  string $periodFrom    period from (yyyy-mm-dd)
+	 * @param  string $periodTo      period to (yyyy-mm-dd)
+	 * @param  array $bankAccountId    ids of bankAccount
+	 * @return array
+	 */
+	public static function pastAndFuture($periodFrom, $periodTo, $bankAccountId = []) {
+		$companyId = \Auth::user()->company_id;
+		$sql = "
             SELECT `date` ,
                    (balance - (credit + debit)) AS initial_balance ,
                    credit ,
@@ -467,20 +465,19 @@ class CashFlowRepository extends Repository
                   ORDER BY date) total) x
         WHERE date >= '{$periodFrom}'
         ";
-  return \DB::select($sql);
- }
+		return \DB::select($sql);
+	}
 
- /**
-  * get cash flow when periodFrom > current date
-  * @param  string $periodFrom    period from (yyyy-mm-dd)
-  * @param  string $periodTo      period to (yyyy-mm-dd)
-  * @param  array $bankAccountId  ids of bankAccount
-  * @return array
-  */
- public static function future($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date')
- {
-  $companyId = \Auth::user()->company_id;
-  $sql       = "
+	/**
+	 * get cash flow when periodFrom > current date
+	 * @param  string $periodFrom    period from (yyyy-mm-dd)
+	 * @param  string $periodTo      period to (yyyy-mm-dd)
+	 * @param  array $bankAccountId  ids of bankAccount
+	 * @return array
+	 */
+	public static function future($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date') {
+		$companyId = \Auth::user()->company_id;
+		$sql = "
             SELECT `date` ,
                    (balance - (credit + debit)) AS initial_balance ,
                    credit ,
@@ -694,9 +691,9 @@ class CashFlowRepository extends Repository
               WHERE date >= '{$periodFrom}'
         ";
 
-  // get all records of day
-  if ('day' == $groupBy) {
-   $sql = "
+		// get all records of day
+		if ('day' == $groupBy) {
+			$sql = "
             SELECT BID.id ,
                    BID.due_date AS `date` ,
                    BID.net_value,
@@ -706,18 +703,19 @@ class CashFlowRepository extends Repository
                    parcel_number,
                    total_invoices AS total_parcels,
                    PM.name AS payment_method,
-                   CONCAT(U.name, ' ', U.last_name) AS user_name,
-                   S.box_sale_code,
+                   CONCAT(P.firstname, ' ', U.lastname) AS user_name,
+                   S.company_sale_code,
                    S.id AS sale_id,
                    BC.name as category,
-                   BID.box_id,
+                   BID.company_id,
                    U.id AS user_id,
                    'user' AS type_user
             FROM bank_invoice_detail BID
             JOIN bank_category BC ON BC.id = BID.bank_category_id
             LEFT JOIN bank_invoice_transaction BIT ON BIT.id = BID.bank_invoice_transaction_id
             LEFT JOIN payment_method PM ON PM.id = BID.payment_method_id
-            LEFT JOIN user U ON U.id = BID.user_id
+            LEFT JOIN users U ON U.id = BID.user_id
+            LEFT JOIN person P ON P.id = U.id
             LEFT JOIN sale S ON S.id = BID.sale_id
             WHERE BID.receive_date = '{$periodFrom}'
               AND BID.company_id = '{$companyId}'
@@ -735,19 +733,20 @@ class CashFlowRepository extends Repository
                    parcel_number,
                    total_invoices AS total_parcels,
                    PM.name AS payment_method,
-                   SP.name AS user_name,
-                   '' AS box_sale_code,
+                   P_SP.firstname AS user_name,
+                   '' AS company_sale_code,
                    '' AS sale_id,
                    BC.name as category,
-                   BID.box_id,
+                   BID.company_id,
                    SP.id AS user_id,
                    'supplier' AS type_user
             FROM bank_invoice_detail BID
             JOIN bank_category BC ON BC.id = BID.bank_category_id
             LEFT JOIN bank_invoice_transaction BIT ON BIT.id = BID.bank_invoice_transaction_id
             LEFT JOIN payment_method PM ON PM.id = BID.payment_method_id
-            LEFT JOIN user U ON U.id = BID.user_id
-            LEFT JOIN suppliers SP ON SP.id = BID.supplier_id
+            LEFT JOIN users U ON U.id = BID.user_id
+            LEFT JOIN supplier SP ON SP.id = BID.supplier_id
+            LEFT JOIN person P_SP ON P_SP.id = SP.id
             WHERE ((BID.due_date = '{$periodFrom}' AND BID.status not in (" . BankInvoiceDetail::STATUS_CANCELLED . "," . BankInvoiceDetail::STATUS_PAID . ")) OR (BID.payment_date = '{$periodFrom}' AND BID.status = " . BankInvoiceDetail::STATUS_PAID . "))
               AND BID.company_id = '{$companyId}'
               AND BID.bank_account_id IN (" . implode(',', $bankAccountId) . ")
@@ -755,8 +754,8 @@ class CashFlowRepository extends Repository
               AND BC.main_parent_category_id = " . BankCategory::CATEGORY_TO_PAY . "
             ORDER BY user_name
             ";
-  }
+		}
 
- }
+	}
 
 }
