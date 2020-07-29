@@ -2839,7 +2839,7 @@ body.nooverflow {
 
 /*
  * RTL - SUPPORT
- 
+
 .rtl {
   .jarviswidget > header {
     padding: 0 7px 0 0;
@@ -3012,7 +3012,7 @@ body.nooverflow {
   top: 3px; }
 
 /*
- * Enhancements for other plugins 
+ * Enhancements for other plugins
  */
 #jarviswidget-fullscreen-mode .fc-grid .fc-day-number {
   padding: 5px 12px;
@@ -3578,7 +3578,7 @@ textarea.clone {
 
 /*
 .MessageIE {
-  background-image: url("../img/bg.png");    
+  background-image: url("../img/bg.png");
 }*/
 .MessageBoxContainer {
   position: relative;
@@ -4449,10 +4449,10 @@ table.dataTable {
 /**
  * SuperBox
  * The lightbox reimagined. Fully responsive HTML5 image galleries.
- * 
+ *
  * Latest version: https://github.com/seyDoggy/superbox
  * Original version: https://github.com/toddmotto/superbox
- * 
+ *
  * License <https://github.com/seyDoggy/superbox/blob/master/LICENSE.txt>
  */
 .superbox-active {
@@ -5831,7 +5831,7 @@ hr.simple {
 
 /* -------------------------------------- */
 .text-blue {
-  color: #57889c !important; }
+  color: #0000FF !important; }
 
 .bg-blue {
   background-color: #57889c !important; }
