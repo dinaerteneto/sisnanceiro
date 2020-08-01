@@ -97,13 +97,14 @@
     };
     Main.dataTableOptions.columns = [
         {
-            className:      'details-control',
-            orderable:      false,
-            data:           null,
-            defaultContent: ''
+            className: 'details-control',
+            data: null,
+            defaultContent: '',
+            'searchable': false,
+            'sortable': false
         },
-        { data: 'date', 'searchable': false },
-        { data: 'initial_balance', 'searchable': false,
+        { data: 'date', 'searchable': false, 'sortable': false },
+        { data: 'initial_balance', 'searchable': false, 'sortable': false,
             mRender: function(data, type, row) {
                 if(row.initial_balance_value < 0) {
                     return '<span class="text-red">'+ row.initial_balance +'</span>';
@@ -112,7 +113,7 @@
                 }
             }
         },
-        { data: 'debit', 'searchable': false,
+        { data: 'debit', 'searchable': false, 'sortable': false,
             mRender: function(data, type, row) {
                 if(row.debit_value < 0) {
                     return '<span class="text-red">'+ row.debit +'</span>';
@@ -121,7 +122,7 @@
                 }
             }
         },
-        { data: 'credit', 'searchable': true,
+        { data: 'credit', 'searchable': true, 'sortable': false,
             mRender: function(data, type, row) {
                 if(row.credit_value < 0) {
                     return '<span class="text-red">'+ row.credit +'</span>';
@@ -130,7 +131,7 @@
                 }
             }
         },
-        { data: 'balance', 'searchable': false,
+        { data: 'balance', 'searchable': false, 'sortable': false,
             mRender: function(data, type, row) {
                 if(row.balance_value < 0) {
                     return '<span class="text-red">'+ row.balance +'</span>';
@@ -164,7 +165,6 @@
             'end_date': $('#filter-range-end-date').val(),
             'bank_account_id': $('#Filter_bank_account_id').val()
         };
-        console.log(filter);
         dataTables.ajax.json(filter);
         dataTables.draw();
     });

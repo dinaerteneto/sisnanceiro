@@ -13,7 +13,7 @@
         <header>
             <div class="widget-header">
                 <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
-                <h2> Eventos </h2>						
+                <h2> Eventos </h2>
             </div>
             <div class="widget-toolbar">
                 <div class="btn-group">
@@ -31,14 +31,14 @@
                             <a class="dropdown-item" href="javascript:void(0);" id="td">Hoje</a>
                         </li>
                     </ul>
-                </div>									
-            </div>            
+                </div>
+            </div>
         </header>
 
         <!-- widget div-->
         <div>
             <div class="widget-body no-padding">
-                <!-- content goes here -->                
+                <!-- content goes here -->
                 <div class="widget-body-toolbar">
                     <div id="calendar-buttons">
                         <div class="btn-group pull-right">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="calendar"></div>
                 <!-- end content -->
             </div>

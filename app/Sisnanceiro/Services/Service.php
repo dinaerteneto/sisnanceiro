@@ -135,7 +135,7 @@ abstract class Service
     {
         return $this->repository
             ->where($column, '=', $value)
-            ->delete();        
+            ->delete();
     }
 
 }

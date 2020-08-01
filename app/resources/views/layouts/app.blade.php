@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,500,700">
 
     <!-- Styles -->
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/smartadmin-production.min.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/vendors/vendors.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/app.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/custom.bundle.css') }}">
@@ -73,25 +75,25 @@
             <div class="sa-content">
                 @if ($message = Session::has('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-					<i class="fa-fw fa fa-check"></i>
-					<strong>Sucesso</strong> {{ Session::get('success')['message'] }}
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
+                    <i class="fa-fw fa fa-check"></i>
+                    <strong>Sucesso</strong> {{ Session::get('success')['message'] }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
                 @endif
 
                 @if (Session::has('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-					<i class="fa-fw fa fa-times"></i>
+                    <i class="fa-fw fa fa-times"></i>
                     <strong>Erro!</strong> {{ Session::get('error')['message'] }}
                     @foreach(Session::get('error')['errors'] as $errors)
                         <br>{{$errors['message']}}
                     @endforeach
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
                 @endif
 
                 @yield('content')
