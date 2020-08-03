@@ -1,5 +1,5 @@
 <?php
-?>
+;?>
 
 @extends('layouts.app')
 
@@ -63,8 +63,8 @@
                     <div class="well" style="margin-bottom: 2px">
                         <div class="widget-body">
 
-                            <input type="hidden" name="Filter[start_date]" value="{{ Carbon::now()->startOfMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
-                            <input type="hidden" name="Filter[end_date]" value="{{ Carbon::now()->format('Y-m-d') }}" id="filter-range-end-date" />
+                            <input type="hidden" name="Filter[start_date]" value="{{ Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
+                            <input type="hidden" name="Filter[end_date]" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" id="filter-range-end-date" />
                             <input type="hidden" name="Filter[main_parent_category_id]" value="{{ $mainCategoryId }}" id="Filter_main_parent_category_id" />
 
                             <div class="row mb-10">
@@ -140,9 +140,9 @@
                                             <th width="6%">Vencto</th>
                                             <th>Conta</th>
                                             <th>Categoria</th>
-                                            @if ($mainCategoryId == BankCategory::CATEGORY_TO_PAY)
+                                            @if ($mainCategoryId == Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY)
                                                 <th>Fornecedor</th>
-                                            @elseif ($mainCategoryId == BankCategory::CATEGORY_TO_RECEIVE)
+                                            @elseif ($mainCategoryId == Sisnanceiro\Models\BankCategory::CATEGORY_TO_RECEIVE)
                                                 <th>Cliente</th>
                                             @else
                                                 <th>Cliente / Fornecedor</th>

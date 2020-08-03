@@ -24,7 +24,7 @@ class PaymentTaxTermService extends Service
 
     public function __construct(
         Validator $validator,
-        PaymentTaxRepository $repository,
+        PaymentTaxRepository $repository
     ) {
         $this->validator  = $validator;
         $this->repository = $repository;

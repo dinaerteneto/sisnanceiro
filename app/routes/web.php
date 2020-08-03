@@ -190,6 +190,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::group(['prefix' => 'payment-tax'], function () {
         Route::get('/', 'PaymentTaxController@index');
         Route::post('/', 'PaymentTaxController@index');
+        Route::get('/create/{payment_method_id}', 'PaymentTaxController@create');
+        Route::post('/create/{payment_method_id}', 'PaymentTaxController@create');
     });
 
 });

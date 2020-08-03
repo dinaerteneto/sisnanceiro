@@ -1,6 +1,6 @@
 <form id="form1" method="post" action="">
     @csrf
-    <input type="hidden" name="Customer[id]" value="{{ isset($model) ? $model->id : null }}"> 
+    <input type="hidden" name="Customer[id]" value="{{ isset($model) ? $model->id : null }}">
 
     <fieldset>
         <legend><i class="fa fa-list-alt"></i> Dados gerais</legend>
@@ -43,7 +43,7 @@
                         <option value="">Selecione</option>
                         <option value="M" {{ isset($model) && $model->gender == 'M' ? 'selected' : null}}>Masculino</option>
                         <option value="F" {{ isset($model) && $model->gender == 'F' ? 'selected' : null}}>Feminino</option>
-                    </select>                    
+                    </select>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -71,7 +71,7 @@
             @else
                 @include('person/_form_address', compact('modelAddress', 'typeAddresses'))
             @endif
-            
+
         </div>
         <div class="row">
             <div class="col-sm-12 col-lg-12 col-md-12 align-right">
@@ -89,7 +89,7 @@
                 @foreach($contacts as $modelContact)
                     @include('person/_form_contact', compact('modelContact', 'typeContacts'))
                 @endforeach
-            @else 
+            @else
                 @include('person/_form_contact', compact('modelContact', 'typeContacts'))
             @endif
         </div>

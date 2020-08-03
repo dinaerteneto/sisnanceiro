@@ -15,8 +15,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,500,700">
 
     <!-- Styles -->
-    <link rel="stylesheet" media="screen, print" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/smartadmin-production.min.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/vendors/vendors.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/app.bundle.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('assets/app/custom.bundle.css') }}">

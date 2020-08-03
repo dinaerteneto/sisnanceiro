@@ -9,37 +9,38 @@
 </div>
 
 <article class="col-12 sortable-grid">
-    <div class="jarviswidget jarviswidget-style-2 no-padding">
+
         <div role="content">
-            <div class="jarviswidget jarviswidget-color-darken">
-                <header role="heading">
+            <div class="jarviswidget jarviswidget-style-2 no-padding">
+
+                <header role="heading" class="">
                     <div class="widget-header">
-                        <span class="widget-icon">
-                            <i class="fa fa-lock"></i>
-                        </span>
-                        <h2><strong>Nome do banco</strong></h2>
+                        <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                        <h2>Taxas e prazos</h2>
                     </div>
                     <span class="ml-auto" role="menu"></span>
+                    <span class="jarviswidget-loader" role="menu"><i class="fa fa-refresh fa-spin"></i></span>
+                    <ul id="myTab" class="nav nav-tabs ml-auto in">
+                        <li class="nav-item">
+                            <a href="#credit-card" data-toggle="tab" aria-expanded="false" class="nav-link active show">Cartão de crédito</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#debit-card" data-toggle="tab" aria-expanded="false" class="nav-link">Cartão de débito</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#order" data-toggle="tab" aria-expanded="false" class="nav-link">Boleto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#transfer" data-toggle="tab" aria-expanded="false" class="nav-link">Transferência</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#bank-draft" data-toggle="tab" aria-expanded="false" class="nav-link">Cheque</a>
+                        </li>
+                    </ul>
                 </header>
+
                 <div role="content">
                     <div class="widget-body">
-                        <ul class="nav nav-tabs bordered" id="tab-payment-tax">
-                           <li class="active">
-                                <a data-toggle="tab" href="#credit-card">Cartão de crédito</a>
-                            </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#debit-card">Cartão de débito</a>
-                            </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#order">Boleto</a>
-                            </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#transfer">Transferência</a>
-                            </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#bank-draft">Cheque</a>
-                            </li>
-                        </ul>
                         <div class="tab-content padding-10">
                             <div id="credit-card" class="tab-pane active">
                                 @include('/payment-tax/_list_payment_methods', ['payment_method_id' => Sisnanceiro\Models\PaymentMethod::CREDIT_CARD])
@@ -61,14 +62,17 @@
                 </div>
             </div>
         </div>
-    </div>
-</article>
+    </article>
 @endsection
 
 @section('scripts')
+<script type="text/javascript" src="assets/js/custom/PaymentTax.js" ></script>
 <script type="text/javascript">
 
     Main.dataTableOptions.serverSide = true;
+    Main.dataTableOptions.bPaginate = false;
+    Main.dataTableOptions.searching = false;
+    Main.dataTableOptions.toolbar = false;
     Main.dataTableOptions.ajax = {
             url: "payment-tax",
             type: 'POST'
@@ -93,6 +97,9 @@
     var dataTables5 = $('#dt_basic_5').DataTable({...Main.dataTableOptions, ajax: { url: 'payment-tax', type: 'POST', data: {payment_method_id: 5} } }); //ORDER
     var dataTables6 = $('#dt_basic_6').DataTable({...Main.dataTableOptions, ajax: { url: 'payment-tax', type: 'POST', data: {payment_method_id: 6} } }); //TRANSFER
     var dataTables7 = $('#dt_basic_4').DataTable({...Main.dataTableOptions, ajax: { url: 'payment-tax', type: 'POST', data: {payment_method_id: 7} } }); //BANK_DRAFT
+
+    $('.dt-toolbar').removeClass('d-flex');
+    $('.dt-toolbar').removeClass('dt-toolbar');
 
 </script>
 @endsection
