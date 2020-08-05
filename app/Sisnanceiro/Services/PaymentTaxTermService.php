@@ -3,7 +3,7 @@
 namespace Sisnanceiro\Services;
 
 use Sisnanceiro\Helpers\Validator;
-use Sisnanceiro\Repositories\PaymentTaxRepository;
+use Sisnanceiro\Repositories\PaymentTaxTermRepository;
 
 class PaymentTaxTermService extends Service
 {
@@ -24,7 +24,7 @@ class PaymentTaxTermService extends Service
 
     public function __construct(
         Validator $validator,
-        PaymentTaxRepository $repository
+        PaymentTaxTermRepository $repository
     ) {
         $this->validator  = $validator;
         $this->repository = $repository;

@@ -8,43 +8,45 @@
             </button>
         </div>
 
-        <form id="form-payment-tax" action=''>
+        <form id="form-payment-tax" method="post" action="/payment-tax/create/{{ $payment_method_id }}">
             @csrf
             <div class="modal-body">
-                <input type="hidden" name="PaymenTax[payment_method_id]" value="" />
+                <input type="hidden" name="PaymentTax[payment_method_id]" value="{{ $payment_method_id }}" />
 
-               @if (!in_array($payment_method_id, [Sisnanceiro\Models\PaymentMethod::TRANSFER, Sisnanceiro\Models\PaymentMethod::BANK_DRAFT] ))
-                <div class="row">
+                @if($bankAccounts)
+                <div class="row mb-10">
+                    <div class="col-sm-12">
+                        <label class="control-label" for="PaymentMethod_bank_account_id">Conta</label>
+                        <select name="PaymentTax[bank_account_id]" class="form-control bank_account_id" id="PaymentMethod_bank_account_id" title="Todas as contas">
+                            <option value="">-- Selecione --</option>
+                            @foreach($bankAccounts as $bankAccount)
+                                <option value="{{ $bankAccount->id }}">{{ $bankAccount->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                @endif
+
+                <div class="row mb-10">
                     <div class="col-sm-4">
                         <label class="control-label">Nome</label>
-                        <input type="text" class="form-control" name="PaymentMethod[name]" id="PaymentMethod_name" value="" />
+                        <input type="text" class="form-control name" name="PaymentTax[name]" id="PaymentMethod_name" value="" />
                     </div>
-                    <div class="col-sm-4">
-                        <label class="control-label">Dias úteis</label>
-                        <input type="text" class="form-control mask-number" name="PaymentMethod[days_business]" id="PaymentMethod_days_business" value="" />
-                    </div>
-                </div>
-                @endif
 
-                @if (!in_array($payment_method_id, [Sisnanceiro\Models\PaymentMethod::CREDIT_CARD, Sisnanceiro\Models\PaymentMethod::DEBIT_CARD] ))
-                <div class="row">
                     <div class="col-sm-4">
-                        <label class="control-label" for="category-allow_block">Dias úteis</label>
-                        <input type="checkbox" name="PaymentMethod[days_business]" class="form-control mask-number" />
+                        <label class="control-label">Dias para pagamento</label>
+                        <input type="text" class="form-control mask-number days_for_payment" name="PaymentTax[days_for_payment]" id="PaymentMethod_days_for_payment" value="" />
                     </div>
-                </div>
-                @endif
 
-                <div class="row">
-                    <div class="form-group">
-                       <select name="PaymentMethod[bank_account_id]" class="form-control selectpicker" id="PaymentMethod_bank_account_id" title="Todas as contas" multiple>
-                            @if($bankAccounts)
-                                @foreach($bankAccounts as $bankAccount)
-                                    <option value="{{ $bankAccount->id }}">{{ $bankAccount->name }}</option>
-                                @endforeach
-                            @endif
-                       </select>
-                    </div>
+                    @if (!in_array($payment_method_id, [Sisnanceiro\Models\PaymentMethod::CREDIT_CARD, Sisnanceiro\Models\PaymentMethod::DEBIT_CARD] ))
+                        <div class="col-sm-4">
+                            <br />
+                            <label class="vcheck m-0">
+                                <input type="checkbox" name="PaymentTax[days_business]" class="checkbox style-0" value="1" />
+                                <span>Dias úteis</span>
+                            </label>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="">
@@ -54,6 +56,7 @@
                             @break
                         @case (Sisnanceiro\Models\PaymentMethod::TRANSFER)
                         @case (Sisnanceiro\Models\PaymentMethod::BANK_DRAFT)
+                            @include('/payment-tax/_form_partial_null')
                             @break
                         @default
                             @include('/payment-tax/_form_partial')

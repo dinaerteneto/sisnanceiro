@@ -2,8 +2,7 @@
 
 namespace Sisnanceiro\Services;
 
-use Sisnaceiro\Helpers\FloatConversor;
-use Sisnaceiro\Models\PaymentTaxTerm;
+use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\PaymentMethod;
 use Sisnanceiro\Models\PaymentTax;
@@ -36,42 +35,48 @@ class PaymentTaxService extends Service
         $this->taxTermService = $taxTermService;
     }
 
+    private function mapData(array $data)
+    {
+        return [
+        ];
+    }
+
     private function addTerm(PaymentTax $model, array $data = [])
     {
         $taxTerm = false;
         if (PaymentMethod::CREDIT_CARD == $model->payment_method_id) {
-            PaymentTaxTerm::where('payment_tax_id', $model->id)->delete();
+            $this->taxTermService->deleteBy('payment_tax_id', $model->id);
             // persist tax of the credit card
-            $postCreditCard = $data['CreditCard'];
-            if ($postCreditCard) {
-                foreach ($postCreditCard['value'] as $key => $value) {
+            if ($data) {
+                foreach ($data['value'] as $key => $value) {
                     $dataTaxTerm = [
                         'payment_tax_id' => $model->id,
-                        'order'          => $postCreditCard['order'][$key],
+                        'order'          => $data['order'][$key],
                         'percent'        => true,
                         'value'          => FloatConversor::convert($value),
                     ];
-                    $taxTerm = $taxTerm = $this->taxTermService->store('create', $dataTaxTerm);
+                    $taxTerm = $taxTerm = $this->taxTermService->store($dataTaxTerm, 'create');
                     if (!$taxTerm) {
-                        throw new \Exception('Erro na tentativa de incluir a taxa do cartão de crédito.');
+                        throw new \Exception('Erro na tentativa de incluir/alterar a taxa do cartão de crédito.');
                     }
                 }
             }
         } else {
-            // persist tax different credit card
-            if (in_array($model->payment_method_id, [PaymentMethod::TRANSFER, PaymentMethod::BANK_DRAFT])) {
-                throw new \Exception('Esta forma de pagto não possuí parcelamento.');
-            }
-            $postPaymentTaxTerm = $data['PaymentTaxTerm'];
-            $taxTerm            = $this->taxTermService;
+            $rule        = 'create';
+            $dataTaxTerm = [
+                'payment_tax_id'    => $model->id,
+                'payment_method_id' => $model->payment_method_id,
+                'value'             => FloatConversor::convert($data['value']),
+                'order'             => 1,
+                'percent'           => $data['percent'],
+            ];
             if (!empty($postPaymentTaxTerm['id'])) {
-                $taxTerm = $this->taxTermService($postPaymentTaxTerm['id']);
+                $rule              = 'update';
+                $dataTaxTerm['id'] = $postPaymentTaxTerm['id'];
             }
-            $dataTaxTerm['payment_tax_id'] = $model->id;
-            $dataTaxTerm['value']          = FloatConversor::convert($taxTerm->value);
-
-            if (!$taxTerm->store($dataTaxTerm)) {
-                throw new \Exception('Erro na tentativa de incluir a taxa.');
+            $taxTerm = $this->taxTermService->store($dataTaxTerm, $rule);
+            if (!$taxTerm) {
+                throw new \Exception('Erro na tentativa de incluir/alterar a taxa.');
             }
 
         }
@@ -80,11 +85,20 @@ class PaymentTaxService extends Service
 
     public function store(array $data, $rules = false)
     {
-        $model = parent::store($data, $rules);
-        if (isset($data['PaymentTaxTerm'])) {
-            $this->addTerm($model, $data);
+        \DB::beginTransaction();
+        try {
+            $model = parent::store($data['PaymentTax'], $rules);
+            if (isset($data['CreditCard'])) {
+                $this->addTerm($model, $data['CreditCard']);
+            } else {
+                $this->addTerm($model, $data['PaymentTaxTerm']);
+            }
+            \DB::commit();
+            return $model;
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa.');
         }
-        return $model;
     }
 
     public function getAll($search = null)

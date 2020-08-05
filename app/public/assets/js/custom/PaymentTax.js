@@ -22,6 +22,19 @@ var PaymentTax = {
     },
     validate: function() {
         var error = '';
+
+        if($('.name').val().length <= 4) {
+            error = 'Digite um nome válido com no minimo 4 caracteres.';
+        }
+
+        if($('.bank_account_id').val() == '') {
+            error = 'Selecione uma conta.';
+        }
+
+        if($('.days_for_payment').val() == '') {
+            error = 'Dias para pagamento deve ser preenchidos.';
+        }
+
         if($('.credit-card-value').length > 0) {
             $('.credit-card-value').each(function(index, element) {
                 if($(element).val() == '') {
@@ -49,10 +62,9 @@ var PaymentTax = {
     },
     onSubmit: function() {
         $('body').on('submit', '#form-payment-tax', function(e) {
-            e.preventDefault();
             var error = PaymentTax.validate();
             if(error != '') {
-                $('.payment-tax-form .error').html('<div class="alert alert-danger" id="form-payment-tax-error" role ="alert">' + error + '</div>');
+                swal("Oops...", error, "error");
                 return false;
             } else {
                 return true;
