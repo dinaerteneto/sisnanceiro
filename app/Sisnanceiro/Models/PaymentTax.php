@@ -8,30 +8,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentTax extends Model
 {
-    use TenantModels;
-    use SoftDeletes;
+ use TenantModels;
+ use SoftDeletes;
 
-    protected $table      = 'payment_tax';
-    protected $primaryKey = 'id';
+ protected $table      = 'payment_tax';
+ protected $primaryKey = 'id';
 
-    protected $fillable = [
-        'id',
-        'company_id',
-        'bank_account_id',
-        'payment_method_id',
-        'name',
-        'days_for_payment',
-        'days_business',
-    ];
+ protected $fillable = [
+  'id',
+  'company_id',
+  'bank_account_id',
+  'payment_method_id',
+  'name',
+  'days_for_payment',
+  'days_business',
+ ];
 
-    public function bankAccount()
-    {
-        return $this->hasOne('Sisnanceiro\Models\BankAccount', 'id', 'bank_account_id');
-    }
+ public function bankAccount()
+ {
+  return $this->hasOne('Sisnanceiro\Models\BankAccount', 'id', 'bank_account_id');
+ }
 
-    public function paymentTaxTerm()
-    {
-        return $this->hasMany('Sisnanceiro\Models\PaymentTaxTerm', 'id');
-    }
+ public function paymentTaxTerm()
+ {
+  return $this->hasMany('Sisnanceiro\Models\PaymentTaxTerm', 'payment_tax_id');
+ }
 
 }

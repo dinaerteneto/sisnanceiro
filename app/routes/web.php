@@ -192,6 +192,9 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/', 'PaymentTaxController@index');
         Route::get('/create/{payment_method_id}', 'PaymentTaxController@create');
         Route::post('/create/{payment_method_id}', 'PaymentTaxController@create');
+        Route::get('/update/{id}', 'PaymentTaxController@update');
+        Route::post('/update/{id}', 'PaymentTaxController@update');
+        Route::post('/delete/{id}', 'PaymentTaxController@delete');
     });
 
 });

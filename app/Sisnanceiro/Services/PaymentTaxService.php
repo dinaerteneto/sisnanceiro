@@ -15,13 +15,12 @@ class PaymentTaxService extends Service
             'bank_account_id'   => 'required|int',
             'payment_method_id' => 'required|int',
             'days_for_payment'  => 'required|int',
-            'days_business'     => 'boolean',
         ],
         'update' => [
+            'id'                => 'required|int',
             'bank_account_id'   => 'required|int',
             'payment_method_id' => 'required|int',
             'days_for_payment'  => 'required|int',
-            'days_business'     => 'boolean',
         ],
     ];
 
@@ -44,8 +43,8 @@ class PaymentTaxService extends Service
     private function addTerm(PaymentTax $model, array $data = [])
     {
         $taxTerm = false;
+        $this->taxTermService->deleteBy('payment_tax_id', $model->id);
         if (PaymentMethod::CREDIT_CARD == $model->payment_method_id) {
-            $this->taxTermService->deleteBy('payment_tax_id', $model->id);
             // persist tax of the credit card
             if ($data) {
                 foreach ($data['value'] as $key => $value) {

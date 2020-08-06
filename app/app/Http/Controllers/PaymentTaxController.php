@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Sisnanceiro\Models\PaymentTax;
 use Sisnanceiro\Services\BankAccountService;
 use Sisnanceiro\Services\PaymentTaxService;
 use Sisnanceiro\Transformers\PaymentTaxTransformer;
@@ -31,7 +32,9 @@ class PaymentTaxController extends Controller
 
     public function create(Request $request, $payment_method_id)
     {
-        $bankAccounts = $this->bankAccountService->all();
+        $bankAccounts             = $this->bankAccountService->all();
+        $model                    = new PaymentTax();
+        $model->payment_method_id = $payment_method_id;
         if ($request->isMethod('post')) {
             $data  = $request->post();
             $model = $this->paymentTaxService->store($data, 'create');
@@ -42,8 +45,30 @@ class PaymentTaxController extends Controller
             }
             return redirect("payment-tax");
         }
-
-        return view('payment-tax/_form', compact('payment_method_id', 'bankAccounts'));
+        return view('payment-tax/_form', compact('bankAccounts', 'model'));
     }
 
+    public function update(Request $request, $id)
+    {
+        $bankAccounts = $this->bankAccountService->all();
+        $model        = $this->paymentTaxService->find($id);
+        if ($request->isMethod('post')) {
+            $data  = $request->post();
+            $model = $this->paymentTaxService->store($data, 'update');
+            if (method_exists($model, 'getErrors') && $model->getErrors()) {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar a taxa.', 'errors' => $model->getErrors()]);
+            } else {
+                $request->session()->flash('success', ['message' => 'Taxa alterada com sucesso.']);
+            }
+            return redirect("payment-tax");
+        }
+        return view('payment-tax/_form', compact('bankAccounts', 'model'));
+    }
+
+    public function delete($id)
+    {
+        if ($this->paymentTaxService->destroy($id)) {
+            return $this->apiSuccess(['success' => true]);
+        }
+    }
 }

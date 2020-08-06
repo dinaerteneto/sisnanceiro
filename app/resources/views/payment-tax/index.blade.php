@@ -85,8 +85,8 @@
         {
             bSortable: false,
             mRender: function(data, type, row) {
-                var html = '<a href="payment_tax/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
-                    html+= '<a href="payment_tax/delete/'+row.id+'" class="delete-record" data-title="Excluir esta taxa?" data-ask="Tem certeza que deseja excluir esta taxa '+ row.name +'?"><i class="fa fa-trash"></i></a>';
+                var html = '<a href="payment-tax/update/'+row.id+'" class="open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a>'
+                    html+= '<a href="payment-tax/delete/'+row.id+'" class="delete-record" data-title="Excluir esta taxa?" data-ask="Tem certeza que deseja excluir esta taxa '+ row.name +'?"><i class="fa fa-trash"></i></a>';
                 return html;
             }
         }
