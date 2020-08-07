@@ -27,4 +27,39 @@ class PaymentMethod extends Model
         'id',
         'name',
     ];
+
+    public static function get($payment_method)
+    {
+        switch ($payment_method) {
+            case self::DEBIT_CARD:
+                return 'Cartão de débito';
+                break;
+            case self::CREDIT_CARD:
+                return 'Cartão de crédito';
+                break;
+            case self::MONEY:
+                return 'Dinheiro';
+                break;
+            case self::BANK_DRAFT:
+                return 'Cheque';
+                break;
+            case self::ORDER:
+                return 'Boleto';
+            case self::TRANSFER:
+                return 'Transferência';
+                break;
+            case self::ONLINE_CARD:
+                return 'Crédito online';
+                break;
+            case self::ONLINE_ORDER:
+                return 'Boleto online';
+                break;
+            case self::DEBIT_AUTOM:
+                return 'Débito Automático';
+                break;
+            case self::DEPOSIT:
+                return 'Depósito';
+                break;
+        }
+    }
 }

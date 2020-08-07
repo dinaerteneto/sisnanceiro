@@ -34,12 +34,6 @@ class PaymentTaxService extends Service
         $this->taxTermService = $taxTermService;
     }
 
-    private function mapData(array $data)
-    {
-        return [
-        ];
-    }
-
     private function addTerm(PaymentTax $model, array $data = [])
     {
         $taxTerm = false;
@@ -100,20 +94,8 @@ class PaymentTaxService extends Service
         }
     }
 
-    public function getAll($search = null)
-    {
-        return $this->paymentTaxRepository->getAll($search);
-    }
-
     public function findBy($column, $value)
     {
-        $item = $this->repository->findBy($column, $value);
-        if ($item) {
-            $item->with('bank_account');
-            return $item;
-        } else {
-            $this->validator->addError('not_found', 'id', 'No record found for this id.');
-            return false;
-        }
+        return $this->repository->findAllBy($column, $value);
     }
 }

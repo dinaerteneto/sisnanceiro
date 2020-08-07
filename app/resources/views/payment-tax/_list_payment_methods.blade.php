@@ -20,11 +20,11 @@
                     <table id="dt_basic_{{ $payment_method_id }}" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>Conta</th>
-                                <th>Dias para recebimento (D + X)</th>
-                                <th>Dias úteis</th>
-                                <th width="5%">Ações</th>
+                                <th width="30%">Nome</th>
+                                <th width="20%">Conta</th>
+                                <th width="20%">Dias para recebimento (D + X)</th>
+                                <th width="20%">Dias úteis</th>
+                                <th width="10%">Ações</th>
                             </tr>
                         </thead>
                     </table>

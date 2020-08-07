@@ -10,9 +10,4 @@ class PaymentTaxRepository extends Repository
         $this->model = $model;
     }
 
-    public function getAll($search)
-    {
-
-    }
-
 }

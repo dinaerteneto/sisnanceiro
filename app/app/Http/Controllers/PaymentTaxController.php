@@ -22,8 +22,8 @@ class PaymentTaxController extends Controller
         if ($request->isMethod('post')) {
             $records = $this->paymentTaxService
                 ->findBy('payment_method_id', $request->post('payment_method_id'));
-            $records = $records ? $records->get() : [];
-            $dt      = datatables()->of($records)->setTransformer(new PaymentTaxTransformer);
+//            $records = $records ? $records->get() : [];
+            $dt = datatables()->of($records)->setTransformer(new PaymentTaxTransformer);
             return $dt->make(true);
         }
 

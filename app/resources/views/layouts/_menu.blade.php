@@ -45,7 +45,13 @@
         </li>
 
 
-        <li class="{{ Request::is('bank-category') || Request::is('bank-account') || Request::is('bank-transaction') ? 'active' : '' }}">
+        <li class="{{ Request::is('bank-category')
+            || Request::is('bank-account')
+            || Request::is('bank-transaction')
+            || Request::is('bank-transaction/pay')
+            || Request::is('bank-transaction/receive')
+            || Request::is('payment-tax')
+            || Request::is('reports/cash-flow') ? 'active' : '' }}">
 
             <a class="has-arrow" href="#" title="Financeiro"><span class="fa fa-lg fa-fw fa-money"></span>
                 <span class="menu-item-parent">Financeiro</span>
@@ -65,9 +71,18 @@
                 </li>
                 <li class="">
                     <a href="{{ url('/bank-transaction') }}" title="Transações de receita e despesas"> Transações </a>
+                </li>
+                <li class="">
                     <a href="{{ url('/bank-transaction/pay') }}" title="Contas a receber"> Contas a pagar </a>
+                </li>
+                <li class="">
                     <a href="{{ url('/bank-transaction/receive') }}" title="Contas a pagar"> Contas a receber </a>
+                </li>
+                <li class="">
                     <a href="{{ url('/reports/cash-flow') }}" title="Fluxo de caixa"> Fluxo de caixa </a>
+                </li>
+                <li class="">
+                    <a href="{{ url('/payment-tax') }}" title="Taxas e prazos"> Taxas e prazos </a>
                 </li>
                 <!--
                 <li class="">

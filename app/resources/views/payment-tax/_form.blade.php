@@ -2,7 +2,7 @@
     <div class="modal-content">
 
         <div class="modal-header">
-            <h4 class="modal-title">Taxa e prazo</h4>
+            <h4 class="modal-title">{{ Sisnanceiro\Models\PaymentMethod::get($model->payment_method_id) }}</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                 <span aria-hidden="true">×</span>
             </button>
