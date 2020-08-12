@@ -95,33 +95,32 @@
 <script type="text/javascript">
     $('#bank-transaction-form-delete').on('submit', function(e) {
         e.preventDefault();
-
+        var value = 10;
         if($('.BankInvoiceTransaction_option_update').length > 0) {
             var value = $('.BankInvoiceTransaction_option_update:checked').val();
-            if(isNaN(value)) {
-                swal("Oops...", "Você deve selecionar uma opção", "error");
-                return false;
-            } else {
-
-                var url = $(this).attr('action');
-                var data = $(this).serialize();
-                $.post(url, data, function(json) {
-                    if (json.success) {
-                        $('#btn-search').trigger('click');
-                        $('#remoteModal').modal('hide');
-                        $.smallBox({
-                            title: "Sucesso!",
-                            content: "<i class='fa fa-clock-o'></i> <i>Lançamento(s) removido(s) com sucesso!</i>",
-                            color: "#659265",
-                            iconSmall: "fa fa-check fa-2x fadeInRight animated",
-                            timeout: 2000
-                        });
-                    } else {
-                        swal("Oops...", "Ocorreu algum erro!!!.", "error");
-                    }
-                }, 'json');
-            }
         }
+        if(isNaN(value)) {
+            swal("Oops...", "Você deve selecionar uma opção", "error");
+            return false;
+        } else {
 
+            var url = $(this).attr('action');
+            var data = $(this).serialize();
+            $.post(url, data, function(json) {
+                if (json.success) {
+                    $('#btn-search').trigger('click');
+                    $('#remoteModal').modal('hide');
+                    $.smallBox({
+                        title: "Sucesso!",
+                        content: "<i class='fa fa-clock-o'></i> <i>Lançamento(s) removido(s) com sucesso!</i>",
+                        color: "#659265",
+                        iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                        timeout: 2000
+                    });
+                } else {
+                    swal("Oops...", "Ocorreu algum erro!!!.", "error");
+                }
+            }, 'json');
+        }
     });
 </script>

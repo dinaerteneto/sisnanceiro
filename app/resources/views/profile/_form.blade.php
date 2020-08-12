@@ -1,7 +1,7 @@
 <form id="form1" method="post" action="">
     @csrf
-    <input type="hidden" name="Profile[id]" value="{{ isset($model) ? $model->id : null }}">
-    <input type="hidden" name="Profile[physical]" value="{{ isset($model) ? $model->physical : null }}">
+    <input type="hidden" name="Profile[id]" value="{{ !empty($model) ? $model->id : null }}">
+    <input type="hidden" name="Profile[physical]" value="{{ !empty($model) ? $model->physical : null }}">
 
     <fieldset>
         <legend><i class="fa fa-user"></i> Usuário</legend>
@@ -43,19 +43,19 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label>Nome</label>
-                    <input type="text" value="{{ isset($model) ? $model->firstname : null }}" id="Profile_name" name="Profile[firstname]" class="form-control" placeholder="">
+                    <input type="text" value="{{ !empty($model) ? $model->firstname : null }}" id="Profile_name" name="Profile[firstname]" class="form-control" placeholder="">
                 </div>
             </div>
             <div class="col-sm-4" id="container-lastname">
                 <div class="form-group">
                     <label>Sobrenome</label>
-                    <input type="text" value="{{ isset($model) ? $model->lastname : null }}" id="Profile_lastname" name="Profile[lastname]" class="form-control" placeholder="">
+                    <input type="text" value="{{ !empty($model) ? $model->lastname : null }}" id="Profile_lastname" name="Profile[lastname]" class="form-control" placeholder="">
                 </div>
             </div>
             <div class="col-sm-2" id="container-birthdate">
                 <div class="form-group">
                     <label>Data nascimento</label>
-                    <input type="text" value="{{ isset($model) ? $model->birthdate : null }}" id="Profile_birthdate" name="Profile[birthdate]" class="form-control datepicker mask-date" data-dateformat="dd/mm/yy" placeholder="">
+                    <input type="text" value="{{ !empty($model) ? $model->birthdate : null }}" id="Profile_birthdate" name="Profile[birthdate]" class="form-control datepicker mask-date" data-dateformat="dd/mm/yy" placeholder="">
                 </div>
             </div>
         </div>
@@ -66,21 +66,21 @@
                     <label>Sexo</label>
                     <select name="Profile[gender]" id="Profile_gender" class="form-control select2">
                         <option value="">Selecione</option>
-                        <option value="M" {{ isset($model) && $model->gender == 'M' ? 'selected' : null}}>Masculino</option>
-                        <option value="F" {{ isset($model) && $model->gender == 'F' ? 'selected' : null}}>Feminino</option>
+                        <option value="M" {{ !empty($model) && $model->gender == 'M' ? 'selected' : null}}>Masculino</option>
+                        <option value="F" {{ !empty($model) && $model->gender == 'F' ? 'selected' : null}}>Feminino</option>
                     </select>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
                     <label>CPF</label>
-                    <input type="text" value="{{ isset($model) ? $model->cpf : null }}" id="Profile_cpf" name="Profile[cpf]" class="form-control mask-cpf" placeholder="">
+                    <input type="text" value="{{ !empty($model) ? $model->cpf : null }}" id="Profile_cpf" name="Profile[cpf]" class="form-control mask-cpf" placeholder="">
                 </div>
             </div>
             <div class="col-sm-4" id="container-rg">
                 <div class="form-group">
                     <label>RG</label>
-                    <input type="text" value="{{ isset($model) ? $model->rg : null }}" id="Profile_rg" name="Profile[rg]" class="form-control" placeholder="">
+                    <input type="text" value="{{ !empty($model) ? $model->rg : null }}" id="Profile_rg" name="Profile[rg]" class="form-control" placeholder="">
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
     <fieldset>
         <legend><i class="fa fa-map-marker"></i> Endereços</legend>
         <div id="container-address">
-            @if(isset($addresses))
+            @if($addresses)
                 @foreach($addresses as $modelAddress)
                     @include('person/_form_address', compact('modelAddress', 'typeAddresses'))
                 @endforeach
@@ -110,7 +110,7 @@
     <fieldset>
         <legend><i class="fa fa-phone"></i> Contatos</legend>
         <div id="container-contact">
-            @if(isset($contacts))
+            @if($contacts)
                 @foreach($contacts as $modelContact)
                     @include('person/_form_contact', compact('modelContact', 'typeContacts'))
                 @endforeach

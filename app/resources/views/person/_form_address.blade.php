@@ -4,7 +4,7 @@
     <div class="line-container"></div>
     <div class="delete-container"><a href="/person/del-address/{{ $modelAddress->id }}" class="remove-container btn btn-xs btn-danger" data-target-container="content-person-address"><i class="fa fa-times"></i></a></div>
 
-    <div class="row">                                        
+    <div class="row">
         <div class="col-sm-2">
             <div class="form-group">
                 <label>Tipo</label>
@@ -12,8 +12,8 @@
                     <option value="">Selecione</option>
                     @foreach($typeAddresses as $address)
                         <option value="{{ $address->id }}" {{ isset($modelAddress->person_address_type_id) && $address->id == $modelAddress->person_address_type_id ? 'selected' : null }}>{{ $address->name }}</option>
-                    @endforeach                    
-                </select>                    
+                    @endforeach
+                </select>
             </div>
         </div>
         <div class="col-sm-2">
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    <div class="row">                                        
+    <div class="row">
         <div class="col-sm-3">
             <div class="form-group">
                 <label>Complemento</label>

@@ -16,7 +16,7 @@ class BankAccountTransformer extends TransformerAbstract
         if (!empty($bankAccount->bank_id) || !empty($bankAccount->agency) || !empty($bankAccount->account) || !empty($bankAccount->agency_dv) || !empty($bankAccount->account_dv)) {
             $sendBankAccount = true;
         }
-        
+
         return [
             'id'                   => $bankAccount->id,
             'bank_id'              => $bankAccount->bank_id,
@@ -35,6 +35,7 @@ class BankAccountTransformer extends TransformerAbstract
             'cpf_cnpj'             => $bankAccount->cpf_cnpj,
             'legal_name'           => $bankAccount->legal_name,
             'send_bank_account'    => $sendBankAccount,
+            'current_balance'      => Mask::currency($bankAccount->getCurrentBalance()),
         ];
     }
 }

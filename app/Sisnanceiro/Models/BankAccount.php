@@ -5,6 +5,7 @@ namespace Sisnanceiro\Models;
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Sisnanceiro\Models\BankInvoiceDetail;
 
 class BankAccount extends Model
 {
@@ -69,6 +70,14 @@ class BankAccount extends Model
             3 => 'Conta corrente conjunta',
             4 => 'Conta poupança conjunta',
         ];
+    }
+
+    public function getCurrentBalance()
+    {
+        $balance = BankInvoiceDetail::select(\DB::raw('SUM(net_value) AS current_balance'))
+            ->where('bank_account_id', $this->id)
+            ->first();
+        return $balance ? $balance->current_balance : 0;
     }
 
 }

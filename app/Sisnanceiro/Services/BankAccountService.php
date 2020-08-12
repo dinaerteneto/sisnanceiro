@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankCategory;
+use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Repositories\BankAccountRepository;
 
 class BankAccountService extends Service
@@ -94,6 +95,9 @@ class BankAccountService extends Service
                     'bank_account_id'  => $bankAccount->id,
                     'net_value'        => $input['initial_balance'],
                     'due_date'         => $input['initial_balance_date'],
+                    'payment_date'     => $input['initial_balance_date'],
+                    'receive_date'     => $input['initial_balance_date'],
+                    'status'           => BankInvoiceDetail::STATUS_PAID,
                 ],
             ];
 
@@ -109,7 +113,7 @@ class BankAccountService extends Service
 
     public function update(Model $model, array $input, $rules = 'update')
     {
-        
+
         try {
 
             $data = $this->mapData($input);
@@ -134,13 +138,12 @@ class BankAccountService extends Service
                     'due_date'         => $input['initial_balance_date'],
                 ],
             ];
-            
+
             $this->bankTransactionService->updateInvoices($bankInvoice, $data);
-            
 
             return $bankAccount;
         } catch (\Exception $e) {
-          
+
             abort(500, 'Erro na tentativa de alterar o lançamento.');
         }
     }

@@ -5,22 +5,25 @@ namespace Sisnanceiro\Repositories;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 
-class CashFlowRepository extends Repository {
+class CashFlowRepository extends Repository
+{
 
-	public function __construct(BankInvoiceDetail $model) {
-		$this->model = $model;
-	}
+    public function __construct(BankInvoiceDetail $model)
+    {
+        $this->model = $model;
+    }
 
-	/**
-	 * get cash flow when periodFrom between periodTo in past
-	 * @param  string $periodFrom   period from (yyyy-mm-dd)
-	 * @param  string $periodTo     period to (yyyy-mm-dd)
-	 * @param  array $bankAccountId ids of bankAccount
-	 * @return array
-	 */
-	public static function past($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date') {
-		$companyId = \Auth::user()->company_id;
-		$sql = "
+    /**
+     * get cash flow when periodFrom between periodTo in past
+     * @param  string $periodFrom   period from (yyyy-mm-dd)
+     * @param  string $periodTo     period to (yyyy-mm-dd)
+     * @param  array $bankAccountId ids of bankAccount
+     * @return array
+     */
+    public static function past($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date')
+    {
+        $companyId = \Auth::user()->company_id;
+        $sql       = "
             SELECT `date` ,
                    initial_balance,
                    credit,
@@ -176,8 +179,8 @@ class CashFlowRepository extends Repository {
             WHERE date >= '{$periodFrom}'
         ";
 
-		if ('day' == $groupBy) {
-			$sql = "
+        if ('day' == $groupBy) {
+            $sql = "
             SELECT BID.id ,
                    BID.receive_date AS `date` ,
                    BID.net_value,
@@ -244,22 +247,23 @@ class CashFlowRepository extends Repository {
               AND BC.main_parent_category_id = " . BankCategory::CATEGORY_TO_PAY . "
             ORDER BY user_name
             ";
-		}
+        }
 
-		return \DB::select($sql);
-	}
+        return \DB::select($sql);
+    }
 
-	/**
-	 * get cash flow when periodFrom between periodTo in past and
-	 * @param  string $periodFrom    period from (yyyy-mm-dd)
-	 * @param  string $periodTo      period to (yyyy-mm-dd)
-	 * @param  array $bankAccountId    ids of bankAccount
-	 * @return array
-	 */
-	public static function pastAndFuture($periodFrom, $periodTo, $bankAccountId = []) {
+    /**
+     * get cash flow when periodFrom between periodTo in past and
+     * @param  string $periodFrom    period from (yyyy-mm-dd)
+     * @param  string $periodTo      period to (yyyy-mm-dd)
+     * @param  array $bankAccountId    ids of bankAccount
+     * @return array
+     */
+    public static function pastAndFuture($periodFrom, $periodTo, $bankAccountId = [])
+    {
 
-		$companyId = \Auth::user()->company_id;
-		$sql = "
+        $companyId = \Auth::user()->company_id;
+        $sql       = "
             SELECT `date` ,
                    (balance - (credit + debit)) AS initial_balance ,
                    credit ,
@@ -469,19 +473,20 @@ class CashFlowRepository extends Repository {
                   ORDER BY date) total) x
         WHERE date >= '{$periodFrom}'
         ";
-		return \DB::select($sql);
-	}
+        return \DB::select($sql);
+    }
 
-	/**
-	 * get cash flow when periodFrom > current date
-	 * @param  string $periodFrom    period from (yyyy-mm-dd)
-	 * @param  string $periodTo      period to (yyyy-mm-dd)
-	 * @param  array $bankAccountId  ids of bankAccount
-	 * @return array
-	 */
-	public static function future($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date') {
-		$companyId = \Auth::user()->company_id;
-		$sql = "
+    /**
+     * get cash flow when periodFrom > current date
+     * @param  string $periodFrom    period from (yyyy-mm-dd)
+     * @param  string $periodTo      period to (yyyy-mm-dd)
+     * @param  array $bankAccountId  ids of bankAccount
+     * @return array
+     */
+    public static function future($periodFrom, $periodTo, $bankAccountId = [], $groupBy = 'date')
+    {
+        $companyId = \Auth::user()->company_id;
+        $sql       = "
             SELECT `date` ,
                    (balance - (credit + debit)) AS initial_balance ,
                    credit ,
@@ -695,9 +700,9 @@ class CashFlowRepository extends Repository {
               WHERE date >= '{$periodFrom}'
         ";
 
-		// get all records of day
-		if ('day' == $groupBy) {
-			$sql = "
+        // get all records of day
+        if ('day' == $groupBy) {
+            $sql = "
             SELECT BID.id ,
                    BID.due_date AS `date` ,
                    BID.net_value,
@@ -761,8 +766,8 @@ class CashFlowRepository extends Repository {
               AND BC.main_parent_category_id = " . BankCategory::CATEGORY_TO_PAY . "
             ORDER BY user_name
             ";
-		}
+        }
 
-	}
+    }
 
 }

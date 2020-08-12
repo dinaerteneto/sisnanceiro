@@ -4,7 +4,7 @@
             <tr>
                 <th>Nome</th>
                 <th>Conta</th>
-                <th>Forma de pagto</th>
+                <!-- <th>Forma de pagto</th> -->
                 <th>Descrição</th>
                 <th>Valor bruto</th>
                 <th>Valor da taxa</th>
@@ -16,10 +16,10 @@
                 <tr class="{{ $item['net_value_original'] < 0 ? 'text-red' : 'text-blue' }}" >
                     <td> {{ $item['username'] }} </td>
                     <td> {{ $item['bank_account_name'] }} </td>
-                    <td> Dinheiro </td>
+                    <!-- <td> {{ $item['payment_method_name'] }} </td> -->
                     <td> {{ $item['note'] }} </td>
                     <td> {{ $item['gross_value'] }} </td>
-                    <td> Vl da Taxa </td>
+                    <td> {{ $item['tax_value'] }} </td>
                     <td> {{ $item['net_value'] }} </td>
                 </tr>
             @endforeach

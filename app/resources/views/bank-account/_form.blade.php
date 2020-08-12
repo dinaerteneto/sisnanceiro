@@ -51,7 +51,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label" for="BankAccount_initial_balance">Saldo inicial</label>
-                            <input type="text" name="BankAccount[initial_balance]" value="{{ $model->initial_balance }}" id="BankAccount_initial_balance" class="form-control mask-currency" />
+                            <input type="text" name="BankAccount[initial_balance]" value="{{ $model->initial_balance }}" id="BankAccount_initial_balance" class="form-control money-negative" />
                         </div>
                     </div>
                     <div class="col-sm-4">

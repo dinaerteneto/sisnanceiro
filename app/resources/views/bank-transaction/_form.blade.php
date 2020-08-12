@@ -1,7 +1,3 @@
-<?php
-use Sisnanceiro\Models\BankCategory;
-?>
-
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}" onsubmit="return false">
@@ -28,7 +24,7 @@ use Sisnanceiro\Models\BankCategory;
                             <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $model->due_date }}" />
                         </div>
 
-                        @if($mainCategory['main_category_id'] == BankCategory::CATEGORY_TO_PAY)
+                        @if($mainCategory['main_category_id'] == Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY)
                         <div class="col-sm-6">
                             <label class="control-label" for="BankInvoiceDetail_supplier_id">Fornecedor</label>
                             <select name="BankInvoiceDetail[supplier_id]" id="BankInvoiceDetail_supplier_id" class="select2">
@@ -93,6 +89,7 @@ use Sisnanceiro\Models\BankCategory;
 
                     <div id="more-info" class="d-none">
 
+                        <!--
                         <div class="row mb-10">
                             <div class="col-sm-6">
                                 <label class="vcheck m-0">
@@ -102,6 +99,7 @@ use Sisnanceiro\Models\BankCategory;
                             </div>
                             <div class="col-sm-6"></div>
                         </div>
+                        -->
 
                         <div class="row mb-10">
                             <div class="col-sm-4" style="margin-top: 8px">
@@ -126,7 +124,7 @@ use Sisnanceiro\Models\BankCategory;
                         <div class="row mb-10">
                             <div class="col-sm-4">
                                 <label class="vcheck m-0">
-                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceDetail[status]" id="BankInvoiceDetail_status" value="1" {{ ($model->status == 3) ? 'checked' : null }} >
+                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceDetail[status]" id="BankInvoiceDetail_status" value="3" {{ ($model->status == 3) ? 'checked' : null }} >
                                     <span>Esta pago</span>
                                 </label>
                             </div>

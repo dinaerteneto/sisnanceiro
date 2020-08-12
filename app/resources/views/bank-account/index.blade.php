@@ -12,16 +12,16 @@
     <div class="d-flex w-100">
         <section id="widget-grid" class="w-100">
             <div class="mb-10">
-                <a 
-                    href="/bank-account/create" 
+                <a
+                    href="/bank-account/create"
                     class="btn btn-sm btn-success open-modal"
                     target = "#remoteModal"
                     rel = "tooltip"
                     data-placement = "top"
-                    title = "Adicionar nova conta"    
+                    title = "Adicionar nova conta"
 
                 > <i class="fa fa-plus"></i> Incluir conta </a>
-            </div>            
+            </div>
 
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
@@ -33,7 +33,8 @@
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>Valor</th>
+                                            <th>Saldo inicial</th>
+                                            <th>Saldo atual</th>
                                             <th width="7%">Ações</th>
                                         </tr>
                                     </thead>

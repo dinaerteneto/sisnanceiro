@@ -64,7 +64,7 @@
                         <div class="widget-body">
 
                             <input type="hidden" name="Filter[start_date]" value="{{ Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
-                            <input type="hidden" name="Filter[end_date]" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" id="filter-range-end-date" />
+                            <input type="hidden" name="Filter[end_date]" value="{{ Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}" id="filter-range-end-date" />
                             <input type="hidden" name="Filter[main_parent_category_id]" value="{{ $mainCategoryId }}" id="Filter_main_parent_category_id" />
 
                             <div class="row mb-10">
@@ -220,7 +220,7 @@
                 if(row.main_category_id == 2) {
                     return '<span class="text-red">'+ row.net_value +'</span>';
                 } else {
-                    return '<span style="color: #0000FF">'+ row.net_value +'</span>';
+                    return '<span class="text-blue">'+ row.net_value +'</span>';
                 }
             }
         },

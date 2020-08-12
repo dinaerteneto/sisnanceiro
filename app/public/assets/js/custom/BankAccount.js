@@ -76,7 +76,26 @@ BankAccount = {
             {
                 data: 'initial_balance',
                 name: 'initial_balance',
-                searchable: false
+                searchable: false,
+                mRender: function(data, type, row) {
+                    if(parseFloat(row.initial_balance) < 0) {
+                        return '<span class="text-red">'+ row.initial_balance +'</span>';
+                    } else {
+                        return '<span class="text-blue">'+ row.initial_balance +'</span>';
+                    }
+                }
+            },
+            {
+                name: 'current_balance',
+                data: 'current_balance',
+                searchable: false,
+                mRender: function(data, type, row) {
+                    if(parseFloat(row.current_balance) < 0) {
+                        return '<span class="text-red">'+ row.current_balance +'</span>';
+                    } else {
+                        return '<span class="text-blue">'+ row.current_balance +'</span>';
+                    }
+                }
             },
             {
                 bSortable: false,
