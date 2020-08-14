@@ -317,15 +317,25 @@ class BankTransactionService extends Service
         ];
         $records = $this->repository->getTotalByMainCategory($search);
         if ($records) {
+            $initialBalance = 0;
             foreach ($records as $record) {
+                if (BankCategory::CATEGORY_INITIAL_BALANCE == $record->main_parent_category_id) {
+                    $initialBalance = $record->total;
+                }
                 if (BankCategory::CATEGORY_TO_RECEIVE == $record->main_parent_category_id) {
                     $return['to_receive'] = $record->total;
+                    if ($initialBalance > 0) {
+                        $return['to_receive'] += $initialBalance;
+                    }
                 }
                 if (BankCategory::CATEGORY_TO_PAY == $record->main_parent_category_id) {
                     $return['to_pay'] = $record->total;
+                    if ($initialBalance < 0) {
+                        $return['to_pay'] += $initialBalance;
+                    }
                 }
             }
-            $return['total'] = $return['to_receive'] + $return['to_pay'];
+            $return['total'] = ($return['to_receive'] + $return['to_pay']);
         }
 
         return $return;

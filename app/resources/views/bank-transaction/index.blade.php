@@ -217,7 +217,7 @@
         {
             data: 'net_value' ,
             mRender: function(data, type, row) {
-                if(row.main_category_id == 2) {
+                if(row.net_value_original < 0) {
                     return '<span class="text-red">'+ row.net_value +'</span>';
                 } else {
                     return '<span class="text-blue">'+ row.net_value +'</span>';
