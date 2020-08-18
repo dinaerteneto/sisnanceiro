@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\BankAccount;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Services\BankTransactionTransferService;
@@ -52,16 +51,10 @@ class BankTransactionTransferController extends Controller
     public function delete(Request $request, $id)
     {
         if ($request->isMethod('post')) {
-            $option = $request->get('BankInvoiceTransaction')['option_delete'];
-            if ($this->bankTransactionTransferService->destroy($id, $option)) {
-                return $this->apiSuccess(['success' => true]);
-            } else {
-                return Response::json(['success' => false, 'message' => 'Erro na tentativa de excluir o(s) lançamentos.']);
+            if ($this->bankTransactionTransferService->destroy($id)) {
+                return $this->apiSuccess(['success' => true, 'remove-tr' => true]);
             }
-        } else {
-            $model = $this->bankTransactionTransferService->findByInvoice($id);
-            $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
-            return view('bank-transaction-transfer/_form_delete', compact('model'));
+            return $this->errorJson(['success' => false, 'message' => 'Erro na tentativa de excluir a transferência.']);
         }
     }
 

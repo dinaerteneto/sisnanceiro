@@ -185,6 +185,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('/', ['uses' => 'BankTransactionTransferController@index']);
             Route::get('/create', ['uses' => 'BankTransactionTransferController@create']);
             Route::post('/create', ['uses' => 'BankTransactionTransferController@create']);
+            Route::get('/update/{id}', ['uses' => 'BankTransactionTransferController@update']);
+            Route::post('/update/{id}', ['uses' => 'BankTransactionTransferController@update']);
             Route::post('/delete/{id}', ['uses' => 'BankTransactionTransferController@delete']);
         });
     });

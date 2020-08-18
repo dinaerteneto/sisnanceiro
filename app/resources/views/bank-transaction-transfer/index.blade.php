@@ -107,7 +107,7 @@
         'start_date': $('#filter-range-start-date').val(),
         'end_date': $('#filter-range-end-date').val(),
         'description': '',
-        'bank_categories_ids': [6, 7]
+        'bank_categories_ids': [6]
     };
 
     Main.dataTableOptions.sDom = '';
@@ -127,22 +127,13 @@
         { data: 'description' },
         { data: 'account_name_source' },
         { data: 'account_name_target' },
-        {
-            data: 'net_value' ,
-            mRender: function(data, type, row) {
-                if(row.net_value_original < 0) {
-                    return '<span class="text-red">'+ row.net_value +'</span>';
-                } else {
-                    return '<span class="text-blue">'+ row.net_value +'</span>';
-                }
-            }
-        },
+        { data: 'net_value' },
         {
             bSortable: false,
             mRender: function(data, type, row) {
                 var html = '<div class="text-right">';
                 html += '<a href="/bank-transaction/transfer/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar a transferência" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
-                html += '<a href="/bank-transaction/transfer/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir a transferência" class="btn btn-xs btn-danger open-modal" target="#remoteModal"><i class="fa fa-times"></i></a> ';
+                html += '<a href="/bank-transaction/transfer/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir a transferência" class="btn btn-xs btn-danger delete-record" data-title="Excluir esta transferência?" data-ask="Tem certeza que deseja excluir esta transferência?"><i class="fa fa-times"></i></a> ';
                 html += '</div>';
                 return html;
             }
@@ -160,11 +151,10 @@
             'start_date': $('#filter-range-start-date').val(),
             'end_date': $('#filter-range-end-date').val(),
             'description': $('#Filter_description').val(),
-            'bank_categories_ids': [6, 7]
+            'bank_categories_ids': [6]
         };
         dataTables.ajax.json(filter);
         dataTables.draw();
-
     });
 
 </script>

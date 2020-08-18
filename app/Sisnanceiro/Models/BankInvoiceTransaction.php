@@ -4,10 +4,12 @@ namespace Sisnanceiro\Models;
 
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BankInvoiceTransaction extends Model
 {
     use TenantModels;
+    use SoftDeletes;
 
     const TYPE_CYCLE_DIALY   = 1;
     const TYPE_CYCLE_WEEKLY  = 2;

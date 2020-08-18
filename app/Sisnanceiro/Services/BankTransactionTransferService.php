@@ -9,6 +9,7 @@ use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Repositories\BankInvoiceTransactionRepository;
 use Sisnanceiro\Services\BankAccountService;
+use Sisnanceiro\Services\BankTransactionService;
 
 class BankTransactionTransferService extends Service
 {
@@ -31,11 +32,13 @@ class BankTransactionTransferService extends Service
         Validator $validator,
         BankInvoiceTransactionRepository $repository,
         BankInvoiceDetailService $bankInvoiceDetailService,
-        BankAccountService $bankAccountService
+        BankAccountService $bankAccountService,
+        BankTransactionService $bankTransactionService
     ) {
         $this->validator                = $validator;
         $this->repository               = $repository;
         $this->bankInvoiceDetailService = $bankInvoiceDetailService;
+        $this->bankTransactionService   = $bankTransactionService;
         $this->bankAccountService       = $bankAccountService;
     }
 
@@ -121,6 +124,33 @@ class BankTransactionTransferService extends Service
         } catch (\PDOException $e) {
             \DB::rollBack();
             abort(500, 'Erro na tentativa de criar a transferência.');
+        }
+    }
+
+    public function destroy($id)
+    {
+        \DB::beginTransaction();
+        try {
+            $invoice       = $this->bankInvoiceDetailService->find($id);
+            $transactionId = $invoice->bank_invoice_transaction_id;
+
+            $this->bankInvoiceDetailService
+                ->repository
+                ->where('bank_invoice_transaction_id', $transactionId)
+                ->delete();
+
+            $this->bankTransactionService
+                ->repository
+                ->where('id', $transactionId)
+                ->delete();
+
+            \DB::commit();
+
+            return true;
+
+        } catch (\PDOException $e) {
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa de excluir a transferência.');
         }
     }
 
