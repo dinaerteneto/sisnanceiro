@@ -15,6 +15,10 @@ class BankCategorySeeder extends Seeder
             ['name' => 'Saldo Inicial', 'status' => 1],
             ['name' => 'Contas a pagar', 'status' => 1],
             ['name' => 'Contas a receber', 'status' => 1],
+            ['name' => 'Vendas', 'status' => 1],
+            ['name' => 'Transferências', 'status' => 1],
+            ['name' => 'Transferências entrada', 'status' => 1],
+            ['name' => 'Transferências saída', 'status' => 1],
         ]);
     }
 }

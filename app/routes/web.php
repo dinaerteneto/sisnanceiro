@@ -179,6 +179,14 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('/update/{id}', ['uses' => 'BankTransactionController@update', 'main_category_id' => 3]);
             Route::post('/delete/{id}', ['uses' => 'BankTransactionController@delete', 'main_category_id' => 3]);
         });
+
+        Route::group(['prefix' => 'transfer'], function () {
+            Route::get('/', ['uses' => 'BankTransactionTransferController@index']);
+            Route::post('/', ['uses' => 'BankTransactionTransferController@index']);
+            Route::get('/create', ['uses' => 'BankTransactionTransferController@create']);
+            Route::post('/create', ['uses' => 'BankTransactionTransferController@create']);
+            Route::post('/delete/{id}', ['uses' => 'BankTransactionTransferController@delete']);
+        });
     });
 
     Route::group(['prefix' => 'reports'], function () {

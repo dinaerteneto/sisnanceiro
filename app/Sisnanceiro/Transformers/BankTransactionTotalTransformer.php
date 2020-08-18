@@ -18,7 +18,6 @@ class BankTransactionTotalTransformer extends TransformerAbstract
                 'to_receive' => Mask::currency($data->to_receive),
                 'to_pay'     => Mask::currency($data->to_pay),
                 'total'      => Mask::currency($data->total),
-                'str'        => ($data->str),
             ],
         ];
     }

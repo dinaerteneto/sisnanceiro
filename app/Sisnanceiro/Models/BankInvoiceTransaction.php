@@ -20,6 +20,8 @@ class BankInvoiceTransaction extends Model
     protected $fillable = [
         'company_id',
         'bank_category_id',
+        'bank_account_source_id',
+        'bank_account_target_id',
         'total_invoices',
         'fixed',
         'description',
@@ -28,6 +30,7 @@ class BankInvoiceTransaction extends Model
         'total_value',
         'type_cycle',
         'description',
+        'is_transfer',
     ];
 
     public static function getTypeCycle($type)
@@ -62,6 +65,16 @@ class BankInvoiceTransaction extends Model
             3 => 'Meses',
             4 => 'Anos',
         ];
+    }
+
+    public function accountSource()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankAccount', 'id', 'bank_account_source_id');
+    }
+
+    public function accountTarget()
+    {
+        return $this->hasOne('Sisnanceiro\Models\BankAccount', 'id', 'bank_account_target_id');
     }
 
 }

@@ -1,6 +1,3 @@
-<?php
-;?>
-
 @extends('layouts.app')
 
 @section('content')
@@ -236,7 +233,7 @@
                     }
                     html += '<a href="{!! $urlMain !!}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
                     html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger open-modal" target="#remoteModal"><i class="fa fa-times"></i></a> ';
-                    html + '</div>';
+                    html += '</div>';
                 }
                 return html;
             }

@@ -16,6 +16,9 @@ class BankCategory extends Model
     const CATEGORY_TO_PAY          = 2;
     const CATEGORY_TO_RECEIVE      = 3;
     const CATEGORY_SALE            = 4;
+    const CATEGORY_TRANSFER        = 5;
+    const CATEGORY_TRANSFER_OUT    = 6;
+    const CATEGORY_TRANSFER_IN     = 7;
 
     protected $table      = 'bank_category';
     protected $primaryKey = 'id';
@@ -27,7 +30,8 @@ class BankCategory extends Model
         'status',
     ];
 
-    public function invoices() {
+    public function invoices()
+    {
         return $this->hasMany('Sisnanceiro\Models\BankInvoiceDetail', 'bank_category_id');
     }
 

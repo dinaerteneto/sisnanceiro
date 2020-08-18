@@ -20,7 +20,6 @@ return $this->bankInvoiceDetail->find($id);
 }
  */
 
-
     public function getAll(array $search = [])
     {
         $companyId = Auth::user()->company_id;
@@ -36,6 +35,8 @@ return $this->bankInvoiceDetail->find($id);
             , bank_category.main_parent_category_id
             , due_date
             , bank_account.name AS bank_account_name
+            , bank_account_source.name AS bank_account_source_name
+            , bank_account_target.name AS bank_account_target_name
             , bank_category.name AS bank_category_name
             , person_customer.firstname AS customer_firstname
             , person_customer.lastname AS customer_lastname
@@ -59,6 +60,8 @@ return $this->bankInvoiceDetail->find($id);
             ->join('bank_account', 'bank_account.id', '=', 'bank_invoice_detail.bank_account_id')
             ->leftJoin('person as person_customer', \DB::raw('person_customer.id'), '=', 'bank_invoice_detail.customer_id')
             ->leftJoin('person as person_supplier', \DB::raw('person_supplier.id'), '=', 'bank_invoice_detail.supplier_id')
+            ->leftJoin('bank_account as bank_account_source', \DB::raw('bank_account_source.id'), '=', 'bank_invoice_transaction.bank_account_source_id')
+            ->leftJoin('bank_account as bank_account_target', \DB::raw('bank_account_target.id'), '=', 'bank_invoice_transaction.bank_account_target_id')
             ->where('bank_invoice_detail.company_id', '=', $companyId)
             ->whereNull('bank_invoice_detail.deleted_at');
 
@@ -76,6 +79,9 @@ return $this->bankInvoiceDetail->find($id);
         }
         if (isset($search['description']) && !empty($search['description'])) {
             $query = $query->where('note', 'like', "%{$search['description']}%");
+        }
+        if (isset($search['bank_categories_ids']) && !empty($search['bank_categories_ids'])) {
+            $query = $query->whereIn('bank_category.id', $search['bank_categories_ids']);
         }
         return $query->get();
     }

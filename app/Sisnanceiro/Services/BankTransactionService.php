@@ -152,7 +152,6 @@ class BankTransactionService extends Service
                 }
                 $invoice = $this->addInvoice($dataDetail, $parcelNumber);
                 if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
-                    dd($invoice->getErrors());
                     throw new \Exception("Erro na tentativa de incluir a parcela.", 500);
                 }
                 $details[] = $invoice;
@@ -257,7 +256,6 @@ class BankTransactionService extends Service
             return $recordDetail;
 
         } catch (\PDOException $e) {
-            dd($e);
             \DB::rollBack();
             abort(500, 'Erro na tentativa de alterar o lançamento.');
         }

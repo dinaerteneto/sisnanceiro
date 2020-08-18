@@ -12,12 +12,14 @@
 </a>
 <div class="sa-left-menu-outer">
     <ul class="metismenu sa-left-menu" id="menu1">
+        <!--
         <li class="{{ Request::is('event') ? 'active' : '' }}">
             <a class="" href="{{ url('/event') }}" title="Eventos">
                 <span class="fa fa-lg fa-fw fa-calendar"></span>
                 <span class="menu-item-parent">Eventos</span>
             </a>
         </li>
+        -->
 
         <li class="{{ Request::is('customer') || Request::is('user') || Request::is('supplier') ? 'active' : '' }}">
             <a class="" href="javascript:void(0)" title="Cadastros">
@@ -79,8 +81,12 @@
                     <a href="{{ url('/bank-transaction/receive') }}" title="Contas a pagar"> Contas a receber </a>
                 </li>
                 <li class="">
+                    <a href="{{ url('/bank-transaction/transfer') }}" title="Transferências"> Transferências </a>
+                </li>
+                <li class="">
                     <a href="{{ url('/reports/cash-flow') }}" title="Fluxo de caixa"> Fluxo de caixa </a>
                 </li>
+                <!--
                 <li class="">
                     <a href="{{ url('/payment-tax') }}" title="Taxas e prazos"> Taxas e prazos </a>
                 </li>
@@ -108,6 +114,7 @@
         </li>
 
         <li class="{{ Request::is('store/product') || Request::is('store/category') || Request::is('store/brand') || Request::is('sale') ? 'active' : null }}">
+            <!--
             <a class="" href="javascript:void(0)" title="Loja">
                 <span class="fa fa-lg fa-fw fa-tags"></span>
                 <span class="menu-item-parent">Loja</span>
@@ -116,6 +123,7 @@
                     <em class="fa fa-minus-square-o"></em>
                 </b>
             </a>
+            -->
             <ul aria-expanded="false" class="sa-sub-nav collapse">
                 <!-- second-level -->
                 <li class="{{ Request::is('store/product') ? 'active' : '' }}">
