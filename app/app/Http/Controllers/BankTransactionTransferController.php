@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Sisnanceiro\Models\BankAccount;
 use Sisnanceiro\Models\BankInvoiceDetail;
@@ -33,8 +34,10 @@ class BankTransactionTransferController extends Controller
 
     public function create(Request $request)
     {
+        $action       = '/bank-transaction/transfer/create';
         $model        = new BankInvoiceDetail();
         $bankAccounts = BankAccount::all();
+        $dueDate      = null;
         if ($request->isMethod('post')) {
             $postData = $request->all();
             $model    = $this->bankTransactionTransferService->store($postData, 'create');
@@ -45,7 +48,27 @@ class BankTransactionTransferController extends Controller
             }
             return redirect('bank-transaction/transfer');
         }
-        return view('bank-transaction-transfer/_form', compact('bankAccounts', 'model'));
+        return view('bank-transaction-transfer/_form', compact('bankAccounts', 'model', 'action', 'dueDate'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $action       = "/bank-transaction/transfer/update/{$id}";
+        $model        = $this->bankTransactionTransferService->find($id);
+        $bankAccounts = BankAccount::all();
+        $firstInvoice = $model->invoices()->get()->first();
+        $dueDate      = Carbon::createFromFormat('Y-m-d', $firstInvoice->due_date)->format('d/m/Y');
+        if ($request->isMethod('post')) {
+            $postData = $request->all();
+            $model    = $this->bankTransactionTransferService->update($model, $postData);
+            if (method_exists($model, 'getErrors') && $model->getErrors()) {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar a transferência.', 'errors' => $model->getErrors()]);
+            } else {
+                $request->session()->flash('success', ['message' => 'Transferência alterada com sucesso.']);
+            }
+            return redirect('bank-transaction/transfer');
+        }
+        return view('bank-transaction-transfer/_form', compact('bankAccounts', 'model', 'action', 'dueDate'));
     }
 
     public function delete(Request $request, $id)

@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-transaction-transfer-form" class="bank-transaction-form" method="post" action="/bank-transaction/transfer/create">
+        <form id="bank-transaction-transfer-form" class="bank-transaction-form" method="post" action="{{ $action }}">
             @csrf
 
             <input type="hidden" name="BankInvoiceDetail[bank_category_id]" value="{{ Sisnanceiro\Models\BankCategory::CATEGORY_TRANSFER }}" />
@@ -17,11 +17,11 @@
                     <div class="row mb-10">
                         <div class="col-sm-6">
                             <label class="control-label" for="BankInvoiceDetail_net_value">Insira o valor</label>
-                            <input type="text" name="BankInvoiceDetail[net_value]" id="BankInvoiceDetail_net_value" class="form-control mask-currency" value="{{ $model->net_value }}" />
+                            <input type="text" name="BankInvoiceDetail[net_value]" id="BankInvoiceDetail_net_value" class="form-control mask-currency" value="{{ $model->total_value }}" />
                         </div>
                         <div class="col-sm-6">
                             <label class="control-label" for="BankInvoiceDetail_due_date">Data de vencto</label>
-                            <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $model->due_date }}" />
+                            <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $dueDate }}" />
                         </div>
                     </div>
 
@@ -31,7 +31,7 @@
                             <select name="BankInvoiceDetail[bank_account_source_id]" id="BankInvoiceDetail_bank_account_source_id" class="select2">
                                 @if($bankAccounts)
                                     @foreach($bankAccounts as $bankAccount)
-                                        <option value="{{ $bankAccount->id }}">{{ $bankAccount->name }}</option>
+                                        <option value="{{ $bankAccount->id }}" {{ $model->bank_account_source_id == $bankAccount->id ? 'selected' : null }}>{{ $bankAccount->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -42,7 +42,7 @@
                             <select name="BankInvoiceDetail[bank_account_target_id]" id="BankInvoiceDetail_bank_account_target_id" class="select2">
                                 @if($bankAccounts)
                                     @foreach($bankAccounts as $bankAccount)
-                                        <option value="{{ $bankAccount->id }}">{{ $bankAccount->name }}</option>
+                                        <option value="{{ $bankAccount->id }}" {{ $model->bank_account_target_id == $bankAccount->id ? 'selected' : null }}>{{ $bankAccount->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -51,8 +51,8 @@
 
                     <div class="row mb-10">
                         <div class="col-sm-12">
-                            <label class="control-label" for="BankInvoiceTransaction_description">Observações</label>
-                            <textarea name="BankInvoiceTransaction[note]" id="BankInvoiceTransaction_description" class="form-control">{{$model->note}}</textarea>
+                            <label class="control-label" for="BankInvoiceTransaction_note">Observações</label>
+                            <textarea name="BankInvoiceTransaction[note]" id="BankInvoiceTransaction_note" class="form-control">{{$model->note}}</textarea>
                         </div>
                     </div>
 

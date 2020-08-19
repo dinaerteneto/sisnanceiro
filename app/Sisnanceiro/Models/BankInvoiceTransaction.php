@@ -79,4 +79,9 @@ class BankInvoiceTransaction extends Model
         return $this->hasOne('Sisnanceiro\Models\BankAccount', 'id', 'bank_account_target_id');
     }
 
+    public function invoices()
+    {
+        return $this->hasMany('Sisnanceiro\Models\BankInvoiceDetail', 'bank_invoice_transaction_id');
+    }
+
 }

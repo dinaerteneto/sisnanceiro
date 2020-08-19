@@ -132,7 +132,7 @@
             bSortable: false,
             mRender: function(data, type, row) {
                 var html = '<div class="text-right">';
-                html += '<a href="/bank-transaction/transfer/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar a transferência" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
+                html += '<a href="/bank-transaction/transfer/update/' + row.bank_invoice_transaction_id + '" rel="tooltip" data-placement="top" data-original-title="Alterar a transferência" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
                 html += '<a href="/bank-transaction/transfer/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir a transferência" class="btn btn-xs btn-danger delete-record" data-title="Excluir esta transferência?" data-ask="Tem certeza que deseja excluir esta transferência?"><i class="fa fa-times"></i></a> ';
                 html += '</div>';
                 return html;

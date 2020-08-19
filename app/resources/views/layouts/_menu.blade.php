@@ -52,6 +52,7 @@
             || Request::is('bank-transaction')
             || Request::is('bank-transaction/pay')
             || Request::is('bank-transaction/receive')
+            || Request::is('bank-transaction/transfer')
             || Request::is('payment-tax')
             || Request::is('reports/cash-flow') ? 'active' : '' }}">
 

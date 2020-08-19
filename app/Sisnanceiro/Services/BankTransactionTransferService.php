@@ -3,6 +3,7 @@
 namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankCategory;
@@ -44,7 +45,8 @@ class BankTransactionTransferService extends Service
 
     private function mapData(array $data = [], $bankAccountSource, $bankAccountTarget)
     {
-        $dataDetail = $data['BankInvoiceDetail'];
+        $dataDetail      = $data['BankInvoiceDetail'];
+        $dataTransaction = $data['BankInvoiceTransaction'];
 
         $description = "Transferência enviada da conta: {$bankAccountSource->name} para a conta: {$bankAccountTarget->name}";
 
@@ -58,6 +60,7 @@ class BankTransactionTransferService extends Service
             'net_value'               => $netValue,
             'main_parent_category_id' => BankCategory::CATEGORY_TRANSFER,
             'description'             => $description,
+            'note'                    => $dataTransaction['note'],
         ]);
 
         return $ret;
@@ -122,6 +125,7 @@ class BankTransactionTransferService extends Service
             \DB::commit();
 
         } catch (\PDOException $e) {
+            dd($e);
             \DB::rollBack();
             abort(500, 'Erro na tentativa de criar a transferência.');
         }
@@ -151,6 +155,54 @@ class BankTransactionTransferService extends Service
         } catch (\PDOException $e) {
             \DB::rollBack();
             abort(500, 'Erro na tentativa de excluir a transferência.');
+        }
+    }
+
+    public function update(Model $model, array $input, $rules = 'update')
+    {
+        \DB::beginTransaction();
+        try {
+            $dataDetail = $input['BankInvoiceDetail'];
+
+            $bankAccountSource = $this->bankAccountService->find($dataDetail['bank_account_source_id']);
+            $bankAccountTarget = $this->bankAccountService->find($dataDetail['bank_account_target_id']);
+
+            $dataTransactionSource = $this->mapData($input, $bankAccountSource, $bankAccountTarget);
+            $recordTransaction     = parent::update($model, $dataTransactionSource, 'update');
+
+            $mapSource = $this->mapDataDetail($input['BankInvoiceDetail'], $model, 'source');
+            $mapTarget = $this->mapDataDetail($input['BankInvoiceDetail'], $model, 'target');
+
+            $transactionId = $model->id;
+
+            $invoiceSource = $this->bankInvoiceDetailService
+                ->repository
+                ->where('bank_invoice_transaction_id', $transactionId)
+                ->where('bank_category_id', BankCategory::CATEGORY_TRANSFER_OUT)
+                ->first();
+
+            $invoiceTarget = $this->bankInvoiceDetailService
+                ->repository
+                ->where('bank_invoice_transaction_id', $transactionId)
+                ->where('bank_category_id', BankCategory::CATEGORY_TRANSFER_IN)
+                ->first();
+
+            $source = $this->bankInvoiceDetailService->update($invoiceSource, $mapSource, 'update');
+            $target = $this->bankInvoiceDetailService->update($invoiceTarget, $mapTarget, 'update');
+
+            if (method_exists($source, 'getErrors') && $source->getErrors()) {
+                throw new \Exception('Erro na tentativa de alterar transferência na origem.', 500);
+            }
+            if (method_exists($target, 'getErrors') && $target->getErrors()) {
+                throw new \Exception('Erro na tentativa de alterar transferência no destino.', 500);
+            }
+            \DB::commit();
+
+            return true;
+        } catch (\PDOException $e) {
+            dd($e);
+            \DB::rollBack();
+            abort(500, 'Erro na tentativa de alterar a transferência.');
         }
     }
 
