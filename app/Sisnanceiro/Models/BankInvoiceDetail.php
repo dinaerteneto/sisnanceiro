@@ -33,6 +33,7 @@ class BankInvoiceDetail extends Model
         'supplier_id',
         'bank_category_id',
         'bank_account_id',
+        'credit_card_id',
         'bank_invoice_transaction_id',
         'payment_method_id',
         'payment_tax_term_id',

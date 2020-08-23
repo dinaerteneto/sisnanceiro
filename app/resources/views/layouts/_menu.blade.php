@@ -50,6 +50,7 @@
         <li class="{{ Request::is('bank-category')
             || Request::is('bank-account')
             || Request::is('bank-transaction')
+            || Request::is('credit-card')
             || Request::is('bank-transaction/pay')
             || Request::is('bank-transaction/receive')
             || Request::is('bank-transaction/transfer')
@@ -74,6 +75,9 @@
                 </li>
                 <li class="">
                     <a href="{{ url('/bank-transaction') }}" title="Transações de receita e despesas"> Transações </a>
+                </li>
+                <li class="">
+                    <a href="{{ url('/credit-card') }}" title="Fluxo de caixa"> Cartão de crédito </a>
                 </li>
                 <li class="">
                     <a href="{{ url('/bank-transaction/pay') }}" title="Contas a receber"> Contas a pagar </a>

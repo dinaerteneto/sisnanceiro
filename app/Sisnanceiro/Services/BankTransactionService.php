@@ -152,6 +152,7 @@ class BankTransactionService extends Service
                 }
                 $invoice = $this->addInvoice($dataDetail, $parcelNumber);
                 if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
+                    dd($invoice->getErrors());
                     throw new \Exception("Erro na tentativa de incluir a parcela.", 500);
                 }
                 $details[] = $invoice;
@@ -244,11 +245,16 @@ class BankTransactionService extends Service
                     unset($dataDetailAll['status']);
                     unset($dataDetailAll['bank_account_id']);
                     unset($dataDetailAll['main_parent_category_id']);
+                    if (isset($dataDetailAll['credit_card_id']) && !empty($dataDetailAll['credit_card_id'])) {
+                        unset($dataDetailAll['net_value']);
+                        unset($dataDetailAll['gross_value']);
+                    }
 
                     $this->bankInvoiceDetailService
                         ->repository
-                        ->where('bank_invoice_transaction_id', $recordDetail->bank_invoice_transaction_id)
+                        ->where('bank_invoice_transaction_id', $dataDetail['bank_invoice_transaction_id'])
                         ->update($dataDetailAll);
+
                     break;
             }
 

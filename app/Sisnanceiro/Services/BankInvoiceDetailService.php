@@ -13,7 +13,6 @@ class BankInvoiceDetailService extends Service
     protected $rules = [
         'create' => [
             'bank_category_id'            => 'required',
-            'bank_account_id'             => 'required',
             'bank_invoice_transaction_id' => 'required',
             'gross_value'                 => 'required|numeric',
             'net_value'                   => 'required|numeric',

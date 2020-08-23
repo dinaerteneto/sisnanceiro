@@ -207,4 +207,24 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::post('/delete/{id}', 'PaymentTaxController@delete');
     });
 
+    Route::group(['prefix' => 'credit-card'], function () {
+        Route::get('/', 'CreditCardController@index');
+        Route::post('/', 'CreditCardController@index');
+        Route::get('/create', 'CreditCardController@create');
+        Route::post('/create', 'CreditCardController@create');
+        Route::get('/update/{id}', 'CreditCardController@update');
+        Route::post('/update/{id}', 'CreditCardController@update');
+        Route::post('/delete/{id}', 'CreditCardController@delete');
+    });
+
+    Route::group(['prefix' => 'credit-card/{credit_card_id}'], function () {
+        Route::get('/', 'CreditCardTransactionController@index');
+        Route::post('/', 'CreditCardTransactionController@index');
+        Route::get('/create', 'CreditCardTransactionController@create');
+        Route::post('/create', 'CreditCardTransactionController@create');
+        Route::get('/update/{id}', 'CreditCardTransactionController@update');
+        Route::post('/update/{id}', 'CreditCardTransactionController@update');
+        Route::post('/delete/{id}', 'CreditCardTransactionController@delete');
+    });
+
 });
