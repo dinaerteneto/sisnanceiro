@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Models\BankCategory;
@@ -10,6 +11,7 @@ use Sisnanceiro\Models\CreditCard;
 use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Services\BankTransactionService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
+use Sisnanceiro\Transformers\BankTransactionTotalTransformer;
 use Sisnanceiro\Transformers\BankTransactionTransformer;
 
 class CreditCardTransactionController extends Controller
@@ -26,10 +28,6 @@ class CreditCardTransactionController extends Controller
 
     public function index(Request $request, $id)
     {
-        $creditCards = CreditCard::all();
-        $model       = CreditCard::find($id);
-        $title       = $model->name;
-
         if ($request->isMethod('post')) {
             $records = $this->bankTransactionService->getAll($request->get('extra_search'));
             $dt      = datatables()
@@ -37,7 +35,63 @@ class CreditCardTransactionController extends Controller
                 ->setTransformer(new BankTransactionTransformer);
             return $dt->make(true);
         }
-        return view('/credit-card/index-invoice', compact('urlMain', 'title', 'creditCards', 'model'));
+
+        $creditCards = CreditCard::all();
+        $model       = CreditCard::find($id);
+        $title       = $model->name;
+
+        $dateStartDate = isset($request->start_date) && !empty($request->start_date) ? $request->start_date : date('Y-m') . "-{$model->closing_day}";
+        $dateDueDate   = isset($request->end_date) && !empty($request->end_date) ? $request->end_date : date('Y-m') . "-{$model->payment_day}";
+
+        $startDate       = Carbon::createFromFormat('Y-m-d', $dateStartDate);
+        $dueDate         = Carbon::createFromFormat('Y-m-d', $dateDueDate);
+        $previousEndDate = clone $dueDate;
+        $nextEndDate     = clone $dueDate;
+
+        if ($startDate->isPast()) {
+            $dueDate = $dueDate->addMonth();
+        }
+
+        $currentDate = clone $startDate;
+        $currentDate = $startDate->format('m/Y');
+
+        $previousStartDate = clone $startDate;
+        $previousStartDate = $previousStartDate->addMonth(-1)->format('Y-m-d');
+        $previousEndDate   = $previousEndDate->addMonth(-1)->format('Y-m-d');
+
+        $nextStartDate = clone $startDate;
+        $nextStartDate = $nextStartDate->addMonth()->format('Y-m-d');
+        $nextEndDate   = $nextEndDate->addMonth()->format('Y-m-d');
+
+        $dueDate       = $dueDate->format('d/m/Y');
+        $endDateFormat = clone $startDate;
+        $endDateFormat = $endDateFormat->addMonth();
+        $endDate       = $startDate->addMonth()->format('Y-m-d');
+        $startDate     = $startDate->addMonth(-1)->format('Y-m-d');
+
+        $status = 'Fatura fechada';
+        if ($endDateFormat->isFuture()) {
+            $status = 'Fatura aberta';
+        }
+        $endDateFormat = $endDateFormat->format('d/m/Y');
+
+        return view('/credit-card/index-invoice', compact(
+            'urlMain',
+            'title',
+            'creditCards',
+            'model',
+            'startDate',
+            'endDate',
+            'dueDate',
+            'currentDate',
+            'endDateFormat',
+            'previousStartDate',
+            'previousEndDate',
+            'nextStartDate',
+            'nextEndDate',
+            'status'
+        )
+        );
     }
 
     public function create(Request $request, $id)
@@ -108,7 +162,7 @@ class CreditCardTransactionController extends Controller
         }
     }
 
-    public function getTotalByMainCategory(Request $request)
+    public function getTotal(Request $request)
     {
         $model    = (object) $this->bankTransactionService->getTotal($request->get('extra_search'));
         $response = fractal($model, new BankTransactionTotalTransformer)->toArray()['data'];

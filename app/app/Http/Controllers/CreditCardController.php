@@ -48,4 +48,13 @@ class CreditCardController extends Controller
         return view('credit-card/_form', compact('bankAccounts', 'model', 'action', 'title', 'creditCardBrands'));
     }
 
+    public function delete(Request $request, $id)
+    {
+        if ($request->isMethod('post')) {
+            if ($this->creditCardService->destroy($id)) {
+                return $this->apiSuccess(['success' => true]);
+            }
+            return Response::json(['success' => false, 'message' => 'Erro na tentativa de excluir o cartão de crédito.']);
+        }
+    }
 }

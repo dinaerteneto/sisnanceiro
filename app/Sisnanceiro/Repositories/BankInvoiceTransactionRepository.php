@@ -124,8 +124,8 @@ return $this->bankInvoiceDetail->find($id);
         if (isset($search['description']) && !empty($search['description'])) {
             $query = $query->where('note', 'like', "%{$search['description']}%");
         }
-        if (isset($serch['credit_card_id']) && !empty($search['credit_card_id'])) {
-            $query = $query->whereIn('credit_card_id', $search['credit_card_id']);
+        if (isset($search['credit_card_id']) && !empty($search['credit_card_id'])) {
+            $query = $query->where('bank_invoice_detail.credit_card_id', '=', $search['credit_card_id']);
         }
 
         return $query->get();

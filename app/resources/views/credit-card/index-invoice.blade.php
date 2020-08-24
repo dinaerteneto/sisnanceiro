@@ -10,26 +10,38 @@
         <ul class="sa-sparks">
             <li class="sparks-info">
                 <h5>
-                    <small>Despesa</small>
+                    <small>Fatura</small>
                     <span class="text-red">
-                        <i class="fa fa-arrow-circle-down"></i>&nbsp;
-                        <span id="total-to-pay" class="pull-right">0</span>
+                        <i class="fa fa-money"></i>&nbsp;
+                        <span id="total-to-pay" class="pull-right"></span>
                     </span>
                 </h5>
             </li>
             <li class="sparks-info">
                 <h5>
-                    <small>Receita</small>
+                    <small>Status</small>
                     <span class="text-green">
-                        <i class="fa fa-arrow-circle-up"></i>&nbsp;
-                        <span id="total-to-receive" class="pull-right">0</span>
+                        <i class="fa fa-check"></i>&nbsp;
+                        <span id="status" class="pull-right">{{ $status }}</span>
                     </span>
                 </h5>
             </li>
-            <li class="sparks-info">
+                <li class="sparks-info">
                 <h5>
-                    <small>Total</small>
-                    <span id="total" class="">
+                    <small>Dia de fechamento</small>
+                    <span class="text">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span id="closing-day" class="pull-right">{{ $endDateFormat }}</span>
+                    </span>
+                </h5>
+            </li>
+            </li>
+                <li class="sparks-info">
+                <h5>
+                    <small>Data de vencimento</small>
+                    <span class="text">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span id="payment-day" class="pull-right">{{ $dueDate }}</span>
                     </span>
                 </h5>
             </li>
@@ -58,8 +70,8 @@
                     <div class="well" style="margin-bottom: 2px">
                         <div class="widget-body">
 
-                            <input type="hidden" name="Filter[start_date]" value="{{ Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
-                            <input type="hidden" name="Filter[end_date]" value="{{ Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}" id="filter-range-end-date" />
+                            <input type="hidden" name="Filter[start_date]" value="{{ $startDate }}" id="filter-range-start-date" />
+                            <input type="hidden" name="Filter[end_date]" value="{{ $endDate }}" id="filter-range-end-date" />
                             <input type="hidden" name="Filter[main_parent_category_id]" value="{{ \Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY }}" id="Filter_main_parent_category_id" />
 
                             <div class="row mb-10">
@@ -75,11 +87,9 @@
                                 </div>
 
                                 <div class="drp-container col-sm-3">
-                                    <div id="filter-range" class="form-control" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ced4da; width: 100%">
-                                        <i class="fa fa-calendar"></i>&nbsp;
-                                        <span></span>
-                                        <i class="fa fa-caret-down"></i>
-                                    </div>
+                                    <a href="?start_date={{ $previousStartDate }}&end_date={{ $previousEndDate }}"><i class="fa fa-chevron-left"></i></a>
+                                        {{ $currentDate }}
+                                    <a href="?start_date={{ $nextStartDate }}&end_date={{ $nextEndDate }}"><i class="fa fa-chevron-right"></i></a>
                                 </div>
 
                             </div>
@@ -218,26 +228,15 @@
         dataTables.ajax.json(filter);
         dataTables.draw();
 
-        updateTotal(filter);
     });
-
 
     function updateTotal(filter) {
         var extraSearch = {extra_search: filter};
-        $.post('/bank-transaction/get-total-by-main-category', extraSearch, function(json) {
-            $("#total-to-receive").html(json.mask.to_receive);
-            $("#total-to-pay").html(json.mask.to_pay);
-            if(json.total < 0) {
-                $('#total').addClass('text-red');
-            } else {
-                $('#total').addClass('text-green');
-            }
-            if(json.current_balance < 0) {
-                $('#current-balance').addClass('text-red');
-            } else {
-                $('#current-balance').addClass('text-green');
-            }
-            $("#total").html('<i class="fa fa-money"></i><span class="pull-right">&nbsp;'+ json.mask.total +'</span>');
+        $.post('/credit-card/<?=$model->id;?>/get-total', extraSearch, function(json) {
+            $("#total-to-pay").html(json.mask.to_pay.substr(1));
+            $("#status").html(json.status);
+            $("#closing-day").html(json.closing_day);
+            $("#payment-day").html(json.payment_day);
         }, 'json');
     }
 

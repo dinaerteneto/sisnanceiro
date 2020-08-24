@@ -8,15 +8,25 @@ use Sisnanceiro\Helpers\Mask;
 
 class CreditCardTransformer extends TransformerAbstract
 {
+
     public function transform($creditCard)
     {
-        $availableLimit = 15029.42;
-        $partialValue   = 5470;
-        $closesIn       = Carbon::createFromFormat('Y-m-d', date("Y-m") . "-{$creditCard->closing_day}");
+
+        $closesIn = Carbon::createFromFormat('Y-m-d', date("Y-m") . "-{$creditCard->closing_day}");
         if ($closesIn->isPast()) {
-            $closesIn = $closesIn->addMonth();
+            $closesIn = $closesIn->addMonth(1);
         }
-        $totalPercent = ($partialValue / $creditCard->limit) * 100;
+        $closeInPast = clone $closesIn;
+
+        $startDate = $closeInPast->addMonth(-1)->format('Y-m-d');
+        $endDate   = $closesIn->format('Y-m-d');
+
+        $total = $creditCard->getTotal($creditCard->id, $startDate, $endDate);
+        $total = isset($total) ? $total->total : 0;
+
+        $availableLimit = $creditCard->limit + $total;
+        $partialValue   = $total * -1;
+        $totalPercent   = ($partialValue / $creditCard->limit) * 100;
 
         return [
             'id'             => $creditCard->id,

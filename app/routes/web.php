@@ -225,6 +225,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/update/{id}', 'CreditCardTransactionController@update');
         Route::post('/update/{id}', 'CreditCardTransactionController@update');
         Route::post('/delete/{id}', 'CreditCardTransactionController@delete');
+        Route::post('/get-total', 'CreditCardTransactionController@getTotal');
     });
 
 });

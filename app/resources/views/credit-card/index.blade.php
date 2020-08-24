@@ -96,7 +96,7 @@
 
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        R$ 5.470,00 de R$ {{ $item['limit'] }}
+                                                        R$ {{ $item['partialValue'] }} de R$ {{ $item['limit'] }}
                                                         <div class="progress right" rel="tooltip" data-original-title="{{ $item['totalPercent'] }}%" data-placement="top">
                                                             <div class="progress-bar bg-color-teal" data-transitiongoal="{{ $item['totalPercent'] }}" style="width: {{ $item['totalPercent'] }}%;" aria-valuenow="{{ $item['totalPercent'] }}">{{ $item['totalPercent'] }}%</div>
                                                         </div>
@@ -105,9 +105,12 @@
 
                                                 </div>
                                                 <div class="widget-footer">
-                                                    <a href="/credit-card/1/create"
-                                                        class="open-modal btn btn-primary"
-                                                        target="#remoteModal">Adicionar despesa</a>
+                                                    <a href="/credit-card/delete/{{ $item['id'] }}"
+                                                        data-title="Excluir este cartão?"
+                                                        data-ask="Tem certeza que deseja excluir este cartão?"
+                                                        class="btn btn-danger delete-record">Excluir cartão</a>
+                                                    <a href="/credit-card/{{ $item['id'] }}" class="btn btn-success">Ver despesas</a>
+                                                    <a href="/credit-card/{{ $item['id'] }}/create" class="open-modal btn btn-primary" target="#remoteModal">Adicionar despesa</a>
                                                 </div>
 
                                             </div>
