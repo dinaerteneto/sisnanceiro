@@ -93,7 +93,16 @@
                                     </div>
                                 </div>
 
+                                @if($mainCategoryId === \Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY)
 
+                                <div class="col-sm-3">
+                                    <label class="vcheck m-0">
+                                        <input type="checkbox" class="checkbox style-0" name="Filter[group_by]" id="Filter_group_by" value="credit_card_id">
+                                        <span>Agrupar por cartão</span>
+                                    </label>
+                                </div>
+
+                                @endif
 
                             </div>
 
@@ -110,10 +119,11 @@
                                         <button class="btn btn-success" id="btn-search">
                                             <i class="fa fa-search"></i> Pesquisar
                                         </button>
-
+                                        <!--
                                         <button class="btn btn-primary">
                                             <i class="fa fa-file-text"></i> Exportar
                                         </button>
+                                        -->
                                     </div>
 
                                 </div>
@@ -173,12 +183,15 @@
         'main_parent_category_id': $('#Filter_main_parent_category_id').val(),
         'bank_account_id': '',
         'status': '',
-        'description': ''
+        'description': '',
+        'group_by': ''
     };
 
     updateTotal(filter);
 
-    Main.dataTableOptions.sDom = '';
+//    Main.dataTableOptions.sDom = "<'dt-toolbar d-flex'<f><'ml-auto hidden-xs show-control'l>r>t<'dt-toolbar-footer d-flex'<'hidden-xs'i><'ml-auto'p>>";
+    Main.dataTableOptions.bFilter = false;
+    Main.dataTableOptions.paging = false;
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.aaSorting = [
         [1, 'asc']
@@ -201,14 +214,33 @@
         { data: 'due_date' },
         { data: 'account_name' },
         { data: 'category_name' },
-        { data: 'name'},
+        {
+            data: 'name',
+            mRender: function(data, type, row) {
+               let icon = '';
+                if(row.credit_card_id !== null && row.credit_card_id !== "") {
+                    icon = '<i class="fa fa-credit-card"></i> ';
+                }
+                if(row.name !== null && row.name !== "") {
+                    return `${icon} ${row.name}`;
+                }
+                return '';
+            }
+        },
         {
             data: 'description',
             mRender: function(data, type, row) {
-                if(row.total_invoices > 1) {
-                    return row.description + " (" + row.parcel_number + "/" + row.total_invoices + ") ";
+                let icon = '';
+                if(row.credit_card_id !== null && row.credit_card_id !== "") {
+                    icon = '<i class="fa fa-credit-card"></i> ';
                 }
-                return row.description;
+                if(row.total_invoices > 1) {
+                    return  `${icon}${row.description} (${row.parcel_number}/${row.total_invoices})`;
+                }
+                if(row.description !== null && row.description !== "") {
+                    return `${icon} ${row.description}`;
+                }
+                return '';
             }
         },
         {
@@ -224,7 +256,7 @@
         {
             bSortable: false,
             mRender: function(data, type, row) {
-                if (row.bank_category_id == 1) {
+                if (row.bank_category_id == 1 || row.credit_card_id == '1') {
                     var html = '';
                 } else {
                     var html = '<div class="text-right">';
@@ -236,12 +268,10 @@
                         html += '<a href="/bank-transaction/transfer/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir a transferência" class="btn btn-xs btn-danger delete-record" data-title="Excluir esta transferência?" data-ask="Tem certeza que deseja excluir esta transferência?"><i class="fa fa-times"></i></a> ';
                     } else {
                         html += '<a href="{!! $urlMain !!}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
-                        html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger delete-record" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> ';
+                        html += '<a href="/bank-transaction/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger open-modal" target="#remoteModal" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> ';
                     }
                 }
-
                 html += '</div>';
-
                 return html;
             }
         }
@@ -261,6 +291,7 @@
             'description': $('#Filter_description').val(),
             'bank_account_id': $('#Filter_bank_account_id').val(),
             'status': $('#Filter_status_id').val(),
+            'group_by': $('#Filter_group_by').is(':checked') ? $('#Filter_group_by').val() : ''
         };
         dataTables.ajax.json(filter);
         dataTables.draw();

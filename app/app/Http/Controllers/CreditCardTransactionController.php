@@ -96,6 +96,25 @@ class CreditCardTransactionController extends Controller
 
     public function create(Request $request, $id)
     {
+
+        if ($request->isMethod('post')) {
+            $creditCard = CreditCard::find($id);
+            $postData   = $request->all();
+
+            $postData['BankInvoiceDetail']['bank_account_id'] = $creditCard->bank_account_id;
+
+//            dd($postData);
+
+            $model = $this->bankTransactionService->store($postData, 'create');
+            if (method_exists($model, 'getErrors') && $model->getErrors()) {
+                $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
+            } else {
+                $request->session()->flash('success', ['message' => 'Transação criada com sucesso.']);
+            }
+            $urlMain = "/credit-card/{$id}";
+            return redirect($urlMain);
+        }
+
         $title       = 'Incluir despesa de cartão';
         $model       = new BankInvoiceDetail();
         $creditCards = CreditCard::all();
@@ -106,18 +125,6 @@ class CreditCardTransactionController extends Controller
         $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
         $action = "/credit-card/{$id}/create";
-
-        if ($request->isMethod('post')) {
-            $postData = $request->all();
-            $model    = $this->bankTransactionService->store($postData, 'create');
-            if (method_exists($model, 'getErrors') && $model->getErrors()) {
-                $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
-            } else {
-                $request->session()->flash('success', ['message' => 'Transação criada com sucesso.']);
-            }
-            $urlMain = "/credit-card/{$id}";
-            return redirect($urlMain);
-        }
         return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions'));
     }
 

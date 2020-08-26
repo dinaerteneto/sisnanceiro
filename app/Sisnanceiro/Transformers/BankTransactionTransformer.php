@@ -22,6 +22,9 @@ class BankTransactionTransformer extends TransformerAbstract
             if (!empty($bankInvoiceDetail->supplier_firstname)) {
                 $name = $bankInvoiceDetail->supplier_firstname;
             }
+            if (!empty($bankInvoiceDetail->credit_card_id)) {
+                $name = $bankInvoiceDetail->credit_card_name;
+            }
             if (empty($bankInvoiceDetail->payment_date) && $dueDateCarbon->isPast()) {
                 $dued = true;
             }

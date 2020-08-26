@@ -24,12 +24,14 @@ class BankTransactionService extends Service
     protected $rules = [
         'create' => [
             'bank_category_id' => 'required',
+            'bank_account_id'  => 'required',
             'total_invoices'   => 'required|int|min:1',
             'total_value'      => 'numeric',
             'type_cycle'       => 'required',
         ],
         'update' => [
             'bank_category_id' => 'required',
+            'bank_account_id'  => 'required',
             // 'total_invoices'   => 'required|int',
             // 'total_value'      => 'required|numeric',
         ],
@@ -309,6 +311,9 @@ class BankTransactionService extends Service
 
     public function getAll(array $search = [])
     {
+        if (isset($search['group_by']) && $search['group_by'] == 'credit_card_id') {
+            return $this->repository->getAllGroupByCreditCard($search);
+        }
         return $this->repository->getAll($search);
     }
 

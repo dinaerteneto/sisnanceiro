@@ -63,8 +63,8 @@
         {
             bSortable: false,
             mRender: function(data, type, row) {
-                var html = '<a href="supplier/update/'+row.id+'"><i class="fa fa-pencil"></i></a>'
-                    html+= '<a href="supplier/delete/'+row.id+'" class="delete-record" data-title="Excluir este fornecedor?" data-ask="Tem certeza que deseja excluir o fornecedor: '+ row.firstname +'?"><i class="fa fa-trash"></i></a>';
+                var html = '<a href="supplier/update/'+row.id+'" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i></a> '
+                    html+= '<a href="supplier/delete/'+row.id+'" class="btn btn-xs btn-danger delete-record" data-title="Excluir este fornecedor?" data-ask="Tem certeza que deseja excluir o fornecedor: '+ row.firstname +'?"><i class="fa fa-times"></i></a>';
                 return html;
             }
         }
