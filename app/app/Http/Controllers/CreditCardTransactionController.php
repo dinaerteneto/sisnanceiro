@@ -48,10 +48,6 @@ class CreditCardTransactionController extends Controller
         $previousEndDate = clone $dueDate;
         $nextEndDate     = clone $dueDate;
 
-        if ($startDate->isPast()) {
-            $dueDate = $dueDate->addMonth();
-        }
-
         $currentDate = clone $startDate;
         $currentDate = $startDate->format('m/Y');
 
@@ -65,9 +61,9 @@ class CreditCardTransactionController extends Controller
 
         $dueDate       = $dueDate->format('d/m/Y');
         $endDateFormat = clone $startDate;
-        $endDateFormat = $endDateFormat->addMonth();
-        $endDate       = $startDate->addMonth()->format('Y-m-d');
-        $startDate     = $startDate->addMonth(-1)->format('Y-m-d');
+
+        $endDate   = $startDate->addMonth()->format('Y-m-d');
+        $startDate = $startDate->addMonth(-1)->format('Y-m-d');
 
         $status = 'Fatura fechada';
         if ($endDateFormat->isFuture()) {
@@ -103,8 +99,6 @@ class CreditCardTransactionController extends Controller
 
             $postData['BankInvoiceDetail']['bank_account_id'] = $creditCard->bank_account_id;
 
-//            dd($postData);
-
             $model = $this->bankTransactionService->store($postData, 'create');
             if (method_exists($model, 'getErrors') && $model->getErrors()) {
                 $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
@@ -125,7 +119,7 @@ class CreditCardTransactionController extends Controller
         $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
         $action = "/credit-card/{$id}/create";
-        return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions'));
+        return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions', 'id'));
     }
 
     public function update(Request $request, $credit_card_id, $id)
@@ -174,6 +168,27 @@ class CreditCardTransactionController extends Controller
         $model    = (object) $this->bankTransactionService->getTotal($request->get('extra_search'));
         $response = fractal($model, new BankTransactionTotalTransformer)->toArray()['data'];
         return Response::json($response);
+    }
+
+    public function dueInvoiceDates($id)
+    {
+        $dates   = [];
+        $model   = CreditCard::find($id);
+        $bFuture = false;
+        for ($i = -1; $i <= 4; $i++) {
+            $future = false;
+            $date   = Carbon::createFromDate(date('Y'), date('m'), $model->payment_day)->addMonth($i);
+            if (!$bFuture && $date->isFuture()) {
+                $future  = true;
+                $bFuture = true;
+            }
+            $dates[] = [
+                'date'     => $date->format('d/m/Y'),
+                'selected' => $future,
+            ];
+
+        }
+        return Response::json(['dates' => $dates]);
     }
 
 }

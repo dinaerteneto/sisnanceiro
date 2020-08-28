@@ -87,9 +87,16 @@
                                 </div>
 
                                 <div class="drp-container col-sm-3">
-                                    <a href="?start_date={{ $previousStartDate }}&end_date={{ $previousEndDate }}"><i class="fa fa-chevron-left"></i></a>
-                                        {{ $currentDate }}
-                                    <a href="?start_date={{ $nextStartDate }}&end_date={{ $nextEndDate }}"><i class="fa fa-chevron-right"></i></a>
+                                    <h5 style="margin: 0">
+                                        <a href="?start_date={{ $previousStartDate }}&end_date={{ $previousEndDate }}">
+                                            <i class="fa fa-chevron-left"></i>
+                                        </a>
+                                        <span style="font-weight: 400">{{ $currentDate }}</span>
+                                        <a href="?start_date={{ $nextStartDate }}&end_date={{ $nextEndDate }}">
+                                            <i class="fa fa-chevron-right"></i>
+                                        </a>
+
+                                    </h5>
                                 </div>
 
                             </div>

@@ -15,15 +15,18 @@
             <div class="modal-body">
                 <fieldset>
                     <div class="row mb-10">
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label class="control-label" for="BankInvoiceDetail_net_value">Insira o valor</label>
                             <input type="text" name="BankInvoiceDetail[net_value]" id="BankInvoiceDetail_net_value" class="form-control mask-currency" value="{{ $model->net_value }}" />
                         </div>
-                        <div class="col-sm-3">
-                            <label class="control-label" for="BankInvoiceDetail_due_date">Data de vencto</label>
-                            <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $model->due_date }}" />
+                        <div class="col-sm-4">
+                            <label class="control-label" for="BankInvoiceDetail_competence_date">Data da compra</label>
+                            <input type="text" name="BankInvoiceDetail[competence_date]" id="BankInvoiceDetail_competence_date" class="form-control datepicker" value="{{ $model->competence_date }}" />
                         </div>
-
+                      <div class="col-sm-4">
+                            <label class="control-label" for="BankInvoiceDetail_due_date">Para vencto em</label>
+                            <select name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="select2"></select>
+                        </div>
                     </div>
 
                     <div class="row mb-10">
@@ -65,8 +68,6 @@
 
                     <div id="more-info" class="d-none">
 
-
-
                         <div class="row mb-10">
                             <div class="col-sm-4" style="margin-top: 8px">
                                 <label class="vcheck m-0">
@@ -105,6 +106,8 @@ var data = {!! $categoryOptions !!}
 <script type="text/javascript">
 $('document').ready(function(){
 
+    venctos(<?=$id;?>);
+
     $('#a-more-info').on('click', function(e) {
         e.preventDefault();
         if ($('div#more-info').hasClass('d-none')) {
@@ -132,5 +135,29 @@ $('document').ready(function(){
             $('#BankInvoiceTransaction_type_cycle').prop('disabled', true);
         }
     });
+
+    function venctos(creditCardId) {
+        $.ajax({
+            type: 'POST',
+            url: `/credit-card/${creditCardId}/due-invoice-dates`,
+            dataType: 'json',
+            success: function(json) {
+                let html = '';
+                let value = '';
+                $.each(json.dates, function(el, item) {
+                    const selected = '';
+                    if(item.selected) {
+                        value = item.date;
+                        const selected = 'selected';
+                    }
+                    html += `<option value="${item.date}" ${selected}>${item.date}</option> \n`;
+                });
+                $('#BankInvoiceDetail_due_date').html(html);
+                $('#BankInvoiceDetail_due_date').val(value);
+                $('#BankInvoiceDetail_due_date').trigger('change');
+            }
+        })
+    }
+
 });
 </script>

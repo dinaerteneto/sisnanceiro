@@ -9,6 +9,7 @@ use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\BankInvoiceTransaction;
+use Sisnanceiro\Models\CreditCard;
 use Sisnanceiro\Repositories\BankInvoiceDetailRepository;
 use Sisnanceiro\Repositories\BankInvoiceTransactionRepository;
 use Sisnanceiro\Services\BankInvoiceDetailService;
@@ -42,13 +43,15 @@ class BankTransactionService extends Service
         BankInvoiceTransactionRepository $repository,
         BankInvoiceDetailService $bankInvoiceDetailService,
         BankInvoiceDetailRepository $bankInvoiceRepository,
-        BankCategoryService $bankCategoryService
+        BankCategoryService $bankCategoryService,
+        CreditCard $creditCard
     ) {
         $this->validator                = $validator;
         $this->repository               = $repository;
         $this->bankInvoiceRepository    = $bankInvoiceRepository;
         $this->bankInvoiceDetailService = $bankInvoiceDetailService;
         $this->bankCategoryService      = $bankCategoryService;
+        $this->creditCard               = $creditCard;
     }
 
     private function mapData(array $data = [])
@@ -97,15 +100,14 @@ class BankTransactionService extends Service
         $netValue       = null;
         if (isset($data['due_date'])) {
             $dueDate = Carbon::createFromFormat('d/m/Y', $data['due_date']);
-            $dueDate = $dueDate->format('Y-m-d');
         }
         if (isset($data['payment_date']) && !empty($data['payment_date'])) {
             $paymentDate = Carbon::createFromFormat('d/m/Y', $data['payment_date']);
-            $paymentDate = $paymentDate->format('Y-m-d');
+        } else {
+            $paymentDate = $dueDate;
         }
         if (isset($data['competence_date']) && !empty($data['competence_date'])) {
             $competenceDate = Carbon::createFromFormat('d/m/Y', $data['competence_date']);
-            $competenceDate = $competenceDate->format('Y-m-d');
         }
         if (isset($data['net_value'])) {
             $netValue = FloatConversor::convert($data['net_value']);
@@ -113,6 +115,10 @@ class BankTransactionService extends Service
                 $netValue *= -1;
             }
         }
+
+        $dueDate        = $dueDate->format('Y-m-d');
+        $paymentDate    = $paymentDate->format('Y-m-d');
+        $competenceDate = $competenceDate->format('Y-m-d');
 
         $ret = array_merge($data, [
             'bank_invoice_transaction_id' => $transactionId,
@@ -154,7 +160,6 @@ class BankTransactionService extends Service
                 }
                 $invoice = $this->addInvoice($dataDetail, $parcelNumber);
                 if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
-                    dd($invoice->getErrors());
                     throw new \Exception("Erro na tentativa de incluir a parcela.", 500);
                 }
                 $details[] = $invoice;
