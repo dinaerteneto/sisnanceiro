@@ -108,6 +108,8 @@ class BankTransactionService extends Service
         }
         if (isset($data['competence_date']) && !empty($data['competence_date'])) {
             $competenceDate = Carbon::createFromFormat('d/m/Y', $data['competence_date']);
+        } else {
+            $competenceDate = $dueDate;
         }
         if (isset($data['net_value'])) {
             $netValue = FloatConversor::convert($data['net_value']);

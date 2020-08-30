@@ -24,15 +24,18 @@ class BankInvoiceTransaction extends Model
         'bank_category_id',
         'bank_account_source_id',
         'bank_account_target_id',
+        'credit_card_id',
         'total_invoices',
         'fixed',
+        'is_transfer',
+        'is_credit_card_invoice',
         'description',
         'note',
         'authorization_code',
         'total_value',
         'type_cycle',
         'description',
-        'is_transfer',
+        'credit_card_due_date',
     ];
 
     public static function getTypeCycle($type)

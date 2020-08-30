@@ -124,17 +124,6 @@ class CreditCardTransactionController extends Controller
 
     public function update(Request $request, $credit_card_id, $id)
     {
-        $title          = 'Alterar despesa de cartão';
-        $creditCards    = CreditCard::all();
-        $mainCategoryId = BankCategory::CATEGORY_TO_PAY;
-
-        $action = "/credit-card/{$credit_card_id}/update/{$id}";
-        $model  = $this->bankTransactionService->findByInvoice($id);
-
-        $categories        = $this->bankCategoryService->getAll($mainCategoryId);
-        $categoryTransform = new BankCategoryTransformer();
-        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
-
         if ($request->isMethod('post')) {
             $postData = $request->all();
             $option   = BankTransactionService::OPTION_ALL;
@@ -147,6 +136,17 @@ class CreditCardTransactionController extends Controller
             }
             return redirect("/credit-card/{$credit_card_id}");
         }
+
+        $title          = 'Alterar despesa de cartão';
+        $creditCards    = CreditCard::all();
+        $mainCategoryId = BankCategory::CATEGORY_TO_PAY;
+
+        $action = "/credit-card/{$credit_card_id}/update/{$id}";
+        $model  = $this->bankTransactionService->findByInvoice($id);
+
+        $categories        = $this->bankCategoryService->getAll($mainCategoryId);
+        $categoryTransform = new BankCategoryTransformer();
+        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
         $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
         return view('credit-card-transaction/_form_update', compact('model', 'creditCards', 'action', 'title', 'categoryOptions'));

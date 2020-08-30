@@ -70,8 +70,9 @@ class BankInvoiceDetailService extends Service
     {
         $model = $this->repository->find($id);
         $data  = [
-            'status'       => BankInvoiceDetail::STATUS_PAID,
-            'payment_date' => $this->__getReceiveDate($model->due_date),
+            'status'        => BankInvoiceDetail::STATUS_PAID,
+            'payment_date'  => $this->__getReceiveDate($model->due_date),
+            'payment_value' => !empty($model->payment_value) ? $model->payment_value : $model->net_value,
         ];
         return $model->update($data);
     }

@@ -24,6 +24,10 @@ Route::group(['prefix' => 'sync'], function () {
     Route::get('/customer', 'SynchronizerController@customerSync');
 });
 
+Route::group(['prefix' => 'cron'], function () {
+    Route::get('/credit-card-invoices', 'CronController@creditCardInvoices');
+});
+
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/home', function () {return view('home');});
 

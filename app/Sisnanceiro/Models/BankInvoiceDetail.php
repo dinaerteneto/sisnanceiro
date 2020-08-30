@@ -43,6 +43,7 @@ class BankInvoiceDetail extends Model
         'tax_value',
         'rate_value',
         'net_value',
+        'payment_value',
         'parcel_number',
         'competence_date',
         'due_date',
