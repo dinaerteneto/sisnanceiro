@@ -55,7 +55,9 @@ class ReportController extends Controller
 
     public function cashFlowDetail(Request $request)
     {
-        $date           = $request->date;
+        $date       = $request->date;
+        $carbonDate = Carbon::createFromFormat('Y-m-d', $request->date);
+
         $bankAccountIds = null !== $request->get('bank_account_id') ? $request->get('bank_account_id') : [];
         if (count($bankAccountIds) <= 0) {
             //get all bankAccounts if not filtered by bank account
@@ -66,8 +68,14 @@ class ReportController extends Controller
                 }
             }
         }
-        $records = $this->service->cashFlowPast($date, $date, $bankAccountIds, 'day');
-        $data    = (object) fractal($records, new CashFlowDetailTransformer)->toArray()['data'];
+
+        if ($carbonDate->isPast()) {
+            $records = $this->service->cashFlowPast($date, $date, $bankAccountIds, 'day');
+        } else {
+            $records = $this->service->cashFlowFuture($date, $date, $bankAccountIds, 'day');
+        }
+
+        $data = (object) fractal($records, new CashFlowDetailTransformer)->toArray()['data'];
         return view('/reports/_cash-flow-detail', compact('data'));
     }
 

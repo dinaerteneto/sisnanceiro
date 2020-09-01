@@ -712,7 +712,7 @@ class CashFlowRepository extends Repository
                    parcel_number,
                    total_invoices AS total_parcels,
                    PM.name AS payment_method,
-                   CONCAT(P.firstname, ' ', U.lastname) AS user_name,
+                   CONCAT(P.firstname, ' ', P.lastname) AS user_name,
                    S.company_sale_code,
                    S.id AS sale_id,
                    BC.name as category,
@@ -750,7 +750,8 @@ class CashFlowRepository extends Repository
                    BC.name as category,
                    BID.company_id,
                    SP.id AS user_id,
-                   'supplier' AS type_user
+                   'supplier' AS type_user,
+                   BA.name AS bank_account_name
             FROM bank_invoice_detail BID
             JOIN bank_category BC ON BC.id = BID.bank_category_id
             LEFT JOIN bank_invoice_transaction BIT ON BIT.id = BID.bank_invoice_transaction_id
@@ -767,9 +768,7 @@ class CashFlowRepository extends Repository
             ORDER BY user_name
             ";
         }
-
         return \DB::select($sql);
-
     }
 
 }
