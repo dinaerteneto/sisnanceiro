@@ -95,4 +95,9 @@ class BankInvoiceDetail extends Model
     {
         return $this->hasOne('Sisnanceiro\Models\User', 'id', 'user_id');
     }
+
+    public function creditCard()
+    {
+        return $this->belongsTo('Sisnanceiro\Models\CreditCard', 'credit_card_id', 'id');
+    }
 }

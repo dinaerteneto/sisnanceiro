@@ -19,6 +19,8 @@ class BankCategorySeeder extends Seeder
             ['name' => 'Transferências', 'status' => 1],
             ['name' => 'Transferências entrada', 'status' => 1],
             ['name' => 'Transferências saída', 'status' => 1],
+            ['name' => 'Fatura do cartão', 'status' => 1],
+            ['name' => 'Saldo da fatura anterior', 'status' => 1],
         ]);
     }
 }

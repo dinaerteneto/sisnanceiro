@@ -163,6 +163,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/delete/{id}', 'BankTransactionController@delete');
         Route::post('/set-paid/{id}', 'BankTransactionController@setPaid');
         Route::post('/get-total-by-main-category', 'BankTransactionController@getTotalByMainCategory');
+        Route::get('/partial-pay/{id}', 'BankTransactionController@partialPay');
+        Route::post('/partial-pay/{id}', 'BankTransactionController@partialPay');
 
         Route::group(['prefix' => 'pay'], function () {
             Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);

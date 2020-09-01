@@ -66,6 +66,7 @@ class BankTransactionTransformer extends TransformerAbstract
             'credit_card_id'              => $bankInvoiceDetail->credit_card_id,
             'bank_category_id'            => $bankInvoiceDetail->bank_category_id,
             'main_category_id'            => $bankInvoiceDetail->main_parent_category_id,
+            'is_credit_card_invoice'      => $bankInvoiceDetail->is_credit_card_invoice,
             'status'                      => $bankInvoiceDetail->status,
             'label_status'                => $labelStatus,
             'label_legend'                => isset($labelLegend[$labelStatus]) ? $labelLegend[$labelStatus] : null,

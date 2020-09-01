@@ -12,13 +12,14 @@ class BankCategory extends Model
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE   = 1;
 
-    const CATEGORY_INITIAL_BALANCE = 1;
-    const CATEGORY_TO_PAY          = 2;
-    const CATEGORY_TO_RECEIVE      = 3;
-    const CATEGORY_SALE            = 4;
-    const CATEGORY_TRANSFER        = 5;
-    const CATEGORY_TRANSFER_OUT    = 6;
-    const CATEGORY_TRANSFER_IN     = 7;
+    const CATEGORY_INITIAL_BALANCE     = 1;
+    const CATEGORY_TO_PAY              = 2;
+    const CATEGORY_TO_RECEIVE          = 3;
+    const CATEGORY_SALE                = 4;
+    const CATEGORY_TRANSFER            = 5;
+    const CATEGORY_TRANSFER_OUT        = 6;
+    const CATEGORY_TRANSFER_IN         = 7;
+    const CATEGORY_CREDIT_CARD_BALANCE = 8;
 
     protected $table      = 'bank_category';
     protected $primaryKey = 'id';

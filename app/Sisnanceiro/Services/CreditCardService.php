@@ -3,6 +3,7 @@
 namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
+use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Repositories\CreditCardRepository;
@@ -69,13 +70,14 @@ class CreditCardService extends Service
             foreach ($query as $invoice) {
                 $aData = [
                     'BankInvoiceTransaction' => [
-                        'credit_card_id'       => $invoice->credit_card_id,
-                        'note'                 => "Fatura do cartão de crédito",
-                        'description'          => "Fatura do cartão de crédito",
-                        'credit_card_due_date' => $date,
+                        'credit_card_id'         => $invoice->credit_card_id,
+                        'note'                   => "Fatura do cartão de crédito",
+                        'description'            => "Fatura do cartão de crédito",
+                        'credit_card_due_date'   => $date,
+                        'id_credit_card_invoice' => true,
                     ],
                     'BankInvoiceDetail'      => [
-                        'bank_category_id' => BankCategory::CATEGORY_TO_PAY,
+                        'bank_category_id' => BankCategory::CATEGORY_CREDIT_CARD_BALANCE,
                         'bank_account_id'  => $invoice->bank_account_id,
                         'net_value'        => $invoice->net_value,
                         'parcel_number'    => 1,
@@ -106,5 +108,52 @@ class CreditCardService extends Service
             }
         }
         return true;
+    }
+
+    public function partialPay($data = [], $id)
+    {
+        $model        = $this->bankTransactionService->findByInvoice($id);
+        $paymentValue = FloatConversor::convert($data['BankInvoiceDetail']['net_value']);
+        $balance      = ($model->net_value + $paymentValue);
+        $dataUpd      = [
+            'payment_value'    => $paymentValue,
+            'net_value'        => $balance,
+            'bank_category_id' => BankCategory::CATEGORY_CREDIT_CARD_BALANCE,
+            'bank_account_id'  => $data['BankInvoiceDetail']['bank_account_id'],
+        ];
+        $modelUpd = $this->bankTransactionService->update($model, $dataUpd);
+        if (method_exists($modelUpd, 'getErrors') && $modelUpd->getErrors()) {
+            throw new \Exception("Erro ao alterar o valor da fatura atual.");
+        }
+        $this->bankTransactionService->setPaid($model->id);
+
+        $carbonDueDate = Carbon::createFromFormat('Y-m-d', $model->due_date)->addMonth();
+        $dueDateFormat = $carbonDueDate->format('d/m/Y');
+        $newData       = [
+            'BankInvoiceTransaction' => $model->transaction->getAttributes(),
+            'BankInvoiceDetail'      => $model->getAttributes(),
+        ];
+        $newData['BankInvoiceTransaction']['id']                     = null;
+        $newData['BankInvoiceTransaction']['credit_card_id']         = null;
+        $newData['BankInvoiceTransaction']['is_credit_card_invoice'] = false;
+        $newData['BankInvoiceTransaction']['description']            = 'Saldo da fatura anterior';
+        $newData['BankInvoiceTransaction']['note']                   = 'Saldo da fatura anterior';
+        $newData['BankInvoiceTransaction']['credit_card_due_date']   = $carbonDueDate->format('Y-m-d');
+
+        $newData['BankInvoiceDetail']['id']               = null;
+        $newData['BankInvoiceDetail']['credit_card_id']   = $model->transaction->credit_card_id;
+        $newData['BankInvoiceDetail']['due_date']         = $dueDateFormat;
+        $newData['BankInvoiceDetail']['total_invoices']   = 1;
+        $newData['BankInvoiceDetail']['total_value']      = $balance;
+        $newData['BankInvoiceDetail']['type_cycle']       = 0;
+        $newData['BankInvoiceDetail']['bank_category_id'] = BankCategory::CATEGORY_CREDIT_CARD_BALANCE;
+        $newData['BankInvoiceDetail']['payment_date']     = null;
+        $newData['BankInvoiceDetail']['competence_date']  = date('d/m/Y');
+
+        $newInvoice = $this->bankTransactionService->store($newData, 'create');
+        if (method_exists($newInvoice, 'getErrors') && $newInvoice->getErrors()) {
+            throw new \Exception("Erro ao incluir lançamento na próxima fatura.");
+        }
+        return $newInvoice;
     }
 }

@@ -768,6 +768,8 @@ class CashFlowRepository extends Repository
             ";
         }
 
+        return \DB::select($sql);
+
     }
 
 }

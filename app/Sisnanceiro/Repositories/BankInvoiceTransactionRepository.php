@@ -28,6 +28,7 @@ class BankInvoiceTransactionRepository extends Repository
             , bank_invoice_detail.bank_account_id
             , bank_invoice_detail.bank_category_id
             , bank_category.main_parent_category_id
+            , bank_invoice_transaction.is_credit_card_invoice
             , due_date
             , credit_card.id AS credit_card_id
             , credit_card.name AS credit_card_name
@@ -102,6 +103,7 @@ class BankInvoiceTransactionRepository extends Repository
             , bank_invoice_detail.bank_account_id
             , bank_invoice_detail.bank_category_id
             , bank_category.main_parent_category_id
+            , bank_invoice_transaction.is_credit_card_invoice
             , due_date
             , \'\' AS credit_card_id
             , \'\' AS credit_card_name
@@ -146,6 +148,7 @@ class BankInvoiceTransactionRepository extends Repository
             , bank_invoice_detail.bank_account_id
             , bank_invoice_detail.bank_category_id
             , bank_category.main_parent_category_id
+            , bank_invoice_transaction.is_credit_card_invoice
             , due_date
             , credit_card.id AS credit_card_id
             , credit_card.name AS credit_card_name
@@ -180,30 +183,40 @@ class BankInvoiceTransactionRepository extends Repository
             ->whereNull('bank_invoice_detail.deleted_at')
             ->groupBy('bank_invoice_detail.credit_card_id');
 
-        $query->union($query2);
-
         if (isset($search['start_date']) && !empty($search['start_date'])) {
-            $query = $query->whereBetween('due_date', [$search['start_date'], $search['end_date']]);
+            $query  = $query->whereBetween('due_date', [$search['start_date'], $search['end_date']]);
+            $query2 = $query2->whereBetween('due_date', [$search['start_date'], $search['end_date']]);
         }
         if (isset($search['main_parent_category_id']) && !empty($search['main_parent_category_id'])) {
-            $query = $query->where('bank_category.main_parent_category_id', '=', $search['main_parent_category_id']);
+            $query  = $query->where('bank_category.main_parent_category_id', '=', $search['main_parent_category_id']);
+            $query2 = $query2->where('bank_category.main_parent_category_id', '=', $search['main_parent_category_id']);
         }
         if (isset($search['bank_account_id']) && !empty($search['bank_account_id'])) {
-            $query = $query->whereIn('bank_invoice_detail.bank_account_id', $search['bank_account_id']);
+            $query  = $query->whereIn('bank_invoice_detail.bank_account_id', $search['bank_account_id']);
+            $query2 = $query2->whereIn('bank_invoice_detail.bank_account_id', $search['bank_account_id']);
         }
         if (isset($search['status']) && !empty($search['status'])) {
-            $query = $query->whereIn('bank_invoice_detail.status', $search['status']);
+            $query  = $query->whereIn('bank_invoice_detail.status', $search['status']);
+            $query2 = $query2->whereIn('bank_invoice_detail.status', $search['status']);
         }
         if (isset($search['description']) && !empty($search['description'])) {
             $query = $query->where('note', 'like', "%{$search['description']}%");
             $query = $query->orWhere('description', 'like', "%{$search['description']}%");
+
+            $query2 = $query2->where('note', 'like', "%{$search['description']}%");
+            $query2 = $query2->orWhere('description', 'like', "%{$search['description']}%");
         }
         if (isset($search['bank_categories_ids']) && !empty($search['bank_categories_ids'])) {
-            $query = $query->whereIn('bank_category.id', $search['bank_categories_ids']);
+            $query  = $query->whereIn('bank_category.id', $search['bank_categories_ids']);
+            $query2 = $query2->whereIn('bank_category.id', $search['bank_categories_ids']);
         }
         if (isset($search['credit_card_id']) && !empty($search['credit_card_id'])) {
-            $query = $query->where('credit_card.id', '=', $search['credit_card_id']);
+            $query  = $query->where('credit_card.id', '=', $search['credit_card_id']);
+            $query2 = $query2->where('credit_card.id', '=', $search['credit_card_id']);
         }
+
+        $query->union($query2);
+
         return $query->get();
     }
 

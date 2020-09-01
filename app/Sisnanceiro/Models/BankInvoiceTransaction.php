@@ -87,4 +87,9 @@ class BankInvoiceTransaction extends Model
         return $this->hasMany('Sisnanceiro\Models\BankInvoiceDetail', 'bank_invoice_transaction_id');
     }
 
+    public function creditCard()
+    {
+        return $this->belongsTo('Sisnanceiro\Models\CreditCard', 'credit_card_id');
+    }
+
 }

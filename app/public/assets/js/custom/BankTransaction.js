@@ -157,6 +157,7 @@ BankTransaction = {
                 'BankInvoiceDetail[bank_category_id]': 'required',
                 'BankInvoiceDetail[bank_account_id]': 'required',
                 'BankInvoiceDetail[competence_date]': 'required',
+                'BankInvoiceDetail[payment_date]': 'required',
             },
             messages: {
                 'BankInvoiceDetail[net_value]': {
@@ -167,6 +168,7 @@ BankTransaction = {
                 'BankInvoiceDetail[bank_category_id]': 'Obrigatório',
                 'BankInvoiceDetail[bank_account_id]': 'Obrigatório',
                 'BankInvoiceDetail[competence_date]': 'Obrigatório',
+                'BankInvoiceDetail[payment_date]': 'Obrigatório',
             }
         });
     },
