@@ -2,7 +2,17 @@
 
 <html lang="en" class="smart-style-0">
 
-<head>
+    <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-177021906-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-177021906-1');
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -64,22 +74,22 @@
                                                 @if ($message = Session::has('success'))
                                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                     {!! Session::get('success')['message'] !!}.
-                                                </div>                
+                                                </div>
                                                 @endif
 
                                                 @if (Session::has('error'))
                                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                     <i class="fa-fw fa fa-times"></i>
-                                                    <strong>Erro!</strong> {{ Session::get('error')['message'] }} 
+                                                    <strong>Erro!</strong> {{ Session::get('error')['message'] }}
                                                     @foreach(Session::get('error')['errors'] as $errors)
-                                                        <br>{{$errors['message']}} 
+                                                        <br>{{$errors['message']}}
                                                     @endforeach
                                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true">×</span>
                                                     </button>
-                                                </div>             
-                                                @endif                                                
-                                                            
+                                                </div>
+                                                @endif
+
                                             </div>
                                             <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
 

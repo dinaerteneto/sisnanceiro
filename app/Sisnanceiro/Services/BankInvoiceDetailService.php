@@ -53,6 +53,10 @@ class BankInvoiceDetailService extends Service
         if ('create' == $rules) {
             $data['receive_date'] = $this->__getReceiveDate($data['due_date']);
         }
+
+        if ($this->creditCardInvoiceIsPaid($data)) {
+            $this->validator->addError('', 'due_date', 'Não é possível incluir lançamentos numa fatura que esta paga.');
+        }
         return parent::store($data, $rules);
     }
 
@@ -75,6 +79,21 @@ class BankInvoiceDetailService extends Service
             'payment_value' => !empty($model->payment_value) ? $model->payment_value : $model->net_value,
         ];
         return $model->update($data);
+    }
+
+    /**
+     * verify if credit invoice is paid
+     * return true if yes
+     * @param array $data
+     * @return boolean
+     */
+    public function creditCardInvoiceIsPaid($data)
+    {
+        if (isset($data['credit_card_id']) && !empty($data['credit_card_id'])) {
+            $invoice = $this->repository->findCreditCardByDueDate($data['credit_card_id'], $data['due_date']);
+            return $invoice->status === BankInvoiceDetail::STATUS_PAID;
+        }
+        return false;
     }
 
 }

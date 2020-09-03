@@ -162,7 +162,7 @@ class BankTransactionService extends Service
                 }
                 $invoice = $this->addInvoice($dataDetail, $parcelNumber);
                 if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
-                    throw new \Exception("Erro na tentativa de incluir a parcela.", 500);
+                    return $invoice;
                 }
                 $details[] = $invoice;
             }

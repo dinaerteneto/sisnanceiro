@@ -140,10 +140,10 @@
                         <div class="widget-body no-padding">
 
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>
-                                            <th width="3%"></th>
+                                            <th width="2%"></th>
                                             <th width="6%">Vencto</th>
                                             <th>Conta</th>
                                             <th>Categoria</th>
@@ -154,8 +154,8 @@
                                             @else
                                                 <th>Cliente / Fornecedor</th>
                                             @endif
-                                            <th width="30%">Descrição</th>
-                                            <th width="6%">Valor</th>
+                                            <th width="">Descrição</th>
+                                            <th width="">Valor</th>
                                             <th width="10%">Ações</th>
                                         </tr>
                                     </thead>
