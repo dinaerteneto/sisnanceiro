@@ -19,11 +19,25 @@
             </li>
             <li class="sparks-info">
                 <h5>
-                    <small>Status</small>
+                    <small>Situação</small>
                     <span class="text-green">
                         <i class="fa fa-check"></i>&nbsp;
                         <span id="status" class="pull-right">{{ $status }}</span>
                     </span>
+                </h5>
+            </li>
+            <li class="sparks-info">
+                <h5>
+                    <small>Status</small>
+                    @if($isPaid)
+                    <span class="text-green">
+                        <span id="status" class="pull-right">Paga</span>
+                    </span>
+                    @else
+                    <span class="text-red">
+                        <span id="status" class="pull-right">Em aberto</span>
+                    </span>
+                    @endif
                 </h5>
             </li>
                 <li class="sparks-info">
@@ -55,14 +69,49 @@
         <section id="widget-grid" class="w-100">
 
             <div class="mb-10">
+                @if(!$isPaid)
                 <a
-                    href="/credit-card/<?=$model->id;?>/create"
+                    href="/credit-card/{{$model->id}}/create"
                     class="btn btn-sm btn-success open-modal"
                     target = "#remoteModal"
                     rel = "tooltip"
                     data-placement = "top"
                     title = "Adicionar nova transação"
-                > <i class="fa fa-plus"></i> Incluir </a>
+                > <i class="fa fa-plus"></i> Incluir lançamento</a>
+
+                @if($status === 'Fechada')
+                <div class="pull-right">
+                    <a
+                        href="/bank-transaction/set-paid/{{$invoice->id}}"
+                        class="btn btn-sm btn-primary"
+                        id="set-paid"
+                        rel = "tooltip"
+                        data-placement = "top"
+                        title = "Pagar fatura"
+                    > Pagar esta fatura</a>
+
+                    <a
+                        href="/bank-transaction/partial-pay/{{$invoice->id}}"
+                        class="btn btn-sm btn-warning open-modal"
+                        target = "#remoteModal"
+                        rel = "tooltip"
+                        data-placement = "top"
+                        title = "Pagar fatura parcialmente"
+                    > Pagar parcialmente</a>
+                </div>
+                @endif
+
+                @else
+                <a
+                    href="/credit-card/{{$model->id}}/reopen/{{$invoice->id}}"
+                    class="btn btn-sm btn-primary"
+                    rel = "tooltip"
+                    id="set-open"
+                    data-placement = "top"
+                    title = "Definir como não paga"
+                >  Definir como não paga </a>
+                @endif
+
             </div>
 
             <div class="row">
@@ -237,6 +286,42 @@
 
     });
 
+
+    $('body').on('click', '#set-paid', function(e) {
+        e.preventDefault();
+        var href = $(this).attr('href');
+        $.post(href, function(response) {
+            if (response.success) {
+                $.smallBox({
+                    title: "Sucesso!",
+                    content: "<i class='fa fa-clock-o'></i> <i>Fatura paga com sucesso.</i>",
+                    color: "#659265",
+                    iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                    timeout: 4000
+                });
+                window.location.reload();
+            }
+        }, 'json');
+    });
+
+    $('body').on('click', '#set-open', function(e) {
+        e.preventDefault();
+        var href = $(this).attr('href');
+        $.post(href, function(response) {
+            if (response.success) {
+                $.smallBox({
+                    title: "Sucesso!",
+                    content: "<i class='fa fa-clock-o'></i> <i>Fatura reaberta com sucesso.</i>",
+                    color: "#659265",
+                    iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                    timeout: 4000
+                });
+                window.location.reload();
+            }
+        }, 'json');
+    });
+
+
     function updateTotal(filter) {
         var extraSearch = {extra_search: filter};
         $.post('/credit-card/<?=$model->id;?>/get-total', extraSearch, function(json) {
@@ -246,6 +331,5 @@
             $("#payment-day").html(json.payment_day);
         }, 'json');
     }
-
 </script>
 @endsection

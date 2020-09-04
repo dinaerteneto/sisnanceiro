@@ -10,185 +10,215 @@ use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Models\CreditCard;
 use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Services\BankTransactionService;
+use Sisnanceiro\Services\CreditCardService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
 use Sisnanceiro\Transformers\BankTransactionTotalTransformer;
 use Sisnanceiro\Transformers\BankTransactionTransformer;
 
 class CreditCardTransactionController extends Controller
 {
-    protected $bankTransactionService;
+ protected $bankTransactionService;
 
-    public function __construct(
-        BankTransactionService $bankTransactionService,
-        BankCategoryService $bankCategoryService
-    ) {
-        $this->bankTransactionService = $bankTransactionService;
-        $this->bankCategoryService    = $bankCategoryService;
-    }
+ public function __construct(
+  BankTransactionService $bankTransactionService,
+  BankCategoryService $bankCategoryService,
+  CreditCardService $creditCardService
+ ) {
+  $this->bankTransactionService = $bankTransactionService;
+  $this->bankCategoryService    = $bankCategoryService;
+  $this->creditCardService      = $creditCardService;
+ }
 
-    public function index(Request $request, $id)
-    {
-        if ($request->isMethod('post')) {
-            $records = $this->bankTransactionService->getAll($request->get('extra_search'));
-            $dt      = datatables()
-                ->of($records)
-                ->setTransformer(new BankTransactionTransformer);
-            return $dt->make(true);
-        }
+ public function index(Request $request, $id)
+ {
+  if ($request->isMethod('post')) {
+   $records = $this->bankTransactionService->getAll($request->get('extra_search'));
+   $dt      = datatables()
+    ->of($records)
+    ->setTransformer(new BankTransactionTransformer);
+   return $dt->make(true);
+  }
 
-        $creditCards = CreditCard::all();
-        $model       = CreditCard::find($id);
-        $title       = $model->name;
+  $creditCards = CreditCard::all();
+  $model       = CreditCard::find($id);
+  $title       = $model->name;
 
-        $dateStartDate = isset($request->start_date) && !empty($request->start_date) ? $request->start_date : date('Y-m') . "-{$model->closing_day}";
-        $dateDueDate   = isset($request->end_date) && !empty($request->end_date) ? $request->end_date : date('Y-m') . "-{$model->payment_day}";
+  $dateStartDate = isset($request->start_date) && !empty($request->start_date) ? $request->start_date : date('Y-m') . "-{$model->closing_day}";
+  $dateDueDate   = isset($request->end_date) && !empty($request->end_date) ? $request->end_date : date('Y-m') . "-{$model->payment_day}";
 
-        $startDate       = Carbon::createFromFormat('Y-m-d', $dateStartDate);
-        $dueDate         = Carbon::createFromFormat('Y-m-d', $dateDueDate);
-        $previousEndDate = clone $dueDate;
-        $nextEndDate     = clone $dueDate;
+  $startDate       = Carbon::createFromFormat('Y-m-d', $dateStartDate);
+  $dueDate         = Carbon::createFromFormat('Y-m-d', $dateDueDate);
+  $previousEndDate = clone $dueDate;
+  $nextEndDate     = clone $dueDate;
 
-        $currentDate = clone $startDate;
-        $currentDate = $startDate->format('m/Y');
+  $currentDate = clone $startDate;
+  $currentDate = $startDate->format('m/Y');
 
-        $previousStartDate = clone $startDate;
-        $previousStartDate = $previousStartDate->addMonth(-1)->format('Y-m-d');
-        $previousEndDate   = $previousEndDate->addMonth(-1)->format('Y-m-d');
+  $previousStartDate = clone $startDate;
+  $previousStartDate = $previousStartDate->addMonth(-1)->format('Y-m-d');
+  $previousEndDate   = $previousEndDate->addMonth(-1)->format('Y-m-d');
 
-        $nextStartDate = clone $startDate;
-        $nextStartDate = $nextStartDate->addMonth()->format('Y-m-d');
-        $nextEndDate   = $nextEndDate->addMonth()->format('Y-m-d');
+  $nextStartDate = clone $startDate;
+  $nextStartDate = $nextStartDate->addMonth()->format('Y-m-d');
+  $nextEndDate   = $nextEndDate->addMonth()->format('Y-m-d');
 
-        $dueDate       = $dueDate->format('d/m/Y');
-        $endDateFormat = clone $startDate;
+  $dueDate       = $dueDate->format('d/m/Y');
+  $endDateFormat = clone $startDate;
 
-        $endDate   = $startDate->addMonth()->format('Y-m-d');
-        $startDate = $startDate->addMonth(-1)->format('Y-m-d');
+  $endDate   = $startDate->addMonth()->format('Y-m-d');
+  $startDate = $startDate->addMonth(-1)->format('Y-m-d');
 
-        $status = 'Fatura fechada';
-        if ($endDateFormat->isFuture()) {
-            $status = 'Fatura aberta';
-        }
-        $endDateFormat = $endDateFormat->format('d/m/Y');
+  $status = 'Fechada';
+  if ($endDateFormat->isFuture()) {
+   $status = 'Aberta';
+  }
+  $endDateFormat = $endDateFormat->format('d/m/Y');
+  $invoice       = $this->creditCardService->getInvoice($id, $dateDueDate);
+  $isPaid        = false;
+  if ($invoice) {
+   $isPaid = BankInvoiceDetail::STATUS_PAID === $invoice->status;
+  }
 
-        return view('/credit-card/index-invoice', compact(
-            'urlMain',
-            'title',
-            'creditCards',
-            'model',
-            'startDate',
-            'endDate',
-            'dueDate',
-            'currentDate',
-            'endDateFormat',
-            'previousStartDate',
-            'previousEndDate',
-            'nextStartDate',
-            'nextEndDate',
-            'status'
-        )
-        );
-    }
+  return view('/credit-card/index-invoice', compact(
+   'urlMain',
+   'title',
+   'creditCards',
+   'model',
+   'startDate',
+   'endDate',
+   'dueDate',
+   'currentDate',
+   'endDateFormat',
+   'previousStartDate',
+   'previousEndDate',
+   'nextStartDate',
+   'nextEndDate',
+   'status',
+   'invoice',
+   'isPaid'
+  )
+  );
+ }
 
-    public function create(Request $request, $id)
-    {
+ public function create(Request $request, $id)
+ {
 
-        if ($request->isMethod('post')) {
-            $creditCard = CreditCard::find($id);
-            $postData   = $request->all();
+  if ($request->isMethod('post')) {
+   $creditCard = CreditCard::find($id);
+   $postData   = $request->all();
 
-            $postData['BankInvoiceDetail']['bank_account_id'] = $creditCard->bank_account_id;
+   $postData['BankInvoiceDetail']['bank_account_id'] = $creditCard->bank_account_id;
 
-            $model = $this->bankTransactionService->store($postData, 'create');
-            if (method_exists($model, 'getErrors') && $model->getErrors()) {
-                $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
-            } else {
-                $request->session()->flash('success', ['message' => 'Transação criada com sucesso.']);
-            }
-            $urlMain = "/credit-card/{$id}";
-            return redirect($urlMain);
-        }
+   $model = $this->bankTransactionService->store($postData, 'create');
+   if (method_exists($model, 'getErrors') && $model->getErrors()) {
+    $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
+   } else {
+    $request->session()->flash('success', ['message' => 'Transação criada com sucesso.']);
+   }
+   $urlMain = "/credit-card/{$id}";
+   return redirect($urlMain);
+  }
 
-        $title       = 'Incluir despesa de cartão';
-        $model       = new BankInvoiceDetail();
-        $creditCards = CreditCard::all();
+  $title       = 'Incluir despesa de cartão';
+  $model       = new BankInvoiceDetail();
+  $creditCards = CreditCard::all();
 
-        $mainCategoryId    = BankCategory::CATEGORY_TO_PAY;
-        $categories        = $this->bankCategoryService->getAll($mainCategoryId);
-        $categoryTransform = new BankCategoryTransformer();
-        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
+  $mainCategoryId    = BankCategory::CATEGORY_TO_PAY;
+  $categories        = $this->bankCategoryService->getAll($mainCategoryId);
+  $categoryTransform = new BankCategoryTransformer();
+  $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
-        $action = "/credit-card/{$id}/create";
-        return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions', 'id'));
-    }
+  $action = "/credit-card/{$id}/create";
+  return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions', 'id'));
+ }
 
-    public function update(Request $request, $credit_card_id, $id)
-    {
-        if ($request->isMethod('post')) {
-            $postData = $request->all();
-            $option   = BankTransactionService::OPTION_ALL;
+ public function update(Request $request, $credit_card_id, $id)
+ {
+  if ($request->isMethod('post')) {
+   $postData = $request->all();
+   $option   = BankTransactionService::OPTION_ALL;
 
-            $model = $this->bankTransactionService->updateInvoices($model, $postData, $option);
-            if (method_exists($model, 'getErrors') && $model->getErrors()) {
-                $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o lançamento.', 'errors' => $model->getErrors()]);
-            } else {
-                $request->session()->flash('success', ['message' => 'Lançamento(s) alterado(s) com sucesso.']);
-            }
-            return redirect("/credit-card/{$credit_card_id}");
-        }
+   $model = $this->bankTransactionService->updateInvoices($model, $postData, $option);
+   if (method_exists($model, 'getErrors') && $model->getErrors()) {
+    $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o lançamento.', 'errors' => $model->getErrors()]);
+   } else {
+    $request->session()->flash('success', ['message' => 'Lançamento(s) alterado(s) com sucesso.']);
+   }
+   return redirect("/credit-card/{$credit_card_id}");
+  }
 
-        $title          = 'Alterar despesa de cartão';
-        $creditCards    = CreditCard::all();
-        $mainCategoryId = BankCategory::CATEGORY_TO_PAY;
+  $title          = 'Alterar despesa de cartão';
+  $creditCards    = CreditCard::all();
+  $mainCategoryId = BankCategory::CATEGORY_TO_PAY;
 
-        $action = "/credit-card/{$credit_card_id}/update/{$id}";
-        $model  = $this->bankTransactionService->findByInvoice($id);
+  $action = "/credit-card/{$credit_card_id}/update/{$id}";
+  $model  = $this->bankTransactionService->findByInvoice($id);
 
-        $categories        = $this->bankCategoryService->getAll($mainCategoryId);
-        $categoryTransform = new BankCategoryTransformer();
-        $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
+  $categories        = $this->bankCategoryService->getAll($mainCategoryId);
+  $categoryTransform = new BankCategoryTransformer();
+  $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
 
-        $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
-        return view('credit-card-transaction/_form_update', compact('model', 'creditCards', 'action', 'title', 'categoryOptions'));
-    }
+  $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
+  return view('credit-card-transaction/_form_update', compact('model', 'creditCards', 'action', 'title', 'categoryOptions'));
+ }
 
-    public function delete(Request $request, $credit_card_id, $id)
-    {
-        if ($request->isMethod('post')) {
-            $option = BankTransactionService::OPTION_ALL;
-            if ($this->bankTransactionService->destroyInvoices($id, $option)) {
-                return $this->apiSuccess(['success' => true]);
-            }
-            return Response::json(['success' => false, 'message' => 'Erro na tentativa de excluir o(s) lançamentos.']);
-        }
-    }
+ public function delete(Request $request, $credit_card_id, $id)
+ {
+  if ($request->isMethod('post')) {
+   $option = BankTransactionService::OPTION_ALL;
+   if ($this->bankTransactionService->destroyInvoices($id, $option)) {
+    return $this->apiSuccess(['success' => true]);
+   }
+   return Response::json(['success' => false, 'message' => 'Erro na tentativa de excluir o(s) lançamentos.']);
+  }
+ }
 
-    public function getTotal(Request $request)
-    {
-        $model    = (object) $this->bankTransactionService->getTotal($request->get('extra_search'));
-        $response = fractal($model, new BankTransactionTotalTransformer)->toArray()['data'];
-        return Response::json($response);
-    }
+ public function getTotal(Request $request)
+ {
+  $model    = (object) $this->bankTransactionService->getTotal($request->get('extra_search'));
+  $response = fractal($model, new BankTransactionTotalTransformer)->toArray()['data'];
+  return Response::json($response);
+ }
 
-    public function dueInvoiceDates($id)
-    {
-        $dates   = [];
-        $model   = CreditCard::find($id);
-        $bFuture = false;
-        for ($i = -1; $i <= 4; $i++) {
-            $future = false;
-            $date   = Carbon::createFromDate(date('Y'), date('m'), $model->payment_day)->addMonth($i);
-            if (!$bFuture && $date->isFuture()) {
-                $future  = true;
-                $bFuture = true;
-            }
-            $dates[] = [
-                'date'     => $date->format('d/m/Y'),
-                'selected' => $future,
-            ];
+ public function dueInvoiceDates($id)
+ {
+  $dates   = [];
+  $model   = CreditCard::find($id);
+  $bFuture = false;
+  for ($i = -1; $i <= 4; $i++) {
+   $future = false;
+   $date   = Carbon::createFromDate(date('Y'), date('m'), $model->payment_day)->addMonth($i);
+   if (!$bFuture && $date->isFuture()) {
+    $future  = true;
+    $bFuture = true;
+   }
+   $dates[] = [
+    'date'     => $date->format('d/m/Y'),
+    'selected' => $future,
+   ];
 
-        }
-        return Response::json(['dates' => $dates]);
-    }
+  }
+  return Response::json(['dates' => $dates]);
+ }
+
+ public function reopen(Request $request, $credit_card_id, $id)
+ {
+  $return = ['success' => true];
+  $model  = $this->creditCardService->setOpen($id);
+  if (method_exists($model, 'getErrors') && $model->getErrors()) {
+   $return = ['success' => false];
+  }
+  return Response::json($return);
+ }
+
+ public function close(Request $request, $credit_card_id, $id)
+ {
+  $return = ['success' => true];
+  $model  = $this->bankTransactionService->setClose($id);
+  if (method_exists($model, 'getErrors') && $model->getErrors()) {
+   $return = ['success' => false];
+  }
+  return Response::json($return);
+ }
 
 }
