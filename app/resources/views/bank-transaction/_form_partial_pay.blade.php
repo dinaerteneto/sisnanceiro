@@ -14,9 +14,15 @@
                 <fieldset>
 
                     <div class="row mb-10">
-                        Cartão: {{ $creditCard->name }} <br />
-                        Dia vencto da fatura: {{ $model->due_date }} <br />
-                        Valor total: {{ $model->net_value }}
+                        <div class="col-sm-4">
+                            <label class="control-label">Cartão</label> <br />{{ $creditCard->name }}
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label">Dia vencto da fatura</label> <br />{{ $dueDate }}
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label">Valor total</label><br />R$ {{ \Sisnanceiro\Helpers\Mask::currency($model->net_value * -1) }}
+                        </div>
                     </div>
 
                     <div class="row mb-10">
