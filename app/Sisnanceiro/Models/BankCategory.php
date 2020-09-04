@@ -19,7 +19,8 @@ class BankCategory extends Model
     const CATEGORY_TRANSFER            = 5;
     const CATEGORY_TRANSFER_OUT        = 6;
     const CATEGORY_TRANSFER_IN         = 7;
-    const CATEGORY_CREDIT_CARD_BALANCE = 8;
+    const CATEGORY_CREDIT_INVOICE      = 8;
+    const CATEGORY_CREDIT_CARD_BALANCE = 9;
 
     protected $table      = 'bank_category';
     protected $primaryKey = 'id';

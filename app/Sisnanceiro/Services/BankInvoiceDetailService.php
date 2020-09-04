@@ -81,6 +81,19 @@ class BankInvoiceDetailService extends Service
         return $model->update($data);
     }
 
+    public function setOpen($id)
+    {
+        $model = $this->repository->find($id);
+        $data  = [
+            'status'        => BankInvoiceDetail::STATUS_ACTIVE,
+            'payment_date'  => null,
+            'payment_value' => null,
+            'net_value'     => $model->gross_value,
+        ];
+        $model->update($data);
+        return $model;
+    }
+
     /**
      * verify if credit invoice is paid
      * return true if yes

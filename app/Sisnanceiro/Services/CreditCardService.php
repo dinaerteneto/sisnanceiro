@@ -6,7 +6,10 @@ use Carbon\Carbon;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankCategory;
+use Sisnanceiro\Models\BankInvoiceDetail;
+use Sisnanceiro\Repositories\BankInvoiceDetailRepository;
 use Sisnanceiro\Repositories\CreditCardRepository;
+use Sisnanceiro\Services\BankInvoiceDetailService;
 use Sisnanceiro\Services\BankTransactionService;
 
 class CreditCardService extends Service
@@ -36,11 +39,15 @@ class CreditCardService extends Service
     public function __construct(
         Validator $validator,
         CreditCardRepository $creditCardRepository,
+        BankInvoiceDetailRepository $bankInvoiceDetailRepository,
+        BankInvoiceDetailService $bankInvoiceDetailService,
         BankTransactionService $bankTransactionService
     ) {
-        $this->validator              = $validator;
-        $this->repository             = $creditCardRepository;
-        $this->bankTransactionService = $bankTransactionService;
+        $this->validator                   = $validator;
+        $this->repository                  = $creditCardRepository;
+        $this->bankInvoiceDetailRepository = $bankInvoiceDetailRepository;
+        $this->bankTransactionService      = $bankTransactionService;
+        $this->bankInvoiceDetailService    = $bankInvoiceDetailService;
     }
 
     public function closeInvoice($date)
@@ -155,5 +162,45 @@ class CreditCardService extends Service
             throw new \Exception("Erro ao incluir lançamento na próxima fatura.");
         }
         return $newInvoice;
+    }
+
+    public function isPaid($creditCardId, $dueDate)
+    {
+        $transaction = $this->bankInvoiceDetailRepository->findCreditCardByDueDate($creditCardId, $dueDate);
+        if ($transaction) {
+            return $transaction->status === BankInvoiceDetail::STATUS_PAID;
+        }
+        return false;
+    }
+
+    public function getInvoice($creditCardId, $dueDate)
+    {
+        return $this->bankInvoiceDetailRepository->findCreditCardByDueDate($creditCardId, $dueDate);
+    }
+
+    public function setOpen($id)
+    {
+        \DB::beginTransaction();
+        try {
+            $invoice     = $this->bankInvoiceDetailService->setOpen($id);
+            $transaction = $this->bankTransactionService->find($invoice->bank_invoice_transaction_id);
+            $dueDate     = Carbon::createFromFormat('Y-m-d', $invoice->due_date)->addMonth();
+
+            //remove balance the next invoice if exists
+            $invoiceBalance = $this->bankInvoiceDetailService
+                ->repository
+                ->where('due_date', '=', $dueDate->format('Y-m-d'))
+                ->where('bank_category_id', '=', BankCategory::CATEGORY_CREDIT_CARD_BALANCE)
+                ->where('credit_card_id', '=', $transaction->credit_card_id)
+                ->first();
+            if ($invoiceBalance) {
+                $this->bankInvoiceDetailService->destroy($invoiceBalance->id);
+            }
+            \DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            \DB::rollBack();
+        }
+        return false;
     }
 }
