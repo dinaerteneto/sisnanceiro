@@ -9,6 +9,9 @@ Main = {
         processing: true,
         autoWidth: true,
         responsive: true,
+        bFilter: false,
+        paging: false,
+
         "sDom": "<'dt-toolbar d-flex'<f><'ml-auto hidden-xs show-control'l>r>" +
             "t" +
             "<'dt-toolbar-footer d-flex'<'hidden-xs'i><'ml-auto'p>>",
