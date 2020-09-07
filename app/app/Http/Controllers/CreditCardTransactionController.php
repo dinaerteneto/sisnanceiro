@@ -104,12 +104,12 @@ class CreditCardTransactionController extends Controller
  {
 
   if ($request->isMethod('post')) {
-   $creditCard = CreditCard::find($id);
-   $postData   = $request->all();
 
-   $postData['BankInvoiceDetail']['bank_account_id'] = $creditCard->bank_account_id;
+   $postData = $request->all();
 
-   $model = $this->bankTransactionService->store($postData, 'create');
+   $postData['BankInvoiceDetail']['credit_card_id'] = $id;
+
+   $model = $this->creditCardService->addCreditCardInvoice($postData, 'create');
    if (method_exists($model, 'getErrors') && $model->getErrors()) {
     $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
    } else {
@@ -138,7 +138,7 @@ class CreditCardTransactionController extends Controller
    $postData = $request->all();
    $option   = BankTransactionService::OPTION_ALL;
 
-   $model = $this->bankTransactionService->updateInvoices($model, $postData, $option);
+   $model = $this->creditCardService->updateInvoices($model, $postData, $option);
    if (method_exists($model, 'getErrors') && $model->getErrors()) {
     $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o lançamento.', 'errors' => $model->getErrors()]);
    } else {
@@ -165,8 +165,7 @@ class CreditCardTransactionController extends Controller
  public function delete(Request $request, $credit_card_id, $id)
  {
   if ($request->isMethod('post')) {
-   $option = BankTransactionService::OPTION_ALL;
-   if ($this->bankTransactionService->destroyInvoices($id, $option)) {
+   if ($this->creditCardService->destroyInvoices($id)) {
     return $this->apiSuccess(['success' => true]);
    }
    return Response::json(['success' => false, 'message' => 'Erro na tentativa de excluir o(s) lançamentos.']);

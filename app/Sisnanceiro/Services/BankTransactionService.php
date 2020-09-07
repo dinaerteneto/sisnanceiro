@@ -32,7 +32,7 @@ class BankTransactionService extends Service
   ],
   'update' => [
    'bank_category_id' => 'required',
-   'bank_account_id'  => 'required',
+   // 'bank_account_id'  => 'required',
    // 'total_invoices'   => 'required|int',
    // 'total_value'      => 'required|numeric',
   ],
@@ -155,6 +155,7 @@ class BankTransactionService extends Service
 
    $dataDetail   = $this->mapDataDetail($input['BankInvoiceDetail'], $recordTransaction['id']);
    $firstDueDate = $dataDetail['due_date'];
+
    for ($parcelNumber = 1; $parcelNumber <= (int) $dataTransaction['total_invoices']; $parcelNumber++) {
     if ($parcelNumber > 1) {
      $dueDate                = $this->setNewDueDateTypeCycle($dataTransaction['type_cycle'], $firstDueDate, ($parcelNumber - 1));
