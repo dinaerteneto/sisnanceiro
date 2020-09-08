@@ -240,14 +240,16 @@ class CreditCardService extends Service
  public function updateInvoices($model, $postData, $option)
  {
   $invoice = $this->bankTransactionService->updateInvoices($model, $postData, $option);
-  $this->__setTotalValues($invoice, $model->credit_card_id);
+  $this->__setTotalValues($model, $model->credit_card_id);
   return $invoice;
  }
 
  public function destroyInvoices($id)
  {
-  $option = BankTransactionService::OPTION_ALL;
+  $option  = BankTransactionService::OPTION_ALL;
+  $invoice = $this->bankInvoiceDetailService->find($id);
   if ($this->bankTransactionService->destroyInvoices($id, $option)) {
+   $this->__setTotalValues($invoice, $invoice->credit_card_id);
    return true;
   }
   return false;
@@ -257,7 +259,8 @@ class CreditCardService extends Service
  {
   $dueDate   = $invoice->due_date;
   $companyId = \Auth::user()->company_id;
-  $query     = \DB::query()
+
+  $query = \DB::query()
    ->selectRaw("SUM(bank_invoice_detail.net_value) AS net_value")
    ->from('bank_invoice_detail')
    ->where('bank_invoice_detail.company_id', $companyId)
@@ -266,30 +269,32 @@ class CreditCardService extends Service
    ->whereNull('bank_invoice_detail.deleted_at')
    ->first();
 
-  $invoice     = $this->bankInvoiceDetailService->find($invoice->id);
-  $transaction = $this->bankTransactionService->find($invoice->bank_invoice_transaction_id);
+  $creditCardInvoice = $this->bankInvoiceDetailService->findCreditCardByDueDate($creditCardId, $dueDate);
+  $creditCardInvoice = $this->bankInvoiceDetailService->find($creditCardInvoice->id);
+  $transaction       = $this->bankTransactionService->find($creditCardInvoice->bank_invoice_transaction_id);
 
   if ($query) {
    $netValue = $query->net_value;
 
    $dataTransaction = array_merge($transaction->getAttributes(), ['total_value' => $netValue]);
-   $dataInvoice     = array_merge($invoice->getAttributes(),
+   $dataInvoice     = array_merge($creditCardInvoice->getAttributes(),
     [
      'net_value'   => $netValue,
      'gross_value' => $netValue,
     ]
    );
-   $transaction = $this->bankTransactionService->update($transaction, $dataTransaction, 'update');
-   $invoice     = $this->bankInvoiceDetailService->update($invoice, $dataInvoice, 'update');
+
+   $transaction    = $this->bankTransactionService->update($transaction, $dataTransaction, 'update');
+   $invoiceUpdated = $this->bankInvoiceDetailService->update($creditCardInvoice, $dataInvoice, 'update');
    if (method_exists($transaction, 'getErrors') && $transaction->getErrors()) {
     throw new \Exception("Erro na tentativa de atualizar o valor da fatura do cartão.", 500);
    }
-   if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
+   if (method_exists($invoiceUpdated, 'getErrors') && $invoiceUpdated->getErrors()) {
     throw new \Exception("Erro na tentativa de atualizar o valor da fatura do cartão.", 500);
    }
+
    return true;
   }
-
   return false;
  }
 

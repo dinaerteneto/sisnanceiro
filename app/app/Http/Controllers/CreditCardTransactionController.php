@@ -137,8 +137,8 @@ class CreditCardTransactionController extends Controller
   if ($request->isMethod('post')) {
    $postData = $request->all();
    $option   = BankTransactionService::OPTION_ALL;
-
-   $model = $this->creditCardService->updateInvoices($model, $postData, $option);
+   $model    = $this->bankTransactionService->findByInvoice($id);
+   $model    = $this->creditCardService->updateInvoices($model, $postData, $option);
    if (method_exists($model, 'getErrors') && $model->getErrors()) {
     $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o lançamento.', 'errors' => $model->getErrors()]);
    } else {
