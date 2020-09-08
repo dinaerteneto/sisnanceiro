@@ -117,6 +117,10 @@ class BankTransactionController extends Controller
 
  public function update(Request $request, $id)
  {
+  $mainCategory = $this->getMainCategory($request);
+  $model        = $this->bankTransactionService->findByInvoice($id);
+  $urlMain      = $mainCategory['url'];
+
   if ($request->isMethod('post')) {
    $postData = $request->all();
    $option   = $request->get('BankInvoiceTransaction')['option_update'];
@@ -130,14 +134,13 @@ class BankTransactionController extends Controller
    return redirect($urlMain);
   }
 
-  $mainCategory   = $this->getMainCategory($request);
-  $title          = $mainCategory['title'];
-  $urlMain        = $mainCategory['url'];
+  $title = $mainCategory['title'];
+
   $mainCategoryId = $mainCategory['main_category_id'];
 
-  $action       = "{$urlMain}/update/{$id}";
-  $title        = BankCategory::CATEGORY_TO_PAY == $mainCategoryId ? 'Alterar conta a pagar' : 'Alterar contas a receber';
-  $model        = $this->bankTransactionService->findByInvoice($id);
+  $action = "{$urlMain}/update/{$id}";
+  $title  = BankCategory::CATEGORY_TO_PAY == $mainCategoryId ? 'Alterar conta a pagar' : 'Alterar contas a receber';
+
   $bankAccounts = BankAccount::all();
 
   $categories        = $this->bankCategoryService->getAll($mainCategoryId);
