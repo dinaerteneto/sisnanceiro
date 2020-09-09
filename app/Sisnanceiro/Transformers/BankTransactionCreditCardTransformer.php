@@ -8,7 +8,7 @@ use Sisnanceiro\Helpers\Mask;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 
-class BankTransactionTransformer extends TransformerAbstract
+class BankTransactionCreditCardTransformer extends TransformerAbstract
 {
  public function transform($bankInvoiceDetail)
  {

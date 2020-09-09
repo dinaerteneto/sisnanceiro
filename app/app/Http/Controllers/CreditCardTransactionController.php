@@ -12,8 +12,8 @@ use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Services\BankTransactionService;
 use Sisnanceiro\Services\CreditCardService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
+use Sisnanceiro\Transformers\BankTransactionCreditCardTransformer;
 use Sisnanceiro\Transformers\BankTransactionTotalTransformer;
-use Sisnanceiro\Transformers\BankTransactionTransformer;
 
 class CreditCardTransactionController extends Controller
 {
@@ -35,7 +35,7 @@ class CreditCardTransactionController extends Controller
    $records = $this->bankTransactionService->getAll($request->get('extra_search'));
    $dt      = datatables()
     ->of($records)
-    ->setTransformer(new BankTransactionTransformer);
+    ->setTransformer(new BankTransactionCreditCardTransformer);
    return $dt->make(true);
   }
 

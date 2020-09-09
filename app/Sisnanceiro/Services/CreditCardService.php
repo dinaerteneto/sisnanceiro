@@ -226,6 +226,9 @@ class CreditCardService extends Service
     if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
      throw new \Exception("Erro na tentativa de criar a fatura do cartão.", 500);
     }
+    if (BankInvoiceDetail::STATUS_PAID === $invoice->status) {
+     $this->validator->addError('', 'due_date', 'Não é possível incluir lançamentos numa fatura que esta paga.');
+    }
    }
    $this->bankTransactionService->store($input, $rules);
    $this->__setTotalValues($invoice, $creditCardId);
@@ -246,8 +249,13 @@ class CreditCardService extends Service
 
  public function destroyInvoices($id)
  {
-  $option  = BankTransactionService::OPTION_ALL;
-  $invoice = $this->bankInvoiceDetailService->find($id);
+  $option            = BankTransactionService::OPTION_ALL;
+  $invoice           = $this->bankInvoiceDetailService->find($id);
+  $creditCardInvoice = $this->bankInvoiceDetailService->findCreditCardByDueDate($invoice->credit_card_id, $invoice->due_date);
+  if (BankInvoiceDetail::STATUS_PAID === $creditCardInvoice->status) {
+   $this->validator->addError('', 'due_date', 'Não é possível excluir lançamentos numa fatura que esta paga.');
+   return false;
+  }
   if ($this->bankTransactionService->destroyInvoices($id, $option)) {
    $this->__setTotalValues($invoice, $invoice->credit_card_id);
    return true;

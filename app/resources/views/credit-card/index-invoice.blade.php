@@ -258,8 +258,10 @@
             bSortable: false,
             mRender: function(data, type, row) {
                 var html = '<div class="text-right">';
-                    html += '<a href="/credit-card/<?=$model->id;?>/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar o lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
-                    html += '<a href="/credit-card/<?=$model->id;?>/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir o lançamento" class="btn btn-xs btn-danger delete-record" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> ';
+                    html += '<a href="/credit-card/{{$model->id}}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar o lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
+                    @if(!$isPaid)
+                        html += '<a href="/credit-card/{{$model->id}}/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir o lançamento" class="btn btn-xs btn-danger delete-record" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> ';
+                    @endif
                     html += '</div>';
                 return html;
             }
