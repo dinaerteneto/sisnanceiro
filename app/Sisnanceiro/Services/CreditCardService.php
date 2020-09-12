@@ -51,6 +51,34 @@ class CreditCardService extends Service
   $this->bankInvoiceDetailService    = $bankInvoiceDetailService;
  }
 
+ private function mapData(array $data = [])
+ {
+  $dataTransaction = $data['BankInvoiceTransaction'];
+  $dataDetail      = $data['BankInvoiceDetail'];
+
+  $totalInvoices = isset($dataTransaction['total_invoice']) && !empty($dataTransaction['total_invoice']) ? (int) $dataTransaction['total_invoice'] : 1;
+  $netValue      = FloatConversor::convert($dataDetail['net_value']);
+  $totalValue    = $netValue;
+
+  $netValue = $netValue / $totalInvoices;
+
+  $ret = [
+   'BankInvoiceTransaction' => array_merge($dataTransaction, [
+    'description'    => nl2br($dataTransaction['description']),
+    'note'           => nl2br($dataTransaction['note']),
+    'total_invoices' => $totalInvoices,
+    'total_value'    => $totalValue,
+    'type_cycle'     => isset($dataTransaction['type_cycle']) ? $dataTransaction['type_cycle'] : 0,
+   ]),
+   'BankInvoiceDetail'      => array_merge($dataDetail, [
+    'net_value' => $netValue,
+   ]),
+  ];
+
+  return $ret;
+
+ }
+
  public function closeInvoice($date)
  {
   $query = \DB::table('bank_invoice_detail')
@@ -199,6 +227,8 @@ class CreditCardService extends Service
    $dateCarbon   = Carbon::createFromFormat('d/m/Y', $inputDueDate);
    $dueDate      = $dateCarbon->format('Y-m-d');
    $netValue     = FloatConversor::convert($input['BankInvoiceDetail']['net_value']);
+   $totalInvoice = $input['BankInvoiceTransaction']['total_invoice'];
+   $netValue     = ($netValue / $totalInvoice);
 
    $input['BankInvoiceDetail']['bank_account_id'] = $creditCard->bank_account_id;
 
@@ -223,19 +253,20 @@ class CreditCardService extends Service
      ],
     ];
     $invoice = $this->bankTransactionService->store($aData, 'create');
-    if (method_exists($invoice, 'getErrors') && $invoice->getErrors()) {
-     throw new \Exception("Erro na tentativa de criar a fatura do cartão.", 500);
-    }
+    $invoice = $invoice[0];
     if (BankInvoiceDetail::STATUS_PAID === $invoice->status) {
      $this->validator->addError('', 'due_date', 'Não é possível incluir lançamentos numa fatura que esta paga.');
     }
    }
-   $this->bankTransactionService->store($input, $rules);
+
+   $mapData = $this->mapData($input);
+   $this->bankTransactionService->store($mapData, $rules);
    $this->__setTotalValues($invoice, $creditCardId);
    \DB::commit();
    return true;
   } catch (\Exception $e) {
    \DB::rollBack();
+   throw new \Exception('Erro na tentativa de incluir os lançamento.');
    return false;
   }
  }

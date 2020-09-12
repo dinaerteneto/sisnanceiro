@@ -82,6 +82,8 @@ class BankTransactionController extends Controller
 
  public function create(Request $request)
  {
+  $mainCategory = $this->getMainCategory($request);
+  $urlMain      = $mainCategory['url'];
 
   if ($request->isMethod('post')) {
    $postData = $request->all();
@@ -94,9 +96,7 @@ class BankTransactionController extends Controller
    return redirect($urlMain);
   }
 
-  $mainCategory   = $this->getMainCategory($request);
   $title          = $mainCategory['title'];
-  $urlMain        = $mainCategory['url'];
   $mainCategoryId = $mainCategory['main_category_id'];
 
   $action       = "{$urlMain}/create";

@@ -78,38 +78,41 @@
                     data-placement = "top"
                     title = "Adicionar nova transação"
                 > <i class="fa fa-plus"></i> Incluir lançamento</a>
-
-                @if($status === 'Fechada')
-                <div class="pull-right">
-                    <a
-                        href="/bank-transaction/set-paid/{{$invoice->id}}"
-                        class="btn btn-sm btn-primary"
-                        id="set-paid"
-                        rel = "tooltip"
-                        data-placement = "top"
-                        title = "Pagar fatura"
-                    > Pagar esta fatura</a>
-
-                    <a
-                        href="/bank-transaction/partial-pay/{{$invoice->id}}"
-                        class="btn btn-sm btn-warning open-modal"
-                        target = "#remoteModal"
-                        rel = "tooltip"
-                        data-placement = "top"
-                        title = "Pagar fatura parcialmente"
-                    > Pagar parcialmente</a>
-                </div>
                 @endif
 
-                @else
-                <a
-                    href="/credit-card/{{$model->id}}/reopen/{{$invoice->id}}"
-                    class="btn btn-sm btn-primary"
-                    rel = "tooltip"
-                    id="set-open"
-                    data-placement = "top"
-                    title = "Definir como não paga"
-                >  Definir como não paga </a>
+                @if($invoice)
+
+                    @if($status === 'Fechada')
+                    <div class="pull-right">
+                        <a
+                            href="/bank-transaction/set-paid/{{$invoice->id}}"
+                            class="btn btn-sm btn-primary"
+                            id="set-paid"
+                            rel = "tooltip"
+                            data-placement = "top"
+                            title = "Pagar fatura"
+                        > Pagar esta fatura</a>
+
+                        <a
+                            href="/bank-transaction/partial-pay/{{$invoice->id}}"
+                            class="btn btn-sm btn-warning open-modal"
+                            target = "#remoteModal"
+                            rel = "tooltip"
+                            data-placement = "top"
+                            title = "Pagar fatura parcialmente"
+                        > Pagar parcialmente</a>
+                    </div>
+                    @else
+                    <a
+                        href="/credit-card/{{$model->id}}/reopen/{{$invoice->id}}"
+                        class="btn btn-sm btn-primary"
+                        rel = "tooltip"
+                        id="set-open"
+                        data-placement = "top"
+                        title = "Definir como não paga"
+                    >  Definir como não paga </a>
+                    @endif
+
                 @endif
 
             </div>
