@@ -61,28 +61,17 @@
                     </div>
 
                     <div class="row mb-10">
-                        <div class="col-sm-12 text-center font-italic">
-                            <a href="javascript:void(0)" id="a-more-info">Mais informações</a>
+                        <div class="col-sm-4" style="margin-top: 8px">
+                            <label class="vcheck m-0">
+                                <input type="checkbox" class="checkbox style-0" name="BankInvoiceTransaction[repeat]" id="BankInvoiceTransaction_repeat" value="1" {{ !empty($model->repeat) ? 'checked' : null }} >
+                                <span>Parcelado</span>
+                            </label>
                         </div>
-                    </div>
-
-                    <div id="more-info" class="d-none">
-
-                        <div class="row mb-10">
-                            <div class="col-sm-4" style="margin-top: 8px">
-                                <label class="vcheck m-0">
-                                    <input type="checkbox" class="checkbox style-0" name="BankInvoiceTransaction[repeat]" id="BankInvoiceTransaction_repeat" value="1" {{ !empty($model->repeat) ? 'checked' : null }} >
-                                    <span>Parcelado</span>
-                                </label>
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" name="BankInvoiceTransaction[total_invoice]" id="BankInvoiceTransaction_total_invoice" class="mask-number form-control" value="1" disabled />
-                            </div>
-                            <input type="hidden" name="BankInvoiceTransaction[type_cycle]" value="{{ \Sisnanceiro\Models\BankInvoiceTransaction::TYPE_CYCLE_MONTHLY }}" />
+                        <div class="col-sm-4">
+                            <input type="text" name="BankInvoiceTransaction[total_invoice]" id="BankInvoiceTransaction_total_invoice" class="mask-number form-control" value="1" disabled />
                         </div>
-
+                        <input type="hidden" name="BankInvoiceTransaction[type_cycle]" value="{{ \Sisnanceiro\Models\BankInvoiceTransaction::TYPE_CYCLE_MONTHLY }}" />
                     </div>
-
 
                 </fieldset>
             </div>
@@ -136,10 +125,17 @@ $('document').ready(function(){
         }
     });
 
+    $('#BankInvoiceDetail_competence_date').on('change', function(e) {
+        venctos(<?=$id;?>);
+    });
+
     function venctos(creditCardId) {
         $.ajax({
             type: 'POST',
             url: `/credit-card/${creditCardId}/due-invoice-dates`,
+            data: {
+                date: $('#BankInvoiceDetail_competence_date').val()
+            },
             dataType: 'json',
             success: function(json) {
                 let html = '';

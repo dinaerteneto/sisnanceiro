@@ -88,7 +88,6 @@ class BankTransactionService extends Service
   if (empty($ret['net_value'])) {
    unset($ret['net_value']);
   }
-
   return $ret;
  }
 
@@ -171,6 +170,7 @@ class BankTransactionService extends Service
    return $details;
 
   } catch (\PDOException $e) {
+   dd($e);
    \DB::rollBack();
    abort(500, 'Erro na tentativa de criar o lançamento.');
   }

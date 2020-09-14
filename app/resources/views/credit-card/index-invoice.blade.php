@@ -81,8 +81,7 @@
                 @endif
 
                 @if($invoice)
-
-                    @if($status === 'Fechada')
+                    @if(!$isPaid)
                     <div class="pull-right">
                         <a
                             href="/bank-transaction/set-paid/{{$invoice->id}}"

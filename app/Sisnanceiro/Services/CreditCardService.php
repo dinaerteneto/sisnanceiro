@@ -79,38 +79,44 @@ class CreditCardService extends Service
 
  }
 
- public function closeInvoice($date)
+ public function closeInvoice()
  {
-  $query = \DB::table('bank_invoice_detail')
-   ->selectRaw('
-                SUM(bank_invoice_detail.net_value) AS net_value
-              , bank_invoice_detail.credit_card_id
-              , bank_invoice_detail.bank_account_id
-              , credit_card.name'
-   )
-   ->join('credit_card', 'credit_card.id', '=', 'bank_invoice_detail.credit_card_id')
-   ->leftJoin('bank_invoice_transaction', function ($join) use ($date) {
-    $join->on('bank_invoice_transaction.credit_card_id', '=', 'bank_invoice_detail.credit_card_id')
-     ->where('bank_invoice_transaction.credit_card_due_date', '=', $date);
-   })
-   ->where('due_date', $date)
-   ->whereNotNull('bank_invoice_detail.credit_card_id')
-   ->whereNull('bank_invoice_transaction.id')
-   ->whereNull('bank_invoice_detail.deleted_at')
-   ->whereNull('credit_card.deleted_at')
-   ->groupBy('bank_invoice_detail.credit_card_id')
-   ->get();
+
+  $sql = "
+    SELECT SUM(bid.net_value) AS net_value
+    , bid.due_date
+    , bid.credit_card_id
+    , bid.bank_account_id
+ FROM bank_invoice_detail bid
+ LEFT JOIN bank_invoice_transaction bit2
+   ON bid.due_date = bit2.credit_card_due_date
+  AND bit2.credit_card_id = bid.credit_card_id
+  AND bit2.deleted_at IS NULL
+
+WHERE bid.credit_card_id IS NOT NULL
+  AND bid.deleted_at IS NULL
+  AND bit2.id IS NULL
+  AND bid.due_date <= NOW()
+
+GROUP BY bid.due_date
+        , bid.credit_card_id
+
+    ";
+
+  $query = \DB::select($sql);
 
   if ($query) {
-   $dateCarbon = Carbon::createFromFormat('Y-m-d', $date);
+
    foreach ($query as $invoice) {
-    $aData = [
+    $date       = $invoice->due_date;
+    $dateCarbon = Carbon::createFromFormat('Y-m-d', $date);
+    $aData      = [
      'BankInvoiceTransaction' => [
       'credit_card_id'         => $invoice->credit_card_id,
       'note'                   => "Fatura do cartão de crédito",
       'description'            => "Fatura do cartão de crédito",
       'credit_card_due_date'   => $date,
-      'id_credit_card_invoice' => true,
+      'is_credit_card_invoice' => true,
      ],
      'BankInvoiceDetail'      => [
       'bank_category_id' => BankCategory::CATEGORY_CREDIT_CARD_BALANCE,
@@ -120,6 +126,7 @@ class CreditCardService extends Service
       'due_date'         => $dateCarbon->format('d/m/Y'),
      ],
     ];
+
     $transaction = $this->bankTransactionService->store($aData, 'create');
     if (method_exists($transaction, 'getErrors') && $transaction->getErrors()) {
      throw new \Exception("Erro na tentativa de incluir a fatura.", 500);

@@ -102,7 +102,6 @@ class CreditCardTransactionController extends Controller
 
  public function create(Request $request, $id)
  {
-
   if ($request->isMethod('post')) {
 
    $postData = $request->all();
@@ -113,15 +112,17 @@ class CreditCardTransactionController extends Controller
    if (method_exists($model, 'getErrors') && $model->getErrors()) {
     $request->session()->flash('error', ['message' => 'Erro na tentativa de criar a transação.', 'errors' => $model->getErrors()]);
    } else {
+    $this->creditCardService->closeInvoice();
     $request->session()->flash('success', ['message' => 'Transação criada com sucesso.']);
    }
    $urlMain = "/credit-card/{$id}";
    return redirect($urlMain);
   }
 
-  $title       = 'Incluir despesa de cartão';
-  $model       = new BankInvoiceDetail();
-  $creditCards = CreditCard::all();
+  $title                  = 'Incluir despesa de cartão';
+  $model                  = new BankInvoiceDetail();
+  $model->competence_date = date('d/m/Y');
+  $creditCards            = CreditCard::all();
 
   $mainCategoryId    = BankCategory::CATEGORY_TO_PAY;
   $categories        = $this->bankCategoryService->getAll($mainCategoryId);
@@ -179,17 +180,17 @@ class CreditCardTransactionController extends Controller
   return Response::json($response);
  }
 
- public function dueInvoiceDates($id)
+ public function dueInvoiceDates(Request $request, $id)
  {
-  $dates   = [];
-  $model   = CreditCard::find($id);
-  $bFuture = false;
+  $competenceDate  = $request->get('date');
+  $aCompetenceDate = explode('/', $competenceDate);
+  $dates           = [];
+  $model           = CreditCard::find($id);
   for ($i = -1; $i <= 4; $i++) {
    $future = false;
-   $date   = Carbon::createFromDate(date('Y'), date('m'), $model->payment_day)->addMonth($i);
-   if (!$bFuture && $date->isFuture()) {
-    $future  = true;
-    $bFuture = true;
+   $date   = Carbon::createFromDate($aCompetenceDate[2], $aCompetenceDate[1], $model->payment_day)->addMonth($i);
+   if (1 == $i) {
+    $future = true;
    }
    $dates[] = [
     'date'     => $date->format('d/m/Y'),
