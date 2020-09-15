@@ -303,6 +303,9 @@ class BankTransactionService extends Service
       ->delete();
      break;
    }
+
+   $this->bankInvoiceRepository->destroyCreditCardOrphanInvoice();
+
    \DB::commit();
    return true;
   } catch (\PDOException $e) {

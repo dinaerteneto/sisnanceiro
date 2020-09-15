@@ -42,27 +42,38 @@ class BankInvoiceDetailRepository extends Repository
   return $query->first();
  }
 
- public function creditCardInvoiceUpdateValues($creditCardId, $dueDate)
+ public function destroyCreditCardOrphanInvoice()
  {
-// sum all invoices based due date and credit card id
-  $companyId = \Auth::user()->company_id;
-  $query     = \DB::query()
-   ->selectRaw("SUM(bank_invoice_detail.net_value) AS net_value")
-   ->from('bank_invoice_detail')
-   ->where('bank_invoice_detail.company_id', '=', $companyId)
-   ->where('bank_invoice_detail.credit_card_id', '=', $creditCardId)
-   ->where('bank_invoice_detail.due_date', '=', $dueDate)
-   ->whereNull('bank_invoice_detail.deleted_at')
-   ->first();
-  if ($query) {
-   $netValue = $query->net_value;
-//get invoice credit card to update net value
-   $invoice = $this->findCreditCardByDueDate($creditCardId, $dueDate);
-   $this->model->fill(['id' => $invoice->id, 'net_value' => $netValue, 'gross_value' => $netValue]);
-   return $this->model->save();
-  }
 
-  return false;
+  $creditCardCategory = BankCategory::CATEGORY_CREDIT_CARD_BALANCE;
+
+  $sql = "
+      SELECT *
+      FROM (
+      SELECT (
+      SELECT COUNT(id)
+        FROM bank_invoice_detail bid2
+        WHERE bid2.due_date = bit2.credit_card_due_date
+          AND bid2.bank_category_id NOT IN ({$creditCardCategory})
+          AND deleted_at IS NULL
+      ) AS total_invoices
+      , bit2.credit_card_due_date
+      , bit2.id
+        FROM bank_invoice_transaction bit2
+      WHERE bit2.is_credit_card_invoice = TRUE
+    ) AS BASE
+    WHERE BASE.total_invoices = 0
+    ";
+  $query = \DB::select($sql);
+  if ($query) {
+   foreach ($query as $record) {
+    $invoice     = $this->findBy('bank_invoice_transaction_id', $record->id);
+    $transaction = $invoice->transaction()->first();
+    $invoice->delete();
+    $transaction->delete();
+   }
+  }
+  return true;
  }
 
 }

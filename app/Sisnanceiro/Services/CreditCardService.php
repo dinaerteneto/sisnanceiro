@@ -290,7 +290,8 @@ GROUP BY bid.due_date
   $option            = BankTransactionService::OPTION_ALL;
   $invoice           = $this->bankInvoiceDetailService->find($id);
   $creditCardInvoice = $this->bankInvoiceDetailService->findCreditCardByDueDate($invoice->credit_card_id, $invoice->due_date);
-  if (BankInvoiceDetail::STATUS_PAID === $creditCardInvoice->status) {
+
+  if ($creditCardInvoice && BankInvoiceDetail::STATUS_PAID === $creditCardInvoice->status) {
    $this->validator->addError('', 'due_date', 'Não é possível excluir lançamentos numa fatura que esta paga.');
    return false;
   }
@@ -316,27 +317,29 @@ GROUP BY bid.due_date
    ->first();
 
   $creditCardInvoice = $this->bankInvoiceDetailService->findCreditCardByDueDate($creditCardId, $dueDate);
-  $creditCardInvoice = $this->bankInvoiceDetailService->find($creditCardInvoice->id);
-  $transaction       = $this->bankTransactionService->find($creditCardInvoice->bank_invoice_transaction_id);
+  if ($creditCardInvoice) {
+   $creditCardInvoice = $this->bankInvoiceDetailService->find($creditCardInvoice->id);
+   $transaction       = $this->bankTransactionService->find($creditCardInvoice->bank_invoice_transaction_id);
 
-  if ($query) {
-   $netValue = $query->net_value;
+   if ($transaction && $query) {
+    $netValue = $query->net_value;
 
-   $dataTransaction = array_merge($transaction->getAttributes(), ['total_value' => $netValue]);
-   $dataInvoice     = array_merge($creditCardInvoice->getAttributes(),
-    [
-     'net_value'   => $netValue,
-     'gross_value' => $netValue,
-    ]
-   );
+    $dataTransaction = array_merge($transaction->getAttributes(), ['total_value' => $netValue]);
+    $dataInvoice     = array_merge($creditCardInvoice->getAttributes(),
+     [
+      'net_value'   => $netValue,
+      'gross_value' => $netValue,
+     ]
+    );
 
-   $transaction    = $this->bankTransactionService->update($transaction, $dataTransaction, 'update');
-   $invoiceUpdated = $this->bankInvoiceDetailService->update($creditCardInvoice, $dataInvoice, 'update');
-   if (method_exists($transaction, 'getErrors') && $transaction->getErrors()) {
-    throw new \Exception("Erro na tentativa de atualizar o valor da fatura do cartão.", 500);
-   }
-   if (method_exists($invoiceUpdated, 'getErrors') && $invoiceUpdated->getErrors()) {
-    throw new \Exception("Erro na tentativa de atualizar o valor da fatura do cartão.", 500);
+    $transaction    = $this->bankTransactionService->update($transaction, $dataTransaction, 'update');
+    $invoiceUpdated = $this->bankInvoiceDetailService->update($creditCardInvoice, $dataInvoice, 'update');
+    if (method_exists($transaction, 'getErrors') && $transaction->getErrors()) {
+     throw new \Exception("Erro na tentativa de atualizar o valor da fatura do cartão.", 500);
+    }
+    if (method_exists($invoiceUpdated, 'getErrors') && $invoiceUpdated->getErrors()) {
+     throw new \Exception("Erro na tentativa de atualizar o valor da fatura do cartão.", 500);
+    }
    }
 
    return true;
