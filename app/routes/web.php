@@ -29,7 +29,7 @@ Route::group(['prefix' => 'cron'], function () {
 });
 
 Route::group(['middleware' => ['web', 'auth']], function () {
- Route::get('/home', function () {return view('home');});
+ Route::get('/home', 'HomeController@home');
 
  Route::group(['prefix' => 'profile'], function () {
   Route::name('My Profile')->get('/', 'ProfileController@index');

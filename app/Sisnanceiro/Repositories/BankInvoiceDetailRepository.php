@@ -76,4 +76,76 @@ class BankInvoiceDetailRepository extends Repository
   return true;
  }
 
+ /**
+  * return total grouped by categories
+  * @param array $mainParentCategoryIds ids of the categories
+  * @param string $startDate initial date (YYYY-MM-DD)
+  * @param string $endDate final date (YYYY-MM-DD)
+  * @return array
+  */
+ public function totalByCategory($mainParentCategoryIds = [], $startDate, $endDate)
+ {
+
+  $companyId                 = \Auth::user()->company_id;
+  $mainParentCategoryIds     = implode($mainParentCategoryIds);
+  $bankCategoryCreditInvoice = BankCategory::CATEGORY_CREDIT_INVOICE;
+
+  $sql = "
+    SELECT SUM(net_value) AS total
+         , bc.id
+         , bc.name
+      FROM bank_invoice_detail bid
+      JOIN bank_category bc
+        ON bid.bank_category_id = bc.id
+     WHERE bid.deleted_at is null
+       AND bid.due_date between '{$startDate}' AND '{$endDate}'
+       AND bid.company_id = {$companyId}
+       AND bc.main_parent_category_id in ({$mainParentCategoryIds})
+       AND bid.bank_category_id NOT IN ({$bankCategoryCreditInvoice})
+     GROUP BY bc.id, bc.name
+     ORDER BY bc.name;
+    ";
+
+  $query = \DB::select($sql);
+
+  return $query;
+ }
+
+ /**
+  * return total grouped by main categories
+  * @param array $mainParentCategoryIds ids of the categories
+  * @param string $startDate initial date (YYYY-MM-DD)
+  * @param string $endDate final date (YYYY-MM-DD)
+  * @return array
+  */
+ public function totalByParentCategory($mainParentCategoryIds = [], $startDate, $endDate)
+ {
+
+  $companyId                 = \Auth::user()->company_id;
+  $mainParentCategoryIds     = implode($mainParentCategoryIds);
+  $bankCategoryCreditInvoice = BankCategory::CATEGORY_CREDIT_INVOICE;
+
+  $sql = "
+    SELECT SUM(net_value) AS total
+         , bc2.id
+         , case when bc.parent_category_id <=9 then bc.name else bc2.name end name
+      FROM bank_invoice_detail bid
+      JOIN bank_category bc
+        ON bid.bank_category_id = bc.id
+      JOIN bank_category bc2
+        ON bc.parent_category_id = bc2.id
+     WHERE bid.deleted_at is null
+       AND bid.due_date between '{$startDate}' AND '{$endDate}'
+       AND bid.company_id = {$companyId}
+       AND bc.main_parent_category_id in ({$mainParentCategoryIds})
+       AND bid.bank_category_id NOT IN ({$bankCategoryCreditInvoice})
+     GROUP BY bc2.id, bc2.name
+     ORDER BY bc2.name;
+    ";
+
+  $query = \DB::select($sql);
+
+  return $query;
+ }
+
 }

@@ -21,7 +21,7 @@
                         <div class="">
                             <div class="text-center">
                                 <h3>
-                                    <b>R$ 4.212,56</b><br />
+                                    <b>R$ {{ $aBallance['bank_account'] }}</b><br />
                                     Saldo atual
                                 </h3>
                             </div>
@@ -41,7 +41,7 @@
                         <div class="">
                             <div class="text-center">
                                 <h3>
-                                    <b>R$ 4.212,56</b><br />
+                                    <b>R$ {{ $aBallance['to_receive'] }}</b><br />
                                     Contas a receber
                                 </h3>
                             </div>
@@ -61,7 +61,7 @@
                         <div class="">
                             <div class="text-center">
                                 <h3>
-                                    <b>R$ 4.212,56</b><br />
+                                    <b>R$ {{ $aBallance['to_pay'] }}</b><br />
                                     Contas a pagar
                                 </h3>
                             </div>
@@ -81,7 +81,7 @@
                         <div class="">
                             <div class="text-center">
                                 <h3>
-                                    <b>R$ 4.212,56</b><br />
+                                    <b>R$ {{ $aBallance['credit_card'] }}</b><br />
                                     Cartão de crédito
                                 </h3>
                             </div>
@@ -97,12 +97,12 @@
             <div class="jarviswidget jarviswidget-color-blueDark">
                 <header class="ui-sortable-handle">
                     <div class="widget-header">
-                        <span class="widget-icon"> <i class="fa fa-arrow-circle-up text-green"></i> </span>
-                        <h2>Contas a receber por categorias</h2>
+                        <span class="widget-icon"> <i class="fa fa-arrow-circle-down text-red"></i> </span>
+                        <h2>Contas a pagar por categorias</h2>
                     </div>
                 </header>
-                <div class="widget-body">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Mammal_species_pie_chart.png" />
+                <div class="widget-body" style="position: relative; height:50vh">
+                    <canvas id="chart-category-to-receive"></canvas>
                 </div>
             </div>
         </article>
@@ -112,11 +112,11 @@
                 <header class="ui-sortable-handle">
                     <div class="widget-header">
                         <span class="widget-icon"> <i class="fa fa-arrow-circle-down text-red"></i> </span>
-                        <h2>Contas a pagar por categorias</h2>
+                        <h2>Contas a pagar por categoria de orçamento</h2>
                     </div>
                 </header>
-                <div class="widget-body">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Mammal_species_pie_chart.png" />
+                <div class="widget-body" style="position: relative; height:50vh">
+                    <canvas id="chart-category-to-budget"></canvas>
                 </div>
             </div>
         </article>
@@ -124,4 +124,16 @@
 
 </section>
 
+@endsection
+
+@section('scripts')
+    @include(
+    'layouts/_dashboard_scripts',
+    compact(
+        $jsonLabel,
+        $jsonValue,
+        $jsonParentLabel,
+        $jsonParentValue
+        )
+    )
 @endsection

@@ -12,9 +12,10 @@ class BankTransactionTransformer extends TransformerAbstract
 {
  public function transform($bankInvoiceDetail)
  {
-  $dueDateCarbon     = Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->due_date);
-  $paymentDateCarbon = !empty($bankInvoiceDetail->payment_date) ? Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->payment_date) : null;
-  $netValue          = Mask::currency($bankInvoiceDetail->net_value < 0 ? $bankInvoiceDetail->net_value * -1 : $bankInvoiceDetail->net_value);
+  $dueDateCarbon        = Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->due_date);
+  $competenceDateCarbon = Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->competence_date);
+  $paymentDateCarbon    = !empty($bankInvoiceDetail->payment_date) ? Carbon::createFromFormat('Y-m-d', $bankInvoiceDetail->payment_date) : null;
+  $netValue             = Mask::currency($bankInvoiceDetail->net_value < 0 ? $bankInvoiceDetail->net_value * -1 : $bankInvoiceDetail->net_value);
 
   $name = null;
   $dued = false;
@@ -71,6 +72,7 @@ class BankTransactionTransformer extends TransformerAbstract
    'label_status'                => $labelStatus,
    'label_legend'                => isset($labelLegend[$labelStatus]) ? $labelLegend[$labelStatus] : null,
    'due_date'                    => $dueDateCarbon->format('d/m/Y'),
+   'competence_date'             => $competenceDateCarbon->format('d/m/Y'),
    'payment_date'                => !empty($paymentDateCarbon) ? $paymentDateCarbon->format('d/m/Y') : null,
    'description'                 => $transaction->description,
    'credit_card_name'            => $bankInvoiceDetail->credit_card_name,

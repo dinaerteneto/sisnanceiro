@@ -184,9 +184,10 @@
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>
-                                            <th width="6%">Vencto</th>
+                                            <th width="6%">Dt compra</th>
                                             <th>Categoria</th>
                                             <th>Cartão</th>
+                                            <th>Fornecedor</th>
                                             <th width="40%">Descrição</th>
                                             <th width="6%">Valor</th>
                                             <th width="10%">Ações</th>
@@ -234,9 +235,10 @@
         }
     };
     Main.dataTableOptions.columns = [
-        { data: 'due_date' },
+        { data: 'competence_date' },
         { data: 'category_name'},
         { data: 'credit_card_name' },
+        { data: 'name'},
         {
             data: 'description',
             mRender: function(data, type, row) {

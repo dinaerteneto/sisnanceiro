@@ -11,9 +11,11 @@ use Sisnanceiro\Models\CreditCard;
 use Sisnanceiro\Services\BankCategoryService;
 use Sisnanceiro\Services\BankTransactionService;
 use Sisnanceiro\Services\CreditCardService;
+use Sisnanceiro\Services\SupplierService;
 use Sisnanceiro\Transformers\BankCategoryTransformer;
 use Sisnanceiro\Transformers\BankTransactionCreditCardTransformer;
 use Sisnanceiro\Transformers\BankTransactionTotalTransformer;
+use Sisnanceiro\Transformers\BankTransactionTransformer;
 
 class CreditCardTransactionController extends Controller
 {
@@ -22,11 +24,13 @@ class CreditCardTransactionController extends Controller
  public function __construct(
   BankTransactionService $bankTransactionService,
   BankCategoryService $bankCategoryService,
-  CreditCardService $creditCardService
+  CreditCardService $creditCardService,
+  SupplierService $supplierService
  ) {
   $this->bankTransactionService = $bankTransactionService;
   $this->bankCategoryService    = $bankCategoryService;
   $this->creditCardService      = $creditCardService;
+  $this->supplierService        = $supplierService;
  }
 
  public function index(Request $request, $id)
@@ -128,9 +132,10 @@ class CreditCardTransactionController extends Controller
   $categories        = $this->bankCategoryService->getAll($mainCategoryId);
   $categoryTransform = new BankCategoryTransformer();
   $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
+  $suppliers         = $this->supplierService->getAll()->get();
 
   $action = "/credit-card/{$id}/create";
-  return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions', 'id'));
+  return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions', 'id', 'suppliers'));
  }
 
  public function update(Request $request, $credit_card_id, $id)
@@ -158,9 +163,10 @@ class CreditCardTransactionController extends Controller
   $categories        = $this->bankCategoryService->getAll($mainCategoryId);
   $categoryTransform = new BankCategoryTransformer();
   $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
+  $suppliers         = $this->supplierService->getAll()->get();
 
   $model = (object) fractal($model, new BankTransactionTransformer)->toArray()['data'];
-  return view('credit-card-transaction/_form_update', compact('model', 'creditCards', 'action', 'title', 'categoryOptions'));
+  return view('credit-card-transaction/_form_update', compact('model', 'creditCards', 'action', 'title', 'categoryOptions', 'suppliers'));
  }
 
  public function delete(Request $request, $credit_card_id, $id)

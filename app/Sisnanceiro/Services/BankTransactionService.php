@@ -73,7 +73,7 @@ class BankTransactionService extends Service
 
   $ret = array_merge($dataTransaction, $dataDetail, [
    'description'    => nl2br($dataTransaction['description']),
-   'note'           => nl2br($dataTransaction['note']),
+   'note'           => isset($dataTransaction['note']) ? nl2br($dataTransaction['note']) : null,
    'total_invoices' => $totalInvoices,
    'total_value'    => $totalValue,
    'net_value'      => $netValue,

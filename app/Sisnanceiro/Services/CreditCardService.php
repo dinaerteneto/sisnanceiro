@@ -65,7 +65,6 @@ class CreditCardService extends Service
   $ret = [
    'BankInvoiceTransaction' => array_merge($dataTransaction, [
     'description'    => nl2br($dataTransaction['description']),
-    'note'           => nl2br($dataTransaction['note']),
     'total_invoices' => $totalInvoices,
     'total_value'    => $totalValue,
     'type_cycle'     => isset($dataTransaction['type_cycle']) ? $dataTransaction['type_cycle'] : 0,
@@ -119,7 +118,7 @@ GROUP BY bid.due_date
       'is_credit_card_invoice' => true,
      ],
      'BankInvoiceDetail'      => [
-      'bank_category_id' => BankCategory::CATEGORY_CREDIT_CARD_BALANCE,
+      'bank_category_id' => BankCategory::CATEGORY_CREDIT_INVOICE,
       'bank_account_id'  => $invoice->bank_account_id,
       'net_value'        => $invoice->net_value,
       'parcel_number'    => 1,
@@ -234,7 +233,7 @@ GROUP BY bid.due_date
    $dateCarbon   = Carbon::createFromFormat('d/m/Y', $inputDueDate);
    $dueDate      = $dateCarbon->format('Y-m-d');
    $netValue     = FloatConversor::convert($input['BankInvoiceDetail']['net_value']);
-   $totalInvoice = $input['BankInvoiceTransaction']['total_invoice'];
+   $totalInvoice = isset($input['BankInvoiceTransaction']['total_invoice']) ? $input['BankInvoiceTransaction']['total_invoice'] : 1;
    $netValue     = ($netValue / $totalInvoice);
 
    $input['BankInvoiceDetail']['bank_account_id'] = $creditCard->bank_account_id;
@@ -272,6 +271,7 @@ GROUP BY bid.due_date
    \DB::commit();
    return true;
   } catch (\Exception $e) {
+   dd($e);
    \DB::rollBack();
    throw new \Exception('Erro na tentativa de incluir os lançamento.');
    return false;
