@@ -101,7 +101,7 @@
                         <h2>Contas a pagar por categorias</h2>
                     </div>
                 </header>
-                <div class="widget-body" style="position: relative; height:50vh">
+                <div class="widget-body" style="position: relative; height:40vh">
                     <canvas id="chart-category-to-receive"></canvas>
                 </div>
             </div>
@@ -115,8 +115,108 @@
                         <h2>Contas a pagar por categoria de orçamento</h2>
                     </div>
                 </header>
-                <div class="widget-body" style="position: relative; height:50vh">
+                <div class="widget-body" style="position: relative; height:40vh">
                     <canvas id="chart-category-to-budget"></canvas>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="row">
+        <article class="col-sm-6 sortable-grid">
+            <div class="jarviswidget jarviswidget-color-blue-dark no-padding">
+                <header>
+                    <div class="widget-header">
+                        <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                        <h2> Calendário </h2>
+                    </div>
+                    <div class="widget-toolbar">
+                        <div class="btn-group">
+                            <button class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown">
+                                Exibir
+                            </button>
+                            <ul class="dropdown-menu js-status-update dropdown-menu-right">
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" id="mt">Mês</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" id="ag">Semana</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" id="td">Hoje</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- widget div-->
+                <div>
+                    <div class="widget-body no-padding">
+                        <!-- content goes here -->
+                        <div class="widget-body-toolbar">
+                            <div id="calendar-buttons">
+                                <div class="btn-group pull-right">
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="calendar"></div>
+                        <!-- end content -->
+                    </div>
+                <!-- end widget div -->
+                </div>
+            <!-- end widget -->
+        </article>
+
+        <article class="col-sm-6 sortable-grid ui-sortable">
+            <div class="jarviswidget jarviswidget-color-blue-dark no-padding">
+                <header role="heading" class="">
+                    <div class="widget-header">
+                        <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                        <h2>Cartões de crédito</h2>
+                    </div>
+                    <ul id="myTab" class="nav nav-tabs ml-auto in">
+                        <li class="nav-item">
+                            <a href="#s1" data-toggle="tab" aria-expanded="false" class="nav-link active">Faturas abertas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#s2" data-toggle="tab" aria-expanded="false" class="nav-link">Faturas fechadas</a>
+                        </li>
+                    </ul>
+                </header>
+                <div role="content">
+                    <div id="myTabContent" class="tab-content padding-10">
+                        <div class="tab-pane active" id="s1">
+                            <div class="">
+                                <h4>Cartão porto seguro</h4>
+                                Vence em 3 dias <br />
+                                R$ 3.207,61
+                                <hr />
+                                <h4>Cartão nubank</h4>
+                                Vence em 3 dias <br />
+                                R$ 3.207,61
+                                <hr />
+
+                                <h5>TOTAL <span class="pull-right"> R$ 6415,22</span></h5>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="s2">
+                            <div class="">
+                                <h4>Cartão porto seguro</h4>
+                                fecha em 12 de outubro <br />
+                                R$ 412,95
+                                <hr />
+                                <h4>Cartão nubank</h4>
+                                fecha em 12 de outubro <br />
+                                R$ 412,95
+                                <hr />
+                                <h5>TOTAL <span class="pull-right"> R$ 825,90</span></h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </article>
@@ -136,4 +236,5 @@
         $jsonParentValue
         )
     )
+<script type="text/javascript" src="{{ asset('assets/js/custom/Dashboard.js') }}"></script>
 @endsection

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Helpers\Mask;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Services\CompanyService;
 use Sisnanceiro\Services\DashboardService;
+use Sisnanceiro\Transformers\DashboardCalendarTransformer;
 
 class HomeController extends Controller
 {
@@ -67,5 +69,17 @@ class HomeController extends Controller
   }
 
   return view('home', compact('aBallance', 'jsonLabel', 'jsonValue', 'jsonParentLabel', 'jsonParentValue'));
+ }
+
+ public function calendar(Request $request)
+ {
+  $start = $request->get('start');
+  $end   = $request->get('end');
+
+  if ($calendars = $this->dashboardService->calendar($start, $end)) {
+   $calendarTransformers = fractal($calendars, new DashboardCalendarTransformer());
+   return Response::json($calendarTransformers);
+  }
+  return Response::json([]);
  }
 }

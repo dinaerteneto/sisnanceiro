@@ -76,4 +76,15 @@ class DashboardService extends Service
   return $this->bankInvoiceDetailRepository->totalByParentCategory($mainParentCategoryIds, $startDate, $endDate);
  }
 
+ /**
+  * combine initial date and final date to find invoices
+  * @param string $start inicial date to find invoices
+  * @param string $end final date to find invoices
+  * @return Collection
+  */
+ public function calendar($start, $end)
+ {
+  return $this->bankInvoiceDetailRepository->getByBetweenDueDate($start, $end);
+ }
+
 }

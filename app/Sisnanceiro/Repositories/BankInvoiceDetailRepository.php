@@ -139,13 +139,24 @@ class BankInvoiceDetailRepository extends Repository
        AND bid.company_id = {$companyId}
        AND bc.main_parent_category_id in ({$mainParentCategoryIds})
        AND bid.bank_category_id NOT IN ({$bankCategoryCreditInvoice})
-     GROUP BY bc2.id, bc2.name
+     GROUP BY name
      ORDER BY bc2.name;
     ";
 
   $query = \DB::select($sql);
 
   return $query;
+ }
+
+ public function getByBetweenDueDate($start, $end)
+ {
+  $dateBetween = [$start, $end];
+  return $this->model
+   ->whereBetween('due_date', $dateBetween)
+   ->orWhereBetween('competence_date', $dateBetween)
+   ->orWhereBetween('payment_date', $dateBetween)
+   ->orWhereBetween('receive_date', $dateBetween)
+   ->get();
  }
 
 }

@@ -236,4 +236,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
   Route::post('/reopen/{id}', 'CreditCardTransactionController@reopen');
  });
 
+ Route::group(['prefix' => 'dashboard'], function () {
+  Route::get('/calendar', 'HomeController@calendar');
+ });
+
 });

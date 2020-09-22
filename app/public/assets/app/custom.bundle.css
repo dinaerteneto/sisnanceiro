@@ -77,3 +77,11 @@
 #dt_basic {
     width: 100%;
 }
+
+.bg-color-red {
+    background-color: #a90329!important;
+}
+
+.bg-color-blue {
+    background-color: #57889c!important;
+}
