@@ -98,8 +98,7 @@ WHERE bid.credit_card_id IS NOT NULL
   AND bid.due_date <= NOW()
 
 GROUP BY bid.due_date
-        , bid.credit_card_id
-
+    , bid.credit_card_id
     ";
 
   $query = \DB::select($sql);

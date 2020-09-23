@@ -21,6 +21,13 @@
         </li>
         -->
 
+        <li class="{{ Request::is('home') ? 'active' : '' }}">
+            <a href="{{ url('/home') }}" title="Dashboard">
+                <i class="fa fa-lg fa-fw fa-home"></i>
+                <span class="menu-item-parent">Dashboard</span>
+            </a>
+        </li>
+
         <li class="{{ Request::is('customer') || Request::is('user') || Request::is('supplier') ? 'active' : '' }}">
             <a class="" href="javascript:void(0)" title="Cadastros">
                 <span class="fa fa-lg fa-fw fa-list"></span>

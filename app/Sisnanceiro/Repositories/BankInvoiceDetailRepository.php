@@ -153,9 +153,13 @@ class BankInvoiceDetailRepository extends Repository
   $dateBetween = [$start, $end];
   return $this->model
    ->whereBetween('due_date', $dateBetween)
-   ->orWhereBetween('competence_date', $dateBetween)
-   ->orWhereBetween('payment_date', $dateBetween)
-   ->orWhereBetween('receive_date', $dateBetween)
+  /*
+  ->orWhereBetween('competence_date', $dateBetween)
+  ->orWhereBetween('payment_date', $dateBetween)
+  ->orWhereBetween('receive_date', $dateBetween)
+   */
+   ->whereNull('credit_card_id')
+
    ->get();
  }
 

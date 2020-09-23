@@ -175,9 +175,10 @@
             <div class="jarviswidget jarviswidget-color-blue-dark no-padding">
                 <header role="heading" class="">
                     <div class="widget-header">
-                        <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                        <span class="widget-icon"> <i class="fa fa-credit-card"></i> </span>
                         <h2>Cartões de crédito</h2>
                     </div>
+                    <!--
                     <ul id="myTab" class="nav nav-tabs ml-auto in">
                         <li class="nav-item">
                             <a href="#s1" data-toggle="tab" aria-expanded="false" class="nav-link active">Faturas abertas</a>
@@ -186,36 +187,26 @@
                             <a href="#s2" data-toggle="tab" aria-expanded="false" class="nav-link">Faturas fechadas</a>
                         </li>
                     </ul>
+                    -->
                 </header>
-                <div role="content">
+                <div role="content" style="min-height: 648px">
                     <div id="myTabContent" class="tab-content padding-10">
                         <div class="tab-pane active" id="s1">
-                            <div class="">
-                                <h4>Cartão porto seguro</h4>
-                                Vence em 3 dias <br />
-                                R$ 3.207,61
-                                <hr />
-                                <h4>Cartão nubank</h4>
-                                Vence em 3 dias <br />
-                                R$ 3.207,61
-                                <hr />
 
-                                <h5>TOTAL <span class="pull-right"> R$ 6415,22</span></h5>
+                             <div class="">
+                                @if($creditCardData)
+                                    @foreach($creditCardData as $creditCard)
+                                        <h4><b>{{ $creditCard['brand_name'] }}</b> {{ $creditCard['name'] }}</h4>
+                                        Vence em {{ $creditCard['closesIn'] }} <br />
+                                        R$ {{ $creditCard['maskPartialValue'] }}
+                                        <hr />
+                                    @endforeach
+                                @endif
+                                <h5>TOTAL <span class="pull-right"> R$ {{ $creditCardTotal }}</span></h5>
                             </div>
                         </div>
-                        <div class="tab-pane" id="s2">
-                            <div class="">
-                                <h4>Cartão porto seguro</h4>
-                                fecha em 12 de outubro <br />
-                                R$ 412,95
-                                <hr />
-                                <h4>Cartão nubank</h4>
-                                fecha em 12 de outubro <br />
-                                R$ 412,95
-                                <hr />
-                                <h5>TOTAL <span class="pull-right"> R$ 825,90</span></h5>
-                            </div>
-                        </div>
+
+
                     </div>
                 </div>
             </div>

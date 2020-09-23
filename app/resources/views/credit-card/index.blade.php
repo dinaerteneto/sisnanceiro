@@ -86,7 +86,7 @@
 
                                                 <div class="row">
                                                     <div class="col-sm-6">Valor parcial</div>
-                                                    <div class="col-sm-6 text-right">R$ {{ $item['partialValue'] }}</div>
+                                                    <div class="col-sm-6 text-right">R$ {{ $item['maskPartialValue'] }}</div>
                                                 </div>
 
                                                 <div class="row mb-10">
@@ -96,9 +96,9 @@
 
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        R$ {{ $item['partialValue'] }} de R$ {{ $item['limit'] }}
-                                                        <div class="progress right" rel="tooltip" data-original-title="{{ $item['totalPercent'] }}%" data-placement="top">
-                                                            <div class="progress-bar bg-color-teal" data-transitiongoal="{{ $item['totalPercent'] }}" style="width: {{ $item['totalPercent'] }}%;" aria-valuenow="{{ $item['totalPercent'] }}">{{ $item['totalPercent'] }}%</div>
+                                                        R$ {{ $item['maskPartialValue'] }} de R$ {{ $item['limit'] }}
+                                                        <div class="progress right" rel="tooltip" data-original-title="{{ $item['maskTotalPercent'] }}%" data-placement="top">
+                                                            <div class="progress-bar bg-color-teal" data-transitiongoal="{{ $item['maskTotalPercent'] }}" style="width: {{ $item['totalPercent'] < 10 ? 10 : ceil($item['totalPercent']) }}%;" aria-valuenow="{{ $item['maskTotalPercent'] }}">{{ $item['maskTotalPercent'] }}%</div>
                                                         </div>
                                                         Limite Disponível R$ {{ $item['availableLimit'] }}
                                                     </div>

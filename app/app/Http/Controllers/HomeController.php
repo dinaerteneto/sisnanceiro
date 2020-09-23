@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Helpers\Mask;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Services\CompanyService;
+use Sisnanceiro\Services\CreditCardService;
 use Sisnanceiro\Services\DashboardService;
+use Sisnanceiro\Transformers\CreditCardTransformer;
 use Sisnanceiro\Transformers\DashboardCalendarTransformer;
 
 class HomeController extends Controller
@@ -18,10 +20,14 @@ class HomeController extends Controller
   *
   * @return void
   */
- public function __construct(CompanyService $companyService, DashboardService $dashboardService)
- {
-  $this->companyService   = $companyService;
-  $this->dashboardService = $dashboardService;
+ public function __construct(
+  CreditCardService $creditCardService,
+  CompanyService $companyService,
+  DashboardService $dashboardService
+ ) {
+  $this->companyService    = $companyService;
+  $this->dashboardService  = $dashboardService;
+  $this->creditCardService = $creditCardService;
   // $this->middleware('auth');
  }
 
@@ -68,7 +74,28 @@ class HomeController extends Controller
    $jsonParentValue = json_encode(array_map(function ($data) {return $data->total * -1;}, $aTotalByParentCategory));
   }
 
-  return view('home', compact('aBallance', 'jsonLabel', 'jsonValue', 'jsonParentLabel', 'jsonParentValue'));
+  $creditCardRecords = $this->creditCardService->all();
+  $creditCardData    = fractal($creditCardRecords, new CreditCardTransformer)->toArray()['data'];
+
+  $creditCardTotal = Mask::currency(
+   array_sum(
+    array_map(function ($item) {
+     return $item['partialValue'];
+    },
+     $creditCardData
+    )
+   )
+  );
+
+  return view('home', compact(
+   'aBallance',
+   'jsonLabel',
+   'jsonValue',
+   'jsonParentLabel',
+   'jsonParentValue',
+   'creditCardData',
+   'creditCardTotal'
+  ));
  }
 
  public function calendar(Request $request)

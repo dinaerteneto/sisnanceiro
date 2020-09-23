@@ -13,7 +13,7 @@ class DashboardCalendarTransformer extends TransformerAbstract
  {
   $carbonDueDate = Carbon::createFromFormat('Y-m-d', $invoice->due_date);
   $netValue      = Mask::currency($invoice->net_value < 0 ? $invoice->net_value * -1 : $invoice->net_value);
-  $bankCategory  = $invoice->category->name;
+  $bankCategory  = isset($invoice->category) ? $invoice->category->name : null;
   $transaction   = $invoice->transaction->description;
   $description   = "{$bankCategory} <br /> {$transaction}";
 
