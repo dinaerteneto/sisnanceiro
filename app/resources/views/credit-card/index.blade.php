@@ -111,6 +111,7 @@
                                                         class="btn btn-danger delete-record">Excluir cartão</a>
                                                     <a href="/credit-card/{{ $item['id'] }}" class="btn btn-success">Ver despesas</a>
                                                     <a href="/credit-card/{{ $item['id'] }}/create" class="open-modal btn btn-primary" target="#remoteModal">Adicionar despesa</a>
+                                                    <a href="/credit-card/update/{{ $item['id'] }}" class="open-modal btn btn-primary" target="#remoteModal">Alterar</a>
                                                 </div>
 
                                             </div>

@@ -28,17 +28,24 @@ class CreditCardTransformer extends TransformerAbstract
   $partialValue   = $total * -1;
   $totalPercent   = ($partialValue / $creditCard->limit) * 100;
 
+  $brandName = isset($creditCard->creditCardBrand) ? $creditCard->creditCardBrand[0]->name : null;
+
   return [
-   'id'               => $creditCard->id,
-   'brand_name'       => $creditCard->creditCardBrand->name,
-   'name'             => $creditCard->name,
-   'limit'            => Mask::currency($creditCard->limit),
-   'closesIn'         => $closesIn->format('d/m/Y'),
-   'maskPartialValue' => Mask::currency($partialValue),
-   'partialValue'     => $partialValue,
-   'maskTotalPercent' => Mask::currency($totalPercent),
-   'totalPercent'     => $totalPercent,
-   'availableLimit'   => Mask::currency($availableLimit),
+   'id'                   => $creditCard->id,
+   'brand_name'           => $brandName,
+   'closesIn'             => $closesIn->format('d/m/Y'),
+   'maskPartialValue'     => Mask::currency($partialValue),
+   'partialValue'         => $partialValue,
+   'maskTotalPercent'     => Mask::currency($totalPercent),
+   'totalPercent'         => $totalPercent,
+   'availableLimit'       => Mask::currency($availableLimit),
+
+   'credit_card_brand_id' => $creditCard->credit_card_brand_id,
+   'bank_account_id'      => $creditCard->bank_account_id,
+   'name'                 => $creditCard->name,
+   'limit'                => Mask::currency($creditCard->limit),
+   'payment_day'          => Mask::currency($creditCard->payment_day),
+   'closing_day'          => Mask::currency($creditCard->closing_day),
   ];
  }
 }
