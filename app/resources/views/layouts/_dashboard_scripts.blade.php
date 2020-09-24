@@ -49,7 +49,19 @@ var ctx = document.getElementById('chart-category-to-receive').getContext('2d');
             }
        },
        tooltips: {
-        enabled: true
+        enabled: true,
+        callbacks: {
+            label: function(tooltipItem, data) {
+                var dataset = data.datasets[tooltipItem.datasetIndex];
+                var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                    return previousValue + currentValue;
+                });
+                var currentValue = dataset.data[tooltipItem.index];
+                var label = data.labels[tooltipItem.index];
+                var precentage = Math.floor(((currentValue/total) * 100)+0.5);
+                return `${label} - R$ ${currentValue} - ${precentage}%`;
+            }
+        }
        }
        /*
        plugins: {
@@ -118,7 +130,19 @@ var ctx = document.getElementById('chart-category-to-budget').getContext('2d');
             }
        },
        tooltips: {
-        enabled: true
+        enabled: true,
+        callbacks: {
+            label: function(tooltipItem, data) {
+                var dataset = data.datasets[tooltipItem.datasetIndex];
+                var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                    return previousValue + currentValue;
+                });
+                var currentValue = dataset.data[tooltipItem.index];
+                var label = data.labels[tooltipItem.index];
+                var precentage = Math.floor(((currentValue/total) * 100)+0.5);
+                return `${label} - R$ ${currentValue} - ${precentage}%`;
+            }
+        }
        }
        /*
        plugins: {
