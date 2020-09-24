@@ -196,9 +196,12 @@
                              <div class="">
                                 @if($creditCardData)
                                     @foreach($creditCardData as $creditCard)
-                                        <h4><b>{{ $creditCard['brand_name'] }}</b> {{ $creditCard['name'] }}</h4>
-                                        Vence em {{ $creditCard['closesIn'] }} <br />
-                                        R$ {{ $creditCard['maskPartialValue'] }}
+                                        <div>
+                                            <h4><b>{{ $creditCard['brand_name'] }}</b> {{ $creditCard['name'] }}</h4>
+                                            Vence em {{ $creditCard['closesIn'] }} <br />
+                                            R$ {{ $creditCard['maskPartialValue'] }} <br />
+                                            <a href="/credit-card/{{$creditCard['id']}}" class="font-xs">Visualizar</a>
+                                        </div>
                                         <hr />
                                     @endforeach
                                 @endif
