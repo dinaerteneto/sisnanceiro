@@ -198,15 +198,16 @@ class BankTransactionController extends Controller
    } else {
     $request->session()->flash('success', ['message' => 'Pagamento parcial efetuado com sucesso.']);
    }
-   return redirect('/bank-transaction');
+   return redirect($request->urlReturn);
   }
 
   $model        = $this->bankTransactionService->findByInvoice($id);
   $creditCard   = $model->transaction->creditCard;
   $bankAccounts = BankAccount::all();
   $dueDate      = Carbon::createFromFormat('Y-m-d', $model->due_date)->format('d/m/Y');
+  $urlReturn    = str_replace('||', '&', $request->get('url-return'));
 
-  return view('bank-transaction/_form_partial_pay', compact('model', 'creditCard', 'bankAccounts', 'dueDate'));
+  return view('bank-transaction/_form_partial_pay', compact('model', 'creditCard', 'bankAccounts', 'dueDate', 'urlReturn'));
  }
 
 }

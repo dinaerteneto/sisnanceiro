@@ -128,11 +128,12 @@ class CreditCardTransactionController extends Controller
   $model->competence_date = date('d/m/Y');
   $creditCards            = CreditCard::all();
 
-  $mainCategoryId    = BankCategory::CATEGORY_TO_PAY;
-  $categories        = $this->bankCategoryService->getAll($mainCategoryId);
-  $categoryTransform = new BankCategoryTransformer();
-  $categoryOptions   = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
-  $suppliers         = $this->supplierService->getAll()->get();
+  $mainCategoryId        = BankCategory::CATEGORY_TO_PAY;
+  $categories            = $this->bankCategoryService->getAll($mainCategoryId);
+  $categoryTransform     = new BankCategoryTransformer();
+  $categoryOptions       = json_encode($categoryTransform->buildHtmlDiv($categories->toArray(), $mainCategoryId));
+  $suppliers             = $this->supplierService->getAll()->get();
+  $model->credit_card_id = $id;
 
   $action = "/credit-card/{$id}/create";
   return view('credit-card-transaction/_form', compact('model', 'creditCards', 'action', 'title', 'categoryOptions', 'id', 'suppliers'));

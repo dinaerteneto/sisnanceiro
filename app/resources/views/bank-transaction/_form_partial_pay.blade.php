@@ -2,7 +2,7 @@
     <div class="modal-content">
         <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="/bank-transaction/partial-pay/{{ $model->id }}" onsubmit="return false">
             @csrf
-
+            <input type="hidden" name="urlReturn" value="{{ $urlReturn }}" />
                <div class="modal-header">
                 <h4 class="modal-title">Pagamento parcial</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">

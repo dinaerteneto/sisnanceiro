@@ -264,13 +264,17 @@
                         if(row.is_credit_card_invoice != null && row.is_credit_card_invoice != 0) {
                             html += `<a href="/bank-transaction/partial-pay/${row.id}" rel="tooltip" data-placement="top" data-original-title="Pagar parcialmente" class="btn btn-xs btn-primary open-modal" target="#remoteModal"><i class="fa fa-check"></i></a> `;
                         }
-                        html += `<a href="/bank-transaction/set-paid/${row.id}" rel="tooltip" data-placement="top" data-original-title="Pagar" class="btn btn-xs btn-success set-paid"><i class="fa fa-check"></i></a> `;
+                        var label = 'Pagar';
+                        if(row.main_category_id == 3) {
+                            label = 'Receber';
+                        }
+                        html += `<a href="/bank-transaction/set-paid/${row.id}" rel="tooltip" data-placement="top" data-original-title="${label}" class="btn btn-xs btn-success set-paid"><i class="fa fa-check"></i></a> `;
                     }
                     if(row.bank_category_id == 6 || row.bank_category_id == 7) {
                         html += `<a href="/bank-transaction/transfer/update/${row.bank_invoice_transaction_id}" rel="tooltip" data-placement="top" data-original-title="Alterar a transferência" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> `;
                         html += `<a href="/bank-transaction/transfer/delete/${row.id}" rel="tooltip" data-placement="top" data-original-title="Excluir a transferência" class="btn btn-xs btn-danger delete-record" data-title="Excluir esta transferência?" data-ask="Tem certeza que deseja excluir esta transferência?"><i class="fa fa-times"></i></a> `;
                     } else {
-                        html += `<a href="{!! $urlMain !!}/update/${row.id}" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> `;
+                        html += `<a href="/bank-transaction/${row.url_main}/update/${row.id}" rel="tooltip" data-placement="top" data-original-title="Alterar lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> `;
                         html += `<a href="/bank-transaction/delete/${row.id}" rel="tooltip" data-placement="top" data-original-title="Excluir lançamento" class="btn btn-xs btn-danger open-modal" target="#remoteModal" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> `;
                     }
                 }

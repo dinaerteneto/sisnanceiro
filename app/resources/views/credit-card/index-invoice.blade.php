@@ -93,7 +93,7 @@
                         > Pagar esta fatura</a>
 
                         <a
-                            href="/bank-transaction/partial-pay/{{$invoice->id}}"
+                            href="/bank-transaction/partial-pay/{{$invoice->id}}?url-return=/credit-card/{{$model->id}}?start_date={{ $startDate }}||end_date={{ $endDate }}"
                             class="btn btn-sm btn-warning open-modal"
                             target = "#remoteModal"
                             rel = "tooltip"
@@ -184,7 +184,7 @@
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>
-                                            <th width="6%">Dt compra</th>
+                                            <th width="8%">Dt compra</th>
                                             <th>Categoria</th>
                                             <th>Cartão</th>
                                             <th>Fornecedor</th>

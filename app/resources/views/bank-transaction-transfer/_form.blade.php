@@ -20,7 +20,7 @@
                             <input type="text" name="BankInvoiceDetail[net_value]" id="BankInvoiceDetail_net_value" class="form-control mask-currency" value="{{ $model->total_value }}" />
                         </div>
                         <div class="col-sm-6">
-                            <label class="control-label" for="BankInvoiceDetail_due_date">Data de vencto</label>
+                            <label class="control-label" for="BankInvoiceDetail_due_date">Data da transferência</label>
                             <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $dueDate }}" />
                         </div>
                     </div>

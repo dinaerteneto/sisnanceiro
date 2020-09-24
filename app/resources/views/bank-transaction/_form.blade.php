@@ -75,13 +75,6 @@
                     </div>
 
                     <div class="row mb-10">
-                        <div class="col-sm-12">
-                            <label class="control-label" for="BankInvoiceTransaction_note">Observação</label>
-                            <textarea name="BankInvoiceTransaction[note]" id="BankInvoiceTransaction_note" class="form-control">{{$model->note}}</textarea>
-                        </div>
-                    </div>
-
-                    <div class="row mb-10">
                         <div class="col-sm-12 text-center font-italic">
                             <a href="javascript:void(0)" id="a-more-info">Mais informações</a>
                         </div>

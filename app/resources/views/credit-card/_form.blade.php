@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-credit-card-form" class="bank-transaction-form" method="post" action="{{ $action }}">
+        <form id="credit-card-form" class="credit-card-form" method="post" action="{{ $action }}">
             @csrf
             <div class="modal-header">
                 <h4 class="modal-title">{{ $title }}</h4>
@@ -83,26 +83,9 @@
 
 @include('layouts/_partial_scripts')
 <script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/custom/CreditCard.js') }}"></script>
 <script type="text/javascript">
 $('document').ready(function(){
-
-    $('#a-more-info').on('click', function(e) {
-        e.preventDefault();
-        if ($('div#more-info').hasClass('d-none')) {
-            $('div#more-info').removeClass('d-none');
-            $('#a-more-info').html('Menos informações');
-
-            $('#BankInvoiceTransaction_total_invoice').val(1);
-            $('#BankInvoiceTransaction_total_invoice').prop('disabled', true);
-            $('#BankInvoiceTransaction_type_cycle').prop('disabled', true);
-
-            $('#BankInvoiceTransaction_repeat').prop('checked', false);
-            $('#BankInvoiceTransaction_fixed').prop('checked', false);
-        } else {
-            $('div#more-info').addClass('d-none');
-            $('#a-more-info').html('Mais informações');
-        }
-    });
 
     $('#BankInvoiceTransaction_fixed').on('click', function() {
         if($(this).is(':checked')) {

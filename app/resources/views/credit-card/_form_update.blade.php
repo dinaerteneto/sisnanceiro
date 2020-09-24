@@ -83,6 +83,7 @@
 
 @include('layouts/_partial_scripts')
 <script type="text/javascript" src="{{ asset('assets/js/custom/BankTransaction.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/custom/CreditCard.js') }}"></script>
 <script type="text/javascript">
 $('document').ready(function(){
 

@@ -102,8 +102,6 @@ class BankTransactionService extends Service
   }
   if (isset($data['payment_date']) && !empty($data['payment_date'])) {
    $paymentDate = Carbon::createFromFormat('d/m/Y', $data['payment_date']);
-  } else {
-   $paymentDate = $dueDate;
   }
   if (isset($data['competence_date']) && !empty($data['competence_date'])) {
    $competenceDate = Carbon::createFromFormat('d/m/Y', $data['competence_date']);
@@ -118,8 +116,9 @@ class BankTransactionService extends Service
   }
 
   $dueDate        = $dueDate->format('Y-m-d');
-  $paymentDate    = $paymentDate->format('Y-m-d');
+  $paymentDate    = $paymentDate ? $paymentDate->format('Y-m-d') : null;
   $competenceDate = $competenceDate->format('Y-m-d');
+  $status         = $paymentDate ? BankInvoiceDetail::STATUS_PAID : BankInvoiceDetail::STATUS_ACTIVE;
 
   $ret = array_merge($data, [
    'bank_invoice_transaction_id' => $transactionId,
@@ -128,6 +127,7 @@ class BankTransactionService extends Service
    'payment_date'                => $paymentDate,
    'net_value'                   => $netValue,
    'gross_value'                 => $netValue,
+   'status'                      => $status,
   ]);
 
   if (empty($dueDate)) {
@@ -136,7 +136,6 @@ class BankTransactionService extends Service
   if (empty($netValue)) {
    $ret['net_value'] = 0;
   }
-
   return $ret;
  }
 

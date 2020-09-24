@@ -58,6 +58,8 @@ class BankTransactionTransformer extends TransformerAbstract
 
   $transaction = isset($bankInvoiceDetail->transaction) ? $bankInvoiceDetail->transaction : $bankInvoiceDetail;
 
+  $urlMain = BankCategory::CATEGORY_TO_PAY == $bankInvoiceDetail->main_parent_category_id ? 'pay' : 'receive';
+
   return [
    'id'                          => $bankInvoiceDetail->id,
    'bank_invoice_transaction_id' => $bankInvoiceDetail->bank_invoice_transaction_id,
@@ -84,6 +86,7 @@ class BankTransactionTransformer extends TransformerAbstract
    'net_value_original'          => $bankInvoiceDetail->net_value,
    'note'                        => $transaction->note,
    'name'                        => $name,
+   'url_main'                    => $urlMain,
   ];
  }
 }

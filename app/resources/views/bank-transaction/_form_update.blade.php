@@ -1,6 +1,5 @@
 <?php
-use Sisnanceiro\Models\BankCategory;
-?>
+;?>
 
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -27,7 +26,7 @@ use Sisnanceiro\Models\BankCategory;
                             <label class="control-label" for="BankInvoiceDetail_due_date">Data de vencto</label>
                             <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" data-original-value="{{ $model->due_date }}" class="form-control datepicker" value="{{ $model->due_date }}" />
                         </div>
-                        @if($mainCategory['main_category_id'] == BankCategory::CATEGORY_TO_PAY)
+                        @if($mainCategory['main_category_id'] == \Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY)
                         <div class="col-sm-6">
                             <label class="control-label" for="BankInvoiceDetail_supplier_id">Fornecedor</label>
                             <select name="BankInvoiceDetail[supplier_id]" id="BankInvoiceDetail_supplier_id" class="select2">
@@ -73,13 +72,6 @@ use Sisnanceiro\Models\BankCategory;
                                     @endforeach
                                 @endif
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="row mb-10">
-                        <div class="col-sm-12">
-                            <label class="control-label" for="BankInvoiceTransaction_note">Observação</label>
-                            <textarea name="BankInvoiceTransaction[note]" id="BankInvoiceTransaction_note" class="form-control">{{$model->note}}</textarea>
                         </div>
                     </div>
 
