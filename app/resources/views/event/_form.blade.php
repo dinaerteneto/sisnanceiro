@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg" role="document" id="<?= time() ?>">
+<div class="modal-dialog modal-lg" role="document" id="<?=time();?>">
 
     <div class="modal-content">
 
@@ -39,7 +39,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input class="form-control datepicker" id="Event_start_date" autocomplete="off" value="{{ $model->start_date }}" type="text" placeholder="Data inicial" name="Event[start_date]">
+                                            <input class="form-control datepicker mask-date" id="Event_start_date" autocomplete="off" value="{{ $model->start_date }}" type="text" placeholder="Data inicial" name="Event[start_date]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar"></i></span></span>
                                         </div>
                                     </div>
@@ -61,7 +61,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input class="form-control datepicker" id="Event_end_date" autocomplete="off" value="{{ $model->end_date }}" type="text" placeholder="Data do fim" name="Event[end_date]">
+                                            <input class="form-control datepicker mask-date" id="Event_end_date" autocomplete="off" value="{{ $model->end_date }}" type="text" placeholder="Data do fim" name="Event[end_date]">
                                             <span class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar"></i></span></span>
                                         </div>
                                     </div>

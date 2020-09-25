@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="control-label" for="BankInvoiceDetail_payment_date">Data do pagto</label>
-                            <input type="text" name="BankInvoiceDetail[payment_date]" id="BankInvoiceDetail_payment_date" class="form-control datepicker"  />
+                            <input type="text" name="BankInvoiceDetail[payment_date]" id="BankInvoiceDetail_payment_date" class="form-control datepicker mask-date"  />
                         </div>
                     </div>
 

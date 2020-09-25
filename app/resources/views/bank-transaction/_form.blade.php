@@ -21,13 +21,14 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="control-label" for="BankInvoiceDetail_due_date">Data de vencto</label>
-                            <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $model->due_date }}" />
+                            <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker mask-date" value="{{ $model->due_date }}" />
                         </div>
 
                         @if($mainCategory['main_category_id'] == Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY)
                         <div class="col-sm-6">
                             <label class="control-label" for="BankInvoiceDetail_supplier_id">Fornecedor</label>
                             <select name="BankInvoiceDetail[supplier_id]" id="BankInvoiceDetail_supplier_id" class="select2">
+                                <option value="">Selecione</option>
                                 @if($suppliers)
                                     @foreach($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}" {{ $model->supplier_id == $supplier->id ? 'selected' : null }}>{{ $supplier->firstname }}</option>
@@ -39,6 +40,7 @@
                         <div class="col-sm-6">
                             <label class="control-label" for="BankInvoiceDetail_customer_id">Cliente</label>
                             <select name="BankInvoiceDetail[customer_id]" id="BankInvoiceDetail_customer_id" class="select2">
+                                <option value="">Selecione</option>
                                 @if($customers)
                                     @foreach($customers as $customer)
                                         <option value="{{ $customer->id }}" {{ $model->customer_id == $customer->id ? 'selected' : null }}>{{ $customer->firstname }}</option>
@@ -74,13 +76,8 @@
                         </div>
                     </div>
 
-                    <div class="row mb-10">
-                        <div class="col-sm-12 text-center font-italic">
-                            <a href="javascript:void(0)" id="a-more-info">Mais informações</a>
-                        </div>
-                    </div>
 
-                    <div id="more-info" class="d-none">
+                    <div>
 
                         <!--
                         <div class="row mb-10">
@@ -94,7 +91,7 @@
                         </div>
                         -->
 
-                        <div class="row mb-10">
+                        <div class="row mb-10" style="margin-top: 20px">
                             <div class="col-sm-4" style="margin-top: 8px">
                                 <label class="vcheck m-0">
                                     <input type="checkbox" class="checkbox style-0" name="BankInvoiceTransaction[repeat]" id="BankInvoiceTransaction_repeat" value="1" {{ !empty($model->repeat) ? 'checked' : null }} >
@@ -122,7 +119,7 @@
                                 </label>
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" name="BankInvoiceDetail[payment_date]" id="BankInvoiceDetail_payment_date" class="form-control datepicker" value="" disabled />
+                                <input type="text" name="BankInvoiceDetail[payment_date]" id="BankInvoiceDetail_payment_date" class="form-control datepicker mask-date" value="" disabled />
                             </div>
                         </div>
 

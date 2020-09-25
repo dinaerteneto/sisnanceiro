@@ -101,11 +101,12 @@
                                 </div>
                                 <div class="col-12 col-lg-5">
                                     <div class="well no-padding">
-                                        <form method="POST" action="/cadastrar" aria-label="{{ __('Register') }}" class="smart-form client-form" novalidate="novalidate">
+                                        <form method="POST" action="/cadastrar" aria-label="{{ __('Register') }}" class="smart-form client-form" novalidate="novalidate" id="form-register">
                                             @csrf
                                             <header>Cadastre-se</header>
 
                                             <fieldset>
+                                                <!--
                                                 <section class="mb-3">
                                                     <label class="input">
                                                         <i class="icon-append fa fa-user"></i>
@@ -118,6 +119,21 @@
                                                         @endif
                                                     </label>
                                                 </section>
+                                                -->
+                                                <section class="mb-3">
+                                                    <div class="row">
+                                                        <section class="col-md-6">
+                                                            <label class="input">
+                                                                <input type="text" name="Register[firstname]" id="Register_firstname" placeholder="Nome">
+                                                            </label>
+                                                        </section>
+                                                        <section class="col-md-6">
+                                                            <label class="input">
+                                                                <input type="text" name="Register[lastname]" id="Register_lastname" placeholder="Sobrenome">
+                                                            </label>
+                                                        </section>
+                                                    </div>
+                                                </section>
                                                 <section class="mb-3">
                                                     <i class="icon-append fa fa-envelope"></i>
                                                     <input id="Register_email" placeholder="Endereço de e-mail" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="Register[email]" value="{{ old('email') }}" required>
@@ -129,9 +145,7 @@
                                                     @endif
                                                 </section>
 
-                                            </fieldset>
-
-                                            <fieldset>
+                                                <!--
                                                 <div class="row">
                                                     <section class="col-md-6 mb-3">
                                                         <label class="input">
@@ -144,6 +158,7 @@
                                                         </label>
                                                     </section>
                                                 </div>
+-->
                                                 <div class="row">
                                                     <section class="col-md-6 mb-3">
                                                         <label class="select">
@@ -155,7 +170,7 @@
                                                     </section>
                                                     <section class="col-md-6 mb-3">
                                                         <label class="input"> <i class="icon-append fa fa-calendar"></i>
-                                                            <input type="text" name="Register[birthdate]" placeholder="Data de nascimento" class="datepicker" data-dateformat="dd/mm/yy">
+                                                            <input type="text" name="Register[birthdate]" placeholder="Data de nascimento" class="datepicker mask-date" data-dateformat="dd/mm/yy">
                                                         </label>
                                                     </section>
                                                 </div>
@@ -180,6 +195,9 @@
 
     <script src="{{ asset('assets/vendors/vendors.bundle.js') }}"></script>
     <script src="{{ asset('assets/app/app.bundle.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/libs/jquery.maskMoney.0.2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/custom/form.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/custom/Register.js') }}"></script>
 
     <script>
         $(function() {

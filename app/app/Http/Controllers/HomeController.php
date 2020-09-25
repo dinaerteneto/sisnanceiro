@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Sisnanceiro\Helpers\Mask;
@@ -60,15 +61,22 @@ class HomeController extends Controller
    'credit_card'  => Mask::currency($aBallance['creditCard']->ballance),
   ];
 
-  $jsonLabel        = '';
-  $jsonValue        = '';
-  $aTotalByCategory = $this->dashboardService->totalByCategory([BankCategory::CATEGORY_TO_PAY], '2020-08-01', '2020-08-31');
+  $jsonLabel       = '';
+  $jsonValue       = '';
+  $jsonParentLabel = '';
+  $jsonParentValue = '';
+
+  $carbonDate = Carbon::today();
+  $startDate  = $carbonDate->firstOfMonth()->format('Y-m-d');
+  $endDate    = $carbonDate->lastOfMonth()->format('Y-m-d');
+
+  $aTotalByCategory = $this->dashboardService->totalByCategory([BankCategory::CATEGORY_TO_PAY], $startDate, $endDate);
   if ($aTotalByCategory) {
    $jsonLabel = json_encode(array_map(function ($data) {return $data->name;}, $aTotalByCategory));
    $jsonValue = json_encode(array_map(function ($data) {return $data->total * -1;}, $aTotalByCategory));
   }
 
-  $aTotalByParentCategory = $this->dashboardService->totalByParentCategory([BankCategory::CATEGORY_TO_PAY], '2020-08-01', '2020-08-31');
+  $aTotalByParentCategory = $this->dashboardService->totalByParentCategory([BankCategory::CATEGORY_TO_PAY], $startDate, $endDate);
   if ($aTotalByParentCategory) {
    $jsonParentLabel = json_encode(array_map(function ($data) {return $data->name;}, $aTotalByParentCategory));
    $jsonParentValue = json_encode(array_map(function ($data) {return $data->total * -1;}, $aTotalByParentCategory));

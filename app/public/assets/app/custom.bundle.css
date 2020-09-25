@@ -85,3 +85,7 @@
 .bg-color-blue {
     background-color: #57889c!important;
 }
+
+.dt-toolbar {
+    padding: 0px !important;
+}

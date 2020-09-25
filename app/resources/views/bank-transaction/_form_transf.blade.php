@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="control-label" for="BankInvoiceDetail_due_date">Data da transferência</label>
-                            <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker" value="{{ $model->due_date }}" />
+                            <input type="text" name="BankInvoiceDetail[due_date]" id="BankInvoiceDetail_due_date" class="form-control datepicker mask-date" value="{{ $model->due_date }}" />
                         </div>
 
                     </div>

@@ -102,6 +102,9 @@
                     </div>
                 </header>
                 <div class="widget-body" style="position: relative; height:40vh">
+                    @if(!$jsonValue)
+                        <p>Você ainda não possuí lançamentos</p>
+                    @endif
                     <canvas id="chart-category-to-receive"></canvas>
                 </div>
             </div>
@@ -116,6 +119,9 @@
                     </div>
                 </header>
                 <div class="widget-body" style="position: relative; height:40vh">
+                    @if(!$jsonValue)
+                        <p>Você ainda não possuí lançamentos</p>
+                    @endif
                     <canvas id="chart-category-to-budget"></canvas>
                 </div>
             </div>
@@ -204,8 +210,10 @@
                                         </div>
                                         <hr />
                                     @endforeach
-                                @endif
                                 <h5>TOTAL <span class="pull-right"> R$ {{ $creditCardTotal }}</span></h5>
+                                @else
+                                    <p>Você ainda não possuí cartões cadastrados.</p>
+                                @endif
                             </div>
                         </div>
 

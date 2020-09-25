@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label class="control-label" for="BankInvoiceDetail_competence_date">Data da compra</label>
-                            <input type="text" name="BankInvoiceDetail[competence_date]" id="BankInvoiceDetail_competence_date" class="form-control datepicker" value="{{ $model->competence_date }}" />
+                            <input type="text" name="BankInvoiceDetail[competence_date]" id="BankInvoiceDetail_competence_date" class="form-control datepicker mask-date" value="{{ $model->competence_date }}" />
                         </div>
                         <div class="col-sm-4">
                             <label class="control-label" for="BankInvoiceDetail_due_date">Para vencto em</label>
