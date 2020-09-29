@@ -85,12 +85,18 @@
                                    </select>
                                 </div>
 
-                                <div class="drp-container col-sm-3">
-                                    <div id="filter-range" class="form-control" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ced4da; width: 100%">
+                                <div class="drp-container col-sm-3 row">
+                                    <label class="col-md-2 control-label">
+                                        <a href="javascript:void(0)" class="pull-right change-date" id="previous-date"><i class="fa fa-chevron-left"></i></a>
+                                    </label>
+                                    <div id="filter-range" class="form-control col-md-8" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ced4da;">
                                         <i class="fa fa-calendar"></i>&nbsp;
                                         <span></span>
                                         <i class="fa fa-caret-down"></i>
                                     </div>
+                                    <label class="col-md-2 control-label">
+                                        <a href="javascript:void(0)" class="change-date" id="next-date"><i class="fa fa-chevron-right"></i></a>
+                                    </label>
                                 </div>
 
                                 @if($mainCategoryId === \Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY)

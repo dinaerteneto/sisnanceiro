@@ -33,33 +33,27 @@
                             <input type="hidden" name="Filter[start_date]" value="{{ Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}" id="filter-range-start-date" />
                             <input type="hidden" name="Filter[end_date]" value="{{ Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}" id="filter-range-end-date" />
 
-                            <div class="row mb-10">
-
-                                <div class="drp-container col-sm-3">
-                                    <div id="filter-range" class="form-control" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ced4da; width: 100%">
+                            <div class="row">
+                                <div class="drp-container col-sm-3 row">
+                                    <label class="col-md-2 control-label">
+                                        <a href="javascript:void(0)" class="change-date" id="previous-date"><i class="fa fa-chevron-left"></i></a>
+                                    </label>
+                                    <div id="filter-range" class="form-control col-md-8" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ced4da;">
                                         <i class="fa fa-calendar"></i>&nbsp;
                                         <span></span>
                                         <i class="fa fa-caret-down"></i>
                                     </div>
+                                    <label class="col-md-2 control-label">
+                                        <a href="javascript:void(0)" class="pull-right change-date" id="next-date"><i class="fa fa-chevron-right"></i></a>
+                                    </label>
                                 </div>
 
-                            </div>
-
-                            <div class="row">
                                 <div class="col-sm-9">
-                                    <div class="icon-addon addon-md">
-                                        <input type="text" name="Filter[description]" id="Filter_description" class="form-control" />
-                                        <label for="email" class="fa fa-search" rel="tooltip" title="" data-original-title="email"></label>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3">
                                     <div class="pull-right">
                                         <button class="btn btn-success" id="btn-search">
                                             <i class="fa fa-search"></i> Pesquisar
                                         </button>
                                     </div>
-
                                 </div>
                             </div>
 

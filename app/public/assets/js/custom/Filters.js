@@ -24,6 +24,7 @@ Filters = {
                 'Último mês': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             },
 
+            autoUpdateInput: true,
             autoApply: true,
             cancelClass: 'pull-right btn-danger',
 
@@ -52,6 +53,44 @@ Filters = {
             $('#filter-range-start-date').val(picker.startDate.format('YYYY-MM-DD'));
             $('#filter-range-end-date').val(picker.endDate.format('YYYY-MM-DD'));
         });
+
+        $('.change-date').click(function() {
+            var startDate = moment($('#filter-range-start-date').val());
+            var startDate2 = moment($('#filter-range-start-date').val());
+            var endDate = moment($('#filter-range-end-date').val());
+
+            var diff = startDate.diff(endDate, 'days');
+            diff = diff > 0 ? diff : diff * -1;
+
+            var id = $(this).attr('id');
+            var add = id == 'previous-date' ? -1 : 1;
+
+            var interval = 'day';
+            if(diff >= 29 && diff <= 31) {
+                interval = 'month'
+            }
+
+            if(interval == 'day') {
+                var newStartDate = startDate2.add(diff * add, 'days');
+                var newEndDate = endDate.add(diff * add, 'days');
+            } else {
+                var newStartDate = startDate.add(add, 'month');
+                var newEndDate = startDate2.add(add, 'month').endOf('month');
+            }
+
+            $('#filter-range').data('daterangepicker').setStartDate(newStartDate.format('DD/MM/YYYY'));
+            $('#filter-range').data('daterangepicker').setEndDate(newEndDate.format('DD/MM/YYYY'));
+
+            $('#filter-range-start-date').val(newStartDate.format('YYYY-MM-DD'));
+            $('#filter-range-end-date').val(newEndDate.format('YYYY-MM-DD'));
+
+            $('#btn-search').trigger('click');
+
+            var strCalendar = `${newStartDate.format('DD/MM/YYYY')} - ${newEndDate.format('DD/MM/YYYY')}`;
+
+            $('#filter-range span').closest('span').html(strCalendar);
+        })
+
     }
 }
 
