@@ -93,6 +93,22 @@
     </div>
 
     <div class="row">
+
+        <div class="col-sm-12 text-center">
+            <h6 style="margin-top: 5px">
+                <a href="?iMonth=<?=$iPreviousMonth;?>">
+                    <i class="fa fa-chevron-left"></i>
+                </a>
+                <span>{{ $currentDate }}</span>
+                <a href="?iMonth=<?=$iNextMonth;?>">
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </h6>
+        </div>
+
+    </div>
+
+    <div class="row">
         <article class="col-sm-6">
             <div class="jarviswidget jarviswidget-color-blueDark">
                 <header class="ui-sortable-handle">

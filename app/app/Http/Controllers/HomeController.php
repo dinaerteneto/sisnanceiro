@@ -50,7 +50,7 @@ class HomeController extends Controller
   }
  }
 
- public function home()
+ public function home(Request $request)
  {
   $aBallance = $this->dashboardService->ballance();
 
@@ -66,9 +66,12 @@ class HomeController extends Controller
   $jsonParentLabel = '';
   $jsonParentValue = '';
 
+  $iMonth = isset($request->iMonth) ? $request->iMonth : 0;
+
   $carbonDate = Carbon::today();
-  $startDate  = $carbonDate->firstOfMonth()->format('Y-m-d');
-  $endDate    = $carbonDate->lastOfMonth()->format('Y-m-d');
+  $carbonDate->addMonth($iMonth);
+  $startDate = $carbonDate->firstOfMonth()->format('Y-m-d');
+  $endDate   = $carbonDate->lastOfMonth()->format('Y-m-d');
 
   $aTotalByCategory = $this->dashboardService->totalByCategory([BankCategory::CATEGORY_TO_PAY], $startDate, $endDate);
   if ($aTotalByCategory) {
@@ -95,6 +98,10 @@ class HomeController extends Controller
    )
   );
 
+  $currentDate    = $carbonDate->format('m/Y');
+  $iPreviousMonth = $iMonth - 1;
+  $iNextMonth     = $iMonth + 1;
+
   return view('home', compact(
    'aBallance',
    'jsonLabel',
@@ -102,7 +109,10 @@ class HomeController extends Controller
    'jsonParentLabel',
    'jsonParentValue',
    'creditCardData',
-   'creditCardTotal'
+   'creditCardTotal',
+   'currentDate',
+   'iPreviousMonth',
+   'iNextMonth'
   ));
  }
 
