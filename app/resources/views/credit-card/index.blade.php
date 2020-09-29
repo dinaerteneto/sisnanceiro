@@ -69,7 +69,7 @@
                             @if($data)
                                 @foreach($data as $item)
                                 <div class="col-sm-4">
-                                    <div class="jarviswidget jarviswidget-color-blueDark"
+                                    <div class="jarviswidget jarviswidget-color-blue-dark"
                                         data-widget-colorbutton="false"
                                         data-widget-editbutton="false"
                                         data-widget-togglebutton="false"
@@ -78,7 +78,33 @@
                                         data-widget-custombutton="false"
                                         data-widget-sortable="false">
                                         <header>
-                                            <h2>{{ $item['brand_name'] }} - {{ $item['name'] }}</h2>
+                                            <div class="widget-header">
+                                                <h2>{{ $item['brand_name'] }} - {{ $item['name'] }}</h2>
+                                            </div>
+                                            <div class="widget-toolbar">
+                                                <div class="btn-group">
+                                                    <button class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown">
+                                                        Ações
+                                                    </button>
+                                                    <ul class="dropdown-menu js-status-update dropdown-menu-right">
+                                                        <li>
+                                                            <a href="/credit-card/delete/{{ $item['id'] }}"
+                                                            data-title="Excluir este cartão?"
+                                                            data-ask="Tem certeza que deseja excluir este cartão?"
+                                                            class="dropdown-item delete-record">Excluir cartão</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/credit-card/{{ $item['id'] }}" class="dropdown-item">Ver despesas</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/credit-card/{{ $item['id'] }}/create" class="dropdown-item open-modal" target="#remoteModal">Adicionar despesa</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/credit-card/update/{{ $item['id'] }}" class="dropdown-item open-modal" target="#remoteModal">Alterar dados deste cartão</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </header>
                                         <div>
                                             <div class="widget-body">
@@ -105,13 +131,8 @@
 
                                                 </div>
                                                 <div class="widget-footer">
-                                                    <a href="/credit-card/delete/{{ $item['id'] }}"
-                                                        data-title="Excluir este cartão?"
-                                                        data-ask="Tem certeza que deseja excluir este cartão?"
-                                                        class="btn btn-danger delete-record">Excluir cartão</a>
+
                                                     <a href="/credit-card/{{ $item['id'] }}" class="btn btn-success">Ver despesas</a>
-                                                    <a href="/credit-card/{{ $item['id'] }}/create" class="open-modal btn btn-primary" target="#remoteModal">Adicionar despesa</a>
-                                                    <a href="/credit-card/update/{{ $item['id'] }}" class="open-modal btn btn-primary" target="#remoteModal">Alterar</a>
                                                 </div>
 
                                             </div>
