@@ -2,6 +2,10 @@
 
 @section('content')
 
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('bank-category') }}
+@endsection
+
 <div class="d-flex w-100 home-header">
     <div>
         <h1 class="page-header"><i class="fa fa-table fa-fw "></i> Financeiro <span>&gt; Categorias</span></h1>
@@ -16,7 +20,7 @@
                 <h2>Categorias</h2>
             </div>
             <span class="ml-auto" role="menu"></span>
-            <span class="jarviswidget-loader" role="menu"><i class="fa fa-refresh fa-spin"></i></span>            
+            <span class="jarviswidget-loader" role="menu"><i class="fa fa-refresh fa-spin"></i></span>
             <ul id="myTab" class="nav nav-tabs ml-auto in">
                 <li class="nav-item">
                     <a href="#s1" data-toggle="tab" aria-expanded="false" class="nav-link {{ ($mainParentCategoryId == 3) ? 'active' : null }}">Receitas</a>
@@ -28,7 +32,7 @@
         </header>
 
         <div role="content">
-            
+
             <form id="form-delete">
                 @csrf
             </form>
@@ -38,13 +42,13 @@
                     <div class="">
                         <div class="col-sm-6 pull-left"><h4>Categorias de receitas</h4></div>
                         <div class="col-sm-6 pull-right align-right">
-                            <a 
+                            <a
                                 href="/bank-category/create/3"
                                 class = "open-modal"
                                 target = "#remoteModal"
                                 rel = "tooltip"
                                 data-placement = "top"
-                                title = "Adicionar nova categoria de receitas"                                       
+                                title = "Adicionar nova categoria de receitas"
                             >
                                 <i class="fa fa-plus"></i> NOVA CATEGORIA
                             </a>
@@ -66,27 +70,27 @@
                                     <div>{{ $toReceive['text'] }}</div>
                                 </td>
                                 <td style="text-align: right">
-                                    <a 
+                                    <a
                                         href="/bank-category/create/{{$toReceive['main_parent_category_id']}}/{{$toReceive['id']}}"
                                         class = "btn btn-success open-modal"
                                         target = "#remoteModal"
                                         rel = "tooltip"
                                         data-placement = "top"
-                                        title = "Adicionar nova subcategoria"                                       
+                                        title = "Adicionar nova subcategoria"
                                     >
                                         <i class="fa fa-plus"></i>
                                     </a>
-                                    <a 
+                                    <a
                                         href="/bank-category/update/{{$toReceive['id']}}"
                                         class = "btn btn-info open-modal"
                                         target = "#remoteModal"
                                         rel = "tooltip"
                                         data-placement = "top"
-                                        title = "Alterar categoria"                                       
+                                        title = "Alterar categoria"
                                     >
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a 
+                                    <a
                                         href="/bank-category/delete/{{$toReceive['id']}}"
                                         class = "btn btn-danger delete-record"
                                         target = "#remoteModal"
@@ -107,17 +111,17 @@
                                     <div style="padding-left: 20px">{{ $child['text'] }}</div>
                                 </td>
                                 <td style="text-align: right">
-                                    <a 
+                                    <a
                                         href="/bank-category/update/{{$child['id']}}"
                                         class = "btn btn-info open-modal"
                                         target = "#remoteModal"
                                         rel = "tooltip"
                                         data-placement = "top"
-                                        title = "Alterar categoria"                                       
+                                        title = "Alterar categoria"
                                     >
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a 
+                                    <a
                                         href="/bank-category/delete/{{$child['id']}}"
                                         class = "btn btn-danger delete-record"
                                         target = "#remoteModal"
@@ -128,7 +132,7 @@
                                         data-ask="Tem certeza que deseja excluir esta categoria?"
                                     >
                                         <i class="fa fa-trash-o"></i>
-                                    </a>                                    
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
@@ -143,13 +147,13 @@
                    <div class="">
                         <div class="col-sm-6 pull-left"><h4>Categorias de despesas</h4></div>
                         <div class="col-sm-6 pull-right align-right">
-                            <a 
+                            <a
                                 href="/bank-category/create/2"
                                 class = "open-modal"
                                 target = "#remoteModal"
                                 rel = "tooltip"
                                 data-placement = "top"
-                                title = "Adicionar nova categoria de despesas"                                       
+                                title = "Adicionar nova categoria de despesas"
                             >
                                 <i class="fa fa-plus"></i> NOVA CATEGORIA
                             </a>
@@ -170,27 +174,27 @@
                                     <div>{{ $toPay['text'] }}</div>
                                 </td>
                                 <td style="text-align: right">
-                                    <a 
+                                    <a
                                         href="/bank-category/create/{{$toPay['main_parent_category_id']}}/{{$toPay['id']}}"
                                         class = "btn btn-success open-modal"
                                         target = "#remoteModal"
                                         rel = "tooltip"
                                         data-placement = "top"
-                                        title = "Adicionar nova subcategoria"                                       
+                                        title = "Adicionar nova subcategoria"
                                     >
                                         <i class="fa fa-plus"></i>
                                     </a>
-                                    <a 
+                                    <a
                                         href="/bank-category/update/{{$toPay['id']}}"
                                         class = "btn btn-info open-modal"
                                         target = "#remoteModal"
                                         rel = "tooltip"
                                         data-placement = "top"
-                                        title = "Alterar categoria"                                       
+                                        title = "Alterar categoria"
                                     >
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a 
+                                    <a
                                         href="/bank-category/delete/{{$toPay['id']}}"
                                         class = "btn btn-danger delete-record"
                                         target = "#remoteModal"
@@ -211,17 +215,17 @@
                                     <div style="padding-left: 20px">{{ $child['text'] }}</div>
                                 </td>
                                 <td style="text-align: right">
-                                    <a 
+                                    <a
                                         href="/bank-category/update/{{$child['id']}}"
                                         class = "btn btn-info open-modal"
                                         target = "#remoteModal"
                                         rel = "tooltip"
                                         data-placement = "top"
-                                        title = "Alterar categoria"                                       
+                                        title = "Alterar categoria"
                                     >
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a 
+                                    <a
                                         href="/bank-category/delete/{{$child['id']}}"
                                         class = "btn btn-danger delete-record"
                                         target = "#remoteModal"
@@ -232,7 +236,7 @@
                                         data-ask="Tem certeza que deseja excluir esta categoria?"
                                     >
                                         <i class="fa fa-trash-o"></i>
-                                    </a>                                    
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach

@@ -2,6 +2,11 @@
 
 @section('content')
 
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('supplier-update', $model) }}
+@endsection
+
+
 <div class="d-flex w-100 home-header">
     <div>
         <h1 class="page-header"><i class="fa fa-fw fa-user"></i> Alterando fornecedor </h1>

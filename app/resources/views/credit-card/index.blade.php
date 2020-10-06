@@ -2,6 +2,10 @@
 
 @section('content')
 
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('credit-card') }}
+@endsection
+
 <div class="d-flex w-100 home-header">
     <div>
         <h1 class="page-header"><i class="fa fa-credit-card"></i> Cartões de crédito </h1>

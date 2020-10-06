@@ -13,7 +13,9 @@
 
 Auth::routes();
 
-Route::name('home')->get('/', function () {return view('auth/login');});
+Route::name('home')->get('/', 'HomeController@auth', function () {
+ return view('auth/login');
+});
 Route::get('/cadastrar', function () {return view('auth/register');});
 Route::post('/cadastrar', 'HomeController@register');
 
@@ -37,7 +39,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  });
 
  Route::group(['prefix' => 'bank-category'], function () {
-  Route::get('/', 'BankCategoryController@index');
+  Route::name('bank-category')->get('/', 'BankCategoryController@index');
   Route::get('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
   Route::post('create/{main_parent_category_id}/{parent_category_id?}', 'BankCategoryController@create');
   Route::post('min-create/{main_parent_category_id}', 'BankCategoryController@createMin');
@@ -96,7 +98,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  });
 
  Route::group(['prefix' => 'customer'], function () {
-  Route::name('Cliente')->get('/', 'CustomerController@index');
+  Route::name('customer')->get('/', 'CustomerController@index');
   Route::post('/', 'CustomerController@index');
   Route::name('Incluir')->get('/create', 'CustomerController@create');
   Route::post('/create', 'CustomerController@create');
@@ -148,7 +150,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  });
 
  Route::group(['prefix' => 'bank-account'], function () {
-  Route::get('/', 'BankAccountController@index');
+  Route::name('bank-account')->get('/', 'BankAccountController@index');
   Route::post('/', 'BankAccountController@index');
   Route::get('/create', 'BankAccountController@create');
   Route::post('/create', 'BankAccountController@create');
@@ -158,7 +160,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  });
 
  Route::group(['prefix' => 'bank-transaction'], function () {
-  Route::get('/', 'BankTransactionController@index');
+  Route::name('bank-transaction')->get('/', 'BankTransactionController@index');
   Route::post('/', 'BankTransactionController@index');
   Route::get('/delete/{id}', 'BankTransactionController@delete');
   Route::post('/set-paid/{id}', 'BankTransactionController@setPaid');
@@ -167,7 +169,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
   Route::post('/partial-pay/{id}', 'BankTransactionController@partialPay');
 
   Route::group(['prefix' => 'pay'], function () {
-   Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
+   Route::name('bank-transaction-pay')->get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
    Route::post('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 2]);
    Route::get('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 2]);
    Route::post('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 2]);
@@ -177,7 +179,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
   });
 
   Route::group(['prefix' => 'receive'], function () {
-   Route::get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 3]);
+   Route::name('bank-transaction-receive')->get('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 3]);
    Route::post('/', ['uses' => 'BankTransactionController@index', 'main_category_id' => 3]);
    Route::get('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 3]);
    Route::post('/create', ['uses' => 'BankTransactionController@create', 'main_category_id' => 3]);
@@ -187,7 +189,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
   });
 
   Route::group(['prefix' => 'transfer'], function () {
-   Route::get('/', ['uses' => 'BankTransactionTransferController@index']);
+   Route::name('transfer')->get('/', ['uses' => 'BankTransactionTransferController@index']);
    Route::post('/', ['uses' => 'BankTransactionTransferController@index']);
    Route::get('/create', ['uses' => 'BankTransactionTransferController@create']);
    Route::post('/create', ['uses' => 'BankTransactionTransferController@create']);
@@ -198,7 +200,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  });
 
  Route::group(['prefix' => 'reports'], function () {
-  Route::get('/cash-flow', 'ReportController@cashFlow');
+  Route::name('reports-cash-flow')->get('/cash-flow', 'ReportController@cashFlow');
   Route::post('/cash-flow', 'ReportController@cashFlow');
   Route::get('/cash-flow/detail', 'ReportController@cashFlowDetail');
  });
@@ -214,7 +216,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  });
 
  Route::group(['prefix' => 'credit-card'], function () {
-  Route::get('/', 'CreditCardController@index');
+  Route::name('credit-card')->get('/', 'CreditCardController@index');
   Route::post('/', 'CreditCardController@index');
   Route::get('/create', 'CreditCardController@create');
   Route::post('/create', 'CreditCardController@create');
@@ -224,7 +226,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  });
 
  Route::group(['prefix' => 'credit-card/{credit_card_id}'], function () {
-  Route::get('/', 'CreditCardTransactionController@index');
+  Route::name('credit-card-invoices')->get('/', 'CreditCardTransactionController@index');
   Route::post('/', 'CreditCardTransactionController@index');
   Route::get('/create', 'CreditCardTransactionController@create');
   Route::post('/create', 'CreditCardTransactionController@create');

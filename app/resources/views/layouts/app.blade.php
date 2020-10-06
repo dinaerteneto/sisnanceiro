@@ -69,9 +69,12 @@
 
         <!-- BEGIN .sa-content-wrapper -->
         <div class="sa-content-wrapper">
+
+            @yield('breadcrumbs')
+
             <!-- BEGIN .sa-page-breadcrumb -->
+            <!--
             <ol class="align-items-center sa-page-ribbon breadcrumb" aria-label="breadcrumb" role="navigation">
-                <li><span id="refresh" class="btn sa-ribbon-btn sa-theme-btn" data-action="resetWidgets"><i class="fa fa-refresh"></i></span></li>
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Início</a></li>
                 @for($i = 1; $i <= count(Request::segments()); $i++)
                 <li class="breadcrumb-item">
@@ -79,6 +82,7 @@
                 </li>
                 @endfor
             </ol>
+            -->
 
             <!-- END .sa-page-breadcrumb -->
             <div class="sa-content">

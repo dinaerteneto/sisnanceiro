@@ -2,6 +2,10 @@
 
 @section('content')
 
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('reports-cash-flow') }}
+@endsection
+
 <div class="d-flex w-100 home-header">
     <div>
         <h1 class="page-header"><i class="fa fa-calculator"></i> Fluxo de caixa </h1>

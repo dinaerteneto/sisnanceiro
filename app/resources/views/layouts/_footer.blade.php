@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center w-100 h-100">
     <div class="footer-left">
-        Sisnaceiro - <span class="footer-txt"> © 2017-2019
+        Sisnaceiro - <span class="footer-txt"> © 2017-<?=date('Y');?>
     </div>
     <div class="ml-auto footer-right">
         <!--

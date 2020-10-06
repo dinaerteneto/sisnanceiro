@@ -2,6 +2,10 @@
 
 @section('content')
 
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('supplier') }}
+@endsection
+
 <div class="d-flex w-100 home-header">
     <div>
         <h1 class="page-header"><i class="fa fa-group"></i> Fornecedores </h1>
@@ -21,7 +25,7 @@
                         <div class="widget-body no-padding">
 
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Cód</th>
