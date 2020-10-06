@@ -127,4 +127,12 @@ class HomeController extends Controller
   }
   return Response::json([]);
  }
+
+ public function auth(Request $request)
+ {
+  if (\Auth::check()) {
+   return redirect('home');
+  }
+  return view('auth/login');
+ }
 }

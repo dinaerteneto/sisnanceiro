@@ -57,7 +57,6 @@ class CreditCardController extends Controller
    $postData = $request->all();
 
    $postData['CreditCard']['limit'] = FloatConversor::convert($postData['CreditCard']['limit']);
-   //dd($postData['CreditCard']);
 
    $model = $this->creditCardService->update($model, $postData['CreditCard'], 'update');
    if (method_exists($model, 'getErrors') && $model->getErrors()) {
