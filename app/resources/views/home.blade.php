@@ -246,12 +246,12 @@
 @section('scripts')
     @include(
     'layouts/_dashboard_scripts',
-    compact(
-        $jsonLabel,
-        $jsonValue,
-        $jsonParentLabel,
-        $jsonParentValue
-        )
+    [
+        'jsonLabel' => $jsonLabel,
+        'jsonValue' => $jsonValue,
+        'jsonParentLabel' => $jsonParentLabel,
+        'jsonParentValue' => $jsonParentValue
+    ]
     )
 <script type="text/javascript" src="{{ asset('assets/js/custom/Dashboard.js') }}"></script>
 @endsection

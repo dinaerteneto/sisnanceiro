@@ -134,14 +134,14 @@ jQuery.fn.doesExist = function() { return jQuery(this).length > 0 }
      * original filename: app.config.js
      * filesize: 12kb
      * =======================================================================
-     * 
+     *
      * GLOBAL ROOT (DO NOT CHANGE)
      */
 $.root_ = $('body');
 /*
  * APP CONFIGURATION (HTML/AJAX/PHP Versions ONLY)
  * Description: Enable / disable certain theme features here
- * GLOBAL: Your left nav in your app will no longer fire ajax calls, set 
+ * GLOBAL: Your left nav in your app will no longer fire ajax calls, set
  * it to false for HTML version
  */
 $.navAsAjax = false;
@@ -168,7 +168,7 @@ var root = this,
     debugStyle_success = 'background-color:green; font-weight:bold; color:#fff;',
     debugStyle_error = 'background-color:#ed1c24; font-weight:bold; color:#fff;',
     /*
-     * Impacts the responce rate of some of the responsive elements (lower 
+     * Impacts the responce rate of some of the responsive elements (lower
      * value affects CPU but improves speed)
      */
     throttle_delay = 350,
@@ -179,7 +179,7 @@ var root = this,
     /*
      * Collapse current menu item as other menu items are expanded
      * Careful when using this option, if you have a long menu it will
-     * keep expanding and may distrupt the user experience This is best 
+     * keep expanding and may distrupt the user experience This is best
      * used with fixed-menu class
      */
     menu_accordion = true,
@@ -198,27 +198,27 @@ var root = this,
      */
     localStorageJarvisWidgets = true,
     /*
-     * Turn off sortable feature for JarvisWidgets 
+     * Turn off sortable feature for JarvisWidgets
      */
     sortableJarvisWidgets = true,
     /*
-     * Warning: Enabling mobile widgets could potentially crash your webApp 
-     * if you have too many widgets running at once 
+     * Warning: Enabling mobile widgets could potentially crash your webApp
+     * if you have too many widgets running at once
      * (must have enableJarvisWidgets = true)
      */
     enableMobileWidgets = false,
     /*
      * Turn on fast click for mobile devices
      * Enable this to activate fastclick plugin
-     * dependency: js/plugin/fastclick/fastclick.js 
+     * dependency: js/plugin/fastclick/fastclick.js
      */
     fastClick = false,
     /*
      * SMARTCHAT PLUGIN ARRAYS & CONFIG
-     * Dependency: js/plugin/moment/moment.min.js 
-     *             js/plugin/cssemotions/jquery.cssemoticons.min.js 
+     * Dependency: js/plugin/moment/moment.min.js
+     *             js/plugin/cssemotions/jquery.cssemoticons.min.js
      *             js/smart-chat-ui/smart.chat.ui.js
-     * (DO NOT CHANGE BELOW) 
+     * (DO NOT CHANGE BELOW)
      */
     boxList = [],
     showList = [],
@@ -232,7 +232,7 @@ var root = this,
         gap: 35
     },
     /*
-     * These elements are ignored during DOM object deletion for ajax version 
+     * These elements are ignored during DOM object deletion for ajax version
      * It will delete all objects during page load with these exceptions:
      */
     ignore_key_elms = ["#header, #left-panel, #right-panel, #main, div.page-footer, #shortcut, #divSmallBoxes, #divMiniIcons, #divbigBoxes, #voiceModal, script, .ui-chatbox"],
@@ -246,9 +246,9 @@ var root = this,
      */
     voice_command_auto = false,
     /*
-     * 	Sets the language to the default 'en-US'. (supports over 50 languages 
+     * 	Sets the language to the default 'en-US'. (supports over 50 languages
      * 	by google)
-     * 
+     *
      *  Afrikaans         ['af-ZA']
      *  Bahasa Indonesia  ['id-ID']
      *  Bahasa Melayu     ['ms-MY']
@@ -437,7 +437,7 @@ if (voice_command) {
  */
 /*
  Copyright 2015 - SmartAdmin Template
- 
+
  This script is a modified version of : MetroNotification
  Plugin name was adjusted with the permission of its author to blend in with the theme
  Original URL: http://codecanyon.net/item/metro-notifications/3903495
@@ -1168,7 +1168,7 @@ function isIE8orlower() {
 
 (function($, window, document, undefined) {
 
-    //"use strict"; 
+    //"use strict";
 
     var pluginName = 'jarvisWidgets';
 
@@ -2706,7 +2706,7 @@ $('a[data-chat-id]:not(.offline)').click(function(event, ui) {
 
 
     chatboxManager.addBox(temp_chat_id, {
-        // dest:"dest" + counter, 
+        // dest:"dest" + counter,
         // not used in demo
         title: "username" + temp_chat_id,
         first_name: fname,
@@ -3037,7 +3037,7 @@ $('a[data-chat-id]:not(.offline)').click(function(event, ui) {
             "[+=..]": { cssClass: "no-rotate nintendo-controller" }
             //"OwO":  { cssClass: "no-rotate" }, // these emoticons overflow and look weird even if they're made even smaller, could probably fix this with some more css trickery
             //"O-O":  { cssClass: "no-rotate" },
-            //"O=)":    { cssClass: "small-emoticon" } 
+            //"O=)":    { cssClass: "small-emoticon" }
         }
 
         var specialRegex = new RegExp('(\\' + escapeCharacters.join('|\\') + ')', 'g');
@@ -3116,10 +3116,10 @@ jQuery.fn.vectorMap('addMap', 'world_mill_en', { "insets": [{ "width": 900, "top
 /**
  * SuperBox
  * The lightbox reimagined. Fully responsive HTML5 image galleries.
- * 
+ *
  * Latest version: https://github.com/seyDoggy/superbox
  * Original version: https://github.com/toddmotto/superbox
- * 
+ *
  * License <https://github.com/seyDoggy/superbox/blob/master/LICENSE.txt>
  */
 ;
@@ -3166,7 +3166,7 @@ jQuery.fn.vectorMap('addMap', 'world_mill_en', { "insets": [{ "width": 900, "top
          */
         /**
          * setSuperboxLayout
-         * 
+         *
          * Removes previously set classes,
          * Add classes based on parent width,
          * Set .superbox.show width based number of columns
@@ -3216,7 +3216,7 @@ jQuery.fn.vectorMap('addMap', 'world_mill_en', { "insets": [{ "width": 900, "top
 
         /**
          * setSuperBoxHeight
-         * 
+         *
          * Set superbox-show outer height based on default height,
          * based on viewport height,
          * based on standard 2:3 ratio,
@@ -3248,7 +3248,7 @@ jQuery.fn.vectorMap('addMap', 'world_mill_en', { "insets": [{ "width": 900, "top
 
         /**
          * createSuperboxShow
-         * 
+         *
          * Dynamically create superbox-show and insert it after superbox-last,
          * apply data-img of the thumbnail to the source of the full image,
          * preload previous and next full size image data into DOM,
@@ -3431,7 +3431,7 @@ jQuery.fn.vectorMap('addMap', 'world_mill_en', { "insets": [{ "width": 900, "top
 
         /**
          * keepShowAfterLast
-         * 
+         *
          * Move superbox-show to after superbox-last when window is resized
          */
         var keepShowAfterLast = function() {
@@ -3446,7 +3446,7 @@ jQuery.fn.vectorMap('addMap', 'world_mill_en', { "insets": [{ "width": 900, "top
 
         /**
          * useDefaults
-         * 
+         *
          * Make us of and apply user settings
          */
         var useDefaults = function() {
@@ -6951,7 +6951,7 @@ jQuery.fn.vectorMap('addMap', 'world_mill_en', { "insets": [{ "width": 900, "top
     // This test is asynchronous. Watch out.
 
 
-    // in IE7 in HTTPS this can cause a Mixed Content security popup. 
+    // in IE7 in HTTPS this can cause a Mixed Content security popup.
     //  github.com/Modernizr/Modernizr/issues/362
     // To avoid that you can create a new iframe and inject this.. perhaps..
 
@@ -8369,7 +8369,7 @@ $("a[data-chat-id]:not(.offline)").click(function(a, b) {
 
 
 
-// demo 
+// demo
 
 function applyTheme(element) {
     var a = $(element),
@@ -8504,10 +8504,10 @@ function userLogout(e) {
     }
     $.SmartMessageBox({
         title: "<i class='fa fa-sign-out text-orange-dark'></i> Logout <span class='text-orange-dark'><strong>" + $(".sa-sidebar-shortcut-toggle").text() + "</strong></span> ?",
-        content: e.data("logout-msg") || "You can improve your security further after logging out by closing this opened browser",
-        buttons: "[No][Yes]"
+        content: e.data("logout-msg") || "Tem certeza que deseja sair do SiSnanceiro?",
+        buttons: "[Não][Sim]"
     }, function(e) {
-        "Yes" == e && ($.root_.addClass("animated fadeOutUp"),
+        "Sim" == e && ($.root_.addClass("animated fadeOutUp"),
             setTimeout(t, 1e3))
     })
 }
