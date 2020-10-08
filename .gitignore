@@ -2,3 +2,9 @@ vendor
 database
 .vscode
 app/.env
+app/.ftpquota
+app/error_log
+app/public/error_log
+error_log
+
+app/bootstrap/cache
