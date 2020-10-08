@@ -19,6 +19,8 @@ class BankCategoryController extends Controller
 
  public function index(Request $request)
  {
+  $this->bankCategoryService->addDefaultCategories();
+
   $mainParentCategoryId = $request->has('mainParentCategoryId') ? $request->mainParentCategoryId : BankCategory::CATEGORY_TO_RECEIVE;
   $categoriesReceive    = [];
   if ($categoriesReceive = $this->bankCategoryService->getAll(BankCategory::CATEGORY_TO_RECEIVE)) {

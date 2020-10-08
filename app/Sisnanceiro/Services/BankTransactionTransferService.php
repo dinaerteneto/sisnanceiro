@@ -199,7 +199,6 @@ class BankTransactionTransferService extends Service
 
    return true;
   } catch (\PDOException $e) {
-   dd($e);
    \DB::rollBack();
    abort(500, 'Erro na tentativa de alterar a transferência.');
   }

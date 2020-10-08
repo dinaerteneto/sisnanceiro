@@ -169,7 +169,6 @@ class BankTransactionService extends Service
    return $details;
 
   } catch (\PDOException $e) {
-   dd($e);
    \DB::rollBack();
    abort(500, 'Erro na tentativa de criar o lançamento.');
   }

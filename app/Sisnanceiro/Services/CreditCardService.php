@@ -270,7 +270,6 @@ GROUP BY bid.due_date
    \DB::commit();
    return true;
   } catch (\Exception $e) {
-   dd($e);
    \DB::rollBack();
    throw new \Exception('Erro na tentativa de incluir os lançamento.');
    return false;
