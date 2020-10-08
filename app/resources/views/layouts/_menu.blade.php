@@ -95,14 +95,15 @@
                 <li class="">
                     <a href="{{ url('/bank-transaction/transfer') }}" title="Transferências"> Transferências </a>
                 </li>
+                <!--
                 <li class="">
                     <a href="{{ url('/reports/cash-flow') }}" title="Fluxo de caixa"> Fluxo de caixa </a>
                 </li>
-                <!--
+
                 <li class="">
                     <a href="{{ url('/payment-tax') }}" title="Taxas e prazos"> Taxas e prazos </a>
                 </li>
-                <!--
+
                 <li class="">
                     <a href="dashboard-marketing.html" title="Marketing Dashboard"> Cartões de crédito </a>
 
