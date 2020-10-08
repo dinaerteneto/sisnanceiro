@@ -121,6 +121,7 @@
                                     >
                                         <i class="fa fa-pencil"></i>
                                     </a>
+                                    @if ($child['can_delete'])
                                     <a
                                         href="/bank-category/delete/{{$child['id']}}"
                                         class = "btn btn-danger delete-record"
@@ -133,6 +134,7 @@
                                     >
                                         <i class="fa fa-trash-o"></i>
                                     </a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
@@ -194,6 +196,7 @@
                                     >
                                         <i class="fa fa-pencil"></i>
                                     </a>
+                                    @if ($toPay['can_delete'])
                                     <a
                                         href="/bank-category/delete/{{$toPay['id']}}"
                                         class = "btn btn-danger delete-record"
@@ -203,9 +206,22 @@
                                         title = "Excluir categoria",
                                         data-title="Excluir categoria",
                                         data-ask="Tem certeza que deseja excluir esta categoria?"
+                                        disabled="true"
                                     >
                                         <i class="fa fa-trash-o"></i>
                                     </a>
+                                    @else
+                                    <a
+                                        href="#"
+                                        class = "btn btn-default"
+                                        rel = "tooltip"
+                                        data-placement = "top"
+                                        title = "Esta categoria não pode ser excluída",
+                                        data-title="Esta categoria não pode ser excluída",
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                    @endif
                                 </td>
                             </tr>
                             @if (isset($toPay['children']))

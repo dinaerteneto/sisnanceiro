@@ -15,12 +15,18 @@
 
 </style>
 
-<h4>Olá {{ $user->person->firstname }}, seu usuário foi criado com sucesso.</h4>
-<h6>Anote seus dados de acesso</h6>
+<h4>Olá Dinaerte,</h4>
 
+<p>
+    <b>{{ $user->person->firstname }} {{ $user->person->lastname }}</b> acaba de se cadastrar no <b>SiSnanceiro</b>.
+</p>
+
+<h4>PARABÉNS</h4>
+
+<h6>Anote seus dados de acesso</h6>
 <div>
-    Login: {{ $user->email }}<br>
-    Senha: {{ $passwordGenerated }}
+    Nome: {{ $user->person->firstname }} <br />
+    E-mail: {{ $user->email }}<br />
 </div>
 
 <div>

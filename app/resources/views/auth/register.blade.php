@@ -68,8 +68,12 @@
                                         <div class="hero">
                                             <div class="pull-left login-desc-box-l">
                                                 <h4 class="paragraph-header">
-                                                    Tudo bem ser esperto. Experimente a simplicidade do {{ config('app.name', 'Laravel') }}, onde quer que você vá!
+                                                    Esta é a ferramenta que irá lhe ajudar a ter uma vida financeira mais próspera.
                                                 </h4>
+
+                                                <p style="margin-top: 10px">
+                                                    Baseado nas caixinhas de: Aplicações, Sonhos, Educação, Orçamento familiar e Doações aprenda a classificar seu dinheiro e enriquecer.
+                                                </p>
                                                 <!--
                                                 <div class="login-app-icons">
                                                     <a href="javascript:void(0);" class="btn sa-btn-danger btn-sm">Frontend Template</a>
@@ -83,6 +87,7 @@
                                         </div>
                                     </div>
 
+                                    <!--
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                             <h5 class="about-heading">Sobre o {{ config('app.name', 'Laravel') }} - Você está atualizado?</h5>
@@ -97,6 +102,7 @@
                                             </p>
                                         </div>
                                     </div>
+                                    -->
 
                                 </div>
                                 <div class="col-12 col-lg-5">

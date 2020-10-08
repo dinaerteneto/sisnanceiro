@@ -46,7 +46,7 @@
                 <div class="sa-content">
 
 
-                
+
                     <div class="main" role="main">
 
                         <!-- MAIN CONTENT -->
@@ -59,28 +59,32 @@
                                         <div class="">
                                             <div class="pull-left login-desc-box-l">
                                                 <h4 class="paragraph-header">
-                                                    Tudo bem ser esperto. Experimente a simplicidade do {{ config('app.name', 'Laravel') }}, onde quer que você vá!
+                                                    Esta é a ferramenta que irá lhe ajudar a ter uma vida financeira mais próspera.
                                                 </h4>
+
+                                                <p style="margin-top: 10px">
+                                                    Baseado nas caixinhas de: Aplicações, Sonhos, Educação, Orçamento familiar e Doações aprenda a classificar seu dinheiro e enriquecer.
+                                                </p>
                                                 <br>
 
                                                 @if ($message = Session::has('success'))
                                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                                     {!! Session::get('success')['message'] !!}.
-                                                </div>                
+                                                </div>
                                                 @endif
 
                                                 @if (Session::has('error'))
                                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                                     <i class="fa-fw fa fa-times"></i>
-                                                    <strong>Erro!</strong> {{ Session::get('error')['message'] }} 
+                                                    <strong>Erro!</strong> {{ Session::get('error')['message'] }}
                                                     @foreach(Session::get('error')['errors'] as $errors)
-                                                        <br>{{$errors['message']}} 
+                                                        <br>{{$errors['message']}}
                                                     @endforeach
                                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true">×</span>
                                                     </button>
-                                                </div>             
-                                                @endif   
+                                                </div>
+                                                @endif
 
                                             </div>
 
@@ -100,7 +104,7 @@
                                             </header>
 
                                             <fieldset>
-                                                
+
                                                 <section>
                                                     <label class="label">Digite seu e-mail</label>
                                                     <label class="input"> <i class="icon-append fa fa-envelope"></i>
@@ -110,7 +114,7 @@
                                                             <span class="invalid-feedback" role="alert">
                                                                 <strong>{{ $errors->first('email') }}</strong>
                                                             </span>
-                                                        @endif                                                        
+                                                        @endif
                                                 </section>
 
 
@@ -132,4 +136,3 @@
         </div>
     </div>
 </body>
-

@@ -5,11 +5,6 @@
 @endsection
 
 @section('content')
-<div class="d-flex w-100 home-header">
-    <div>
-        <h1 class="page-header"><i class="fa-fw fa fa-home"></i> Home <span>&gt; Dashboard</span></h1>
-    </div>
-</div>
 
 <section>
 

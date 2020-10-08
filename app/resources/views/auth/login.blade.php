@@ -67,8 +67,12 @@
                                         <div class="">
                                             <div class="pull-left login-desc-box-l">
                                                 <h4 class="paragraph-header">
-                                                    Tudo bem ser esperto. Experimente a simplicidade do {{ config('app.name', 'Laravel') }}, onde quer que você vá!
+                                                    Esta é a ferramenta que irá lhe ajudar a ter uma vida financeira mais próspera.
                                                 </h4>
+
+                                                <p style="margin-top: 10px">
+                                                    Baseado nas caixinhas de: Aplicações, Sonhos, Educação, Orçamento familiar e Doações aprenda a classificar seu dinheiro e enriquecer.
+                                                </p>
 
                                                 <br>
                                                 @if ($message = Session::has('success'))
