@@ -135,7 +135,7 @@ $('document').ready(function(){
     function venctos(creditCardId) {
         $.ajax({
             type: 'POST',
-            url: `/credit-card/${creditCardId}/due-invoice-dates`,
+            url: `<?=url('/credit-card/{{$creditCard->id}}/due-invoice-dates');?>`,
             data: {
                 date: $('#BankInvoiceDetail_competence_date').val()
             },
