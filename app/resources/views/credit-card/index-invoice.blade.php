@@ -266,10 +266,14 @@
         {
             bSortable: false,
             mRender: function(data, type, row) {
+
+                const linkUpd = `<?=url("/credit-card/{$model->id}/update");?>/${row.id}`;
+                const linkDel = `<?=url("/credit-card/{$model->id}/delete");?>/${row.id}`;
+
                 var html = '<div class="text-right">';
-                    html += '<a href="/credit-card/{{$model->id}}/update/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Alterar o lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> ';
+                    html += `<a href="${linkUpd}" rel="tooltip" data-placement="top" data-original-title="Alterar o lançamento" class="btn btn-xs btn-warning open-modal" target="#remoteModal"><i class="fa fa-pencil"></i></a> `;
                     @if(!$isPaid)
-                        html += '<a href="/credit-card/{{$model->id}}/delete/' + row.id + '" rel="tooltip" data-placement="top" data-original-title="Excluir o lançamento" class="btn btn-xs btn-danger delete-record" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> ';
+                        html += `<a href="${linkDel}" rel="tooltip" data-placement="top" data-original-title="Excluir o lançamento" class="btn btn-xs btn-danger delete-record" data-title="Excluir este lançamento?" data-ask="Tem certeza que deseja excluir este lançamento?"><i class="fa fa-times"></i></a> `;
                     @endif
                     html += '</div>';
                 return html;
@@ -335,7 +339,8 @@
 
     function updateTotal(filter) {
         var extraSearch = {extra_search: filter};
-        $.post('/credit-card/<?=$model->id;?>/get-total', extraSearch, function(json) {
+        const url = "<?=url("/credit-card/{$model->id}/get-total");?>";
+        $.post(url, extraSearch, function(json) {
             $("#total-to-pay").html(json.mask.to_pay.substr(1));
             $("#status").html(json.status);
             $("#closing-day").html(json.closing_day);
