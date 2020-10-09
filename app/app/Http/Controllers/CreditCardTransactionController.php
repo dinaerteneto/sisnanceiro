@@ -84,7 +84,6 @@ class CreditCardTransactionController extends Controller
   }
 
   return view('/credit-card/index-invoice', compact(
-   'urlMain',
    'title',
    'creditCards',
    'model',

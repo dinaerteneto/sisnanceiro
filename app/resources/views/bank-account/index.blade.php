@@ -17,7 +17,7 @@
         <section id="widget-grid" class="w-100">
             <div class="mb-10">
                 <a
-                    href="{{ url(/bank-account/create) }}"
+                    href="{{ url('/bank-account/create') }}"
                     class="btn btn-sm btn-success open-modal"
                     target = "#remoteModal"
                     rel = "tooltip"
