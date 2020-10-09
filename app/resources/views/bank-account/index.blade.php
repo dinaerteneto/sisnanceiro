@@ -17,7 +17,7 @@
         <section id="widget-grid" class="w-100">
             <div class="mb-10">
                 <a
-                    href="/bank-account/create"
+                    href="{{ url(/bank-account/create) }}"
                     class="btn btn-sm btn-success open-modal"
                     target = "#remoteModal"
                     rel = "tooltip"
@@ -33,6 +33,7 @@
                         <div class="widget-body no-padding">
 
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <input type="hidden" id="dt_url" value="{{ url('/bank-account') }}" />
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>
@@ -49,6 +50,7 @@
 
                         </div>
                     </div>
+
                 </article>
             </div>
         </section>

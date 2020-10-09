@@ -25,6 +25,8 @@
                         <div class="widget-body no-padding">
 
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+
+                                <input type="hidden" id="dt_url" value="{{ url('/customer') }}" />
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
@@ -54,8 +56,8 @@
 <script type="text/javascript">
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.ajax = {
-            url: "customer",
-            type: 'POST'
+        url: $('#dt_url').val(),
+        type: 'POST'
     };
     Main.dataTableOptions.columns = [
         { data: 'id', 'searchable': false },

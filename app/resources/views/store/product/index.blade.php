@@ -21,7 +21,7 @@
                     <div class="jarviswidget jarviswidget-color-blue-dark" id="wid-id-0" role="widget">
 
                         <header>
-                            <div class="widget-header">	
+                            <div class="widget-header">
                                 <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                                 <h2>Produtos</h2>
                             </div>
@@ -31,8 +31,8 @@
                                 <!-- add: non-hidden - to disable auto hide -->
                             </div>
                             <div class="jarviswidget-ctrls" role="menu">
-                                <a href="/store/product/create" class="button-icon " rel="tooltip" title="" data-placement="bottom" data-original-title="Incluir novo produto" style=""><i class="fa fa-pencil-square-o"></i></a>                                    
-                            </div>                            
+                                <a href="/store/product/create" class="button-icon " rel="tooltip" title="" data-placement="bottom" data-original-title="Incluir novo produto" style=""><i class="fa fa-pencil-square-o"></i></a>
+                            </div>
                         </header>
 
                         <!-- widget edit box -->
@@ -40,11 +40,13 @@
                             <!-- This area used as dropdown edit box -->
                         </div>
                         <!-- end widget edit box -->
-    
+
                         <!-- widget content -->
                         <div class="widget-body p-0">
+
+                            <input type="hidden" value="{{ url('/store/product') }}" id="dt_url" />
                             <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-                                <thead>			                
+                                <thead>
                                     <tr>
                                         <th>Cód</th>
                                         <th>Nome</th>
@@ -69,8 +71,8 @@
 <script type="text/javascript">
     Main.dataTableOptions.serverSide = true;
     Main.dataTableOptions.ajax = {
-            url: "/store/product",
-            type: 'POST'
+        url: $('#dt_url').val(),
+        type: 'POST'
     };
     Main.dataTableOptions.columns = [
         { data: 'sku'},
@@ -90,6 +92,6 @@
     ];
 
     var dataTables = $('#dt_basic').DataTable(Main.dataTableOptions);
-    
+
 </script>
 @endsection

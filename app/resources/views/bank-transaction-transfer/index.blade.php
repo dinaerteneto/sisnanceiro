@@ -72,6 +72,7 @@
                         <div class="widget-body no-padding">
 
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <input id="dt_url" type="hidden" value="{{ url('/bank-transaction/transfer') }}" />
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>
@@ -114,7 +115,7 @@
         [1, 'asc']
     ];
     Main.dataTableOptions.ajax = {
-        url: "/bank-transaction/transfer",
+        url: $('#dt_url').val(),
         type: 'POST',
         data: function(d) {
             d.extra_search = filter;

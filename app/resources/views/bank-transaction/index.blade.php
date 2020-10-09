@@ -158,7 +158,7 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                     <div class="jarviswidget-color-darken">
                         <div class="widget-body no-padding">
-
+                            <input type="hidden" id="dt_url" value="{{ url('/bank-transaction') }}" />
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
@@ -217,7 +217,7 @@
         [1, 'asc']
     ];
     Main.dataTableOptions.ajax = {
-        url: "/bank-transaction",
+        url: $('#dt_url').val(),
         type: 'POST',
         data: function(d) {
             d.extra_search = filter;
@@ -376,7 +376,7 @@
 
     function updateTotal(filter) {
         var extraSearch = {extra_search: filter};
-        $.post('/bank-transaction/get-total-by-main-category', extraSearch, function(json) {
+        $.post('<?=url('/bank-transaction/get-total-by-main-category');?>', extraSearch, function(json) {
             $("#total-to-receive").html(json.mask.to_receive);
             $("#total-to-pay").html(json.mask.to_pay);
             if(json.total < 0) {

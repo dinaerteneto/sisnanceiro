@@ -58,7 +58,7 @@ BankAccount = {
             [0, 'desc']
         ];
         Main.dataTableOptions.ajax = {
-            url: "/bank-account",
+            url: $('#dt_url').val(),
             type: 'POST'
         };
         Main.dataTableOptions.columns = [{

@@ -43,7 +43,7 @@
                         <div class="col-sm-6 pull-left"><h4>Categorias de receitas</h4></div>
                         <div class="col-sm-6 pull-right align-right">
                             <a
-                                href="/bank-category/create/3"
+                                href="{{ url('/bank-category/create/3')}}"
                                 class = "open-modal"
                                 target = "#remoteModal"
                                 rel = "tooltip"
@@ -162,6 +162,8 @@
                     </div>
                     </div>
                     @if ($categoriesPay)
+
+                    <input type="hidden" id="dt_url" value="{{ url('/bank-category') }}" />
                     <table class="table table-hover">
                         <thead>
                             <tr>
