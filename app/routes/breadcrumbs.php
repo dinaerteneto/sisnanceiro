@@ -9,6 +9,11 @@ Breadcrumbs::for('customer', function ($trail) {
  $trail->push('Clientes', route('customer'));
 });
 
+Breadcrumbs::for('customer-create', function ($trail) {
+ $trail->parent('customer');
+ $trail->push("Novo cliente", route('customer-create'));
+});
+
 Breadcrumbs::for('customer-update', function ($trail, $model) {
  $trail->parent('customer');
  $trail->push("{$model->firstname} {$model->lastname}", route('customer', $model->id));
@@ -17,6 +22,11 @@ Breadcrumbs::for('customer-update', function ($trail, $model) {
 Breadcrumbs::for('supplier', function ($trail) {
  $trail->parent('home');
  $trail->push('Fornecedores', route('customer'));
+});
+
+Breadcrumbs::for('supplier-create', function ($trail) {
+ $trail->parent('supplier');
+ $trail->push("Novo fornecedor", route('supplier-create'));
 });
 
 Breadcrumbs::for('supplier-update', function ($trail, $model) {

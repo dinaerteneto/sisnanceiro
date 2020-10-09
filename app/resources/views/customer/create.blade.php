@@ -2,6 +2,10 @@
 
 @section('content')
 
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('customer-create') }}
+@endsection
+
 <div class="d-flex w-100 home-header">
     <div>
         <h1 class="page-header"><i class="fa fa-fw fa-user"></i> Adicionar cliente </h1>
@@ -15,7 +19,7 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                     <div class="jarviswidget well jarviswidget-color-darken">
                         <div class="widget-body">
-                            @include('customer/_form', compact('modelAddress', 'typeAddresses', 'addresses', 'contacts'))
+                            @include('customer/_form', compact('modelAddress', 'typeAddresses'))
                         </div>
                     </div>
                 </article>

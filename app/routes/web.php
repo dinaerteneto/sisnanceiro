@@ -100,7 +100,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  Route::group(['prefix' => 'customer'], function () {
   Route::name('customer')->get('/', 'CustomerController@index');
   Route::post('/', 'CustomerController@index');
-  Route::name('Incluir')->get('/create', 'CustomerController@create');
+  Route::name('customer-create')->get('/create', 'CustomerController@create');
   Route::post('/create', 'CustomerController@create');
   Route::name('Alterar')->get('/update/{id}', 'CustomerController@update');
   Route::post('/update/{id}', 'CustomerController@update');
@@ -111,7 +111,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
  Route::group(['prefix' => 'supplier'], function () {
   Route::name('Fornecedor')->get('/', 'SupplierController@index');
   Route::post('/', 'SupplierController@index');
-  Route::name('Incluir')->get('/create', 'SupplierController@create');
+  Route::name('supplier-create')->get('/create', 'SupplierController@create');
   Route::post('/create', 'SupplierController@create');
   Route::name('Alterar')->get('/update/{id}', 'SupplierController@update');
   Route::post('/update/{id}', 'SupplierController@update');

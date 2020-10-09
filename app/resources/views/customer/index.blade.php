@@ -27,7 +27,7 @@
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
 
                                 <input type="hidden" id="dt_url" value="{{ url('/customer') }}" />
-                                <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Cód</th>
