@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="credit-card-form" class="credit-card-form" method="post" action="{{ $action }}">
+        <form id="credit-card-form" class="credit-card-form" method="post" action="{{ url($action) }}">
             @csrf
             <div class="modal-header">
                 <h4 class="modal-title">{{ $title }}</h4>

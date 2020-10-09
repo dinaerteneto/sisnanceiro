@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="/bank-transaction/partial-pay/{{ $model->id }}" onsubmit="return false">
+        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ url('/bank-transaction/partial-pay/$model->id')" onsubmit="return false">
             @csrf
             <input type="hidden" name="urlReturn" value="{{ $urlReturn }}" />
                <div class="modal-header">

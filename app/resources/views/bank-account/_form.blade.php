@@ -2,7 +2,7 @@
 
     <div class="modal-content">
 
-        <form id="bank-account-form" class="bank-category-form" method="post" action="{{ $action }}">
+        <form id="bank-account-form" class="bank-category-form" method="post" action="{{ url($action) }}">
         @csrf
 
         <div class="modal-header">

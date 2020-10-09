@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ $action }}" onsubmit="return false">
+        <form id="bank-transaction-form" class="bank-transaction-form" method="post" action="{{ url($action) }}" onsubmit="return false">
             @csrf
 
             <input type="hidden" value="{{ Sisnanceiro\Models\BankCategory::CATEGORY_TO_PAY }}" id="main_category_id" />

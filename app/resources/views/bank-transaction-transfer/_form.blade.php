@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-        <form id="bank-transaction-transfer-form" class="bank-transaction-form" method="post" action="{{ $action }}">
+        <form id="bank-transaction-transfer-form" class="bank-transaction-form" method="post" action="{{ url($action) }}">
             @csrf
 
             <input type="hidden" name="BankInvoiceDetail[bank_category_id]" value="{{ Sisnanceiro\Models\BankCategory::CATEGORY_TRANSFER }}" />
