@@ -69,7 +69,7 @@ class CreditCardTransactionController extends Controller
   $dueDate       = $dueDate->format('d/m/Y');
   $endDateFormat = clone $startDate;
 
-  $endDate   = $startDate->addMonth()->format('Y-m-d');
+  $endDate   = $startDate->addMonth()->subDay()->format('Y-m-d');
   $startDate = $startDate->addMonth(-1)->format('Y-m-d');
 
   $status = 'Fechada';

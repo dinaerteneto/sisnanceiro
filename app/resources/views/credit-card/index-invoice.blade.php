@@ -185,7 +185,7 @@
 
                             <div class="dataTables_wrapper dt-bootstrap4 no-footer">
 
-                                <input id="dt_url" type="hidden" value="{{ url('/credit-card/$model->id') }}" />
+                                <input id="dt_url" type="hidden" value="<?=url("/credit-card/{$model->id}");?>" />
                                 <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
                                     <thead>
                                         <tr>

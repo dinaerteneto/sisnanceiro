@@ -250,7 +250,7 @@ GROUP BY bid.due_date
       'is_credit_card_invoice' => true,
      ],
      'BankInvoiceDetail'      => [
-      'bank_category_id' => BankCategory::CATEGORY_CREDIT_CARD_BALANCE,
+      'bank_category_id' => BankCategory::CATEGORY_CREDIT_INVOICE,
       'bank_account_id'  => $creditCard->bank_account_id,
       'net_value'        => $netValue,
       'parcel_number'    => 1,
@@ -265,11 +265,13 @@ GROUP BY bid.due_date
    }
 
    $mapData = $this->mapData($input);
+   // dd($mapData);
    $this->bankTransactionService->store($mapData, $rules);
    $this->__setTotalValues($invoice, $creditCardId);
    \DB::commit();
    return true;
   } catch (\Exception $e) {
+
    \DB::rollBack();
    throw new \Exception('Erro na tentativa de incluir os lançamento.');
    return false;
