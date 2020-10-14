@@ -88,9 +88,9 @@ class CreditCardService extends Service
 
    $dueDate = date('Y-m') . "-{$model->payment_day}";
    $invoice = $this->bankInvoiceDetailRepository->findCreditCardByDueDate($model->id, $dueDate);
-
-   $this->__setTotalValues($invoice, $model->id);
-
+   if ($invoice) {
+    $this->__setTotalValues($invoice, $model->id);
+   }
    \DB::commit();
    return $parent;
   } catch (\Exception $e) {
