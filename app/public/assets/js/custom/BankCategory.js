@@ -23,15 +23,19 @@ BankCategory = {
                 return d.selection;
             },
             formatNoMatches: function(term) {
-                return "<div style=\"text-align: center\"><b>" + term + "</b>, não encontrado!<br><b><a href=\"javascript:void(0)\" onClick=\"BankCategory.add('" + term + "', 2)\">Clique aqui para criar</a></b></div>";
+                return `<div style="text-align: center">
+                    <b>${term}</b>, não encontrado!<br />
+                    <b><a href="javascript:void(0)" onClick="BankCategory.add('${term}', 2)">Clique aqui para criar</a></b>
+                </div>`;
             }
         });
     },
 
-    add: function(term, bankCategoryId) {
+    add: function (term, bankCategoryId) {
+        const url = $('#url').val();
         $.ajax({
             async: false,
-            url: '/bank-categories/create',
+            url: `${url}/bank-categories/create`,
             type: 'post',
             dataType: 'json',
             data: {
@@ -74,10 +78,11 @@ BankCategory = {
         });
     },
 
-    loadData: function() {
+    loadData: function () {
+        const url = $('#url').val();
         $.ajax({
             async: false,
-            url: '/bank-categories/hierarchy-select-2',
+            url: `${url}/bank-categories/hierarchy-select-2`,
             dataType: 'json',
             data: {
                 remove: false,

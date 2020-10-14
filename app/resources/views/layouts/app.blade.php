@@ -40,6 +40,8 @@
 
 <body class="smart-style-0">
 
+    <input type="hidden" id="url" value="{{ url('/') }}/" />
+
     <div id="remoteModal" class="modal fade" role="dialog"></div>
 
     <!-- BEGIN .sa-wrapper -->
