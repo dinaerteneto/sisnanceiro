@@ -84,7 +84,7 @@ class CreditCardService extends Service
   \DB::beginTransaction();
   try {
    $parent = parent::update($model, $data, $rules);
-   $this->repository->updateAllDueDate($model->id, $model->payment_day);
+   $this->repository->updateAllDueDate($model);
    \DB::commit();
    return $parent;
   } catch (\Exception $e) {

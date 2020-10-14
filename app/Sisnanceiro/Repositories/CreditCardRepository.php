@@ -11,7 +11,7 @@ class CreditCardRepository extends Repository
   $this->model = $model;
  }
 
- public function updateAllDueDate($creditCardId, $dueDay)
+ public function updateAllDueDate($model)
  {
   $dateCarbon = new Carbon('first day of this month');
 
@@ -20,13 +20,14 @@ class CreditCardRepository extends Repository
         JOIN bank_invoice_transaction bit2
           ON bit2.id = bid.bank_invoice_transaction_id
 
-         SET bid.due_date = CONCAT(SUBSTRING(bid.due_date, 1, 8), '{$dueDay}')
+         SET bid.due_date = CONCAT(SUBSTRING(bid.due_date, 1, 8), '{$model->payment_day}')
+           , bid.bank_account_id = {$model->bank_account_id}
 
        WHERE bid.deleted_at IS NULL
          AND bit2.is_credit_card_invoice = 1
          AND bid.status = 1
          AND bid.due_date >= '{$dateCarbon->format('Y-m-d')}'
-         AND bit2.credit_card_id = {$creditCardId}
+         AND bit2.credit_card_id = {$model->id}
     ";
 
   return \DB::statement($sql);
