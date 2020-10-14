@@ -58,7 +58,7 @@ class CreditCardController extends Controller
 
    $postData['CreditCard']['limit'] = FloatConversor::convert($postData['CreditCard']['limit']);
 
-   $model = $this->creditCardService->update($model, $postData['CreditCard'], 'update');
+   $model = $this->creditCardService->update($model, $postData['CreditCard']);
    if (method_exists($model, 'getErrors') && $model->getErrors()) {
     $request->session()->flash('error', ['message' => 'Erro na tentativa de alterar o cartão de crédito.', 'errors' => $model->getErrors()]);
    } else {

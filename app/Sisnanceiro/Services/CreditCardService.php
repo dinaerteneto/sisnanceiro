@@ -3,6 +3,7 @@
 namespace Sisnanceiro\Services;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Sisnanceiro\Helpers\FloatConversor;
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankCategory;
@@ -76,6 +77,21 @@ class CreditCardService extends Service
 
   return $ret;
 
+ }
+
+ public function update(Model $model, array $data, $rules = 'update')
+ {
+  \DB::beginTransaction();
+  try {
+   $parent = parent::update($model, $data, $rules);
+   $this->repository->updateAllDueDate($model->id, $model->payment_day);
+   \DB::commit();
+   return $parent;
+  } catch (\Exception $e) {
+   \DB::rollBack();
+   throw new \Exception('Erro na tentativa de alterar os dados do cartão.');
+   return false;
+  }
  }
 
  public function closeInvoice()
@@ -265,7 +281,7 @@ GROUP BY bid.due_date
    }
 
    $mapData = $this->mapData($input);
-   // dd($mapData);
+
    $this->bankTransactionService->store($mapData, $rules);
    $this->__setTotalValues($invoice, $creditCardId);
    \DB::commit();
