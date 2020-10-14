@@ -32,7 +32,7 @@ BankTransaction = {
         var newData = {};
         var mainParentCategoryId = $('#main_category_id').val();
         BankTransaction.loading();
-        $.post('/bank-category/min-create/' + mainParentCategoryId, {
+        $.post(`${url}/bank-category/min-create/${mainParentCategoryId}`, {
             'BankCategory[name]': term
         }, function (json) {
 
@@ -55,11 +55,12 @@ BankTransaction = {
     },
 
     addSupplier(term) {
+        const url = $('#url').val();
         BankTransaction.loading();
-        $.post('/supplier/min-create', {
+        $.post(`${url}/supplier/min-create`, {
             'Supplier[firstname]': term
         }, function(json) {
-            $('#BankInvoiceDetail_supplier_id').append("<option value=\"" + json.id + "\">" + json.firstname + "</option>");
+            $('#BankInvoiceDetail_supplier_id').append(`<option value="${json.id}">${json.firstname}</option>`);
             $('#BankInvoiceDetail_supplier_id').val(json.id).trigger("change");
         }).done(function() {
             BankTransaction.removeLoading();
@@ -70,11 +71,12 @@ BankTransaction = {
     },
 
     addCustomer(term) {
+        const url = $('#url').val();
         BankTransaction.loading();
-        $.post('/customer/min-create', {
+        $.post(`${url}/customer/min-create`, {
             'Customer[firstname]': term
         }, function(json) {
-            $('#BankInvoiceDetail_customer_id').append("<option value=\"" + json.id + "\">" + json.firstname + "</option>");
+            $('#BankInvoiceDetail_customer_id').append(`<option value="${json.id}">${json.firstname}</option>`);
             $('#BankInvoiceDetail_customer_id').val(json.id).trigger("change");
         }).done(function() {
             BankTransaction.removeLoading();
@@ -89,7 +91,13 @@ BankTransaction = {
             data: data,
             formatNoMatches: function(term) {
                 // return 'Nenhuma categoria encontrada.';
-                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"BankTransaction.addCategory('" + term + "')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
+                return `<div class="select2-result-label">
+                    <span class="select2-match"></span>${term}<span class="pull-right">
+                        <a href="javascript:void(0)" onClick="BankTransaction.addCategory('${term}')">
+                            <i class='fa fa-plus-circle'></i> adicionar
+                        </a>
+                    </span>
+                </div>`;
             },
             formatSearching: function() {
                 return 'Procurando...';
@@ -112,12 +120,24 @@ BankTransaction = {
 
         $('#BankInvoiceDetail_supplier_id').select2({
             formatNoMatches: function(term) {
-                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"BankTransaction.addSupplier('" + term + "')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
+                return `<div class='select2-result-label'>
+                    <span class='select2-match'></span>${term}<span class="pull-right">
+                        <a href="javascript:void(0)" onClick="BankTransaction.addSupplier('${term}')">
+                            <i class='fa fa-plus-circle'></i> adicionar
+                        </a>
+                    </span>
+                </div>`;
             }
         });
         $('#BankInvoiceDetail_customer_id').select2({
             formatNoMatches: function(term) {
-                return "<div class='select2-result-label'><span class='select2-match'></span>" + term + " <span class='pull-right'><a href='javascript:void(0)' onClick=\"BankTransaction.addCustomer('" + term + "')\"><i class='fa fa-plus-circle'></i> adicionar</a></span></div>";
+                return `<div class='select2-result-label'>
+                    <span class="select2-match"></span>${term}<span class="pull-right">
+                        <a href="javascript:void(0)" onClick="BankTransaction.addCustomer('${term}')">
+                            <i class='fa fa-plus-circle'></i> adicionar
+                        </a>
+                    </span>
+                </div>`;
             }
         });
 
