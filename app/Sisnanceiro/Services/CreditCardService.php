@@ -85,9 +85,16 @@ class CreditCardService extends Service
   try {
    $parent = parent::update($model, $data, $rules);
    $this->repository->updateAllDueDate($model);
+
+   $dueDate = date('Y-m') . "-{$model->payment_day}";
+   $invoice = $this->bankInvoiceDetailRepository->findCreditCardByDueDate($model->id, $dueDate);
+
+   $this->__setTotalValues($invoice, $model->id);
+
    \DB::commit();
    return $parent;
   } catch (\Exception $e) {
+   dd($e);
    \DB::rollBack();
    throw new \Exception('Erro na tentativa de alterar os dados do cartão.');
    return false;
