@@ -18,8 +18,7 @@ class BankInvoiceTransactionRepository extends Repository
  public function getAll(array $search = [])
  {
   $companyId = Auth::user()->company_id;
-
-  $query = \DB::table('bank_invoice_detail')
+  $query     = \DB::table('bank_invoice_detail')
    ->selectRaw(
     ' bank_invoice_detail.id
             , bank_invoice_detail.bank_invoice_transaction_id
@@ -87,7 +86,10 @@ class BankInvoiceTransactionRepository extends Repository
   if (isset($search['credit_card_id']) && !empty($search['credit_card_id'])) {
    $query = $query->where('credit_card.id', '=', $search['credit_card_id']);
   }
+
   return $query->get();
+//   \DB::enableQueryLog();
+  //   dd(\DB::getQueryLog());
  }
 
  public function getAllGroupByCreditCard(array $search = [])
@@ -108,7 +110,10 @@ class BankInvoiceTransactionRepository extends Repository
             , due_date
             , \'\' AS credit_card_id
             , \'\' AS credit_card_name
-            , bank_account.name AS bank_account_name
+            , CASE
+                WHEN bank_account.deleted_at IS NOT NULL THEN CONCAT(bank_account.name, \' \', \'deleted\')
+                ELSE bank_account.name
+                 END AS bank_account_name
             , bank_account_source.name AS bank_account_source_name
             , bank_account_target.name AS bank_account_target_name
             , bank_category.name AS bank_category_name
