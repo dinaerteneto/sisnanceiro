@@ -111,7 +111,7 @@ class BankInvoiceTransactionRepository extends Repository
             , \'\' AS credit_card_id
             , \'\' AS credit_card_name
             , CASE
-                WHEN bank_account.deleted_at IS NOT NULL THEN CONCAT(bank_account.name, \' \', \'deleted\')
+                WHEN bank_account.deleted_at IS NOT NULL THEN CONCAT(bank_account.name, \' \', \'Removido\')
                 ELSE bank_account.name
                  END AS bank_account_name
             , bank_account_source.name AS bank_account_source_name
