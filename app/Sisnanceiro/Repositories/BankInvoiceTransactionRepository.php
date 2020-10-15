@@ -100,39 +100,40 @@ class BankInvoiceTransactionRepository extends Repository
   $query = \DB::table('bank_invoice_detail')
    ->selectRaw(
     ' bank_invoice_detail.id
-            , bank_invoice_detail.bank_invoice_transaction_id
-            , bank_invoice_detail.supplier_id
-            , bank_invoice_detail.customer_id
-            , bank_invoice_detail.bank_account_id
-            , bank_invoice_detail.bank_category_id
-            , bank_category.main_parent_category_id
-            , bank_invoice_transaction.is_credit_card_invoice
-            , due_date
-            , \'\' AS credit_card_id
-            , \'\' AS credit_card_name
-            , CASE
-                WHEN bank_account.deleted_at IS NOT NULL THEN CONCAT(bank_account.name, \' \', \'Removido\')
-                ELSE bank_account.name
-                 END AS bank_account_name
-            , bank_account_source.name AS bank_account_source_name
-            , bank_account_target.name AS bank_account_target_name
-            , bank_category.name AS bank_category_name
-            , person_customer.firstname AS customer_firstname
-            , person_customer.lastname AS customer_lastname
-            , person_supplier.firstname AS supplier_firstname
-            , person_supplier.lastname AS supplier_lastname
-            , note
-            , description
-            , net_value
-            , gross_value
-            , total_invoices
-            , parcel_number
-            , CASE WHEN bank_invoice_detail.status = 1
-               AND due_date > CURDATE()
-              THEN 2
-              ELSE bank_invoice_detail.status
-               END status
-            '
+    , bank_invoice_detail.bank_invoice_transaction_id
+    , bank_invoice_detail.supplier_id
+    , bank_invoice_detail.customer_id
+    , bank_invoice_detail.bank_account_id
+    , bank_invoice_detail.bank_category_id
+    , bank_category.main_parent_category_id
+    , bank_invoice_transaction.is_credit_card_invoice
+    , competence_date
+    , due_date
+    , \'\' AS credit_card_id
+    , \'\' AS credit_card_name
+    , CASE
+        WHEN bank_account.deleted_at IS NOT NULL THEN CONCAT(bank_account.name, \' \', \'Removido\')
+        ELSE bank_account.name
+            END AS bank_account_name
+    , bank_account_source.name AS bank_account_source_name
+    , bank_account_target.name AS bank_account_target_name
+    , bank_category.name AS bank_category_name
+    , person_customer.firstname AS customer_firstname
+    , person_customer.lastname AS customer_lastname
+    , person_supplier.firstname AS supplier_firstname
+    , person_supplier.lastname AS supplier_lastname
+    , note
+    , description
+    , net_value
+    , gross_value
+    , total_invoices
+    , parcel_number
+    , CASE WHEN bank_invoice_detail.status = 1
+        AND due_date > CURDATE()
+        THEN 2
+        ELSE bank_invoice_detail.status
+        END status
+    '
    )
    ->join('bank_invoice_transaction', 'bank_invoice_transaction.id', '=', 'bank_invoice_detail.bank_invoice_transaction_id')
    ->join('bank_category', 'bank_category.id', '=', 'bank_invoice_detail.bank_category_id')
@@ -156,6 +157,7 @@ class BankInvoiceTransactionRepository extends Repository
             , bank_category.main_parent_category_id
             , bank_invoice_transaction.is_credit_card_invoice
             , due_date
+            , competence_date
             , credit_card.id AS credit_card_id
             , credit_card.name AS credit_card_name
             , bank_account.name AS bank_account_name
