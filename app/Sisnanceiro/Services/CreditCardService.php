@@ -88,13 +88,13 @@ class CreditCardService extends Service
 
    $dueDate = date('Y-m') . "-{$model->payment_day}";
    $invoice = $this->bankInvoiceDetailRepository->findCreditCardByDueDate($model->id, $dueDate);
+
    if ($invoice) {
     $this->__setTotalValues($invoice, $model->id);
    }
    \DB::commit();
    return $parent;
   } catch (\Exception $e) {
-   dd($e);
    \DB::rollBack();
    throw new \Exception('Erro na tentativa de alterar os dados do cartão.');
    return false;
@@ -103,25 +103,53 @@ class CreditCardService extends Service
 
  public function closeInvoice()
  {
+  $end = new Carbon('last day of this month');
+  $end = $end->format('Y-m-d');
+
+  $categoryId = BankCategory::CATEGORY_CREDIT_INVOICE;
 
   $sql = "
-    SELECT SUM(bid.net_value) AS net_value
-    , bid.due_date
-    , bid.credit_card_id
-    , bid.bank_account_id
- FROM bank_invoice_detail bid
- LEFT JOIN bank_invoice_transaction bit2
-   ON bid.due_date = bit2.credit_card_due_date
-  AND bit2.credit_card_id = bid.credit_card_id
-  AND bit2.deleted_at IS NULL
 
-WHERE bid.credit_card_id IS NOT NULL
-  AND bid.deleted_at IS NULL
-  AND bit2.id IS NULL
-  AND bid.due_date <= NOW()
+    SELECT calc_credit_card_invoice.*
+        , bit2.id
+    FROM (
+        SELECT SUM(bid.net_value) AS net_value
+            , bid.due_date
+            , bid.credit_card_id
+            , bid.bank_account_id
+        FROM bank_invoice_detail bid
+        JOIN bank_invoice_transaction bit2
+        ON bit2.id = bid.bank_invoice_transaction_id
+        JOIN credit_card cc
+        ON cc.id = bid.credit_card_id
 
-GROUP BY bid.due_date
-    , bid.credit_card_id
+        WHERE bid.credit_card_id IS NOT NULL
+        AND bid.deleted_at IS NULL
+        AND bit2.deleted_at IS NULL
+        AND cc.deleted_at IS NULL
+        AND bit2.is_credit_card_invoice = 0
+
+        GROUP BY MONTH(bid.due_date)
+            , YEAR(bid.due_date)
+            , bid.credit_card_id
+        ORDER BY bid.due_date
+    ) calc_credit_card_invoice
+    LEFT JOIN bank_invoice_detail bid2
+    ON bid2.due_date = calc_credit_card_invoice.due_date
+    AND bid2.bank_category_id = {$categoryId}
+    AND bid2.deleted_at IS NULL
+
+    LEFT JOIN bank_invoice_transaction bit2
+    ON bid2.bank_invoice_transaction_id = bit2.id
+    AND bit2.deleted_at IS NULL
+    LEFT JOIN credit_card cc
+    ON calc_credit_card_invoice.credit_card_id = cc.id
+
+    WHERE calc_credit_card_invoice.due_date <= '{$end}'
+    AND bit2.id IS NULL
+
+    ORDER BY bid2.due_date
+
     ";
 
   $query = \DB::select($sql);
