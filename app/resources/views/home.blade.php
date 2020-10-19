@@ -19,8 +19,8 @@
                         </div>
                         <div class="">
                             <div class="text-center">
-                                <h3>
-                                    <b>R$ {{ $aBallance['bank_account'] }}</b><br />
+                                <h3 class="{{$aBallance['bank_account'] > 0 ? 'text-blue' : 'text-red' }}">
+                                    <b>{{ $aBallance['bank_account'] }}</b><br />
                                     Saldo atual
                                 </h3>
                             </div>
@@ -39,9 +39,9 @@
                         </div>
                         <div class="">
                             <div class="text-center">
-                                <h3>
-                                    <b>R$ {{ $aBallance['to_receive'] }}</b><br />
-                                    Contas a receber
+                                <h3 class="text-green">
+                                    <b>{{ $aBallance['to_receive'] }}</b><br />
+                                    Contas à receber
                                 </h3>
                             </div>
                         </div>
@@ -59,9 +59,9 @@
                         </div>
                         <div class="">
                             <div class="text-center">
-                                <h3>
-                                    <b>R$ {{ $aBallance['to_pay'] }}</b><br />
-                                    Contas a pagar
+                                <h3 class="text-red">
+                                    <b>{{ $aBallance['to_pay'] }}</b><br />
+                                    Contas à pagar
                                 </h3>
                             </div>
                         </div>
@@ -79,8 +79,8 @@
                         </div>
                         <div class="">
                             <div class="text-center">
-                                <h3>
-                                    <b>R$ {{ $aBallance['credit_card'] }}</b><br />
+                                <h3 class="text-red">
+                                    <b>{{ $aBallance['credit_card'] }}</b><br />
                                     Cartão de crédito
                                 </h3>
                             </div>

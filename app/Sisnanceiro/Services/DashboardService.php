@@ -2,6 +2,7 @@
 
 namespace Sisnanceiro\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
@@ -25,11 +26,14 @@ class DashboardService extends Service
    BankCategory::CATEGORY_CREDIT_INVOICE,
   ];
 
+  $carbonStart = Carbon::now()->startOfMonth()->format('Y-m-d');
+  $carbonEnd   = Carbon::now()->endOfMonth()->format('Y-m-d');
+
   $companyId = Auth::user()->company_id;
   $ballance  = \DB::table('bank_invoice_detail')
    ->selectRaw(\DB::raw('SUM(net_value) AS ballance'))
    ->join('bank_category', 'bank_category.id', '=', 'bank_invoice_detail.bank_category_id')
-//   ->where('due_date', '<=', date('Y-m-d'))
+   ->whereBetween('due_date', [$carbonStart, $carbonEnd])
    ->where('bank_invoice_detail.status', BankInvoiceDetail::STATUS_PAID)
    ->where('bank_invoice_detail.company_id', '=', $companyId)
    ->whereNull('bank_invoice_detail.credit_card_id')
