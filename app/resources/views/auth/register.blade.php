@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="col-12 col-lg-5">
                                     <div class="well no-padding">
-                                        <form method="POST" action="/cadastrar" aria-label="{{ __('Register') }}" class="smart-form client-form" novalidate="novalidate" id="form-register">
+                                        <form method="POST" action="{{url('cadastrar')}}" aria-label="{{ __('Register') }}" class="smart-form client-form" novalidate="novalidate" id="form-register">
                                             @csrf
                                             <header>Cadastre-se</header>
 
