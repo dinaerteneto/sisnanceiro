@@ -227,6 +227,10 @@ class BankTransactionService extends Service
    unset($dataTransaction['total_invoices']);
    unset($dataTransaction['type_cycle']);
 
+   if (in_array($dataTransaction['bank_category_id'], [BankCategory::CATEGORY_CREDIT_CARD_BALANCE, BankCategory::CATEGORY_CREDIT_INVOICE])) {
+    throw new \Exception('Não é possível alterar uma fatura de cartão de crédito.');
+   }
+
    $recordTransaction = parent::store($dataTransaction, 'update');
 
    $dataDetail   = $this->mapDataDetail($input['BankInvoiceDetail'], $recordTransaction->id);

@@ -241,6 +241,8 @@ class BankInvoiceTransactionRepository extends Repository
    ->selectRaw('bank_category.main_parent_category_id, sum(bank_invoice_detail.net_value) as total')
    ->join('bank_category', 'bank_category.id', '=', 'bank_invoice_detail.bank_category_id')
    ->where('bank_invoice_detail.company_id', '=', $companyId)
+  //->whereNotIn('bank_invoice_detail.bank_category_id', [BankCategory::CATEGORY_CREDIT_INVOICE])
+   ->whereNull('bank_invoice_detail.credit_card_id')
    ->whereNull('bank_invoice_detail.deleted_at')
    ->groupBy('bank_category.main_parent_category_id');
 

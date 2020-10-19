@@ -171,15 +171,21 @@ class BankAccountService extends Service
  {
   \DB::beginTransaction();
   try {
-   $bankAccount        = $this->find($id);
-   $invoice            = $this->bankInvoiceDetailService->findInitialBalance($bankAccount);
-   $destroyBankAccount = $this->repository->destroy($id);
+
+   $haveInvoice = $this->repository->haveInvoice($id);
+   if ($haveInvoice) {
+    throw new \Exception('Não é possível remover uma conta que possua lançamentos.');
+   }
+
+   $bankAccount = $this->find($id);
+   $invoice     = $this->bankInvoiceDetailService->findInitialBalance($bankAccount);
+   $this->repository->destroy($id);
    $invoice->delete();
    \DB::commit();
    return true;
   } catch (\Exception $e) {
    \DB::rollBack();
-   abort(500, 'Erro na tentativa de excluir a conta.');
+   throw new \Exception($e->getMessage());
   }
  }
 

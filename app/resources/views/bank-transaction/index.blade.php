@@ -322,14 +322,16 @@
                                 <i class="fa fa-times"></i>
                             </a> `;
                     } else {
-                        html += `<a href="/bank-transaction/${row.url_main}/update/${row.id}"
-                            rel="tooltip"
-                            data-placement="top"
-                            data-original-title="Alterar lançamento"
-                            class="btn btn-xs btn-warning open-modal"
-                            target="#remoteModal">
-                                <i class="fa fa-pencil"></i>
-                            </a> `;
+                        if(row.bank_category_id != 8 && row.bank_category_id != 9) {
+                            html += `<a href="/bank-transaction/${row.url_main}/update/${row.id}"
+                                rel="tooltip"
+                                data-placement="top"
+                                data-original-title="Alterar lançamento"
+                                class="btn btn-xs btn-warning open-modal"
+                                target="#remoteModal">
+                                    <i class="fa fa-pencil"></i>
+                                </a> `;
+                        }
                         html += `<a href="/bank-transaction/delete/${row.id}"
                             rel="tooltip" data-placement="top"
                             data-original-title="Excluir lançamento"

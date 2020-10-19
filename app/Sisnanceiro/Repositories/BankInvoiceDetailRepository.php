@@ -67,10 +67,12 @@ class BankInvoiceDetailRepository extends Repository
   $query = \DB::select($sql);
   if ($query) {
    foreach ($query as $record) {
-    $invoice     = $this->findBy('bank_invoice_transaction_id', $record->id);
-    $transaction = $invoice->transaction()->first();
-    $invoice->delete();
-    $transaction->delete();
+    $invoice = $this->findBy('bank_invoice_transaction_id', $record->id);
+    if ($invoice) {
+     $transaction = $invoice->transaction()->first();
+     $invoice->delete();
+     $transaction->delete();
+    }
    }
   }
   return true;

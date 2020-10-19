@@ -4,6 +4,7 @@ namespace Sisnanceiro\Services;
 
 use Sisnanceiro\Helpers\Validator;
 use Sisnanceiro\Models\BankAccount;
+use Sisnanceiro\Models\BankCategory;
 use Sisnanceiro\Models\BankInvoiceDetail;
 use Sisnanceiro\Repositories\BankInvoiceDetailRepository;
 
@@ -52,6 +53,12 @@ class BankInvoiceDetailService extends Service
  {
   if ('create' == $rules) {
    $data['receive_date'] = $this->__getReceiveDate($data['due_date']);
+  }
+
+  if ('update' == $rules) {
+   if (in_array([BankCategory::CATEGORY_CREDIT_CARD_BALANCE, BankCategory::CATEGORY_CREDIT_INVOICE], $data['bank_category_id'])) {
+    $this->validator->addError('', 'bank_category_id', 'Não é possível alterar uma fatura de cartão de crédito.');
+   }
   }
 
   if ($this->creditCardInvoiceIsPaid($data)) {
