@@ -65,7 +65,7 @@
                                 <div class="col col-lg-7 d-lg-block d-none">
                                     <h1 class="text-red login-header-big">{{ config('app.name', 'Laravel') }}</h1>
                                     <div class="clearfix">
-                                        <div class="hero">
+                                        <div class="">
                                             <div class="pull-left login-desc-box-l">
                                                 <h4 class="paragraph-header">
                                                     Esta é a ferramenta que irá lhe ajudar a ter uma vida financeira mais próspera.
@@ -81,9 +81,9 @@
                                                 </div>
                                                 -->
                                             </div>
-
+                                            <!--
                                             <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
-
+                                            -->
                                         </div>
                                     </div>
 

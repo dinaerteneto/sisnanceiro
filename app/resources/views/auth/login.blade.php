@@ -95,7 +95,9 @@
                                                 @endif
 
                                             </div>
-                                            <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
+                                            <!--
+                                            <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px;">
+                                            -->
 
                                         </div>
                                     </div>
